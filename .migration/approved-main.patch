@@ -1,0 +1,586 @@
+diff --git a/.github/workflows/verify-live-site.yml b/.github/workflows/verify-live-site.yml
+new file mode 100644
+index 0000000..a9fbaa2
+--- /dev/null
++++ b/.github/workflows/verify-live-site.yml
+@@ -0,0 +1,24 @@
++name: Verify deployed ONE PLACE
++on:
++  workflow_dispatch:
++permissions:
++  contents: read
++jobs:
++  deployed-smoke:
++    runs-on: ubuntu-latest
++    timeout-minutes: 15
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: '22'
++          cache: npm
++      - run: npm ci
++      - run: npx playwright install --with-deps chromium
++      - run: node scripts/verify_live_site.cjs
++      - uses: actions/upload-artifact@v4
++        if: always()
++        with:
++          name: deployed-one-place-verification
++          path: live-site-report/
++          retention-days: 7
+diff --git a/.nojekyll b/.nojekyll
+new file mode 100644
+index 0000000..e69de29
+diff --git a/README.md b/README.md
+index 5b3880b..6a6742a 100644
+--- a/README.md
++++ b/README.md
+@@ -2,6 +2,33 @@
+ 
+ ONE PLACE is the primary home for practical life resources, free tools, Human Literacy learning, Life Simulator practice and TEAL. The public website uses the approved One Place identity, with unfinished products and services clearly marked as previews. No visitor account or payment is required.
+ 
++
++## Organization website migration — November 7, 2026
++
++Current public home: **https://ouroneplace.github.io/**. This repository preserves
++the complete approved source-main history through
++`302cbeb18dec85fd6753469a55b20ce8a18b75ea` from
++`humanliteracy/Human-literacy-online`. Only approved main and migration adaptations
++are published here; unapproved source draft branches are not imported.
++
++The original repository and website remain independently available and unchanged.
++No redirect is installed there. Source-history URLs in dated review documents
++remain historical references. TEAL sharing, canonical/social URLs, local-review
++ZIP paths and internal educational-resource links use this organization's root.
++
++GitHub Pages is to publish `main` / repository root. `.nojekyll` keeps this
++buildless static site intact. Existing browser CI remains separate from Pages;
++future main changes still require the project's review and acceptance process.
++The manual **Verify deployed ONE PLACE** workflow checks the actual public host
++at desktop and 320px; it uses fictional examples only and activates no services.
++
++Browser storage belongs to an origin. Local learning records saved on the old
++`humanliteracy.github.io` origin do not automatically appear on the new
++`ouroneplace.github.io` origin. The old site and records are not deleted; use
++the existing local export/clear controls. No private records are transferred.
++
++[Migration evidence and founder checklist](docs/organization-migration.md).
++
+ ## Where the site lives
+ 
+ - `index.html` — ONE PLACE homepage, search and the 18-area / 72-offering catalog.
+@@ -17,7 +44,7 @@ See [the rebranding and repository transition assessment](docs/one-place-transit
+ 
+ ## Publication control
+ 
+-GitHub Pages serves [ONE PLACE](https://humanliteracy.github.io/Human-literacy-online/) from the repository root on **`main`**. Merging or pushing to `main` starts public deployment automatically; there is no separate manual publish step. Browser-test CI is a separate workflow and does not itself hold back Pages.
++GitHub Pages serves [ONE PLACE](https://ouroneplace.github.io/) from the repository root on **`main`**. Merging or pushing to `main` starts public deployment automatically; there is no separate manual publish step. Browser-test CI is a separate workflow and does not itself hold back Pages.
+ 
+ Use the [release and rollback checklist](docs/release-checklist.md) before changing `main`. The founder authorized publication of the integrated One Place homepage at the existing GitHub Pages address on November 7, 2026. This authorization does not include renaming the GitHub repository, changing the Pages address, activating purchases, payments, analytics, or paid services. Review and approve future release changes separately.
+ 
+diff --git a/docs/organization-migration.md b/docs/organization-migration.md
+new file mode 100644
+index 0000000..c389857
+--- /dev/null
++++ b/docs/organization-migration.md
+@@ -0,0 +1,71 @@
++# ONE PLACE organization website migration
++
++Authorized November 7, 2026: copy approved public source main to
++`ouroneplace/ouroneplace.github.io` and publish at https://ouroneplace.github.io/.
++
++## Provenance and preservation
++
++- Source baseline: `302cbeb18dec85fd6753469a55b20ce8a18b75ea`, 282 reachable
++  commits at capture. The destination adds migration commits on top of this
++  ancestry; no shallow/squashed copy or mirror of draft branches is used.
++- The ten lessons, five-experience flows, approved video/art assets, Life Simulator
++  and scripted Coach, TEAL, 18 life areas / 72 entries, two free tools, source
++  licenses and existing tests remain. Main is the only source publication input.
++- Unapproved draft features, private materials, prior owners, priorities and
++  acceptance history remain governed by the existing project register. This
++  migration adds no Everyday Mentor backend or private curriculum.
++- The original source repository, branch, site and public URL are not written,
++  renamed, disabled or redirected.
++
++## Destination adaptations
++
++Canonical/social metadata and exact-origin TEAL sharing guards now use the
++organization root. Preview sharing still excludes a preview URL, query or
++fragment. Internal educational-resource entries point to this site's Human
++Literacy section / approved lessons. All component navigation remains relative.
++The review launcher and its integrity fixtures use the new codeload repository
++and ZIP root. Historical evidence/source links remain historical. `.nojekyll`
++keeps static files out of Jekyll processing.
++
++Pages should use **Deploy from a branch → main → /(root)** with HTTPS. No custom
++domain, payment, tracking, account service or paid integration is introduced.
++Existing browser CI runs the full suite. The manual deployed-site workflow tests
++the actual host after deployment. Workflow logs, commit SHAs and Pages settings
++are the execution evidence; a prepared workflow alone does not prove publication.
++
++The hostname change creates a different browser-storage origin. Old local
++learning records do not migrate automatically. The old site remains available;
++existing export/delete features are preserved. No private records are read or
++transferred during migration.
++
++## Verification boundaries
++
++Full regression includes lesson completion/quiz controls, simulator behavior,
++media range/seek, navigation, 320px reflow, keyboard and sampled privacy checks.
++Canonical tests cover the new public origin, local previews, lookalike hosts and
++query/fragment exclusion. Live verification checks all 18 areas / 72 internal
++views, all ten lessons, simulator, TEAL, both tools, returns, error responses and
++320px width. Automated viewport emulation is not a physical-phone test or full
++screen-reader/WCAG certification. External provider availability and broader
++learning effectiveness remain separate evidence.
++
++## Founder checklist after the deployed host is verified
++
++1. Open https://ouroneplace.github.io/ on Chromebook. Confirm ONE PLACE, search
++   and one life-area route, then return Home.
++2. Open Human Literacy → Lesson 01, check video and a familiar lesson interaction,
++   then try Life Simulator and TEAL, using their One Place Home returns.
++3. Use fictional examples in Money & Bills and Family & Caregiving; check
++   editing, local download/reset and representative 320px / keyboard navigation.
++
++Record PASS or specific failures with the page URL and tested revision. Do not
++infer new human acceptance from automated checks or close older unrelated gates.
++
++## Recovery and future releases
++
++The original site remains the fallback and receives no automatic redirect.
++If a destination defect appears, retain its failed SHA and fix/revert only the
++destination migration delta with a normal reviewed commit; never force-reset or
++rewrite the preserved history or modify the original as a shortcut. Any old-site
++redirect requires verification and a separate founder decision. Paid services,
++tracking, unrelated draft features and changes of scope remain unapproved.
+diff --git a/human-literacy/index.html b/human-literacy/index.html
+index 9034e62..7330d36 100644
+--- a/human-literacy/index.html
++++ b/human-literacy/index.html
+@@ -88,6 +88,7 @@
+ }
+ 
+ </style>
++<link rel="canonical" href="https://ouroneplace.github.io/human-literacy/">
+ </head>
+ <body><main>
+ <div class="op104-human-top"><div class="brand">HUMAN LITERACY</div><a class="op104-home-link" href="../index.html">← One Place Home</a></div>
+diff --git a/index.html b/index.html
+index 69a3384..fd07bde 100644
+--- a/index.html
++++ b/index.html
+@@ -16,7 +16,8 @@
+ if (['#choose', '#lessons', '#mission'].includes(location.hash)) {
+   location.replace('human-literacy/index.html' + location.search + location.hash);
+ }
+-</script></head><body><a class="skip" href="#main">Skip to content</a><div class="shell"><header><a class="mark" href="index.html" aria-label="One Place home"><i aria-hidden="true">✳</i>ONE PLACE</a><span class="flag">PUBLIC PREVIEW · NO PURCHASES</span><a class="teamnav" href="index.html?team">Meet our team ↗</a></header><nav class="learning-nav" aria-label="One Place navigation">
++</script><link rel="canonical" href="https://ouroneplace.github.io/">
++</head><body><a class="skip" href="#main">Skip to content</a><div class="shell"><header><a class="mark" href="index.html" aria-label="One Place home"><i aria-hidden="true">✳</i>ONE PLACE</a><span class="flag">PUBLIC PREVIEW · NO PURCHASES</span><a class="teamnav" href="index.html?team">Meet our team ↗</a></header><nav class="learning-nav" aria-label="One Place navigation">
+ <a href="index.html">Explore life areas</a>
+ <div class="learning-cluster" role="group" aria-label="Human Literacy: learning">
+ <span class="learning-cluster-title">HUMAN LITERACY</span>
+@@ -30,7 +31,7 @@ if (['#choose', '#lessons', '#mission'].includes(location.hash)) {
+ <a href="one-place/money-bills.html">Money &amp; Bills</a>
+ <a href="one-place/family-handoff.html">Family &amp; Caregiving</a>
+ </div>
+-</nav><main id="main" tabindex="-1"><noscript><h1>Welcome to ONE PLACE</h1><p>Turn on JavaScript for life-area search and interactive tools. You can also open <a href="human-literacy/">Human Literacy</a> or <a href="teal/">TEAL</a>.</p></noscript></main><footer><span><strong>One human founder.</strong> Created with ChatGPT and AI tools. Human-led, AI-assisted, accountable.</span><span><a href="index.html?team">Our story</a> · <a href="human-literacy/index.html#choose">Human Literacy lessons ↗</a></span></footer></div><script>const source=[["Money & Bills","💰","Get help paying basic bills","Understand debt and creditor options","Household Budget Studio","Debt Action Planner","https://www.usa.gov/benefits","https://www.consumerfinance.gov/consumer-tools/"],["Housing & Utilities","🏠","Find rental or housing assistance","Learn home safety essentials","Home Maintenance Planner","Housing Next-Step Navigator","https://www.usa.gov/housing-help","https://www.hud.gov/"],["Family & Caregiving","👨‍👩‍👧","Make a daily caregiving handoff","Find community caregiving support","Family Handoff Toolkit","Care Coordination Pathway","https://www.usa.gov/disability-services","https://eldercare.acl.gov/"],["Health & Wellness","🩺","Explore health insurance options","Prepare for a healthcare appointment","Wellness Routine Builder","Appointment Preparation Studio","https://www.healthcare.gov/","https://medlineplus.gov/"],["Mental Health & Safety","💚","Find emotional or crisis support","Learn grounding and coping basics","Reflection & Coping Journal","Support Options Navigator","https://988lifeline.org/","https://findtreatment.gov/"],["Work & Careers","💼","Discover training and job resources","Learn to spot job scams","Application Tracker","Career Transition Roadmap","https://www.careeronestop.org/","https://consumer.ftc.gov/articles/job-scams"],["Business & Entrepreneurship","📊","Learn how to start a business","Explore free small-business counseling","Job Pricing Calculator","Business Launch Roadmap","https://www.sba.gov/business-guide","https://www.sba.gov/counseling/"],["Learning & Education","🎓","Practice Human Literacy lessons","Explore adult learning opportunities","Learning Path Planner","Skill-Building Roadmap","https://humanliteracy.github.io/Human-literacy-online/","https://www.careeronestop.org/"],["Technology & Digital Safety","🔒","Recognize common scams","Understand safer accounts and passwords","Digital Safety Checklist","Digital Setup Walkthrough","https://consumer.ftc.gov/scams","https://www.cisa.gov/secure-our-world"],["Legal & Consumer Rights","⚖️","Find public legal-help resources","Understand how to file complaints","Document Organizer","Consumer Issue Action Plan","https://www.usa.gov/legal-aid","https://www.consumerfinance.gov/complaint/"],["Veterans & Military Families","🎖️","Explore VA benefits","Find VA employment support","Veteran Transition Organizer","Benefits Preparation Roadmap","https://www.va.gov/","https://www.va.gov/careers-employment/vocational-rehabilitation/"],["Relationships & Communication","🫶","Practice listening and boundaries","Learn how to repair a disagreement","Conversation Practice Cards","Difficult Conversation Rehearsal","https://humanliteracy.github.io/Human-literacy-online/","https://humanliteracy.github.io/Human-literacy-online/lessons/07/"],["Daily Life & Organization","🗂️","Organize essential family records","Plan household routines","Weekly Life Planner","Household Reset Walkthrough","https://www.ready.gov/plan","https://www.usa.gov/"],["Transportation & Travel","🚗","Learn transport-assistance options","Plan an affordable trip","Trip Cost Planner","Accessible Travel Checklist Builder","https://www.usa.gov/disability-services","https://www.transportation.gov/individuals/aviation-consumer-protection/buying-ticket"],["Aging & Accessibility","♿","Find older-adult community resources","Explore disability support options","Accessibility Checklist Kit","Aging-in-Place Planning Pathway","https://eldercare.acl.gov/","https://www.usa.gov/disability-services"],["Emergencies & Preparedness","🧯","Create a family emergency plan","Learn basic disaster readiness","Emergency Go-Bag Planner","Household Preparedness Pathway","https://www.ready.gov/plan","https://www.ready.gov/kit"],["Creativity & Legacy","✍️","Start a family story or memoir","Make a creative project plan","Legacy Story Builder","Life Story Roadmap","https://guides.bpl.org/OralHistory/sample-questions","https://rootsandshoots.org/resources/project-planning-guide/"],["Community & Civic Life","🌎","Find ways to volunteer","Learn how local government works","Community Project Planner","Civic Proposal Starter","https://www.americorps.gov/join/find-volunteer-opportunity","https://www.usa.gov/state-local-governments"]];const all=source.flatMap((a,i)=>[a[2],a[3],a[4],a[5]].map((title,j)=>({id:'s'+String(i*4+j+1).padStart(3,'0'),area:a[0],icon:a[1],title,kind:j<2?'free':j===2?'product':'service',url:a[j===0?6:j===1?7:7]})));const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uArea=a=>'index.html?area='+encodeURIComponent(a),uService=id=>'index.html?service='+id;const kinds={free:'FREE HELP',product:'TOOL PREVIEW',service:'FUTURE SERVICE'};const q=new URLSearchParams(location.search),area=q.get('area'),service=q.get('service'),team=q.has('team');const main=$('main');const quickNames={'Business & Entrepreneurship':'Business + Startup','Mental Health & Safety':'Mental Health + Safety','Technology & Digital Safety':'Tech + Digital Safety','Veterans & Military Families':'Veterans + Military','Relationships & Communication':'Relationships','Daily Life & Organization':'Daily Organization','Emergencies & Preparedness':'Emergencies','Transportation & Travel':'Travel + Transport','Learning & Education':'Education + Learning','Housing & Utilities':'Housing + Utilities','Aging & Accessibility':'Aging + Accessibility','Community & Civic Life':'Community + Civic'};if(team){main.className='inside';main.innerHTML='<a class="back" href="index.html">← All life areas</a><p class="eyebrow" style="margin-top:25px">THE PEOPLE AND TOOLS BEHIND THIS</p><h1>One person. AI tools. A mission to help everyone.</h1><p class="desc">ONE PLACE is led by one human founder. ChatGPT and other AI tools help research, write, design, code and prototype the site. The founder decides what to publish and remains accountable for it.</p><div class="teamgrid"><article><h2>♥ The human founder</h2><p>Sets the vision, values and priorities. Reviews decisions and owns responsibility for this project.</p></article><article><h2>✳ ChatGPT + AI</h2><p>Helps produce drafts, design tools, test prototypes and catch problems. AI is not a person or licensed professional.</p></article><article><h2>◎ Our shared purpose</h2><p>Help people find better next steps across life and business, whether the resource is free or a future paid tool.</p></article></div><p class="notice">Founder-only preview. The founder and AI tools are the project team, but not a claim that every resource or service has been individually checked or is available. No purchase or booking is possible.</p>';}
++</nav><main id="main" tabindex="-1"><noscript><h1>Welcome to ONE PLACE</h1><p>Turn on JavaScript for life-area search and interactive tools. You can also open <a href="human-literacy/">Human Literacy</a> or <a href="teal/">TEAL</a>.</p></noscript></main><footer><span><strong>One human founder.</strong> Created with ChatGPT and AI tools. Human-led, AI-assisted, accountable.</span><span><a href="index.html?team">Our story</a> · <a href="human-literacy/index.html#choose">Human Literacy lessons ↗</a></span></footer></div><script>const source=[["Money & Bills","💰","Get help paying basic bills","Understand debt and creditor options","Household Budget Studio","Debt Action Planner","https://www.usa.gov/benefits","https://www.consumerfinance.gov/consumer-tools/"],["Housing & Utilities","🏠","Find rental or housing assistance","Learn home safety essentials","Home Maintenance Planner","Housing Next-Step Navigator","https://www.usa.gov/housing-help","https://www.hud.gov/"],["Family & Caregiving","👨‍👩‍👧","Make a daily caregiving handoff","Find community caregiving support","Family Handoff Toolkit","Care Coordination Pathway","https://www.usa.gov/disability-services","https://eldercare.acl.gov/"],["Health & Wellness","🩺","Explore health insurance options","Prepare for a healthcare appointment","Wellness Routine Builder","Appointment Preparation Studio","https://www.healthcare.gov/","https://medlineplus.gov/"],["Mental Health & Safety","💚","Find emotional or crisis support","Learn grounding and coping basics","Reflection & Coping Journal","Support Options Navigator","https://988lifeline.org/","https://findtreatment.gov/"],["Work & Careers","💼","Discover training and job resources","Learn to spot job scams","Application Tracker","Career Transition Roadmap","https://www.careeronestop.org/","https://consumer.ftc.gov/articles/job-scams"],["Business & Entrepreneurship","📊","Learn how to start a business","Explore free small-business counseling","Job Pricing Calculator","Business Launch Roadmap","https://www.sba.gov/business-guide","https://www.sba.gov/counseling/"],["Learning & Education","🎓","Practice Human Literacy lessons","Explore adult learning opportunities","Learning Path Planner","Skill-Building Roadmap","https://ouroneplace.github.io/human-literacy/","https://www.careeronestop.org/"],["Technology & Digital Safety","🔒","Recognize common scams","Understand safer accounts and passwords","Digital Safety Checklist","Digital Setup Walkthrough","https://consumer.ftc.gov/scams","https://www.cisa.gov/secure-our-world"],["Legal & Consumer Rights","⚖️","Find public legal-help resources","Understand how to file complaints","Document Organizer","Consumer Issue Action Plan","https://www.usa.gov/legal-aid","https://www.consumerfinance.gov/complaint/"],["Veterans & Military Families","🎖️","Explore VA benefits","Find VA employment support","Veteran Transition Organizer","Benefits Preparation Roadmap","https://www.va.gov/","https://www.va.gov/careers-employment/vocational-rehabilitation/"],["Relationships & Communication","🫶","Practice listening and boundaries","Learn how to repair a disagreement","Conversation Practice Cards","Difficult Conversation Rehearsal","https://ouroneplace.github.io/human-literacy/","https://ouroneplace.github.io/lessons/07/"],["Daily Life & Organization","🗂️","Organize essential family records","Plan household routines","Weekly Life Planner","Household Reset Walkthrough","https://www.ready.gov/plan","https://www.usa.gov/"],["Transportation & Travel","🚗","Learn transport-assistance options","Plan an affordable trip","Trip Cost Planner","Accessible Travel Checklist Builder","https://www.usa.gov/disability-services","https://www.transportation.gov/individuals/aviation-consumer-protection/buying-ticket"],["Aging & Accessibility","♿","Find older-adult community resources","Explore disability support options","Accessibility Checklist Kit","Aging-in-Place Planning Pathway","https://eldercare.acl.gov/","https://www.usa.gov/disability-services"],["Emergencies & Preparedness","🧯","Create a family emergency plan","Learn basic disaster readiness","Emergency Go-Bag Planner","Household Preparedness Pathway","https://www.ready.gov/plan","https://www.ready.gov/kit"],["Creativity & Legacy","✍️","Start a family story or memoir","Make a creative project plan","Legacy Story Builder","Life Story Roadmap","https://guides.bpl.org/OralHistory/sample-questions","https://rootsandshoots.org/resources/project-planning-guide/"],["Community & Civic Life","🌎","Find ways to volunteer","Learn how local government works","Community Project Planner","Civic Proposal Starter","https://www.americorps.gov/join/find-volunteer-opportunity","https://www.usa.gov/state-local-governments"]];const all=source.flatMap((a,i)=>[a[2],a[3],a[4],a[5]].map((title,j)=>({id:'s'+String(i*4+j+1).padStart(3,'0'),area:a[0],icon:a[1],title,kind:j<2?'free':j===2?'product':'service',url:a[j===0?6:j===1?7:7]})));const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uArea=a=>'index.html?area='+encodeURIComponent(a),uService=id=>'index.html?service='+id;const kinds={free:'FREE HELP',product:'TOOL PREVIEW',service:'FUTURE SERVICE'};const q=new URLSearchParams(location.search),area=q.get('area'),service=q.get('service'),team=q.has('team');const main=$('main');const quickNames={'Business & Entrepreneurship':'Business + Startup','Mental Health & Safety':'Mental Health + Safety','Technology & Digital Safety':'Tech + Digital Safety','Veterans & Military Families':'Veterans + Military','Relationships & Communication':'Relationships','Daily Life & Organization':'Daily Organization','Emergencies & Preparedness':'Emergencies','Transportation & Travel':'Travel + Transport','Learning & Education':'Education + Learning','Housing & Utilities':'Housing + Utilities','Aging & Accessibility':'Aging + Accessibility','Community & Civic Life':'Community + Civic'};if(team){main.className='inside';main.innerHTML='<a class="back" href="index.html">← All life areas</a><p class="eyebrow" style="margin-top:25px">THE PEOPLE AND TOOLS BEHIND THIS</p><h1>One person. AI tools. A mission to help everyone.</h1><p class="desc">ONE PLACE is led by one human founder. ChatGPT and other AI tools help research, write, design, code and prototype the site. The founder decides what to publish and remains accountable for it.</p><div class="teamgrid"><article><h2>♥ The human founder</h2><p>Sets the vision, values and priorities. Reviews decisions and owns responsibility for this project.</p></article><article><h2>✳ ChatGPT + AI</h2><p>Helps produce drafts, design tools, test prototypes and catch problems. AI is not a person or licensed professional.</p></article><article><h2>◎ Our shared purpose</h2><p>Help people find better next steps across life and business, whether the resource is free or a future paid tool.</p></article></div><p class="notice">Founder-only preview. The founder and AI tools are the project team, but not a claim that every resource or service has been individually checked or is available. No purchase or booking is possible.</p>';}
+ else if(service){const x=all.find(z=>z.id===service);main.className='inside';if(!x){main.innerHTML='<a class="back" href="index.html">← All needs</a><h1>Solution not found</h1>'}else{document.title=x.title+' · ONE PLACE';main.innerHTML='<a class="back" href="'+uArea(x.area)+'">← '+esc(x.area)+'</a><div class="serviceview"><section class="content"><span class="tag '+x.kind+'">'+kinds[x.kind]+'</span><h1>'+esc(x.title)+'</h1><p class="desc">'+(x.kind==='free'?'Free starting points and a direct link to an established outside source.':x.kind==='product'?'Illustrative digital tool, not a finished product or checkout.':'A possible future service, not currently staffed or bookable.')+'</p><div id="helpContent"></div></section><aside class="aside" id="aside"></aside></div>';const body=$('helpContent'),aside=$('aside');if(x.kind==='free'){body.innerHTML='<h2>Three starting steps</h2><ol><li>Identify the problem and any urgent deadline.</li><li>Prepare only the details needed for the next action.</li><li>Open the provider resource and verify eligibility or local availability.</li></ol>';aside.innerHTML='<h2>Outside resources</h2><p>This project does not provide professional intervention or emergency response.</p><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">Open established resource ↗</a><p>Check the provider site for current information.</p>'}else if(x.kind==='service'){body.innerHTML='<h2>How this might work</h2><ol><li>Choose the specific outcome you need.</li><li>Review an understandable action checklist.</li><li>If professional expertise is needed, select a vetted outside provider.</li></ol>';aside.innerHTML='<h2>Concept only</h2><p>No service is active. No specialist, appointment, fee, client intake, or order is offered here.</p><a href="'+uArea(x.area)+'">See the free alternatives →</a>'}else{body.innerHTML='<h2>See the tool idea</h2><p>This is a prototype of a potential paid digital product. Try fictional inputs, not private information.</p><div id="demoHost"></div>';aside.innerHTML='<h2>Prototype only</h2><p>This is not a purchasable item. No checkout, delivery, subscription or service request is active.</p><a href="'+uArea(x.area)+'">Browse this life area →</a>';renderDemo(x.title)}aside.insertAdjacentHTML('beforeend','<p class="notice">General information only; no individualized medical, legal or financial advice. U.S. emergency: 911. Crisis support: call/text 988.</p>')}}
+ else if(area){const items=all.filter(x=>x.area===area);main.className='inside';main.innerHTML='<a class="back" href="index.html">← All life areas</a><p class="eyebrow" style="margin-top:30px">FOUR WAYS TO BEGIN</p><h1>'+esc(area)+'</h1><p class="desc">Two free starting points, one tool preview, and one future assisted service. Choose an option to see its focused one-page view.</p><div class="offers">'+items.map(x=>'<a class="offer" href="'+uService(x.id)+'"><span class="tag '+x.kind+'">'+kinds[x.kind]+'</span><strong>'+esc(x.title)+'</strong><small>'+(x.kind==='free'?'Practical guidance and an outside resource':x.kind==='product'?'Interactive illustration, not for sale':'An unlaunched assisted-service idea')+'</small><em>Open this one-page solution →</em></a>').join('')+'</div><p class="notice">Paid options are prototypes only. No payment or booking is possible.</p>';}
+ else{main.className='home';main.innerHTML='<section class="hero"><p class="eyebrow">ONE HOME FOR LIFE’S MANY NEEDS</p><h1>What do you need <em>help with?</em></h1><p class="desc">Explore life areas, free action tools, Human Literacy lessons and TEAL. Paid ideas are previews only.</p><form class="search" id="finder" role="search"><label for="term" class="sr">Search every service</label><input id="term" type="search" autocomplete="off" placeholder="Search any need: bills, jobs, caregiving, business…"><button type="submit">Find help</button></form><div class="results" id="results" hidden></div></section><section><div class="section-title"><h2>Explore every part of life</h2><small>18 areas · 72 ways to start</small></div><div class="grid">'+source.map(a=>'<a class="tile" href="'+uArea(a[0])+'" aria-label="'+esc(a[0])+', four options"><span class="emoji" aria-hidden="true">'+a[1]+'</span><strong>'+esc(quickNames[a[0]]||a[0].replace(' & ',' + '))+'</strong><small>4 ways to begin</small><span class="arrow" aria-hidden="true">↗</span></a>').join('')+'</div></section>';let hits=[];const input=$('term'),results=$('results');const update=()=>{let text=input.value.trim().toLowerCase();if(!text){results.hidden=true;results.innerHTML='';hits=[];return}hits=all.filter(x=>(x.title+' '+x.area).toLowerCase().includes(text)).slice(0,10);results.hidden=false;results.innerHTML=hits.length?hits.map(x=>'<a href="'+uService(x.id)+'"><strong>'+esc(x.title)+'</strong><small>'+esc(x.area)+' · '+kinds[x.kind]+'</small></a>').join(''):'<p style="padding:8px">No exact result. Try a life area below.</p>'};input.addEventListener('input',update);$('finder').addEventListener('submit',e=>{e.preventDefault();if(hits.length)location.href=uService(hits[0].id);else update()});}
+diff --git a/lessons/01/index.html b/lessons/01/index.html
+index 9d73b68..8038b77 100644
+--- a/lessons/01/index.html
++++ b/lessons/01/index.html
+@@ -27,6 +27,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ /* HL-119: allow enlarged result feedback and other prose to wrap at 320px. */
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style><link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/01/">
+ </head><body><script src="../../shared/lesson-video-controls.js"></script><main><div class="brand">HUMAN LITERACY</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 01 · Understanding Before Reacting</div><div id="app" aria-live="polite"></div></main><script> 'use strict';
+ const DATA={"scenarios":[{"title":"The misunderstood message","scene":"A friend says you rarely respond promptly. Yesterday you were helping someone and did not check your phone. You feel unfairly criticized.","question":"What would you say to your friend?","choices":[{"text":"“I was helping someone yesterday. I can explain, but first tell me what worried you.”","rating":"Strongest response","why":"You acknowledge their concern, give relevant context, and invite clarification without accepting the sweeping accusation.","points":2,"feedback":"You acknowledge their concern, give relevant context, and invite clarification without accepting the sweeping accusation.","best":true},{"text":"“I was helping someone yesterday, so I think it is fair to expect some patience.”","rating":"Partly effective","why":"Your explanation and request for patience are reasonable, but you have not yet learned what your friend experienced.","points":1,"feedback":"Your explanation and request for patience are reasonable, but you have not yet learned what your friend experienced. Another approach: “I was helping someone yesterday. I can explain, but first tell me what worried you.” You acknowledge their concern, give relevant context, and invite clarification without accepting the sweeping accusation.","best":false},{"text":"“I understand you were upset. I will try to answer every message sooner.”","rating":"Partly effective","why":"You show empathy, but promising faster replies may set an expectation you cannot consistently meet.","points":1,"feedback":"You show empathy, but promising faster replies may set an expectation you cannot consistently meet. Another approach: “I was helping someone yesterday. I can explain, but first tell me what worried you.” You acknowledge their concern, give relevant context, and invite clarification without accepting the sweeping accusation.","best":false}]},{"title":"The extra errand","scene":"A relative asks you to cancel plans to run a nonurgent errand. You often help, but today you already have an important commitment.","question":"What would you say to your relative?","choices":[{"text":"“I can do it tonight after my plans, even though it will make my evening longer.”","rating":"Partly effective","why":"This may be generous, but it risks treating your available time as unlimited. You need not overextend yourself to show care.","points":1,"feedback":"This may be generous, but it risks treating your available time as unlimited. You need not overextend yourself to show care. Another approach: “I cannot cancel today. I can help tomorrow afternoon if that timing works.” You state a clear, realistic limit and offer help you can actually provide.","best":false},{"text":"“I cannot cancel today. I can help tomorrow afternoon if that timing works.”","rating":"Strongest response","why":"You state a clear, realistic limit and offer help you can actually provide.","points":2,"feedback":"You state a clear, realistic limit and offer help you can actually provide.","best":true},{"text":"“I need to keep my plans today. Please ask someone else this time.”","rating":"Reasonable alternative","why":"A clear limit is valid. If you are willing and able, suggesting a specific alternative could preserve more cooperation.","points":1,"feedback":"A clear limit is valid. If you are willing and able, suggesting a specific alternative could preserve more cooperation. Another approach: “I cannot cancel today. I can help tomorrow afternoon if that timing works.” You state a clear, realistic limit and offer help you can actually provide.","best":false}]},{"title":"The urgent warning","scene":"An alarming social media post claims a familiar household product is dangerous. It includes a screenshot of a supposed study but no link or publication date.","question":"What would you do before sharing the post?","choices":[{"text":"Share the warning even though the claim is unverified, but mention that it may not be true.","rating":"Partly effective","why":"A disclaimer does not stop an unsupported claim from spreading or being repeated as fact.","points":1,"feedback":"A disclaimer does not stop an unsupported claim from spreading or being repeated as fact. Another approach: Find the original study, check its date and findings, and compare reliable independent sources before sharing. You test the claim rather than trusting or dismissing it based on its emotional presentation.","best":false},{"text":"Wait for a government announcement before considering any other evidence.","rating":"Partly effective","why":"Official alerts are useful, but reliable evidence can come from multiple credible sources. Waiting only for one authority can miss context.","points":1,"feedback":"Official alerts are useful, but reliable evidence can come from multiple credible sources. Waiting only for one authority can miss context. Another approach: Find the original study, check its date and findings, and compare reliable independent sources before sharing. You test the claim rather than trusting or dismissing it based on its emotional presentation.","best":false},{"text":"Find the original study, check its date and findings, and compare reliable independent sources before sharing.","rating":"Strongest response","why":"You test the claim rather than trusting or dismissing it based on its emotional presentation.","points":2,"feedback":"You test the claim rather than trusting or dismissing it based on its emotional presentation.","best":true}]}],"quiz":[{"q":"A friend sounds hurt by a delayed reply. Which response is most constructive?","choices":["“I was busy, so there is nothing to discuss.”","“I want to understand what upset you, then I can explain what happened.”","“I will reply instantly from now on.”"],"correct":1,"why":"Understanding their concern first creates room for both perspectives without making an unrealistic promise. Strongest answer: “I want to understand what upset you, then I can explain what happened.”","feedbacks":["This shuts down the conversation before learning what hurt your friend. Being busy explains the delay but does not address the impact.","You invite their perspective before explaining yours. Both people can be heard without assigning blame.","An immediate-reply promise may be impossible to keep and creates expectations that could cause more conflict."]},{"q":"A relative asks for help when you have a prior commitment. Which is the strongest boundary?","choices":["“I will cancel if it makes you feel better.”","“I can do everything tomorrow, whatever you need.”","“I cannot change today’s plans. I can help with this tomorrow afternoon.”"],"correct":2,"why":"Specific limits and realistic offers are more sustainable than vague or guilt-driven promises. Strongest answer: “I cannot change today’s plans. I can help with this tomorrow afternoon.”","feedbacks":["Cancelling only to ease guilt may disregard an existing commitment and create resentment.","Promising everything tomorrow ignores your time and capacity; it is not a reliable boundary.","You protect your prior commitment and make a specific offer you can realistically keep."]},{"q":"An alarming post cites an unnamed study. What is the strongest first action?","choices":["Find the original study and independent confirmation before sharing.","Share it only with people you trust.","Dismiss it solely because the wording sounds exaggerated."],"correct":0,"why":"Verification is more reliable than selective sharing or dismissing a claim based only on tone. The strongest first action is to check the original evidence and independent confirmation.","feedbacks":["You seek the original evidence and independent confirmation before spreading an alarming claim.","Sharing only with trusted people can still spread false information and harm people you care about.","A dramatic tone warrants caution, but it does not prove the claim is false. Check the evidence."]}]};
+ const app=document.getElementById('app');
+diff --git a/lessons/02/index.html b/lessons/02/index.html
+index d3a83cf..435da7e 100644
+--- a/lessons/02/index.html
++++ b/lessons/02/index.html
+@@ -24,6 +24,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ /* HL-119: allow enlarged result feedback and other prose to wrap at 320px. */
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style><link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/02/">
+ </head><body><script src="../../shared/lesson-video-controls.js"></script><main><div class="brand">HUMAN LITERACY</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 02 · The Story We Tell Ourselves</div><div id="app" aria-live="polite"></div></main><script> 'use strict';
+ const DATA={"scenarios":[{"title":"The unanswered message","scene":"You sent a friend an important message yesterday. They have been active online but have not answered. You feel overlooked.","question":"What would you do next?","choices":[{"text":"They may have seen it, so I will give them another day before deciding what it means.","rating":"Reasonable alternative","why":"Waiting may help, but the fact that they were online does not establish why they have not replied.","points":1,"feedback":"Waiting may help, but the fact that they were online does not establish why they have not replied. Another approach: “I feel overlooked, but I do not know why they have not replied. I can follow up directly if needed.” You recognize your emotion, separate it from an unverified motive, and keep a practical next step available.","best":false},{"text":"I feel overlooked, but I do not know why they have not replied. I can follow up directly if needed.","rating":"Strongest response","why":"You recognize your emotion, separate it from an unverified motive, and keep a practical next step available.","points":2,"feedback":"You recognize your emotion, separate it from an unverified motive, and keep a practical next step available.","best":true},{"text":"I know they are busy sometimes, but I should probably lower my expectations of this friendship.","rating":"Partly effective","why":"Adjusting expectations can be healthy after a pattern, but one delay is too little information for a firm conclusion.","points":1,"feedback":"Adjusting expectations can be healthy after a pattern, but one delay is too little information for a firm conclusion. Another approach: “I feel overlooked, but I do not know why they have not replied. I can follow up directly if needed.” You recognize your emotion, separate it from an unverified motive, and keep a practical next step available.","best":false}]},{"title":"The look across the room","scene":"At a family gathering, someone looks at you briefly and turns away. You remember a disagreement from last month and feel uneasy.","question":"What is the most careful conclusion?","choices":[{"text":"The disagreement may still matter to them, so I will keep my distance tonight.","rating":"Partly effective","why":"Giving space can be appropriate, but you are still making an unverified assumption about what the glance means.","points":1,"feedback":"Giving space can be appropriate, but you are still making an unverified assumption about what the glance means. Another approach: “I noticed the glance and felt uneasy. I cannot know their intention from that alone.” You acknowledge your reaction while avoiding mind-reading. If the relationship matters, you can speak directly later.","best":false},{"text":"They might be uncomfortable, but I will ask another relative whether they are upset.","rating":"Partly effective","why":"Seeking context can help, but asking third parties may invite speculation and gossip.","points":1,"feedback":"Seeking context can help, but asking third parties may invite speculation and gossip. Another approach: “I noticed the glance and felt uneasy. I cannot know their intention from that alone.” You acknowledge your reaction while avoiding mind-reading. If the relationship matters, you can speak directly later.","best":false},{"text":"I noticed the glance and felt uneasy. I cannot know their intention from that alone.","rating":"Strongest response","why":"You acknowledge your reaction while avoiding mind-reading. If the relationship matters, you can speak directly later.","points":2,"feedback":"You acknowledge your reaction while avoiding mind-reading. If the relationship matters, you can speak directly later.","best":true}]},{"title":"The missed deadline","scene":"A coworker promised to send information by noon. It is now 3 PM, and you need it to finish a report.","question":"What would you say to your coworker?","choices":[{"text":"“I was expecting the information by noon. What is the updated timing? I need it to finish the report.”","rating":"Strongest response","why":"You identify the observable delay, state the impact, and request the information needed to act.","points":2,"feedback":"You identify the observable delay, state the impact, and request the information needed to act.","best":true},{"text":"“I know things come up, but it would help if you warned me earlier next time.”","rating":"Reasonable alternative","why":"This may improve future communication, but it does not directly address when you will receive the information now.","points":1,"feedback":"This may improve future communication, but it does not directly address when you will receive the information now. Another approach: “I was expecting the information by noon. What is the updated timing? I need it to finish the report.” You identify the observable delay, state the impact, and request the information needed to act.","best":false},{"text":"“I’ll finish the other sections first. Let me know when you have the information.”","rating":"Partly effective","why":"Working on what you can control is sensible, but avoiding a direct follow-up may prolong the blockage.","points":1,"feedback":"Working on what you can control is sensible, but avoiding a direct follow-up may prolong the blockage. Another approach: “I was expecting the information by noon. What is the updated timing? I need it to finish the report.” You identify the observable delay, state the impact, and request the information needed to act.","best":false}]}],"quiz":[{"q":"Your friend has not replied. Which statement is a fact?","choices":["Your friend has been online but has not answered your message.","Your friend saw the message and decided you were unimportant.","Your friend is avoiding a difficult conversation."],"correct":0,"why":"Online activity and an unanswered message can be observed, but they do not establish why someone has not replied.","feedbacks":["Online activity and an unanswered message are observable; neither proves a motive.","This assumes the friend saw your message and judged your importance, neither of which you know.","Avoidance is one possible explanation, but you have not established it as fact."]},{"q":"A glance reminds you of a previous disagreement. What is the strongest interpretation?","choices":["The person is probably still angry, so you should protect yourself.","Feeling uneasy is real, but a glance alone does not reveal what someone thinks.","Their silence proves they have moved on."],"correct":1,"why":"Your feeling is real, but a brief glance does not reveal another person's thoughts or intentions.","feedbacks":["Past disagreement can color your interpretation; a glance alone does not establish continued anger.","You acknowledge your feeling without presenting your interpretation as fact.","Silence does not prove someone has moved on; you would still be guessing."]},{"q":"A coworker misses a deadline. What would you say to request an update without assuming a motive?","choices":["“You seem overwhelmed, so I will wait until you are ready.”","“I will tell my supervisor you are unreliable.”","“The noon deadline passed. When can I expect the information I need?”"],"correct":2,"why":"A factual, direct request addresses the problem without assuming the cause. Strongest answer: “The noon deadline passed. When can I expect the information I need?”","feedbacks":["Waiting may be considerate, but it assumes overwhelm and leaves your work blocked without a clear plan.","Calling someone unreliable makes a character judgment before clarifying what happened.","You describe the missed deadline and request a concrete update without assigning motive."]}]};
+ const app=document.getElementById('app');
+diff --git a/lessons/03/index.html b/lessons/03/index.html
+index b4423b0..40fdcd8 100644
+--- a/lessons/03/index.html
++++ b/lessons/03/index.html
+@@ -15,6 +15,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ /* HL-119: allow enlarged result feedback and other prose to wrap at 320px. */
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style><link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/03/">
+ </head><body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><header class="lesson-heading" aria-label="Lesson number and title"><span>LESSON 03</span><strong>Recognizing and Managing Emotional Reactions</strong></header><div id="app" aria-live="polite"></div><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main><script> 'use strict';
+ const DATA={"scenarios":[{"title":"The sharp reply","scene":"Someone at home answers your simple question in a sharp tone. You feel hurt and angry, but you do not know what caused their tone.","question":"What would you say to the person?","choices":[{"text":"“That sounded sharp. I am feeling hurt, and I want to understand what is going on.”","rating":"Strongest response","why":"You name the impact without claiming to know their intention, opening the door to clarification.","points":2,"feedback":"You name the impact without claiming to know their intention, opening the door to clarification.","best":true},{"text":"“You seem stressed. I will give you some space and we can talk later.”","rating":"Reasonable alternative","why":"Space may help, but saying they seem stressed is still an interpretation. Check whether postponing is actually helpful.","points":1,"feedback":"Space may help, but saying they seem stressed is still an interpretation. Check whether postponing is actually helpful. Another approach: “That sounded sharp. I am feeling hurt, and I want to understand what is going on.” You name the impact without claiming to know their intention, opening the door to clarification.","best":false},{"text":"“I did not like that tone. Please speak to me more gently.”","rating":"Reasonable alternative","why":"You can ask for respectful communication, but a brief check-in may help explain an isolated tense moment.","points":1,"feedback":"You can ask for respectful communication, but a brief check-in may help explain an isolated tense moment. Another approach: “That sounded sharp. I am feeling hurt, and I want to understand what is going on.” You name the impact without claiming to know their intention, opening the door to clarification.","best":false}]},{"title":"The changed plan","scene":"A friend cancels dinner at the last minute. You were looking forward to it and feel disappointed. They offer no explanation.","question":"What would you say to your friend?","choices":[{"text":"“I understand plans change. Let us choose another date when you are free.”","rating":"Partly effective","why":"You are flexible, but you leave your disappointment and the last-minute impact unspoken.","points":1,"feedback":"You are flexible, but you leave your disappointment and the last-minute impact unspoken. Another approach: “I was disappointed because I had planned around tonight. Is everything okay?” You express your experience clearly while allowing room for information you do not have.","best":false},{"text":"“I was disappointed because I had planned around tonight. Is everything okay?”","rating":"Strongest response","why":"You express your experience clearly while allowing room for information you do not have.","points":2,"feedback":"You express your experience clearly while allowing room for information you do not have.","best":true},{"text":"“I would appreciate more notice next time. I will reach out when I am ready to reschedule.”","rating":"Reasonable alternative","why":"This is a valid boundary, especially if cancellations repeat, though it may be worth checking what happened first.","points":1,"feedback":"This is a valid boundary, especially if cancellations repeat, though it may be worth checking what happened first. Another approach: “I was disappointed because I had planned around tonight. Is everything okay?” You express your experience clearly while allowing room for information you do not have.","best":false}]},{"title":"The crowded afternoon","scene":"Three people ask for help at once. You feel overwhelmed and impatient. Two requests are routine; one may be time-sensitive.","question":"What would you do first?","choices":[{"text":"Handle the fastest tasks first without checking which request is urgent.","rating":"Partly effective","why":"Quick wins may feel useful, but urgency and your capacity matter more than speed alone.","points":1,"feedback":"Quick wins may feel useful, but urgency and your capacity matter more than speed alone.","best":false},{"text":"Ask everyone to wait without checking whether any request needs immediate attention.","rating":"Reasonable alternative","why":"A pause can help you regulate, but you still need to identify whether any request is urgent.","points":1,"feedback":"A pause can help you regulate, but you still need to identify whether any request is urgent.","best":false},{"text":"Pause, check whether any request is urgent, and explain what you can realistically handle.","rating":"Strongest response","why":"You recognize your limits, assess priorities, and make commitments you can sustain.","points":2,"feedback":"You recognize your limits, assess priorities, and make commitments you can sustain.","best":true}]}],"quiz":[{"q":"Someone's tone hurts you. What would you say without assuming their intention?","choices":["“You intended to be rude, but I forgive you.”","“It’s fine. Nothing bothered me.”","“That sounded sharp, and I felt hurt. Can we talk about what happened?”"],"correct":2,"why":"You can describe the impact without claiming to know the other person's intention.","feedbacks":["Forgiveness may help, but claiming you know their intent goes beyond what the tone alone proves.","Ignoring the feeling does not help you understand or communicate its impact.","You name your experience while staying open to information about their intent."]},{"q":"A friend cancels unexpectedly. What would you say to express disappointment and remain curious?","choices":["“I was disappointed. Is everything okay, and can we discuss rescheduling?”","“You never keep your plans. I’m done.”","“It doesn’t matter.”"],"correct":0,"why":"You can express your experience and remain curious about theirs. Strongest answer: “I was disappointed. Is everything okay, and can we discuss rescheduling?”","feedbacks":["You express disappointment, check on your friend, and suggest a practical next step.","One cancellation is not enough evidence to conclude the friend cannot keep plans.","Silence can avoid conflict but may also prevent an honest conversation about expectations."]},{"q":"Several people need your help. What is the strongest first action?","choices":["Agree to requests in the order they arrived.","Pause, identify urgency, and explain what you can realistically do.","Finish the easiest requests first without checking urgency."],"correct":1,"why":"A short pause, prioritization, and clear limits help you respond effectively.","feedbacks":["First-come-first-served ignores urgency and your actual capacity to help.","You assess what matters most, communicate limits, and commit only to what you can do.","Doing easy tasks first may neglect urgent needs and leaves others unsure what to expect."]}]};
+ const app=document.getElementById('app');
+diff --git a/lessons/04/index.html b/lessons/04/index.html
+index e0c684c..c393de2 100644
+--- a/lessons/04/index.html
++++ b/lessons/04/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/04/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 04 · Understanding Boundaries</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/05/index.html b/lessons/05/index.html
+index 072f38e..599c617 100644
+--- a/lessons/05/index.html
++++ b/lessons/05/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/05/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 05 · Listening to Understand</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/06/index.html b/lessons/06/index.html
+index 995580d..f3d9394 100644
+--- a/lessons/06/index.html
++++ b/lessons/06/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/06/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 06 · Repairing After a Mistake</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/07/index.html b/lessons/07/index.html
+index e1a5800..ea085d5 100644
+--- a/lessons/07/index.html
++++ b/lessons/07/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/07/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 07 · Handling Disagreements Respectfully</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/08/index.html b/lessons/08/index.html
+index fe949f3..8458215 100644
+--- a/lessons/08/index.html
++++ b/lessons/08/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/08/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 08 · Asking for Help</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/09/index.html b/lessons/09/index.html
+index 424cb0f..1a6d43a 100644
+--- a/lessons/09/index.html
++++ b/lessons/09/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/09/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 09 · Recognizing Unhealthy Patterns</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/lessons/10/index.html b/lessons/10/index.html
+index fd811b2..36e1cd3 100644
+--- a/lessons/10/index.html
++++ b/lessons/10/index.html
+@@ -18,6 +18,7 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
+ .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+ </style>
+ <link rel="stylesheet" href="../../shared/lesson-record.css">
++<link rel="canonical" href="https://ouroneplace.github.io/lessons/10/">
+ </head>
+ <body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 10 · Making Thoughtful Decisions</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+ <script>
+diff --git a/one-place/family-handoff.html b/one-place/family-handoff.html
+index c0792c1..86352a3 100644
+--- a/one-place/family-handoff.html
++++ b/one-place/family-handoff.html
+@@ -68,7 +68,8 @@
+  .foot{margin:5px 0}
+  footer{padding:6px 0}
+ }
+-</style></head><body><div class="bar">PUBLIC TOOL PREVIEW · FREE LOCAL TOOL · NO ACCOUNT, TRACKING, UPLOAD, OR PAYMENT</div><header class="shell"><a class="brand" href="../index.html" aria-label="One Place Home">✳ ONE PLACE</a><nav><a href="../index.html?area=Family%20%26%20Caregiving">Family & Caregiving</a> · <a href="../index.html?team">Our team</a></nav></header>
++</style><link rel="canonical" href="https://ouroneplace.github.io/one-place/family-handoff.html">
++</head><body><div class="bar">PUBLIC TOOL PREVIEW · FREE LOCAL TOOL · NO ACCOUNT, TRACKING, UPLOAD, OR PAYMENT</div><header class="shell"><a class="brand" href="../index.html" aria-label="One Place Home">✳ ONE PLACE</a><nav><a href="../index.html?area=Family%20%26%20Caregiving">Family & Caregiving</a> · <a href="../index.html?team">Our team</a></nav></header>
+ <main class="shell">
+ <div class="topline"><div><h1>Share the care. Make the next step clear.</h1><p class="intro">Built by one human founder with ChatGPT and AI tools. Coordinate tasks without exposing medical records.</p></div><div class="actions"><button class="secondary" id="sample" type="button">Fictional example</button><button class="secondary" id="clear" type="button">Clear</button><button class="btn" id="quick" type="button">Download handoff ↓</button></div></div>
+ <div class="stats" aria-label="Handoff status"><div><small>Responsibilities</small><strong id="nTasks">0</strong></div><div><small>Unassigned</small><strong id="nUnassigned">0</strong></div><div><small>Open concerns</small><strong id="nFlags">0</strong></div><div><small>Readiness</small><strong id="nReady">Needs review</strong></div></div>
+diff --git a/one-place/money-bills.html b/one-place/money-bills.html
+index ad490e6..0e0e8c5 100644
+--- a/one-place/money-bills.html
++++ b/one-place/money-bills.html
+@@ -162,7 +162,8 @@
+   .bottom{padding:6px 0}
+ }
+ 
+-</style></head><body>
++</style><link rel="canonical" href="https://ouroneplace.github.io/one-place/money-bills.html">
++</head><body>
+ <div class="bar">PUBLIC TOOL PREVIEW · FREE LOCAL TOOL · NO BANK CONNECTION · NO PAYMENT OR ACCOUNT</div>
+ <div class="top"><div class="wrap"><a class="brand" href="../index.html" aria-label="One Place Home"><i>✳</i> ONE PLACE</a><div class="topnav"><a href="../index.html">All life areas</a><a href="../index.html?impact">Public numbers</a><a href="../index.html?team">Our team</a></div></div></div>
+ <main class="wrap main" id="main"><section class="intro"><div><div class="eyebrow">Money & Bills · First complete-service pilot</div><h1>Know what comes due. Choose your next step.</h1><p>A free, private bill-and-income organizer built by one human founder with ChatGPT and AI tools.</p></div><div class="toolactions"><button id="sample" type="button" class="ghost">Load fictional example</button><button id="clear" type="button" class="ghost">Clear everything</button><button id="exportTop" type="button" class="btn">Download my plan ↓</button></div></section>
+diff --git a/package.json b/package.json
+index 6e5cd21..8728894 100644
+--- a/package.json
++++ b/package.json
+@@ -2,8 +2,9 @@
+   "name": "human-literacy-online",
+   "private": true,
+   "scripts": {
+-    "test": "npm run test:preview && npm run audit && npm run check:js && npm run test:browser",
++    "test": "npm run test:migration && npm run test:preview && npm run audit && npm run check:js && npm run test:browser",
+     "test:preview": "python3 review/check_integrity.py && python3 -m unittest discover -s review -p test_local_preview.py",
++    "test:migration": "node scripts/check_organization_migration.cjs",
+     "check:js": "node scripts/check_javascript.cjs",
+     "audit": "python3 scripts/site_audit.py",
+     "test:browser": "playwright test"
+diff --git a/review/check_integrity.py b/review/check_integrity.py
+index 8d223ee..c2cba4d 100644
+--- a/review/check_integrity.py
++++ b/review/check_integrity.py
+@@ -54,7 +54,7 @@ for mode in ['tampered', 'traversal', 'missing-manifest']:
+     outer = io.BytesIO()
+     revision = 'e' * 40
+     with zipfile.ZipFile(outer, 'w') as source:
+-        prefix = 'Human-literacy-online-' + revision + '/'
++        prefix = 'ouroneplace.github.io-' + revision + '/'
+         for n in range(1, 11):
+             source.writestr(prefix + 'lessons/%02d/index.html' % n, 'Approved placeholder')
+         source.writestr(prefix + 'review/evidence.zip', nested.getvalue())
+diff --git a/review/local_preview.py b/review/local_preview.py
+index 7bcbd3d..b8ea8bf 100644
+--- a/review/local_preview.py
++++ b/review/local_preview.py
+@@ -26,7 +26,7 @@ def run(revision, expected_checksum):
+     if not re.fullmatch(r'[a-f0-9]{64}', expected_checksum):
+         raise ValueError('The independently supplied archive checksum is required')
+     SHA, CHECKSUM = revision, expected_checksum
+-    URL = 'https://codeload.github.com/humanliteracy/Human-literacy-online/zip/' + SHA
++    URL = 'https://codeload.github.com/ouroneplace/ouroneplace.github.io/zip/' + SHA
+     print('Downloading the pinned public review source and evidence...', flush=True)
+     with urlopen(URL, timeout=90) as response:
+         archive = response.read(67_108_865)
+@@ -34,7 +34,7 @@ def run(revision, expected_checksum):
+         raise SystemExit('Integrity check failed. Nothing was opened. Do not bypass this check.')
+     files = {}
+     with zipfile.ZipFile(io.BytesIO(archive)) as source:
+-        prefix = 'Human-literacy-online-' + SHA + '/'
++        prefix = 'ouroneplace.github.io-' + SHA + '/'
+         for name in source.namelist():
+             if not name.startswith(prefix) or name.endswith('/'):
+                 continue
+diff --git a/review/test_local_preview.py b/review/test_local_preview.py
+index cf04652..c5975d6 100644
+--- a/review/test_local_preview.py
++++ b/review/test_local_preview.py
+@@ -38,7 +38,7 @@ class IntegratedPreview(unittest.TestCase):
+             for path, data in {**cls.payloads, '/.git/config': b'private',
+                                '/private/draft.txt': b'private',
+                                '/.env': b'private'}.items():
+-                z.writestr('Human-literacy-online-' + cls.sha + path, data)
++                z.writestr('ouroneplace.github.io-' + cls.sha + path, data)
+         data = archive.getvalue()
+         cls.launcher = runpy.run_path(str(Path(__file__).with_name('local_preview.py')),
+                                 run_name='review_import')['run']
+diff --git a/scripts/check_organization_migration.cjs b/scripts/check_organization_migration.cjs
+new file mode 100644
+index 0000000..f8e2bd1
+--- /dev/null
++++ b/scripts/check_organization_migration.cjs
+@@ -0,0 +1,43 @@
++'use strict';
++const assert = require('node:assert/strict');
++const fs = require('node:fs');
++const vm = require('node:vm');
++const script = fs.readFileSync('teal/teal.js', 'utf8');
++const canonical = 'https://ouroneplace.github.io/teal/';
++const publicLocation = { origin: 'https://ouroneplace.github.io', pathname: '/teal/', search: '?fictional=do-not-share', hash: '#do-not-share' };
++function setup(location, navigator = {}) {
++  const nodes = Object.fromEntries(['share-status','share-invitation','copy-invitation','manual-copy','invitation-text','share-copy'].map(id => [id, { hidden:true, textContent:'', value:'', events:{}, addEventListener(k,v){this.events[k]=v;},focus(){},select(){} }]));
++  nodes['share-copy'].textContent = 'An invitation to practice respect.';
++  vm.runInNewContext(script, { document: { getElementById:id=>nodes[id], querySelectorAll:()=>[] }, navigator, location });
++  return nodes;
++}
++(async () => {
++  let passed=0;
++  for (const pathname of ['/teal/', '/teal/index.html']) {
++    let sent;
++    const nodes=setup({...publicLocation,pathname}, {share:async data=>{sent=data;}});
++    assert.equal(nodes['invitation-text'].value, nodes['share-copy'].textContent+'\n'+canonical);
++    await nodes['share-invitation'].events.click();
++    assert.equal(sent.url,canonical);
++    assert.ok(!JSON.stringify(sent).includes('do-not-share'));
++    passed++;
++  }
++  for (const location of [
++    {origin:'http://localhost:8765',pathname:'/teal/'},
++    {origin:'https://ouroneplace.github.io.evil.example',pathname:'/teal/'},
++    {origin:'http://ouroneplace.github.io',pathname:'/teal/'},
++    {origin:'https://ouroneplace.github.io',pathname:'/unpublished/teal/'},
++  ]) {
++    let copied;
++    const nodes=setup(location,{clipboard:{writeText:async text=>{copied=text;}}});
++    await nodes['copy-invitation'].events.click();
++    assert.equal(copied,nodes['share-copy'].textContent);
++    assert.ok(!copied.includes('http'));
++    passed++;
++  }
++  for (const file of ['teal/index.html','teal/letter.html']) {
++    assert.ok(fs.readFileSync(file,'utf8').includes('<link rel="canonical" href="'+canonical+'">'));
++    passed++;
++  }
++  console.log('Organization canonical/share checks:',passed,'passed; previews and lookalike hosts never share an address.');
++})().catch(e=>{console.error(e);process.exitCode=1;});
+diff --git a/scripts/verify_live_site.cjs b/scripts/verify_live_site.cjs
+new file mode 100644
+index 0000000..2de4327
+--- /dev/null
++++ b/scripts/verify_live_site.cjs
+@@ -0,0 +1,56 @@
++// Authorized migration smoke tests against the actual public organization website.
++// Fictional inputs only. No sign-in, voice, external-resource visits or server writes.
++'use strict';
++const { chromium } = require('playwright');
++const assert = require('node:assert/strict');
++const fs = require('node:fs');
++const origin = 'https://ouroneplace.github.io';
++const output = 'live-site-report';
++fs.mkdirSync(output,{recursive:true});
++(async()=>{
++ const browser=await chromium.launch({channel:'chromium'});
++ const result={origin,source_sha:process.env.GITHUB_SHA||'unknown',checked:new Date().toISOString(),widths:[],errors:[]};
++ try {
++  for(const width of [1366,320]) {
++   const context=await browser.newContext({viewport:{width,height:844}});
++   const page=await context.newPage();const errors=[],missing=[],outbound=[],writes=[];
++   page.on('pageerror',e=>errors.push(e.message));
++   page.on('response',r=>{const u=new URL(r.url());if(u.origin===origin&&r.status()>=400&&u.pathname!=='/favicon.ico')missing.push(r.status()+' '+r.url());});
++   page.on('request',r=>{if(!r.url().startsWith(origin+'/')&&!r.url().startsWith('data:')&&!r.url().startsWith('blob:'))outbound.push(r.url());if(!['GET','HEAD'].includes(r.method()))writes.push(r.method()+' '+r.url());});
++   async function visible(locator){await locator.waitFor({state:'visible',timeout:15000});}
++   async function goto(path){const r=await page.goto(origin+path,{waitUntil:'domcontentloaded'});assert.ok(r&&r.ok(),path);await visible(page.locator('h1').first());}
++   async function reflow(){assert.ok(await page.evaluate(()=>Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)<=innerWidth+1),'Horizontal overflow at '+page.url()+' width '+width);}
++   await goto('/');assert.match(await page.title(),/^ONE PLACE/);
++   assert.equal(await page.locator('.grid > a.tile').count(),18);await reflow();
++   await page.screenshot({path:output+'/one-place-'+width+'.png',fullPage:true});
++   const areas=await page.locator('.grid > a.tile').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
++   const solutions=[];
++   for(const route of areas){await goto('/'+route);assert.equal(await page.locator('.offers > a.offer').count(),4);solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));await reflow();}
++   assert.equal(new Set(solutions).size,72);
++   for(const route of solutions){await goto('/'+route);await reflow();}
++   for(let n=1;n<=10;n++){
++    await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
++    assert.equal(await page.getByRole('navigation',{name:'One Place and lessons'}).count(),1);
++    await page.getByRole('link',{name:'One Place Home',exact:true}).click();
++    await visible(page.getByRole('heading',{name:'Explore every part of life',exact:true}));
++   }
++   for(const [name,path] of [['Life Simulator','/simulator/01/'],['TEAL foundation (draft)','/teal/'],['Learning home','/human-literacy/'],['Money & Bills','/one-place/money-bills.html'],['Family & Caregiving','/one-place/family-handoff.html']]){
++    await goto('/');await page.getByRole('navigation',{name:'One Place navigation'}).getByRole('link',{name,exact:true}).click();await visible(page.locator('h1').first());assert.equal(new URL(page.url()).pathname,path);await reflow();await page.getByRole('link',{name:/One Place Home/i}).first().click();await visible(page.getByRole('heading',{name:'Explore every part of life'}));
++   }
++   await goto('/simulator/01/');await page.locator('#yourReply').fill('Please leave me alone.');await page.locator('#send').click();await visible(page.locator('#completionTitle'));
++   await goto('/teal/');const share=await page.locator('#invitation-text').inputValue();assert.ok(share.includes(origin+'/teal/'));assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),origin+'/teal/');
++   await goto('/one-place/money-bills.html');await page.locator('#sample').click();await page.locator('#cash').fill('450');await page.locator('#tab-plan').click();await visible(page.locator('#panel-plan'));await reflow();
++   const download=page.waitForEvent('download');await page.locator('#exportTop').click();await (await download).saveAs(output+'/fictional-money-plan-'+width+'.txt');
++   await goto('/one-place/family-handoff.html');await page.locator('#sample').click();await page.getByRole('tab',{name:'1. Household',exact:true}).click();await page.locator('#person').fill('Fictional household');await reflow();
++   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(outbound,[]);assert.deepEqual(writes,[]);
++   result.widths.push({width,areas:18,solutions:72,lessons:10,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',outbound_requests:0,server_writes:0});
++   await context.close();
++  }
++  const context=await browser.newContext();const request=context.request;
++  for(const path of ['/media/Lesson_01_FINAL_REVIEW_114s.mp4','/media/lesson02.mp4']){
++   const response=await request.get(origin+path,{headers:{Range:'bytes=0-511'}});assert.equal(response.status(),206,path+' byte-range support');assert.equal((await response.body()).length,512);
++  }
++  await context.close();result.video_ranges='PASS';result.status='PASS';
++ }catch(e){result.status='FAIL';result.errors.push(e.stack||String(e));process.exitCode=1;}
++ finally{await browser.close();fs.writeFileSync(output+'/results.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));}
++})();
+diff --git a/simulator/01/index.html b/simulator/01/index.html
+index 20616f3..cf67674 100644
+--- a/simulator/01/index.html
++++ b/simulator/01/index.html
+@@ -99,6 +99,7 @@ footer{font-size:.85rem;color:#526e70;line-height:1.6;margin-top:26px}
+ @media(max-width:580px){.container{padding:17px 12px 40px}.scene-top,.dialogue{padding:16px}.office{min-height:230px}.head{width:89px;height:100px}.bodyshape{width:168px;height:145px}.content{padding:19px 16px}.coach-panel{padding:16px 12px}.coach-option{padding:12px}.primary,.secondary{padding:12px 16px}.coach-literal{padding:10px 12px}}
+ @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+ </style>
++<link rel="canonical" href="https://ouroneplace.github.io/simulator/01/">
+ </head>
+ <body>
+ <div class="container">
+diff --git a/support/index.html b/support/index.html
+index d28e1a2..d9296b9 100644
+--- a/support/index.html
++++ b/support/index.html
+@@ -1,6 +1,7 @@
+ <!doctype html>
+ <html lang="en"><head><meta name="robots" content="noindex,nofollow,noarchive"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#edf8f5"><title>Support Our Mission | ONE PLACE</title><style>
+-:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#193035;background:#edf8f5}*{box-sizing:border-box}body{margin:0}main{width:min(100% - 32px,760px);margin:auto;padding:26px 0 55px}a{color:#076f68}a:focus-visible{outline:3px solid #193035;outline-offset:4px}.brand{font-weight:800;color:#087f77;letter-spacing:.03em}.back{display:inline-block;margin:22px 0 35px}h1{font-size:clamp(35px,8vw,52px);line-height:1.12;letter-spacing:-.03em}h2{font-size:27px;margin-top:34px}p,li{font-size:19px;line-height:1.65}.card{background:#fff;border:1px solid #cbe3dd;border-radius:22px;padding:24px;margin:22px 0}.muted{color:#526a6f}.pill{display:inline-block;border:1px solid #a5ccc4;border-radius:999px;padding:7px 12px;font-size:14px;font-weight:700}footer{margin-top:45px;font-size:15px;line-height:1.6;color:#526a6f}</style></head>
++:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#193035;background:#edf8f5}*{box-sizing:border-box}body{margin:0}main{width:min(100% - 32px,760px);margin:auto;padding:26px 0 55px}a{color:#076f68}a:focus-visible{outline:3px solid #193035;outline-offset:4px}.brand{font-weight:800;color:#087f77;letter-spacing:.03em}.back{display:inline-block;margin:22px 0 35px}h1{font-size:clamp(35px,8vw,52px);line-height:1.12;letter-spacing:-.03em}h2{font-size:27px;margin-top:34px}p,li{font-size:19px;line-height:1.65}.card{background:#fff;border:1px solid #cbe3dd;border-radius:22px;padding:24px;margin:22px 0}.muted{color:#526a6f}.pill{display:inline-block;border:1px solid #a5ccc4;border-radius:999px;padding:7px 12px;font-size:14px;font-weight:700}footer{margin-top:45px;font-size:15px;line-height:1.6;color:#526a6f}</style><link rel="canonical" href="https://ouroneplace.github.io/support/">
++</head>
+ <body><main><div class="brand">HUMAN LITERACY</div><a class="back" href="../index.html">← One Place Home</a>
+ <div class="pill">A FREE RESOURCE FOR EVERYONE</div><h1>Support Our Mission</h1><p>Human Literacy is building a free, accessible library of practical knowledge and everyday support. Learning here never requires a purchase, account, or personal information.</p>
+ <section class="card"><h2>Humanity Marketplace</h2><p>In the future, this space will feature carefully reviewed, optional products and services that may help people learn, live independently, care for others, and improve everyday life.</p><p><strong>No products or affiliate links have been approved or published yet.</strong> We will add recommendations only after checking usefulness, safety, affordability, accessibility, and free alternatives.</p></section>
+diff --git a/teal/index.html b/teal/index.html
+index 781dd82..2ed053d 100644
+--- a/teal/index.html
++++ b/teal/index.html
+@@ -8,12 +8,12 @@
+   <meta name="referrer" content="no-referrer">
+   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; font-src 'self'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+   <title>TEAL — A World Worth Building | ONE PLACE</title>
+-  <link rel="canonical" href="https://humanliteracy.github.io/Human-literacy-online/teal/">
++  <link rel="canonical" href="https://ouroneplace.github.io/teal/">
+   <meta property="og:type" content="website">
+   <meta property="og:title" content="TEAL — A World Worth Building">
+   <meta property="og:description" content="To humanity, from one of us. An open invitation to practice respect, learn useful skills, and help reduce preventable suffering.">
+-  <meta property="og:url" content="https://humanliteracy.github.io/Human-literacy-online/teal/">
+-  <meta property="og:image" content="https://humanliteracy.github.io/Human-literacy-online/teal/assets/teal-social.jpg">
++  <meta property="og:url" content="https://ouroneplace.github.io/teal/">
++  <meta property="og:image" content="https://ouroneplace.github.io/teal/assets/teal-social.jpg">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   <meta property="og:image:alt" content="A luminous teal three-heart emblem above Earth. TEAL — A World Worth Building. Peace • Love • Happiness.">
+diff --git a/teal/letter.html b/teal/letter.html
+index 60f81d7..af068a0 100644
+--- a/teal/letter.html
++++ b/teal/letter.html
+@@ -1,4 +1,4 @@
+-<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="description" content="The TEAL founding letter in a simple, printable reading view."><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; base-uri 'none'; form-action 'none'"><title>To Humanity, From One of Us — TEAL founding letter | ONE PLACE</title><link rel="canonical" href="https://humanliteracy.github.io/Human-literacy-online/teal/"><link rel="stylesheet" href="teal.css"></head><body class="reading-body"><a class="skip-link" href="#message-title">Skip to the letter</a><header class="reading-header"><a class="op104-oneplace-reading" href="../index.html">← One Place Home</a><a href="index.html">TEAL · Return to the full experience</a><span class="reading-note">Founding letter · October 28, 2026</span></header><main><article class="founding-letter">
++<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="description" content="The TEAL founding letter in a simple, printable reading view."><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; base-uri 'none'; form-action 'none'"><title>To Humanity, From One of Us — TEAL founding letter | ONE PLACE</title><link rel="canonical" href="https://ouroneplace.github.io/teal/"><link rel="stylesheet" href="teal.css"></head><body class="reading-body"><a class="skip-link" href="#message-title">Skip to the letter</a><header class="reading-header"><a class="op104-oneplace-reading" href="../index.html">← One Place Home</a><a href="index.html">TEAL · Return to the full experience</a><span class="reading-note">Founding letter · October 28, 2026</span></header><main><article class="founding-letter">
+           <h1 id="message-title" tabindex="-1">To humanity,<br><em>from one of us.</em></h1>
+           <p class="letter-opening">We have learned to fly.<br>We have walked on the Moon.<br>We have connected people across oceans.</p>
+           <p>We have found ways to prevent diseases and share knowledge across the world.<sup><a href="index.html#source-history" aria-label="Historical and scientific sources">1</a></sup></p>
+diff --git a/teal/teal.js b/teal/teal.js
+index f1d8ee8..4f329a1 100644
+--- a/teal/teal.js
++++ b/teal/teal.js
+@@ -11,9 +11,9 @@
+ 
+   // Only the actual HTTPS public route shares the fixed canonical address.
+   // This prepares release behavior without asserting publication approval.
+-  const canonicalUrl = 'https://humanliteracy.github.io/Human-literacy-online/teal/';
+-  const atCanonicalLocation = location.origin === 'https://humanliteracy.github.io'
+-    && ['/Human-literacy-online/teal/', '/Human-literacy-online/teal/index.html'].includes(location.pathname);
++  const canonicalUrl = 'https://ouroneplace.github.io/teal/';
++  const atCanonicalLocation = location.origin === 'https://ouroneplace.github.io'
++    && ['/teal/', '/teal/index.html'].includes(location.pathname);
+   const shareText = atCanonicalLocation ? `${invitation}\n${canonicalUrl}` : invitation;
+   textField.value = shareText;
+   share.hidden = false;
