@@ -1,3 +1,4 @@
+# Approved source history imported; verify the published organization website.
 name: Verify deployed ONE PLACE
 on:
   push:
