@@ -33,6 +33,9 @@ jobs:
           git apply --check "$RUNNER_TEMP/approved-main.patch"
           git apply "$RUNNER_TEMP/approved-main.patch"
           git add --all
+          test "$(git write-tree)" = "6ac0417dc579ff5cec812c375f71e2cb4b97f938"
+          git checkout "$BOOTSTRAP_SHA" -- .github/workflows
+          git add --all
           git diff --cached --check
           git config user.name "ONE PLACE migration"
           git config user.email "noreply@users.noreply.github.com"
