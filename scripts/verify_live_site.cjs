@@ -18,8 +18,13 @@ fs.mkdirSync(output,{recursive:true});
    page.on('response',r=>{const u=new URL(r.url());if(u.origin===origin&&r.status()>=400&&u.pathname!=='/favicon.ico')missing.push(r.status()+' '+r.url());});
    page.on('request',r=>{if(!r.url().startsWith(origin+'/')&&!r.url().startsWith('data:')&&!r.url().startsWith('blob:'))outbound.push(r.url());if(!['GET','HEAD'].includes(r.method()))writes.push(r.method()+' '+r.url());});
    async function visible(locator){await locator.waitFor({state:'visible',timeout:15000});}
-   async function goto(path){const r=await page.goto(origin+path,{waitUntil:'domcontentloaded'});assert.ok(r&&r.ok(),path);await visible(page.locator('h1').first());}
-   async function reflow(){assert.ok(await page.evaluate(()=>Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)<=innerWidth+1),'Horizontal overflow at '+page.url()+' width '+width);}
+   async function goto(path){const r=await page.goto(origin+path,{waitUntil:'load'});assert.ok(r&&r.ok(),path);await visible(page.locator('h1').first());}
+   async function reflow(){
+    await page.waitForLoadState('load');
+    await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+    const layout=await page.evaluate(()=>({width:innerWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth,overflow:[...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,id:e.id,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width})).filter(e=>e.right>innerWidth+1).slice(0,15)}));
+    if(Math.max(layout.document,layout.body)>layout.width+1){await page.screenshot({path:output+'/overflow-'+width+'.png',fullPage:true});throw new Error('Horizontal overflow at '+page.url()+' '+JSON.stringify(layout));}
+   }
    await goto('/');assert.match(await page.title(),/^ONE PLACE/);
    assert.equal(await page.locator('.grid > a.tile').count(),18);await reflow();
    await page.screenshot({path:output+'/one-place-'+width+'.png',fullPage:true});

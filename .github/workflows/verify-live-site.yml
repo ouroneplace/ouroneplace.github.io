@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/verify-live-site.yml'
+      - 'scripts/verify_live_site.cjs'
   workflow_dispatch:
 permissions:
   contents: read
