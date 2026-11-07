@@ -2,8 +2,9 @@
   "name": "human-literacy-online",
   "private": true,
   "scripts": {
-    "test": "npm run test:preview && npm run audit && npm run check:js && npm run test:browser",
+    "test": "npm run test:migration && npm run test:preview && npm run audit && npm run check:js && npm run test:browser",
     "test:preview": "python3 review/check_integrity.py && python3 -m unittest discover -s review -p test_local_preview.py",
+    "test:migration": "node scripts/check_organization_migration.cjs",
     "check:js": "node scripts/check_javascript.cjs",
     "audit": "python3 scripts/site_audit.py",
     "test:browser": "playwright test"

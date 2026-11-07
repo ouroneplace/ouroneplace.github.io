@@ -2,6 +2,33 @@
 
 ONE PLACE is the primary home for practical life resources, free tools, Human Literacy learning, Life Simulator practice and TEAL. The public website uses the approved One Place identity, with unfinished products and services clearly marked as previews. No visitor account or payment is required.
 
+
+## Organization website migration — November 7, 2026
+
+Current public home: **https://ouroneplace.github.io/**. This repository preserves
+the complete approved source-main history through
+`302cbeb18dec85fd6753469a55b20ce8a18b75ea` from
+`humanliteracy/Human-literacy-online`. Only approved main and migration adaptations
+are published here; unapproved source draft branches are not imported.
+
+The original repository and website remain independently available and unchanged.
+No redirect is installed there. Source-history URLs in dated review documents
+remain historical references. TEAL sharing, canonical/social URLs, local-review
+ZIP paths and internal educational-resource links use this organization's root.
+
+GitHub Pages is to publish `main` / repository root. `.nojekyll` keeps this
+buildless static site intact. Existing browser CI remains separate from Pages;
+future main changes still require the project's review and acceptance process.
+The manual **Verify deployed ONE PLACE** workflow checks the actual public host
+at desktop and 320px; it uses fictional examples only and activates no services.
+
+Browser storage belongs to an origin. Local learning records saved on the old
+`humanliteracy.github.io` origin do not automatically appear on the new
+`ouroneplace.github.io` origin. The old site and records are not deleted; use
+the existing local export/clear controls. No private records are transferred.
+
+[Migration evidence and founder checklist](docs/organization-migration.md).
+
 ## Where the site lives
 
 - `index.html` — ONE PLACE homepage, search and the 18-area / 72-offering catalog.
@@ -17,7 +44,7 @@ See [the rebranding and repository transition assessment](docs/one-place-transit
 
 ## Publication control
 
-GitHub Pages serves [ONE PLACE](https://humanliteracy.github.io/Human-literacy-online/) from the repository root on **`main`**. Merging or pushing to `main` starts public deployment automatically; there is no separate manual publish step. Browser-test CI is a separate workflow and does not itself hold back Pages.
+GitHub Pages serves [ONE PLACE](https://ouroneplace.github.io/) from the repository root on **`main`**. Merging or pushing to `main` starts public deployment automatically; there is no separate manual publish step. Browser-test CI is a separate workflow and does not itself hold back Pages.
 
 Use the [release and rollback checklist](docs/release-checklist.md) before changing `main`. The founder authorized publication of the integrated One Place homepage at the existing GitHub Pages address on November 7, 2026. This authorization does not include renaming the GitHub repository, changing the Pages address, activating purchases, payments, analytics, or paid services. Review and approve future release changes separately.
 

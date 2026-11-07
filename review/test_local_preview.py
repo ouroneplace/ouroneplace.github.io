@@ -38,7 +38,7 @@ class IntegratedPreview(unittest.TestCase):
             for path, data in {**cls.payloads, '/.git/config': b'private',
                                '/private/draft.txt': b'private',
                                '/.env': b'private'}.items():
-                z.writestr('Human-literacy-online-' + cls.sha + path, data)
+                z.writestr('ouroneplace.github.io-' + cls.sha + path, data)
         data = archive.getvalue()
         cls.launcher = runpy.run_path(str(Path(__file__).with_name('local_preview.py')),
                                 run_name='review_import')['run']

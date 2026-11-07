@@ -54,7 +54,7 @@ for mode in ['tampered', 'traversal', 'missing-manifest']:
     outer = io.BytesIO()
     revision = 'e' * 40
     with zipfile.ZipFile(outer, 'w') as source:
-        prefix = 'Human-literacy-online-' + revision + '/'
+        prefix = 'ouroneplace.github.io-' + revision + '/'
         for n in range(1, 11):
             source.writestr(prefix + 'lessons/%02d/index.html' % n, 'Approved placeholder')
         source.writestr(prefix + 'review/evidence.zip', nested.getvalue())

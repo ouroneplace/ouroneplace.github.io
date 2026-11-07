@@ -26,7 +26,7 @@ def run(revision, expected_checksum):
     if not re.fullmatch(r'[a-f0-9]{64}', expected_checksum):
         raise ValueError('The independently supplied archive checksum is required')
     SHA, CHECKSUM = revision, expected_checksum
-    URL = 'https://codeload.github.com/humanliteracy/Human-literacy-online/zip/' + SHA
+    URL = 'https://codeload.github.com/ouroneplace/ouroneplace.github.io/zip/' + SHA
     print('Downloading the pinned public review source and evidence...', flush=True)
     with urlopen(URL, timeout=90) as response:
         archive = response.read(67_108_865)
@@ -34,7 +34,7 @@ def run(revision, expected_checksum):
         raise SystemExit('Integrity check failed. Nothing was opened. Do not bypass this check.')
     files = {}
     with zipfile.ZipFile(io.BytesIO(archive)) as source:
-        prefix = 'Human-literacy-online-' + SHA + '/'
+        prefix = 'ouroneplace.github.io-' + SHA + '/'
         for name in source.namelist():
             if not name.startswith(prefix) or name.endswith('/'):
                 continue

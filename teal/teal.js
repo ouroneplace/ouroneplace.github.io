@@ -11,9 +11,9 @@
 
   // Only the actual HTTPS public route shares the fixed canonical address.
   // This prepares release behavior without asserting publication approval.
-  const canonicalUrl = 'https://humanliteracy.github.io/Human-literacy-online/teal/';
-  const atCanonicalLocation = location.origin === 'https://humanliteracy.github.io'
-    && ['/Human-literacy-online/teal/', '/Human-literacy-online/teal/index.html'].includes(location.pathname);
+  const canonicalUrl = 'https://ouroneplace.github.io/teal/';
+  const atCanonicalLocation = location.origin === 'https://ouroneplace.github.io'
+    && ['/teal/', '/teal/index.html'].includes(location.pathname);
   const shareText = atCanonicalLocation ? `${invitation}\n${canonicalUrl}` : invitation;
   textField.value = shareText;
   share.hidden = false;
