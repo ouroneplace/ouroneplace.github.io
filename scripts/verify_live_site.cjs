@@ -43,7 +43,7 @@ fs.mkdirSync(output,{recursive:true});
     await goto('/');await page.getByRole('navigation',{name:'One Place navigation'}).getByRole('link',{name,exact:true}).click();await visible(page.locator('h1').first());assert.equal(new URL(page.url()).pathname,path);await reflow();await page.getByRole('link',{name:/One Place Home/i}).first().click();await visible(page.getByRole('heading',{name:'Explore every part of life'}));
    }
    await goto('/simulator/01/');await page.locator('#yourReply').fill('Please leave me alone.');await page.locator('#send').click();await visible(page.locator('#completionTitle'));
-   await goto('/teal/');const share=await page.locator('#invitation-text').inputValue();assert.ok(share.includes(origin+'/teal/'));assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),origin+'/teal/');
+   await goto('/teal/');assert.equal(await page.getByRole('link',{name:'GitHub issue tracker',exact:true}).getAttribute('href'),'https://github.com/ouroneplace/ouroneplace.github.io/issues');const share=await page.locator('#invitation-text').inputValue();assert.ok(share.includes(origin+'/teal/'));assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),origin+'/teal/');
    await goto('/one-place/money-bills.html');await page.locator('#sample').click();await page.locator('#cash').fill('450');await page.locator('#tab-plan').click();await visible(page.locator('#panel-plan'));await reflow();
    const download=page.waitForEvent('download');await page.locator('#exportTop').click();await (await download).saveAs(output+'/fictional-money-plan-'+width+'.txt');
    await goto('/one-place/family-handoff.html');await page.locator('#sample').click();await page.getByRole('tab',{name:'1. Household',exact:true}).click();await page.locator('#person').fill('Fictional household');await reflow();
@@ -52,9 +52,14 @@ fs.mkdirSync(output,{recursive:true});
    await context.close();
   }
   const context=await browser.newContext();const request=context.request;
-  for(const path of ['/media/Lesson_01_FINAL_REVIEW_114s.mp4','/media/lesson02.mp4']){
-   const response=await request.get(origin+path,{headers:{Range:'bytes=0-511'}});assert.equal(response.status(),206,path+' byte-range support');assert.equal((await response.body()).length,512);
+  const videoFiles=fs.readdirSync('media').filter(name=>name.toLowerCase().endsWith('.mp4'));assert.ok(videoFiles.length>0,'Shipped lesson videos missing');
+  for(const filename of videoFiles){
+   const path='/media/'+encodeURIComponent(filename);
+   const response=await request.get(origin+path,{headers:{Range:'bytes=0-511'}});assert.equal(response.status(),206,path+' byte-range support');
+   const bytes=await response.body();assert.equal(bytes.length,512);
+   const expected=Buffer.alloc(512),fd=fs.openSync('media/'+filename,'r');try{assert.equal(fs.readSync(fd,expected,0,512,0),512);}finally{fs.closeSync(fd);}assert.deepEqual(bytes,expected,path+' content preservation');
   }
+  result.videos_checked=videoFiles.length;
   await context.close();result.video_ranges='PASS';result.status='PASS';
  }catch(e){result.status='FAIL';result.errors.push(e.stack||String(e));process.exitCode=1;}
  finally{await browser.close();fs.writeFileSync(output+'/results.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));}
