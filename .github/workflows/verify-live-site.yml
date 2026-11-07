@@ -1,0 +1,51 @@
+name: Verify deployed ONE PLACE
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-live-site.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deployed-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Wait for exact approved application files on Pages
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, time, urllib.request
+          paths = ['index.html', 'teal/teal.js', 'human-literacy/index.html',
+                   'simulator/01/index.html', 'simulator/01/coach.js',
+                   'one-place/money-bills.html', 'one-place/family-handoff.html']
+          paths += [f'lessons/{n:02}/index.html' for n in range(1, 11)]
+          for attempt in range(60):
+              try:
+                  for path in paths:
+                      request = urllib.request.Request('https://ouroneplace.github.io/' + path,
+                          headers={'Cache-Control': 'no-cache'})
+                      with urllib.request.urlopen(request, timeout=20) as response:
+                          assert response.status == 200
+                          assert hashlib.sha256(response.read()).digest() == hashlib.sha256(Path(path).read_bytes()).digest(), path
+                  print(f'PASS: {len(paths)} deployed application files match checkout bytes')
+                  break
+              except Exception as error:
+                  print(f'Pages readiness attempt {attempt + 1}: {error}')
+                  if attempt == 59:
+                      raise
+                  time.sleep(10)
+      - run: node scripts/verify_live_site.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deployed-one-place-verification
+          path: live-site-report/
+          retention-days: 7
