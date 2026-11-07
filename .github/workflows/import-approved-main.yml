@@ -1,0 +1,71 @@
+name: Import approved ONE PLACE main
+on:
+  push:
+    paths:
+      - '.github/workflows/import-approved-main.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: approved-main-import
+  cancel-in-progress: false
+jobs:
+  import-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      APPROVED_SOURCE: 302cbeb18dec85fd6753469a55b20ce8a18b75ea
+      BOOTSTRAP_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prepare preserved source history and migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "ouroneplace/ouroneplace.github.io"
+          cp .migration/approved-main.patch "$RUNNER_TEMP/approved-main.patch"
+          git fetch --no-tags https://github.com/humanliteracy/Human-literacy-online.git refs/heads/main
+          test "$(git rev-parse FETCH_HEAD)" = "$APPROVED_SOURCE"
+          test "$(git rev-list --count "$APPROVED_SOURCE")" = "282"
+          git checkout --detach "$APPROVED_SOURCE"
+          git apply --check "$RUNNER_TEMP/approved-main.patch"
+          git apply "$RUNNER_TEMP/approved-main.patch"
+          git add --all
+          git diff --cached --check
+          git config user.name "ONE PLACE migration"
+          git config user.email "noreply@users.noreply.github.com"
+          tree=$(git write-tree)
+          candidate=$(printf '%s\n' "Migrate approved ONE PLACE website to organization root" "" "Preserve approved source $APPROVED_SOURCE and destination import history. Original repository and website unchanged." | git commit-tree "$tree" -p "$APPROVED_SOURCE" -p "$BOOTSTRAP_SHA")
+          git checkout --detach "$candidate"
+          git merge-base --is-ancestor "$APPROVED_SOURCE" HEAD
+          git merge-base --is-ancestor "$BOOTSTRAP_SHA" HEAD
+          echo "CANDIDATE_SHA=$candidate" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - name: Publish tested history to destination main
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "ouroneplace/ouroneplace.github.io"
+          actual=$(git ls-remote origin refs/heads/main | cut -f1)
+          test "$actual" = "$BOOTSTRAP_SHA"
+          git push origin "$CANDIDATE_SHA:refs/heads/main"
+          printf 'Imported tested commit: %s\nApproved source: %s\n' "$CANDIDATE_SHA" "$APPROVED_SOURCE" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: migration-browser-test-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
