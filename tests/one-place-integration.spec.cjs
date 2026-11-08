@@ -12,7 +12,8 @@ test('OP-104: linked learning experiences share a navigable review build', async
   await expect(page).toHaveURL(/\/index\.html$/);
   const navigation = page.getByRole('navigation',{name:'One Place navigation'});
   await expect(navigation).toBeVisible();
-  await expect(navigation.getByRole('link')).toHaveCount(7);
+  await expect(navigation.getByRole('link')).toHaveCount(8);
+  await expect(navigation.getByRole('link',{name:'Our Humanity',exact:true})).toHaveAttribute('href','one-place/our-humanity.html');
   await expect(navigation.getByRole('link',{name:'Explore life areas'})).toHaveAttribute('href','index.html');
   await expect(navigation.getByRole('link',{name:'All lessons'})).toHaveAttribute('href','human-literacy/index.html#choose');
   await expect(navigation.getByRole('group',{name:'Human Literacy: learning'})).toBeVisible();
