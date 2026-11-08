@@ -65,6 +65,28 @@ test('Our Humanity: collapsed cards stay compact beside expanded cards', async (
 });
 
 
+
+test('Our Humanity: Curiosity invite remains outside the first topic summary',async({page})=>{
+  const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(path);
+  const wonder=page.locator('section#wonder');
+  const invitation=wonder.locator(':scope > p.studio-invite');
+  await expect(invitation).toBeVisible();
+  await expect(invitation.getByRole('link',{name:/Explore the Curiosity Studio/})).toHaveAttribute('href','curiosity-studio.html');
+  const firstSummary=wonder.locator('details.subject').first().locator('summary');
+  await expect(firstSummary).toHaveText('Music, art and imagination＋');
+  await expect(firstSummary.getByRole('link')).toHaveCount(0);
+  await expect(wonder.locator('details.subject')).toHaveCount(5);
+  await firstSummary.click();
+  await expect(wonder.locator('details.subject').first()).not.toHaveAttribute('open','');
+  await firstSummary.click();
+  await expect(wonder.locator('details.subject').first()).toHaveAttribute('open','');
+  await invitation.getByRole('link',{name:/Explore the Curiosity Studio/}).click();
+  await expect(page).toHaveURL(/\/one-place\/curiosity-studio\.html$/);
+  expect(errors).toEqual([]);
+});
+
 test('Our Humanity: choice-based welcome moments are useful without a score', async ({page}) => {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(path);
