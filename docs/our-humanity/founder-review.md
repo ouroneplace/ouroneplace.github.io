@@ -135,3 +135,14 @@ In Our Humanity → **Enjoy being alive**, the “Explore the Curiosity Studio�
 - The Khan Academy donation notice does not mean One Place solicits money. This review made the external-source boundary clearer, but visitors should not be required to leave One Place to enjoy or understand its activities.
 
 **Gate:** Recheck the exact current PR head in automated CI, then verify that the repaired Wonder topic has a clean heading and invitation in the extracted ZIP on desktop and phone. Founder acceptance and separate public release approval remain open. Preserve all current One Place commitments and original approved project priorities.
+
+## 2026-11-08 — Final Curiosity Studio refinement before life-area work
+The founder requested one final creative update to the Our Humanity chapter, then a transition to reviewing all **18 existing life areas**. No category implementation was authorized as part of this update.
+
+**Confirmed CI failure resolved in code:** The 2026-11-08 workflow for head `4753d6c` reported **452 passed, 1 failed**. The failing test expected the old `#topic-27` link in the “Just be curious” moment, while the actual experience correctly linked to `curiosity-studio.html`. The assertion was updated to reflect the intentional navigation change; this is a stale test, **not proof that the page itself was broken**.
+
+**New capability:** Curiosity Studio → symmetry pattern → **Keep this pattern (SVG)**. Visitors can download the pattern they created as a self-contained, printable vector image containing only the generated shapes. The saved graphic is 320×320 SVG with a solid background, current petals and palette, and descriptive SVG title/desc. Downloading uses a browser-generated Blob and ordinary download click—no remote service, upload, profile, account or persistent storage. Screen readers receive a status message after the download is requested, not an unverified claim that the file was saved.
+
+**Verification added:** The browser test sets nine petals and indigo using accessible native controls, requests a download, checks the suggested filename and SVG shape count, and rejects script content. Exact-head GitHub Actions plus founder testing remain required; do not mark the new feature accepted prematurely.
+
+**Next development work (separate review scope):** In the next phase, audit the **same 18 life areas and 72 planned offerings** already present in the One Place homepage. Do not introduce duplicated categories, silent new priorities, mislabel concept previews as usable services, or break the established Money & Bills, Family & Caregiving, TEAL, Human Literacy and Life Simulator paths. Evaluate each area for (a) real visitor problem, (b) usefulness beyond generic search, (c) clarity and safety, (d) actual implemented vs draft features, (e) mobile/keyboard navigation, (f) verified resources, and (g) test coverage. **No modification to the 18 areas was made in this phase.**
