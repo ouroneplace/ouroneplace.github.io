@@ -115,7 +115,7 @@ test('Our Humanity: choice-based welcome moments are useful without a score', as
   await expect(page.locator('#moment-result')).toContainText('professional, community or public assistance');
   await doors.nth(3).click();
   await expect(page.locator('#moment-title')).toHaveText('Notice something ordinary.');
-  await expect(page.locator('#moment-deeper')).toHaveAttribute('href','#topic-27');
+  await expect(page.locator('#moment-deeper')).toHaveAttribute('href','curiosity-studio.html');
   await page.locator('#moment-choices button').first().click();
   await expect(page.locator('#moment-result')).toContainText('enjoy careful observation');
   expect(errors).toEqual([]);
