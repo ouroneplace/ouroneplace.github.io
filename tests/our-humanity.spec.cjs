@@ -70,6 +70,7 @@ test('Our Humanity: choice-based welcome moments are useful without a score', as
   await page.goto(path);
   const doors=page.locator('.moment-door');
   await expect(doors).toHaveCount(4);
+  await expect(page.getByRole('link',{name:'Try a short experience'})).toHaveAttribute('href','#begin');
   await expect(page.locator('#moment-title')).toHaveText('A message goes unanswered.');
   await expect(page.locator('#moment-choices button')).toHaveCount(3);
   await expect(doors.nth(0)).toHaveAttribute('aria-pressed','true');
