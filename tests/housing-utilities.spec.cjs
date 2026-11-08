@@ -96,6 +96,34 @@ test('Housing & Utilities: edit, add, remove, and reset maintenance tasks',async
   await expect(rows.first().locator('input').first()).toHaveValue('Test smoke alarms');
 });
 
+test('Housing & Utilities: save and reopen maintenance tasks on another visit without a server',async({page})=>{
+  await page.goto(guide);
+  const rows=page.locator('#task-list .taskrow');
+  await rows.first().locator('input').first().fill('Fictional annual window review');
+  await rows.first().locator('input').nth(1).fill('Yearly');
+  const [file]=await Promise.all([page.waitForEvent('download'),page.getByRole('button',{name:'Save task list'}).click()]);
+  expect(file.suggestedFilename()).toBe('one-place-housing-maintenance-list.json');
+  const reader=await file.createReadStream(),chunks=[];
+  for await(const part of reader)chunks.push(part);
+  const payload=Buffer.concat(chunks).toString('utf8');
+  const saved=JSON.parse(payload);
+  expect(saved.format).toBe('one-place-housing-maintenance-v1');
+  expect(saved.tasks[0]).toEqual({task:'Fictional annual window review',when:'Yearly'});
+
+  await page.reload();
+  await expect(rows.first().locator('input').first()).toHaveValue('Test smoke alarms');
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('#task-open').setInputFiles({name:'my-tasks.json',mimeType:'application/json',buffer:Buffer.from(payload)});
+  await expect(rows.first().locator('input').first()).toHaveValue('Fictional annual window review');
+  await expect(rows.first().locator('input').nth(1)).toHaveValue('Yearly');
+  await expect(page.locator('#task-status')).toContainText('Nothing was uploaded');
+
+  await page.locator('#task-open').setInputFiles({name:'wrong.json',mimeType:'application/json',
+    buffer:Buffer.from('{"format":"wrong","tasks":[]}')});
+  await expect(page.locator('#task-status')).toContainText('existing tasks were preserved');
+  await expect(rows.first().locator('input').first()).toHaveValue('Fictional annual window review');
+});
+
 test('Housing & Utilities: editable plan and safe TXT export preserve user changes',async({page})=>{
   const errs=[];page.on('pageerror',e=>errs.push(e.message));
   await page.goto(guide);
