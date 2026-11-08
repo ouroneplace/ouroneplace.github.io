@@ -133,3 +133,8 @@ These are deliberately simplified explanatory sketches, **not installation drawi
 **Next quality gates:** Manually review each diagram at 320px, 200% zoom and in ChromeVox/TalkBack; check color-independent understanding; confirm actual hardware/model differences; audit the remaining 32 text-only lessons for which diagrams, original photos, simple videos or more specific manufacturer instructions are appropriate. This is incremental progress within Housing, **not** acceptance of an exhaustive home-repair course.
 
 **Change control:** No merge, public deploy, visitor tracking, cloud account, external resource purchase, new area or change to founder priorities. Keep PR #5 and PR #6 separate from `main` until explicitly authorized.
+
+## November 8, 2026 — Whole-home starter schedule (founder testing only)
+An optional expandable home-care schedule now provides 13 lesson-specific tasks across five frequencies (every use, monthly, every few months, seasonally/after weather, and yearly). Each button opens the corresponding existing Home Skills lesson and clears conflicting filters. There is a link back to the editable Housing planner, without implying that reminders or automatic task tracking exist.
+
+Intervals are examples only, not universal requirements. Manufacturer instructions, household needs, actual equipment, local weather, renter permissions and professional advice take precedence. Roof and gutter review is from the ground only. This feature has no accounts, reminders, uploads, or payment component. Playwright regression was added for all 13 targets, five expanders, filter reset, keyboard focus and 320px overflow. Automated success and founder usability acceptance remain separate. No merge, publication or spending is authorized.
