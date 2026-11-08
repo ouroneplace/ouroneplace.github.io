@@ -32,7 +32,7 @@ for(const width of [320,390,1366]){
       {button:/My bills arrive before my next paycheck/,heading:'See what comes due before money arrives',href:'one-place/money-bills.html',call:true},
       {button:/A creditor or debt collector contacted me/,heading:'Check who contacted you and what they claim',href:'one-place/debt-creditor-guide.html'},
       {button:/I received court papers about a debt/,heading:'Read the court notice and act on the deadline',href:'https://www.consumerfinance.gov/ask-cfpb/what-should-i-do-if-im-sued-by-a-debt-collector-or-creditor-en-334/',secondary:'https://www.lsc.gov/about-lsc/what-legal-aid/i-need-legal-help',warning:'default judgment'},
-      {button:/I want to make a monthly spending plan/,heading:'Start with a simple monthly picture',href:'https://www.consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/toolkit/',secondary:'index.html?service=s003'}
+      {button:/I want to make a monthly spending plan/,heading:'Start with a simple monthly picture',href:'https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/tools-and-resources/',secondary:'index.html?service=s003'}
     ];
     for(const example of cases){
       const button=page.getByRole('button',{name:example.button});
@@ -113,4 +113,12 @@ test('Money & Bills mobile shows the selected answer, then lets visitor change c
  await expect(page.locator('#money-more')).toHaveAttribute('open','');
  await expect(page.locator('.offers > a.offer')).toHaveCount(4);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+});
+
+
+test('Money & Bills budgeting resource does not link to retired CFPB toolkit path',async({page})=>{
+  await page.goto('/index.html?area=Money%20%26%20Bills');
+  await page.getByRole('button',{name:/I want to make a monthly spending plan/}).click();
+  await expect(page.locator('#money-path-primary')).toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/tools-and-resources/');
+  await expect(page.locator('#money-path-primary')).not.toHaveAttribute('href',/\/consumer-tools\/educator-tool\/your-money-your-goals\/toolkit\//);
 });
