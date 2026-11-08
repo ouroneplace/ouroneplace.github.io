@@ -93,3 +93,8 @@ The recorded flow eventually produced a plan after several tasks had been added 
 The planner is now described accurately as a **manual worksheet without automatic reminders**. A saved, locally held JSON file allows continuation after reloading, but it is the visitor's responsibility to keep the file private, avoid sensitive details on shared devices, and import it when returning. This improves continuity without a hosted account.
 
 **Current QA state:** The exact-head full regression suite runs against the newest PR commit. Do not mark it passed until GitHub reports success. Screen recording alone does not demonstrate the new features (they were added after the recording).
+
+## November 8, 2026 — Whole-home starter schedule (founder testing only)
+An optional expandable home-care schedule now provides 13 lesson-specific tasks across five frequencies (every use, monthly, every few months, seasonally/after weather, and yearly). Each button opens the corresponding existing Home Skills lesson and clears conflicting filters. There is a link back to the editable Housing planner, without implying that reminders or automatic task tracking exist.
+
+Intervals are examples only, not universal requirements. Manufacturer instructions, household needs, actual equipment, local weather, renter permissions and professional advice take precedence. Roof and gutter review is from the ground only. This feature has no accounts, reminders, uploads, or payment component. Playwright regression was added for all 13 targets, five expanders, filter reset, keyboard focus and 320px overflow. Automated success and founder usability acceptance remain separate. No merge, publication or spending is authorized.
