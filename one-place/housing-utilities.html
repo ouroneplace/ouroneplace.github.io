@@ -45,7 +45,8 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 @media(max-width:800px){.jump{grid-template-columns:repeat(2,minmax(0,1fr))}.safety-grid,.resource-grid{grid-template-columns:1fr}.headin{justify-content:center}}
 @media(max-width:430px){.wrap{width:calc(100% - 22px)}.jump{gap:7px}.jump a{padding:11px;min-height:122px}.choose{grid-template-columns:1fr}.taskrow{grid-template-columns:1fr}.taskrow button{justify-self:start}.panel{padding:15px}.headnav a{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media print{header,.jump,.controls,#scenario-buttons,.source-links,.footer{display:none!important}.panel{box-shadow:none;break-inside:avoid}.taskrow input{border:0}.notice{background:#fff}.wrap{width:100%}}
+.print-copy{display:none}
+@media print{header,.hero,.notice,.jump,#assist,#safety,#maintenance,#resources,.footer,#plan .controls,#plan textarea,#plan label,#plan .helptext{display:none!important}#plan{display:block;box-shadow:none;border:0;margin:0;padding:0}.print-copy{display:block!important;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.5 system-ui,sans-serif}.wrap{width:100%}}
 </style>
 </head><body id="top">
 <a class="skip" href="#main">Skip to housing guidance</a>
@@ -126,7 +127,7 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 <button type="button" id="plan-reset">Clear plan</button>
 </div>
 <label for="plan-text">Your editable plan</label>
-<textarea id="plan-text" maxlength="7500" rows="12" placeholder="Select a situation above, then choose Make my next-step plan. You can edit every word." spellcheck="true"></textarea>
+<textarea id="plan-text" maxlength="7500" rows="12" placeholder="Select a situation above, then choose Make my next-step plan. You can edit every word." spellcheck="true"></textarea><div id="print-copy" class="print-copy" aria-hidden="true"></div>
 <p class="helptext" id="plan-status" role="status" aria-live="polite">Not generated. This information stays in this page until you download, print, or leave. Downloaded TXT files are unencrypted—avoid private information on shared devices.</p>
 </section>
 <section class="panel" id="resources" aria-labelledby="resource-title">
@@ -200,15 +201,17 @@ function countSafety(){document.getElementById('safety-count').textContent=safet
 safety.forEach(function(c){c.addEventListener('change',countSafety)});
 var list=document.getElementById('task-list'),taskStatus=document.getElementById('task-status');
 var tasks=[];
+var taskSerial=0;
 function examples(){return [{task:'Test smoke alarms',when:'Monthly'},{task:'Check exits and trip hazards',when:'This month'},{task:'Review filter and system instructions',when:'As advised'}]}
 function createRow(data){
+var rowNum=++taskSerial;
 var box=document.createElement('div');box.className='taskrow';
 var parts=[['Task',data.task,'task'],['When',data.when,'when']];
 parts.forEach(function(part){var field=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input');
-var id='task-'+(tasks.length+1)+'-'+part[2];label.htmlFor=id;label.textContent=part[0];input.id=id;input.type='text';input.maxLength=110;input.value=part[1];input.placeholder=part[0]==='Task'?'Describe a task':'When to review';
+var id='task-'+rowNum+'-'+part[2];label.htmlFor=id;label.textContent=part[0];input.id=id;input.type='text';input.maxLength=110;input.value=part[1];input.placeholder=part[0]==='Task'?'Describe a task':'When to review';
 input.addEventListener('input',function(){data[part[2]]=input.value});
 field.appendChild(label);field.appendChild(input);box.appendChild(field)});
-var remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove maintenance task');
+var remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove maintenance task '+rowNum);
 remove.addEventListener('click',function(){tasks=tasks.filter(function(x){return x!==data});box.remove();taskStatus.textContent='Task removed. '+tasks.length+' tasks remain.'});
 box.appendChild(remove);list.appendChild(box);
 }
@@ -219,7 +222,7 @@ var inputs=list.querySelectorAll('input');if(inputs.length)inputs[inputs.length-
 });
 document.getElementById('task-reset').addEventListener('click',function(){tasks=examples();renderTasks()});
 var plan=document.getElementById('plan-text'),download=document.getElementById('plan-download'),printButton=document.getElementById('plan-print');
-var planStatus=document.getElementById('plan-status');
+var planStatus=document.getElementById('plan-status'),printCopy=document.getElementById('print-copy');
 function updatePlanButtons(){var has=!!plan.value.trim();download.disabled=!has;printButton.disabled=!has}
 plan.addEventListener('input',function(){updatePlanButtons();planStatus.textContent=plan.value.trim()?'Plan edited. It is not saved automatically.':'Plan is empty.'});
 document.getElementById('plan-generate').addEventListener('click',function(){
@@ -241,7 +244,7 @@ a.href=url;a.download='one-place-housing-next-step-plan.txt';document.body.appen
 planStatus.textContent='Download requested. Look in your Downloads folder; nothing was uploaded.';
 setTimeout(function(){URL.revokeObjectURL(url)},5000);
 });
-printButton.addEventListener('click',function(){if(plan.value.trim())window.print()});
+printButton.addEventListener('click',function(){if(plan.value.trim()){printCopy.textContent=plan.value;window.print()}});
 document.getElementById('plan-reset').addEventListener('click',function(){plan.value='';updatePlanButtons();planStatus.textContent='Plan cleared from this page.';plan.focus()});
 tasks=examples();renderTasks();countSafety();renderScenario();updatePlanButtons();
 }());
