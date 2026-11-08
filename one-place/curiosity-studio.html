@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Explore the wonder of light and symmetry through two small, accessible interactive experiences at One Place.">
+<title>Curiosity Studio — Our Humanity · One Place</title>
+<style>
+:root{color-scheme:light;--ink:#193f37;--soft:#54756c;--teal:#087f75;--line:#cce5d9;--paper:#f9fcf8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:radial-gradient(circle at 80% 0,#e3f8ec,transparent 35%),var(--paper);font:16px/1.5 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,select{font:inherit}a{color:#075b50}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b36b22;outline-offset:3px}
+.skip{position:absolute;left:9px;top:-90px;background:white;padding:10px;z-index:10}.skip:focus{top:6px}
+.wrap{width:min(1080px,calc(100% - 32px));margin:auto}
+header{border-bottom:1px solid var(--line);background:rgba(251,253,250,.93)}
+.topbar{min-height:70px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 0}
+.brand{font-size:18px;font-weight:900;text-decoration:none}.brand span{background:var(--teal);color:white;border-radius:10px;padding:5px 8px;margin-right:8px}
+nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}nav a{font-size:13px;text-decoration:none;font-weight:750;background:white;border:1px solid var(--line);padding:7px 11px;border-radius:25px}
+.flag{font-size:11px;font-weight:800;color:#91612a;background:#fff0d7;padding:6px 10px;border:1px solid #f0d3a2;border-radius:25px}
+.hero{padding:clamp(30px,6vw,66px) 0 28px;text-align:center;max-width:830px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:900;color:var(--teal);letter-spacing:.14em;margin:0 0 8px}
+h1{font-size:clamp(38px,6vw,65px);line-height:1.08;letter-spacing:-.055em;margin:0 0 13px}h1 em{color:var(--teal);font-style:normal}
+.hero p:not(.eyebrow){font-size:clamp(16px,2vw,19px);color:var(--soft);margin:0 0 13px}
+.leaps{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:20px}.leaps a{background:white;border:1px solid #b7d9ca;padding:10px 15px;border-radius:12px;font-size:14px;text-decoration:none;font-weight:800;min-height:44px}
+.lab{margin:10px 0 24px;padding:clamp(16px,3vw,30px);background:white;border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px #164b3410;scroll-margin-top:14px}
+.lab-head h2{font-size:clamp(27px,3.8vw,40px);line-height:1.12;letter-spacing:-.045em;margin:0 0 8px}.lab-head p{max-width:810px;color:#536f66;margin:0 0 20px}
+.lab-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:22px}
+.controls{background:#f3faf5;padding:20px;border:1px solid #e1eee5;border-radius:17px;min-width:0}
+.controls h3{margin:0 0 10px;font-size:18px}.control{margin:14px 0}.control label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-weight:750;font-size:14px}.control output{color:#3c6257;font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;height:32px;accent-color:var(--teal);cursor:pointer}
+.choice-row{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 0}.choice-row button{background:white;color:#176155;border:1px solid #b5d7c6;border-radius:9px;padding:9px 11px;font-size:13px;font-weight:750;min-height:44px}
+.choice-row button:hover{background:#e1f5ea}.choice-row button:active{background:#d2eddf}
+.preview{display:flex;flex-direction:column;gap:10px;min-width:0}
+.swatch{height:255px;display:flex;align-items:flex-end;justify-content:center;padding:18px;border:1px solid #9ebfaf;border-radius:16px;background:rgb(255,255,0);color:#193f37;text-align:center;transition:background-color .1s}
+.swatch span{padding:7px 12px;border-radius:10px;background:rgba(255,255,255,.87);color:#193f37;font-weight:850;font-size:14px}
+.readout{color:#365f52;background:#eef8f0;padding:12px 14px;border-radius:12px;border:1px solid #d0e6da;min-height:54px;font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:var(--soft);margin:5px 0}.note strong{color:var(--ink)}
+.pattern-graphic{display:grid;place-items:center;border:1px solid #b6d6c7;background:radial-gradient(circle,#fff 5%,#e8f6ef 100%);border-radius:17px;min-height:255px}
+#pattern-svg{width:min(100%,310px);height:auto;aspect-ratio:1/1}
+select{width:100%;padding:11px;border:1px solid #9fbfac;border-radius:10px;background:white;color:#173935;min-height:44px}
+.learning{background:#eaf7ef;border:1px solid #b6d9c8;border-radius:17px;padding:20px;margin:27px 0}
+.learning h2{margin:0 0 8px}.learning p{max-width:900px;margin:8px 0}
+.learning ul{padding-left:23px}.learning li{margin:9px 0}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding:20px 0 42px;color:var(--soft);font-size:13px}
+.back{background:var(--teal);border-radius:10px;color:white;text-decoration:none;font-size:14px;font-weight:800;padding:11px 15px;min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:750px){.lab-grid{grid-template-columns:1fr}.topbar{justify-content:center}.flag{order:3}.swatch,.pattern-graphic{min-height:210px}.swatch{height:210px}}
+@media(max-width:400px){.wrap{width:calc(100% - 24px)}.lab{padding:14px}.controls{padding:14px}.choice-row button{flex:1 0 40%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.swatch{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to activities</a>
+<header><div class="wrap topbar"><a class="brand" href="../index.html"><span aria-hidden="true">✳</span>ONE PLACE</a>
+<nav aria-label="Curiosity Studio navigation"><a href="our-humanity.html">← Our Humanity</a><a href="../index.html">One Place Home</a></nav>
+<span class="flag">FOUNDER REVIEW · NOT RELEASED</span></div></header>
+<main id="main" class="wrap">
+<section class="hero" aria-labelledby="hero-title"><p class="eyebrow">OUR HUMANITY · EXPLORE & EXPERIENCE</p>
+<h1 id="hero-title">Wonder, just <em>because.</em></h1>
+<p>No problem to solve. No perfect answer. Make colors, play with patterns, notice something surprising, and enjoy being curious.</p>
+<p>Two tiny experiments. No sign-in, score, or personal information needed.</p>
+<div class="leaps"><a href="#light">Try mixing light</a><a href="#symmetry">Make a pattern</a></div></section>
+
+<section class="lab" id="light" aria-labelledby="light-title">
+<div class="lab-head"><p class="eyebrow">01 · LIGHT & COLOR</p><h2 id="light-title">What color can you make?</h2>
+<p>Move red, green and blue brightness sliders. Screens combine these colors of light. See whether you can make yellow, cyan, magenta, white—or a shade you invent.</p></div>
+<div class="lab-grid">
+<div class="controls"><h3>Mix the light</h3>
+<div class="control"><label for="red">Red <output id="red-value" for="red">255</output></label><input id="red" type="range" min="0" max="255" value="255" step="1"></div>
+<div class="control"><label for="green">Green <output id="green-value" for="green">255</output></label><input id="green" type="range" min="0" max="255" value="255" step="1"></div>
+<div class="control"><label for="blue">Blue <output id="blue-value" for="blue">0</output></label><input id="blue" type="range" min="0" max="255" value="0" step="1"></div>
+<p class="note">Experiment with a starting mix:</p>
+<div class="choice-row" role="group" aria-label="Light mix shortcuts">
+<button type="button" data-light="255,255,0">Yellow</button>
+<button type="button" data-light="0,255,255">Cyan</button>
+<button type="button" data-light="255,0,255">Magenta</button>
+<button type="button" data-light="255,255,255">White</button>
+<button type="button" data-light="0,0,0">All off</button>
+</div></div>
+<div class="preview"><div class="swatch" id="light-preview" role="img" aria-label="Yellow screen-light sample, red 255, green 255, blue 0"><span>SCREEN LIGHT SAMPLE</span></div>
+<div class="readout" role="status" id="light-output">Yellow · RGB(255, 255, 0)</div>
+<p class="note">Try turning all three sliders to 255: the screen becomes white. This model illustrates how digital displays mix colored light—not how paint mixes. Your display affects the exact appearance.</p>
+<noscript><p class="note">Interactive controls need JavaScript; this page still explains the experiments without it.</p></noscript></div>
+</div></section>
+
+<section class="lab" id="symmetry" aria-labelledby="symmetry-title">
+<div class="lab-head"><p class="eyebrow">02 · PATTERNS & DESIGN</p><h2 id="symmetry-title">Build a little symmetry.</h2>
+<p>Choose how often one shape repeats around a center. Notice how a small rule can create a rich pattern. No art skills required.</p></div>
+<div class="lab-grid">
+<div class="controls"><h3>Design your pattern</h3>
+<div class="control"><label for="petals">Repeated petals <output id="petals-value" for="petals">6</output></label><input id="petals" type="range" min="3" max="12" step="1" value="6"></div>
+<div class="control"><label for="pattern-color">Pattern color</label>
+<select id="pattern-color"><option value="teal">Ocean teal</option><option value="indigo">Midnight indigo</option><option value="amber">Sunlit amber</option></select></div>
+<div class="choice-row"><button id="pattern-surprise" type="button">Surprise me</button><button id="pattern-reset" type="button">Reset</button></div>
+<p class="note"><strong>What to notice:</strong> The same petal is copied and rotated around the center. Try an odd number, then an even number.</p>
+</div>
+<div class="preview">
+<div class="pattern-graphic">
+<svg id="pattern-svg" role="img" viewBox="0 0 320 320" aria-labelledby="pattern-graphic-title pattern-graphic-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="pattern-graphic-title">Six-petal teal rotational pattern</title>
+<desc id="pattern-graphic-desc">Six equally spaced shapes rotate around a center point.</desc>
+<g id="pattern-art" fill="#168f83">
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67"/>
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67" transform="rotate(60 160 160)"/>
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67" transform="rotate(120 160 160)"/>
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67" transform="rotate(180 160 160)"/>
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67" transform="rotate(240 160 160)"/>
+<ellipse cx="160" cy="95" rx="21" ry="51" opacity=".67" transform="rotate(300 160 160)"/>
+<circle cx="160" cy="160" r="19" fill="#087f75"/><circle cx="160" cy="160" r="7" fill="#fff"/>
+</g></svg>
+</div>
+<div class="readout" role="status" id="pattern-output">Six repeating petals · Ocean teal · 60° between petals</div>
+<p class="note">Each petal has the same size and shape. The number of petals changes the rotation between copies. Patterns in art and nature can have many forms of symmetry.</p></div>
+</div></section>
+
+<section class="learning" aria-labelledby="learning-title">
+<h2 id="learning-title">A tiny discovery can lead somewhere wonderful.</h2>
+<p><strong>Color:</strong> Red and green light together can appear yellow; red and blue can appear magenta; green and blue can appear cyan. Add red, green and blue at full brightness on a screen and the result is white. Mixing paints is different.</p>
+<p><strong>Symmetry:</strong> Rotational symmetry means a shape or design can match itself after turning by a certain angle. Our flower patterns repeat an identical shape around one point.</p>
+<p>Want to learn more? These are outside educational resources, not endorsements or One Place services:</p>
+<ul>
+<li><a href="https://wp.optics.arizona.edu/oscoutreach/color-mixing/" target="_blank" rel="noopener noreferrer">University of Arizona Optics Outreach — Color mixing ↗</a></li>
+<li><a href="https://www.khanacademy.org/math/geometry-home/transformations/transformations-symmetry/v/example-rotating-polygons" target="_blank" rel="noopener noreferrer">Khan Academy — Introduction to rotational symmetry ↗</a></li>
+</ul>
+<p>These are simplified screen demonstrations, not precise optical experiments. People can experience colors differently. Reading the number labels and descriptions is an alternative to relying only on the visual display.</p>
+</section>
+</main>
+<footer class="wrap bottom"><span>ONE PLACE · Human-led, AI-assisted · No tracking, profiles or storage introduced by this page.</span><a class="back" href="our-humanity.html#wonder">Return to Our Humanity</a></footer>
+
+<script>
+(function(){
+'use strict';
+var colorNames={'255,255,0':'Yellow','0,255,255':'Cyan','255,0,255':'Magenta','255,255,255':'White','0,0,0':'All lights off','255,0,0':'Red','0,255,0':'Green','0,0,255':'Blue'};
+var channels=['red','green','blue'].map(function(id){return document.getElementById(id)});
+var swatch=document.getElementById('light-preview'),rgbText=document.getElementById('light-output');
+function renderLight(){
+ var nums=channels.map(function(e){return Number(e.value)});
+ channels.forEach(function(e,i){document.getElementById(e.id+'-value').value=String(nums[i])});
+ var key=nums.join(','),name=colorNames[key]||'Custom light mix';
+ swatch.style.backgroundColor='rgb('+nums.join(',')+')';
+ swatch.setAttribute('aria-label',name+' screen-light sample: red '+nums[0]+', green '+nums[1]+', blue '+nums[2]);
+ rgbText.textContent=name+' · RGB('+nums.join(', ')+')';
+}
+channels.forEach(function(e){e.addEventListener('input',renderLight);e.addEventListener('change',renderLight)});
+Array.prototype.forEach.call(document.querySelectorAll('[data-light]'),function(btn){btn.addEventListener('click',function(){
+ btn.getAttribute('data-light').split(',').forEach(function(n,i){channels[i].value=n});renderLight();
+})});
+var counts=document.getElementById('petals'),color=document.getElementById('pattern-color');
+var svgTitle=document.getElementById('pattern-graphic-title'),svgDesc=document.getElementById('pattern-graphic-desc');
+var art=document.getElementById('pattern-art'),patternOutput=document.getElementById('pattern-output');
+var palette={teal:['Ocean teal','#168f83','#087f75'],indigo:['Midnight indigo','#6b69c6','#3d3e8e'],amber:['Sunlit amber','#eeb049','#bc7221']};
+var xmlns='http://www.w3.org/2000/svg';
+function makeSvg(tag,attrs){var el=document.createElementNS(xmlns,tag);Object.keys(attrs).forEach(function(k){el.setAttribute(k,String(attrs[k]))});return el}
+function renderPattern(){
+ var n=Number(counts.value),entry=palette[color.value]||palette.teal;
+ document.getElementById('petals-value').value=String(n);
+ art.replaceChildren();
+ for(var i=0;i<n;i++){
+  var group=makeSvg('g',{transform:'rotate('+(360*i/n)+' 160 160)'});
+  group.appendChild(makeSvg('ellipse',{cx:160,cy:95,rx:21,ry:51,fill:entry[1],opacity:.68}));
+  group.appendChild(makeSvg('circle',{cx:160,cy:29,r:5,fill:entry[2],opacity:.82}));
+  art.appendChild(group);
+ }
+ art.appendChild(makeSvg('circle',{cx:160,cy:160,r:19,fill:entry[2]}));
+ art.appendChild(makeSvg('circle',{cx:160,cy:160,r:7,fill:'#fff'}));
+ var angle=360/n,rounded=Number(angle.toFixed(2));
+ svgTitle.textContent=n+'-petal '+entry[0].toLowerCase()+' rotational pattern';
+ svgDesc.textContent=n+' identical petals, spaced '+rounded+' degrees apart, arranged around one center';
+ patternOutput.textContent=n+' repeating petals · '+entry[0]+' · '+rounded+'° between petals';
+}
+counts.addEventListener('input',renderPattern);counts.addEventListener('change',renderPattern);
+color.addEventListener('change',renderPattern);
+document.getElementById('pattern-reset').addEventListener('click',function(){counts.value='6';color.value='teal';renderPattern()});
+document.getElementById('pattern-surprise').addEventListener('click',function(){
+ var next=3+Math.floor(Math.random()*10);
+ var shades=['teal','indigo','amber'];
+ if(next===Number(counts.value)&&shades[shades.indexOf(color.value)]===color.value){next=next===12?3:next+1}
+ counts.value=String(next);color.value=shades[Math.floor(Math.random()*shades.length)];renderPattern();
+});
+renderLight();renderPattern();
+}());
+</script>
+</body></html>
