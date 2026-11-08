@@ -84,8 +84,11 @@ if(impact){
 }else if(area){
  const steps=plans[area]||['Identify your need','Compare credible options','Choose one next step'];
  root.insertAdjacentHTML('afterbegin',metric());
- root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
- copy(area,steps,'areaKit');
+ // Money & Bills uses a task-focused router instead of a second generic checklist.
+ if(area!=='Money & Bills'){
+  root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
+  copy(area,steps,'areaKit');
+ }
 }else if(service){
  const x=rows.find(r=>r.id===service);
  if(x){const steps=plans[x.area]||['Identify your need','Compare credible options','Choose one next step'];
