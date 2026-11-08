@@ -68,3 +68,42 @@ Following additional founder desktop walkthroughs, the draft receives a focused 
 - Updated regression tests cover 320px mobile choice/result/return flow, disclosure accessibility, per-path editing, downloads and cross-path reset. Verified browser tests remain separate from founder acceptance.
 
 This still does **not** authorize release or change draft PR #1 and #2. The source revision should be previewed through a pinned revision URL, never confused with the unchanged public homepage.
+
+
+## Category purpose and outcome-based acceptance — November 7
+
+**Single promise:** Help a visitor recognize a money problem, understand one responsible first action, and reach useful assistance or a tool without first learning our product taxonomy.
+
+### Why each visible element earns its place
+
+- Header and return link: orientation and a way back, not another product choice.
+- Five problem buttons: translate unfamiliar products into recognizable real-life needs.
+- Neutral initial state: never presume the visitor is in a particular debt, hardship or legal situation.
+- Selected outcome panel: **one first action** and one clearly labeled primary destination; remaining two steps and call wording are optional disclosures.
+- Need-specific caution: protect against ignoring notices, making premature debt agreements or treating future income as available now.
+- Additional choices: one secondary destination relevant to the selected need; do not create multi-page detours simply to repeat generic guidance.
+- Original catalog: **Other Money & Bills resources (4)** disclosure retains legacy routes but does not compete for attention. Unlaunched concepts stay explicitly unavailable.
+- Public record: accountability is kept, but below the practical task.
+
+### Scenario outcome and page-level test
+
+| User situation | Expected useful outcome | Destination |
+|---|---|---|
+| Can't cover essential bill | Check deadline, know whom to contact, seek verified available support | United Way 211, optional bill planner and short call wording |
+| Bills due before payday | Recognize cash-flow timing and enter dated bills/paychecks | Free local Bill Planner |
+| Collector contact | Review written validation, distinguish a collector dispute from a court answer | Debt & Creditor Guide draft; CFPB rights |
+| Court summons | Check papers and deadline, seek appropriate professional procedural help | CFPB court guidance; Legal Services Corporation directory |
+| Ordinary monthly budget | Find an actual budgeting worksheet; recognize that our Studio is an illustration | CFPB Your Money, Your Goals worksheets; optional Budget Studio demonstration |
+
+### The release standard
+
+- All five situations must lead to an honest, relevant, actionable destination.
+- On first load, no situation is automatically chosen; no user account, personal details, bank connection, analytics, purchase, or hidden service is required.
+- At most one highlighted **first action** is displayed for the selected situation; more steps are optional.
+- No new page may merely duplicate the three general starting steps.
+- At 320px, the response comes into view after a choice and user can return to the options.
+- On desktop and mobile, return navigation works and no horizontal content is clipped.
+- Automated browser checks and public-source links are reviewed separately from founder acceptance. Real usability still requires unfamiliar visitors to attempt fictional scenarios.
+- Keep existing PRs #1 and #2 intact and PR #3 draft/unmerged pending separate publication approval.
+
+Note: This is a testable product hypothesis, not evidence that all visitors or populations will find the design useful.
