@@ -70,3 +70,21 @@ test('same-day cumulative bills report the full first-day shortage', async ({pag
   await enterBill(page, 'electric', 100, billDate);
   await expect(page.locator('#cashResult')).toHaveText('$150.00 short');
 });
+
+
+for(const width of [320,1366]){
+  test('Bill Planner returns directly to task-first Money & Bills at '+width+'px',async({page})=>{
+    await page.setViewportSize({width,height:844});
+    await page.goto('/one-place/money-bills.html');
+    const nav=page.getByRole('navigation',{name:'Money & Bills navigation'});
+    const back=nav.getByRole('link',{name:'← Money & Bills'});
+    await expect(back).toBeVisible();
+    await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+    await back.click();
+    await expect(page).toHaveURL(/\/index\.html\?area=Money%20%26%20Bills$/);
+    await expect(page.getByRole('heading',{name:'What do you need help with today?'})).toBeVisible();
+    await expect(page.locator('#money-task-options button')).toHaveCount(5);
+    await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+  });
+}

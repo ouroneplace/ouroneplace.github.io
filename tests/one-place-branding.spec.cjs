@@ -16,10 +16,18 @@ for (const width of [1366, 320]) {
     const solutions = [];
     for (const area of areas) {
       await page.goto('/' + area);
-      await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-      solutions.push(...await page.locator('.offers > a.offer').evaluateAll(links => links.map(a => a.getAttribute('href'))));
+      if (area.includes('area=Money%20%26%20Bills')) {
+        await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+        await expect(page.locator('#money-task-options button')).toHaveCount(5);
+      } else {
+        await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+        solutions.push(...await page.locator('.offers > a.offer').evaluateAll(links => links.map(a => a.getAttribute('href'))));
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     }
+    // Preserve 72 direct legacy routes in the repository without advertising Money & Bills' old cards.
+    expect(new Set(solutions).size).toBe(68);
+    for (const id of ['s001','s002','s003','s004']) solutions.push('index.html?service=' + id);
     expect(new Set(solutions).size).toBe(72);
     for (const solution of solutions) {
       await page.goto('/' + solution);
@@ -40,7 +48,7 @@ for (const width of [1366, 320]) {
       ['All lessons', /\/human-literacy\/index\.html#choose$/],
       ['Life Simulator', /\/simulator\/01\/$/],
       ['TEAL foundation (draft)', /\/teal\/$/],
-      ['Money & Bills', /\/one-place\/money-bills\.html$/],
+      ['Bill Planner', /\/one-place\/money-bills\.html$/],
       ['Family & Caregiving', /\/one-place\/family-handoff\.html$/],
     ];
     for (const [name, url] of cases) {
@@ -98,7 +106,7 @@ test('ONE PLACE: fictional tool edits stay local and root adds no tracking or ac
   });
   await page.goto('/');
   await expect(page.locator('input[type=password],input[type=email]')).toHaveCount(0);
-  await page.getByRole('navigation', { name: 'One Place navigation' }).getByRole('link', { name: 'Money & Bills', exact: true }).click();
+  await page.getByRole('navigation', { name: 'One Place navigation' }).getByRole('link', { name: 'Bill Planner', exact: true }).click();
   await page.locator('#sample').click();
   await page.locator('#cash').fill('450');
   await page.locator('#tab-plan').click();
@@ -134,7 +142,7 @@ for (const prefix of ['Human-literacy-online', 'One-Place']) {
     await expect(page.locator('h1')).toBeVisible();
     await page.getByRole('navigation', { name: 'One Place and lessons' }).getByRole('link', { name: 'One Place Home', exact: true }).click();
     await expect(page).toHaveURL(new RegExp(mount + 'index\\.html$'));
-    await nav.getByRole('link', { name: 'Money & Bills', exact: true }).click();
+    await nav.getByRole('link', { name: 'Bill Planner', exact: true }).click();
     await expect(page).toHaveURL(new RegExp(mount + 'one-place/money-bills\\.html$'));
   });
 }

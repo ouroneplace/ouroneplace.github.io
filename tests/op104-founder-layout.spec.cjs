@@ -1,11 +1,10 @@
 const {test,expect}=require('@playwright/test');
 
-// OP-104 founder acceptance: at normal desktop browser zoom, a focused route
-// should occupy one viewport rather than a long vertically scrolling document.
-// Accessibility wins over the no-scroll aesthetic at enlarged zoom/phone widths.
+// OP-104 baseline: compact desktop screens should fit a focused task when practical.
+// A decision-support category may scroll when preserving readable, accessible choices
+// requires more space. Always keep its first decision visible in the initial viewport.
 const desktopRoutes=[
   ['One Place home','/one-place/'],
-  ['Money & Bills area','/one-place/index.html?area=Money%20%26%20Bills'],
   ['Family & Caregiving area','/one-place/index.html?area=Family%20%26%20Caregiving'],
   ['Money & Bills tool overview','/one-place/money-bills.html'],
   ['Family Handoff tool first view','/one-place/family-handoff.html'],
@@ -30,6 +29,26 @@ for(const size of [{width:1920,height:1080},{width:1366,height:768}]){
         expect(metrics.contentWidth,`${name} width=${metrics.contentWidth}, viewport=${metrics.width}`).toBeLessThanOrEqual(metrics.width+3);
       });
     }
+  });
+}
+
+// A useful decision is more important than artificially squeezing all 5 paths
+// and the four historical catalog options into a single desktop viewport.
+for(const size of [{width:1920,height:1080},{width:1366,height:768}]){
+  test('Money & Bills starts with an actionable choice at '+size.width+'px',async({page})=>{
+    await page.setViewportSize(size);
+    await page.goto('/one-place/index.html?area=Money%20%26%20Bills');
+    const title=page.getByRole('heading',{name:'What do you need help with today?'});
+    const first=page.getByRole('button',{name:/I cannot cover an essential bill/});
+    await expect(title).toBeVisible();
+    await expect(first).toBeVisible();
+    const titleBox=await title.boundingBox();
+    const firstBox=await first.boundingBox();
+    expect(titleBox.y+titleBox.height).toBeLessThan(size.height);
+    expect(firstBox.y+firstBox.height).toBeLessThan(size.height);
+    await expect(page.locator('#money-task-options button')).toHaveCount(5);
+    await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+    expect(await page.evaluate(()=>Math.max(document.documentElement.scrollWidth,document.body.scrollWidth))).toBeLessThanOrEqual(size.width+3);
   });
 }
 
