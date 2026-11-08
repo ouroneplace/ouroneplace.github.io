@@ -70,3 +70,19 @@ test('same-day cumulative bills report the full first-day shortage', async ({pag
   await enterBill(page, 'electric', 100, billDate);
   await expect(page.locator('#cashResult')).toHaveText('$150.00 short');
 });
+
+
+test('Money & Bills resource links and exported language are appropriate for the public preview', async ({page}) => {
+  await page.goto('/one-place/money-bills.html');
+  await expect(page.getByRole('link',{name:/CFPB · Consumer financial guidance/}))
+    .toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/');
+  await page.getByRole('tab',{name:'4. My action plan'}).click();
+  await expect(page.getByRole('link',{name:/CFPB · Money-management worksheets/}))
+    .toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/tools-and-resources/');
+  const downloadPromise=page.waitForEvent('download');
+  await page.locator('#exportPlan').click();
+  const download=await downloadPromise;
+  const txt=await fs.readFile(await download.path(),'utf8');
+  expect(txt).toContain('Public tool preview - organizational guidance, not financial advice.');
+  expect(txt).not.toContain('Founder review -');
+});
