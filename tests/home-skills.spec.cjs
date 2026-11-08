@@ -56,7 +56,7 @@ test('Home Skills: expert-only hazard guidance never invites DIY, verified direc
   }
   await expect(page.locator('#skill-16 a.reference')).toHaveAttribute('href','https://www.energy.gov/cmei/scep/wap/articles/job-aid-11-1-install-weatherstripping-exterior-door');
   await expect(page.locator('#skill-8 a.reference')).toHaveAttribute('href','https://www.energy.gov/cmei/scep/wap/articles/job-aid-24-2-install-low-flow-faucet-aerator');
-  await expect(page.locator('#skill-26 a.reference')).toHaveAttribute('href',/extension.umn.edu/);
+  await expect(page.locator('#skill-26 a.reference')).toHaveAttribute('href',/cpsc.gov\/Newsroom\/News-Releases\/2012\/CPSC-Issues-Safety-Tips-For-Rotary-Power-Mowers/);
   await expect(page.locator('#skill-27 a.reference')).toHaveAttribute('href',/extension.psu.edu/);
 });
 
