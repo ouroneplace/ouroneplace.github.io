@@ -31,8 +31,8 @@ for(const width of [320,390,1366]){
       {button:/I cannot cover an essential bill/,heading:'Start with the bill and its deadline',href:'https://211.org/get-help/i-need-help-paying-my-bills',secondary:'one-place/money-bills.html',call:true},
       {button:/My bills arrive before my next paycheck/,heading:'See what comes due before money arrives',href:'one-place/money-bills.html',call:true},
       {button:/A creditor or debt collector contacted me/,heading:'Check who contacted you and what they claim',href:'one-place/debt-creditor-guide.html'},
-      {button:/I received court papers about a debt/,heading:'Read the court notice and act on the deadline',href:'https://www.consumerfinance.gov/ask-cfpb/what-should-i-do-if-im-sued-by-a-debt-collector-or-creditor-en-334/',warning:'default judgment'},
-      {button:/I want to make a monthly spending plan/,heading:'Start with a simple monthly picture',href:'index.html?service=s003'}
+      {button:/I received court papers about a debt/,heading:'Read the court notice and act on the deadline',href:'https://www.consumerfinance.gov/ask-cfpb/what-should-i-do-if-im-sued-by-a-debt-collector-or-creditor-en-334/',secondary:'https://www.lsc.gov/about-lsc/what-legal-aid/i-need-legal-help',warning:'default judgment'},
+      {button:/I want to make a monthly spending plan/,heading:'Start with a simple monthly picture',href:'https://www.consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/toolkit/',secondary:'index.html?service=s003'}
     ];
     for(const example of cases){
       const button=page.getByRole('button',{name:example.button});
@@ -48,7 +48,8 @@ for(const width of [320,390,1366]){
       if(example.warning)await expect(page.locator('#money-path-caution')).toContainText(example.warning);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
     }
-    await expect(page.locator('#money-path-primary')).toContainText('Budget Studio');
+    await expect(page.locator('#money-path-primary')).toContainText('budgeting worksheets');
+    await expect(page.locator('#money-path-secondary')).toContainText('Budget Studio');
     await expect(page.locator('.offers > a.offer')).toHaveCount(4);
     expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
     expect(unwanted).toEqual([]);
