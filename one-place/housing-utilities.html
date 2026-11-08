@@ -38,6 +38,10 @@ label{font-size:14px;font-weight:750}.choose{display:grid;grid-template-columns:
 .controls .primary{background:var(--teal);color:white;border-color:var(--teal)}button:disabled{cursor:not-allowed;opacity:.55}
 textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-radius:11px;resize:vertical;min-height:220px;color:var(--ink);background:white;line-height:1.55}
 .helptext{color:var(--mute);font-size:13px;margin:9px 0}.helptext strong{color:var(--ink)}
+.file-button{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;background:#fff;border:1px solid #b6d7c8;border-radius:10px;color:#0b685c;font-size:14px;font-weight:750;cursor:pointer}
+.file-button input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.file-button:focus-within{outline:3px solid #ac6a23;outline-offset:3px}
+
 .resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.resource{border-radius:12px;border:1px solid #d3e7da;background:#fbfdfb;padding:14px}
 .resource h3{font-size:16px;margin:0 0 5px}.resource p{font-size:13px;color:var(--mute);margin:0 0 8px}.resource a{font-weight:750;font-size:14px}
 .footer{border-top:1px solid var(--line);padding:22px 0 35px;display:flex;gap:14px;justify-content:space-between;align-items:center;flex-wrap:wrap;color:var(--mute);font-size:13px}
@@ -113,7 +117,9 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 <div class="tasklist" id="task-list" aria-label="Editable home maintenance tasks">
 <p class="helptext">Enable JavaScript to edit tasks. You can still use the safety guidance above.</p>
 </div>
-<div class="controls"><button type="button" id="task-add">Add task</button><button type="button" id="task-reset">Restore example tasks</button></div>
+<div class="controls"><button type="button" id="task-add">Add task</button><button type="button" id="task-reset">Restore example tasks</button><button type="button" id="task-save">Save task list</button>
+<label class="file-button">Open saved task list<input id="task-open" type="file" accept=".json,application/json"></label></div>
+<p class="helptext">Saving creates an unencrypted JSON file on your device. Opening that file restores the list without uploading it. Avoid private information on shared devices.</p>
 <p class="helptext" id="task-status" role="status" aria-live="polite">Use fictional entries for the first review.</p>
 </section>
 
@@ -222,6 +228,31 @@ var item={task:'',when:''};tasks.push(item);createRow(item);taskStatus.textConte
 var inputs=list.querySelectorAll('input');if(inputs.length)inputs[inputs.length-2].focus();
 });
 document.getElementById('task-reset').addEventListener('click',function(){tasks=examples();renderTasks();flagPlanInputChange()});
+
+document.getElementById('task-save').addEventListener('click',function(){
+ var payload={format:'one-place-housing-maintenance-v1',tasks:tasks.map(function(t){return {task:t.task,when:t.when}})};
+ var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+ var url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='one-place-housing-maintenance-list.json';document.body.appendChild(a);a.click();a.remove();
+ taskStatus.textContent='Task list download requested. Check your Downloads folder. This JSON file is unencrypted.';
+ setTimeout(function(){URL.revokeObjectURL(url)},5000);
+});
+document.getElementById('task-open').addEventListener('change',async function(e){
+ var file=e.target.files&&e.target.files[0];e.target.value='';if(!file)return;
+ if(file.size>20000){taskStatus.textContent='File too large. Choose a task-list JSON saved by One Place (20 KB maximum).';return}
+ try{
+  var obj=JSON.parse(await file.text());
+  var valid=obj&&obj.format==='one-place-housing-maintenance-v1'&&Array.isArray(obj.tasks)&&obj.tasks.length<=12&&obj.tasks.every(function(t){
+   return t&&typeof t.task==='string'&&t.task.length<=110&&typeof t.when==='string'&&t.when.length<=110;
+  });
+  if(!valid){taskStatus.textContent='Not a supported One Place maintenance-list file. Your existing tasks were preserved.';return}
+  if(!window.confirm('Open this saved task list and replace the tasks currently on this page?')){taskStatus.textContent='Import canceled. Your existing tasks were preserved.';return}
+  tasks=obj.tasks.map(function(t){return {task:t.task,when:t.when}});
+  renderTasks();flagPlanInputChange();
+  taskStatus.textContent='Saved list opened locally: '+tasks.length+' editable tasks. Nothing was uploaded.';
+ }catch(err){taskStatus.textContent='Could not read this JSON file. Your existing tasks were preserved.'}
+});
+
 var plan=document.getElementById('plan-text'),download=document.getElementById('plan-download'),printButton=document.getElementById('plan-print');
 var planStatus=document.getElementById('plan-status'),printCopy=document.getElementById('print-copy');
 var stale=document.getElementById('plan-stale'),lastGeneratedPlan='',hasGeneratedPlan=false;
