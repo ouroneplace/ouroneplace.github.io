@@ -57,3 +57,8 @@ These are deliberately simplified explanatory sketches, **not installation drawi
 **Next quality gates:** Manually review each diagram at 320px, 200% zoom and in ChromeVox/TalkBack; check color-independent understanding; confirm actual hardware/model differences; audit the remaining 32 text-only lessons for which diagrams, original photos, simple videos or more specific manufacturer instructions are appropriate. This is incremental progress within Housing, **not** acceptance of an exhaustive home-repair course.
 
 **Change control:** No merge, public deploy, visitor tracking, cloud account, external resource purchase, new area or change to founder priorities. Keep PR #5 and PR #6 separate from `main` until explicitly authorized.
+
+## November 8, 2026 — v2 incremental review coverage
+The founder-only combined preview now includes five Home-Care Schedule timeframes, 13 lesson-linked routine tasks, eight original diagrams, and eight optional three-choice explanations (four new this slice). All appear under the existing Home Skills Academy, with no added life area or commercial product. New dishwasher-filter and washer-hose resources are manufacturer-specific examples; visitors must check the manual for their own model. Updated Playwright checks cover links, visual semantics, lesson access after filters, ephemeral non-scored feedback, and 320px layout.
+
+**Acceptance remains open.** Required before any integration decision: inspect all eight diagrams and 28 remaining text-only lessons, 200% zoom, ChromeVox/TalkBack, correct stop conditions, field relevance, safe hands-on outcomes and unchanged other categories. PR #3 is still separate; do not blindly merge overlapping drafts. No release, payments, user-data collection or outside testing authorized.
