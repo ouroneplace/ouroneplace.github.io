@@ -36,7 +36,8 @@ test('Home Skills: starter toolkit and close-open-lessons control',async({page})
   await expect(toolkit).toContainText('Manufacturer manual');
   const close=page.getByRole('button',{name:'Close open lessons'});
   await expect(close).toBeDisabled();
-  await page.locator('#skill-1 summary').click();
+  await page.locator('#compare-lessons').check();
+   await page.locator('#skill-1 summary').click();
   await page.locator('#skill-2 summary').click();
   await expect(close).toBeEnabled();
   await expect(page.locator('#open-count')).toHaveText('2 lessons open');
@@ -436,11 +437,11 @@ test('Home Skills: CO evacuation and lead-dust questions correct unsafe choices 
  expect(state.local).toBe(0);expect(state.session).toBe(0);
 });
 
-test('Home Skills: all 28 visual shortcuts navigate to matching distinct lessons',async({page})=>{
+test('Home Skills: all 36 visual shortcuts navigate to matching distinct lessons',async({page})=>{
  await page.goto(url);
  const buttons=page.locator('.visual-actions button[data-show-skill]');
  const ids=await buttons.evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-show-skill')));
- expect(ids.length).toBe(28);expect(new Set(ids).size).toBe(28);
+ expect(ids.length).toBe(36);expect(new Set(ids).size).toBe(36);
  for(const id of ids){
   const card=page.locator('#skill-'+id);
   await expect(card).toHaveCount(1);
@@ -544,6 +545,43 @@ test('Home Skills: searchable, ordered and scroll-contained picture shortcuts at
  const width=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
  expect(width.scroll).toBeLessThanOrEqual(width.vp+1);
  expect(width.local).toBe(0);expect(width.session).toBe(0);
+});
+
+
+test('Home Skills: focus reading is default, with explicit compare option',async({page})=>{
+ await page.setViewportSize({width:1366,height:860});await page.goto(url);
+ const compare=page.locator('#compare-lessons'),catalog=page.locator('#catalog');
+ await expect(compare).not.toBeChecked();
+ await page.locator('#skill-1 summary').click();
+ await expect(page.locator('#skill-1')).toHaveAttribute('open','');
+ await expect(page.locator('#skill-1')).toHaveCSS('grid-column-start','1');
+ await page.locator('#skill-2 summary').click();
+ await expect(page.locator('#skill-1')).not.toHaveAttribute('open','');
+ await expect(page.locator('#skill-2')).toHaveAttribute('open','');
+ await expect(page.locator('#open-count')).toHaveText('1 lesson open');
+ await compare.check();
+ await expect(catalog).toHaveClass(/compare-mode/);
+ await page.locator('#skill-1 summary').click();
+ await expect(page.locator('#open-count')).toHaveText('2 lessons open');
+ await compare.uncheck();
+ await expect(catalog).not.toHaveClass(/compare-mode/);
+ await expect(page.locator('details.skill[open]')).toHaveCount(1);
+ await page.getByRole('button',{name:'Close open lessons'}).click();
+ await expect(page.locator('#open-count')).toHaveText('No lessons open');
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+});
+
+test('Home Skills: focused reading, diagrams and references avoid redundant notices at 320px',async({page})=>{
+ await page.setViewportSize({width:320,height:800});await page.goto(url);
+ await expect(page.locator('p.source-note')).toHaveCount(0);
+ await expect(page.locator('a.reference')).toHaveCount(36);
+ await expect(page.locator('.warning').first()).toContainText('not proof');
+ await page.locator('#skill-9 summary').click();
+ await expect(page.locator('#skill-9')).toHaveAttribute('open','');
+ await page.locator('#skill-10 summary').click();
+ await expect(page.locator('#skill-9')).not.toHaveAttribute('open','');
+ await expect(page.locator('#skill-10')).toHaveAttribute('open','');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
