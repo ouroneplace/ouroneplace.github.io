@@ -23,7 +23,15 @@ h1{font-size:clamp(37px,5.6vw,60px);letter-spacing:-.055em;line-height:1.07;marg
 .filter[aria-pressed=true]{background:#087b71;color:white;border-color:#087b71}.filter:hover{filter:brightness(.96)}.count{font-size:13px;color:#5a776d;margin-top:10px}
 .levels{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.tier{display:inline-block;font-size:11px;font-weight:850;padding:4px 8px;border-radius:30px;white-space:nowrap;background:#dff3e7;color:#185845}.tier.care{background:#fff1d9;color:#815222}.tier.observe{background:#e8f0ff;color:#31558e}.tier.expert{background:#fae7e4;color:#903e34}
 .toolkit{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px 18px;margin:18px 0}.toolkit summary{font-weight:850;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px}.toolkit-content{font-size:14px;color:var(--ink)}.toolkit-content p{line-height:1.6}.toolkit-content li{margin:8px 0}.library-actions{margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.library-actions button{border:1px solid #b4d6c4;border-radius:10px;background:#f5fbf7;color:#135b4e;padding:10px 14px;min-height:44px;font:750 13px system-ui;cursor:pointer}.library-actions button:disabled{opacity:.6;cursor:not-allowed}
-.visual-starters{border:1px solid #add6c4;background:#eaf8ef;padding:18px 20px;border-radius:17px;margin:16px 0}.visual-starters h2{font-size:clamp(23px,3vw,30px);letter-spacing:-.035em;margin:0 0 8px}.visual-starters p:not(.eyebrow){font-size:14px;color:#376257;margin:0 0 11px}.visual-actions{display:flex;flex-wrap:wrap;gap:8px}.visual-actions button{font:750 13px system-ui;border:1px solid #a9d3c2;background:#fff;color:#0d6356;border-radius:10px;min-height:44px;padding:10px 12px;cursor:pointer}.visual-actions button:hover{background:#f4fdf7}
+.visual-starters{border:1px solid #add6c4;background:#eaf8ef;padding:18px 20px;border-radius:17px;margin:16px 0}.visual-starters h2{font-size:clamp(23px,3vw,30px);letter-spacing:-.035em;margin:0 0 8px}.visual-starters p:not(.eyebrow){font-size:14px;color:#376257;margin:0 0 11px}.visual-actions{display:flex;flex-wrap:wrap;gap:8px;max-height:210px;overflow-y:auto;overscroll-behavior:contain;border:1px solid #b8d8c6;background:#fff;border-radius:12px;padding:10px}
+.visual-actions button[hidden]{display:none}
+.visual-find{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:11px 0 6px}
+.visual-find label{font-size:13px;font-weight:750;color:#1d5449}
+.visual-find input{min-width:0;flex:1 1 180px;max-width:340px;min-height:44px;border:1px solid #9bc9b4;border-radius:10px;padding:10px 12px;font:14px system-ui}
+.visual-find button{min-height:44px;border:1px solid #a9d3c2;background:#fff;color:#0d6356;border-radius:10px;padding:8px 11px;font:700 13px system-ui;cursor:pointer}
+.visual-find button:disabled{opacity:.55;cursor:default}
+.visual-starters .visual-count{font-size:13px;margin:5px 0 8px;color:#376257}
+.visual-actions button{font:750 13px system-ui;border:1px solid #a9d3c2;background:#fff;color:#0d6356;border-radius:10px;min-height:44px;padding:10px 12px;cursor:pointer}.visual-actions button:hover{background:#f4fdf7}
 
 .care-schedule{border:1px solid #acd7c4;background:#f0faf3;border-radius:17px;padding:20px;margin:18px 0}
 .care-schedule h2{font-size:clamp(23px,3vw,30px);letter-spacing:-.035em;margin:0 0 8px}
@@ -84,39 +92,43 @@ footer{border-top:1px solid var(--line);display:flex;justify-content:space-betwe
 <li><strong>Gloves and eye protection:</strong> Choose protection for the specific task; gloves do not prevent electrocution.</li>
 <li><strong>Manufacturer manual:</strong> Check the actual equipment's shutdown, replacement, cleaning, and reassembly procedure.</li></ul>
 <p>When a step is unclear, stop and consult the manual or a qualified person. There is no requirement to perform a repair yourself.</p></div></details>
-<section class="visual-starters" aria-labelledby="visual-starters-title"><p class="eyebrow">LEARN BY SEEING</p><h2 id="visual-starters-title">Start with a picture.</h2><p>Thirty-six simplified original diagrams help you recognize parts and understand the direction of water or air. Choose a lesson to see the picture beside its instructions. They're educational sketches, not installation blueprints.</p><div class="visual-actions">
+<section class="visual-starters" aria-labelledby="visual-starters-title"><p class="eyebrow">LEARN BY SEEING</p><h2 id="visual-starters-title">Start with a picture.</h2><p>Thirty-six simplified original diagrams help you recognize parts and understand the direction of water or air. Choose a lesson to see the picture beside its instructions. They're educational sketches, not installation blueprints.</p><div class="visual-find"><label for="visual-search">Find a picture lesson</label><input id="visual-search" type="search" autocomplete="off" placeholder="Try kitchen, alarm, filter..." aria-describedby="visual-count"><button id="clear-visual-search" type="button" disabled>Clear picture search</button></div><p id="visual-count" class="visual-count" role="status" aria-live="polite">36 of 36 picture lessons shown. Scroll this list or search by name or room.</p><div class="visual-actions" role="group" aria-label="Illustrated lesson links">
+<button type="button" data-show-skill="1">Kitchen surfaces</button>
+<button type="button" data-show-skill="2">Fridge door seals</button>
+<button type="button" data-show-skill="3">Fridge coils</button>
+<button type="button" data-show-skill="4">Dishwasher filter</button>
+<button type="button" data-show-skill="5">Range-hood filters</button>
+<button type="button" data-show-skill="6">Toilet leak test</button>
+<button type="button" data-show-skill="7">Toilet flapper</button>
+<button type="button" data-show-skill="8">Faucet aerator</button>
+<button type="button" data-show-skill="9">Slow sink drain</button>
+<button type="button" data-show-skill="10">Caulk joint</button>
+<button type="button" data-show-skill="11">Dryer lint screen</button>
+<button type="button" data-show-skill="12">Dryer vent pathway</button>
+<button type="button" data-show-skill="13">Washer hoses</button>
+<button type="button" data-show-skill="14">Floor surfaces</button>
 <button type="button" data-show-skill="15">Door hinge</button>
+<button type="button" data-show-skill="16">Door weatherstripping</button>
+<button type="button" data-show-skill="17">Drywall nail holes</button>
+<button type="button" data-show-skill="18">Cord safety</button>
+<button type="button" data-show-skill="19">HVAC filter airflow</button>
+<button type="button" data-show-skill="20">Thermostat schedules</button>
+<button type="button" data-show-skill="21">HVAC warning signs</button>
 <button type="button" data-show-skill="22">Irrigation leaks</button>
+<button type="button" data-show-skill="23">Garden hose washer</button>
+<button type="button" data-show-skill="24">Roof drainage</button>
+<button type="button" data-show-skill="25">Roof from ground</button>
+<button type="button" data-show-skill="26">Mower safety</button>
 <button type="button" data-show-skill="27">Unsafe tree work</button>
+<button type="button" data-show-skill="28">Smoke alarm test</button>
+<button type="button" data-show-skill="29">CO alarm safety</button>
+<button type="button" data-show-skill="30">Emergency supplies</button>
+<button type="button" data-show-skill="31">Find household leaks</button>
 <button type="button" data-show-skill="32">Electrical danger</button>
 <button type="button" data-show-skill="33">Gas emergency</button>
 <button type="button" data-show-skill="34">Mold and sewage</button>
 <button type="button" data-show-skill="35">Old paint and dust</button>
 <button type="button" data-show-skill="36">Structural and spring</button>
-<button type="button" data-show-skill="1">Kitchen surfaces</button>
-<button type="button" data-show-skill="3">Fridge coils</button>
-<button type="button" data-show-skill="14">Floor surfaces</button>
-<button type="button" data-show-skill="17">Drywall nail holes</button>
-<button type="button" data-show-skill="21">HVAC warning signs</button>
-<button type="button" data-show-skill="25">Roof from ground</button>
-<button type="button" data-show-skill="29">CO alarm safety</button>
-<button type="button" data-show-skill="30">Emergency supplies</button>
-<button type="button" data-show-skill="2">Fridge door seals</button>
-<button type="button" data-show-skill="5">Range-hood filters</button>
-<button type="button" data-show-skill="20">Thermostat schedules</button>
-<button type="button" data-show-skill="26">Mower safety</button>
-<button type="button" data-show-skill="4">Dishwasher filter</button><button type="button" data-show-skill="7">Toilet flapper</button><button type="button" data-show-skill="12">Dryer vent pathway</button><button type="button" data-show-skill="18">Cord safety</button><button type="button" data-show-skill="28">Smoke alarm test</button>
-<button type="button" data-show-skill="6">Toilet leak test</button>
-<button type="button" data-show-skill="11">Dryer lint screen</button>
-<button type="button" data-show-skill="13">Washer hoses</button>
-<button type="button" data-show-skill="16">Door weatherstripping</button>
-<button type="button" data-show-skill="8">Faucet aerator</button>
-<button type="button" data-show-skill="9">Slow sink drain</button>
-<button type="button" data-show-skill="10">Caulk joint</button>
-<button type="button" data-show-skill="23">Garden hose washer</button>
-<button type="button" data-show-skill="31">Find household leaks</button>
-<button type="button" data-show-skill="19">HVAC filter airflow</button>
-<button type="button" data-show-skill="24">Roof drainage</button>
 </div></section>
 <section class="care-schedule" id="care-schedule" aria-labelledby="schedule-title">
 <p class="eyebrow">PRACTICE AT HOME · STARTER SCHEDULE</p><h2 id="schedule-title">Know what to check—and when.</h2>
@@ -369,6 +381,22 @@ diagramZoomButtons.forEach(function(button){button.addEventListener('click',func
  button.textContent=zoomed?'Enlarge diagram':'Fit diagram to screen';
  if(!zoomed)figure.focus({preventScroll:true});
 })});
+var visualSearch=document.getElementById('visual-search'),visualCount=document.getElementById('visual-count'),visualClear=document.getElementById('clear-visual-search');
+var imageButtons=[].slice.call(document.querySelectorAll('.visual-actions button[data-show-skill]'));
+function filterPictures(){
+ var term=visualSearch.value.trim().toLowerCase(),shown=0;
+ imageButtons.forEach(function(b){
+  var card=document.getElementById('skill-'+b.getAttribute('data-show-skill'));
+  var title=card&&card.querySelector('.skill-heading b');
+  var words=[b.textContent,title&&title.textContent,card&&card.dataset.area].join(' ').toLowerCase();
+  b.hidden=!!term&&words.indexOf(term)===-1;
+  if(!b.hidden)shown++;
+ });
+ visualClear.disabled=!term;
+ visualCount.textContent=shown?shown+' of '+imageButtons.length+' picture lessons shown. Scroll this list or search by name or room.':'No picture lessons found. Try another term or clear the search.';
+}
+visualSearch.addEventListener('input',filterPictures);
+visualClear.addEventListener('click',function(){visualSearch.value='';filterPictures();visualSearch.focus()});
 var visualButtons=[].slice.call(document.querySelectorAll('button[data-show-skill]'));
 visualButtons.forEach(function(button){button.addEventListener('click',function(){
  var id=button.getAttribute('data-show-skill'),target=document.getElementById('skill-'+id);
