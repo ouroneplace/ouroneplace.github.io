@@ -628,6 +628,57 @@ test('Home Skills: instructional text and quiz options meet readable minimums at
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
+
+test('Home Skills: basic tools cover a safe practice and open relevant lessons',async({page})=>{
+ await page.setViewportSize({width:320,height:780});await page.goto(url);
+ const kit=page.locator('#begin-tools');await kit.locator('summary').first().click();
+ await expect(kit.locator('details.tool-topic')).toHaveCount(6);
+ for(const card of await kit.locator('details.tool-topic').all()){
+  await card.locator('summary').click();
+  await expect(card.locator('.tool-topic-body p')).toHaveCount(3);
+  await expect(card.locator('button[data-tool-open]')).toHaveCount(1);
+ }
+ await kit.locator('button[data-tool-open="9"]').click();
+ await expect(page.locator('#skill-9')).toHaveAttribute('open','');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+});
+test('Home Skills: problem-first examples branch to safety steps and lessons',async({page})=>{
+ await page.goto(url);
+ await page.locator('#symptom-helper summary').click();
+ const select=page.locator('#symptom-type'),result=page.locator('#symptom-result');
+ await expect(result).toBeHidden();
+ await expect(select.locator('option')).toHaveCount(5);
+ await select.selectOption('sink');
+ await expect(page.locator('#symptom-question')).toContainText('chemical drain cleaner');
+ await page.locator('button[data-triage-answer="yes"]').click();
+ await expect(result).toContainText('Stop: do not plunge');
+ await page.locator('#triage-open-lesson').click();
+ await expect(page.locator('#skill-9')).toHaveAttribute('open','');
+ await select.selectOption('dryer');await expect(result).toBeHidden();
+ await page.locator('button[data-triage-answer="no"]').click();
+ await expect(result).toContainText('user-accessible checks');
+ await page.locator('#triage-open-lesson').click();
+ await expect(page.locator('#skill-11')).toHaveAttribute('open','');
+ await select.selectOption('door');await page.locator('button[data-triage-answer="unsure"]').click();
+ await expect(result).toContainText('Check the door function');
+ await page.locator('#triage-reset').click();
+ await expect(select).toHaveValue('');await expect(result).toBeHidden();
+});
+test('Home Skills: first-step helper is keyboard usable and saves no personal information',async({page})=>{
+ await page.setViewportSize({width:320,height:800});
+ const requests=[];page.on('request',r=>requests.push(r.url()));
+ await page.goto(url);
+ await page.locator('#symptom-helper summary').focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#symptom-helper')).toHaveAttribute('open','');
+ await page.locator('#symptom-type').selectOption('toilet');
+ await page.locator('button[data-triage-answer="yes"]').focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#symptom-result')).toContainText('Stop and protect');
+ await page.locator('#triage-open-lesson').click();await expect(page.locator('#skill-31')).toHaveAttribute('open','');
+ expect(requests.every(url=>new URL(url).hostname==='127.0.0.1')).toBe(true);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
