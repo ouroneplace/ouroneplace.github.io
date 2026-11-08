@@ -119,7 +119,8 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 
 <section class="panel" id="plan" aria-labelledby="plan-title">
 <p class="eyebrow">04 · HOUSING NEXT-STEP NAVIGATOR</p><h2 id="plan-title">Take away a useful plan.</h2>
-<p class="intro">Build a simple plan from the situation you selected and your maintenance checklist. Edit it freely before saving. The plan is not an application and does not contact any provider.</p>
+<p class="intro">Build a simple plan from the situation you selected and your maintenance checklist. Edit it freely before saving. The plan is not an application and does not contact any provider. Changing earlier choices does not silently rewrite a plan you have already made.</p>
+<p class="notice hidden" id="plan-stale" role="status" aria-live="polite">Your inputs changed after you made this plan. To include the latest choices, select Make my next-step plan again. Your manual edits are protected by a confirmation before replacement.</p>
 <div class="controls">
 <button class="primary" type="button" id="plan-generate">Make my next-step plan</button>
 <button type="button" id="plan-download" disabled>Download TXT</button>
@@ -195,9 +196,9 @@ script.textContent=s.script;linkBox.replaceChildren();
 s.links.forEach(function(row){var a=document.createElement('a');a.href=row[1];a.target='_blank';a.rel='noopener noreferrer';a.textContent=row[0]+' ↗';linkBox.appendChild(a)});
 caution.textContent=s.caution;
 }
-selButtons.forEach(function(b){b.addEventListener('click',function(){selected=b.getAttribute('data-scenario');renderScenario()})});
+selButtons.forEach(function(b){b.addEventListener('click',function(){selected=b.getAttribute('data-scenario');renderScenario();flagPlanInputChange()})});
 var safety=[].slice.call(document.querySelectorAll('#safety input[type="checkbox"]'));
-function countSafety(){document.getElementById('safety-count').textContent=safety.filter(function(c){return c.checked}).length+' of 5 items reviewed'}
+function countSafety(){document.getElementById('safety-count').textContent=safety.filter(function(c){return c.checked}).length+' of 5 items reviewed';flagPlanInputChange()}
 safety.forEach(function(c){c.addEventListener('change',countSafety)});
 var list=document.getElementById('task-list'),taskStatus=document.getElementById('task-status');
 var tasks=[];
@@ -209,23 +210,26 @@ var box=document.createElement('div');box.className='taskrow';
 var parts=[['Task',data.task,'task'],['When',data.when,'when']];
 parts.forEach(function(part){var field=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input');
 var id='task-'+rowNum+'-'+part[2];label.htmlFor=id;label.textContent=part[0];input.id=id;input.type='text';input.maxLength=110;input.value=part[1];input.placeholder=part[0]==='Task'?'Describe a task':'When to review';
-input.addEventListener('input',function(){data[part[2]]=input.value});
+input.addEventListener('input',function(){data[part[2]]=input.value;flagPlanInputChange()});
 field.appendChild(label);field.appendChild(input);box.appendChild(field)});
 var remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove maintenance task '+rowNum);
-remove.addEventListener('click',function(){tasks=tasks.filter(function(x){return x!==data});box.remove();taskStatus.textContent='Task removed. '+tasks.length+' tasks remain.'});
+remove.addEventListener('click',function(){tasks=tasks.filter(function(x){return x!==data});box.remove();taskStatus.textContent='Task removed. '+tasks.length+' tasks remain.';flagPlanInputChange()});
 box.appendChild(remove);list.appendChild(box);
 }
 function renderTasks(){list.replaceChildren();tasks.forEach(createRow);taskStatus.textContent=tasks.length+' editable tasks. Nothing is saved automatically.'}
 document.getElementById('task-add').addEventListener('click',function(){if(tasks.length>=12){taskStatus.textContent='For clarity, this version supports up to 12 tasks.';return}
-var item={task:'',when:''};tasks.push(item);createRow(item);taskStatus.textContent='Blank task added. '+tasks.length+' total.';
+var item={task:'',when:''};tasks.push(item);createRow(item);taskStatus.textContent='Blank task added. '+tasks.length+' total.';flagPlanInputChange();
 var inputs=list.querySelectorAll('input');if(inputs.length)inputs[inputs.length-2].focus();
 });
-document.getElementById('task-reset').addEventListener('click',function(){tasks=examples();renderTasks()});
+document.getElementById('task-reset').addEventListener('click',function(){tasks=examples();renderTasks();flagPlanInputChange()});
 var plan=document.getElementById('plan-text'),download=document.getElementById('plan-download'),printButton=document.getElementById('plan-print');
 var planStatus=document.getElementById('plan-status'),printCopy=document.getElementById('print-copy');
+var stale=document.getElementById('plan-stale'),lastGeneratedPlan='',hasGeneratedPlan=false;
+function flagPlanInputChange(){if(hasGeneratedPlan&&plan.value.trim()){stale.classList.remove('hidden');planStatus.textContent='Your inputs changed. The editable plan has not been updated automatically.'}}
 function updatePlanButtons(){var has=!!plan.value.trim();download.disabled=!has;printButton.disabled=!has}
 plan.addEventListener('input',function(){updatePlanButtons();planStatus.textContent=plan.value.trim()?'Plan edited. It is not saved automatically.':'Plan is empty.'});
 document.getElementById('plan-generate').addEventListener('click',function(){
+if(plan.value.trim()&&plan.value!==lastGeneratedPlan&&!window.confirm('Making a new plan will replace your edited text. Download or copy your current plan first if you want to keep it. Continue?')){planStatus.textContent='Plan preserved. You can download the current version or make a new one later.';return}
 var s=sources[selected],sDone=safety.filter(function(c){return c.checked}).length;
 var lines=['ONE PLACE — HOUSING & UTILITIES','Personal next-step plan (editable educational worksheet)','','Situation: '+s.title,'','Three starting actions:'];
 s.steps.forEach(function(step,i){lines.push((i+1)+'. '+step)});
@@ -235,7 +239,7 @@ if(tasks.length){tasks.forEach(function(t){lines.push('- '+(t.task.trim()||'[Unn
 lines.push('','Local contacts/resources:','211.org/get-help/housing-expenses','hud.gov/hud-partners/single-family-about-housing-counseling','',
 'Remember: This is general U.S. education. Local rules, eligibility and availability vary. Do not rely on this guide for emergency or legal decisions.','',
 'Next action I choose: ______________________________');
-plan.value=lines.join('\n');updatePlanButtons();planStatus.textContent='Plan ready to edit. Nothing was submitted or saved online.';plan.focus();
+plan.value=lines.join('\n');lastGeneratedPlan=plan.value;hasGeneratedPlan=true;stale.classList.add('hidden');updatePlanButtons();planStatus.textContent='Plan ready to edit. Nothing was submitted or saved online.';plan.focus();
 });
 download.addEventListener('click',function(){
 if(!plan.value.trim())return;
@@ -245,7 +249,7 @@ planStatus.textContent='Download requested. Look in your Downloads folder; nothi
 setTimeout(function(){URL.revokeObjectURL(url)},5000);
 });
 printButton.addEventListener('click',function(){if(plan.value.trim()){printCopy.textContent=plan.value;window.print()}});
-document.getElementById('plan-reset').addEventListener('click',function(){plan.value='';updatePlanButtons();planStatus.textContent='Plan cleared from this page.';plan.focus()});
+document.getElementById('plan-reset').addEventListener('click',function(){plan.value='';hasGeneratedPlan=false;lastGeneratedPlan='';stale.classList.add('hidden');updatePlanButtons();planStatus.textContent='Plan cleared from this page.';plan.focus()});
 tasks=examples();renderTasks();countSafety();renderScenario();updatePlanButtons();
 }());
 </script></body></html>
