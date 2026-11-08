@@ -1,6 +1,17 @@
 const { test, expect } = require('@playwright/test');
 const path = '/one-place/our-humanity.html';
 
+test('Our Humanity has a visible first-class navigation menu entry on the draft homepage',async({page})=>{
+  await page.goto('/index.html');
+  const nav=page.getByRole('navigation',{name:'One Place navigation'});
+  const link=nav.getByRole('link',{name:'Our Humanity',exact:true});
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute('href','one-place/our-humanity.html');
+  await link.click();
+  await expect(page).toHaveURL(/\/one-place\/our-humanity\.html$/);
+  await expect(page.getByRole('heading',{name:/Come as you are/})).toBeVisible();
+});
+
 test('Our Humanity: entry from One Place home and return navigation', async ({page}) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
