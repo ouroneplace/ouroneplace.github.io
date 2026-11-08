@@ -16,6 +16,18 @@ test('Our Humanity: entry from One Place home and return navigation', async ({pa
   expect(errors).toEqual([]);
 });
 
+test('Our Humanity: directory links use explicit HTML files for extracted previews', async ({page}) => {
+  await page.goto(path);
+  const nav = page.getByRole('navigation', {name:'Our Humanity navigation'});
+  await expect(nav.getByRole('link',{name:'Human Literacy'})).toHaveAttribute('href','../human-literacy/index.html');
+  await expect(nav.getByRole('link',{name:'Explore TEAL'})).toHaveAttribute('href','../teal/index.html');
+  await nav.getByRole('link',{name:'Explore TEAL'}).click();
+  await expect(page).toHaveURL(/\/teal\/index\.html$/);
+  await page.goto(path);
+  await page.getByRole('navigation',{name:'Our Humanity navigation'}).getByRole('link',{name:'Human Literacy'}).click();
+  await expect(page).toHaveURL(/\/human-literacy\/index\.html$/);
+});
+
 test('Our Humanity: five rooms, 28 subjects, four practice situations and honest sourcing', async ({page}) => {
   await page.goto(path);
   await expect(page.locator('section.room')).toHaveCount(5);
