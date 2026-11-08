@@ -95,3 +95,22 @@ Each presents three optional responses and a short, contextual explanation. A vi
 **Accessibility & engineering:** Static initial scenario and subject links remain useful without script execution. Ordinary native buttons expose `aria-pressed`; the explanatory feedback uses an `aria-live=polite` region. At 500px and under, navigation/choice buttons reflow. Reduced-motion preferences are respected by the original page. Tests have been added for all four branches, selected-button semantics, keyboard activation, absence of network/storage activity, and four viewport widths; these are smoke checks, **not a certified accessibility audit**.
 
 **Founder gates remain:** Readability and pacing on real phone, ChromeVox/TalkBack, practical usefulness and perception of safety, source accuracy, representative usability review, final acceptance, and separate permission to publish. Exact-head CI must pass after these edits. Do not commit any private family examples; all situations are fictional and general. Keep original One Place site and pending priorities unchanged.
+
+## 2026-11-08 — Curiosity Studio · light and patterns (draft only)
+**Purpose:** Turn “just curious” into genuinely enjoyable, low-pressure activity with visual and text feedback. This is part of the approved One Place → Discover → Explore & Experience direction, **not a new standalone project** or a change of website priorities.
+
+**New page:** \`one-place/curiosity-studio.html\` (intentionally standalone for extracted ZIP previews). Reached through existing Our Humanity → Just be curious and the Wonder room; accessible from the current Our Humanity draft but **not deployed to production**.
+
+**Activities:**
+- **Mixing colored light:** Native keyboard-accessible red, green and blue brightness sliders (0–255), five preset buttons, a swatch and numeric RGB plus named-color readout. Screen RGB is an **illustration** of additive mixing, not paint, real spectral mixing, or color-vision equivalence. Initial yellow sample is red=255, green=255, blue=0.
+- **Rotational symmetry:** Native range slider (3–12 petals), a labeled color selector, reset and surprise controls. The actual SVG uses n identical ellipses rotated by 360/n degrees around the same point; title, description, and text readout are updated with each change. The experience is not reliant solely on distinguishing colors.
+- Both are playful, optional, lightweight, local, offline-compatible, and **do not ask for or retain personal information**. The page has no account, cookies, analytics, local/session storage, third-party scripts or outbound requests on load. Outside reading links activate only when clicked.
+
+**Sources for high-level teaching claims:**
+- University of Arizona optics outreach, additive red/green/blue light mixing: https://wp.optics.arizona.edu/oscoutreach/color-mixing/
+- Khan Academy, introductory rotational symmetry: https://www.khanacademy.org/math/geometry-home/transformations/transformations-symmetry/v/example-rotating-polygons
+These support the explanations, **not** a claim of measured learning improvement.
+
+**Editorial repair:** Prior Our Humanity copy contained \`Try this: Try:\` in **27** topics. All duplicates were removed. Preserve all 28 topics, the four curated perspective moments and original practice scenarios.
+
+**Verification gate:** \`tests/curiosity-studio.spec.cjs\` now checks the link from Our Humanity, color presets, keyboard slider adjustments, pattern count/angle, reset, surprise, phone widths (320/390), other widths (768/1366), and no automatic external requests or browser storage. Exact-head CI must finish successfully; real phone/Chromebook, 200% zoom and screen-reader testing remain necessary. Technical checks are not user acceptance. Existing PR #4 remains draft; no merge, public site change, paid service, tracking, new account or new priorities.
