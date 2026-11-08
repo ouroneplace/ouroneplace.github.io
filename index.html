@@ -206,4 +206,28 @@ const footer=document.querySelector('footer');if(footer)footer.insertAdjacentHTM
  .learning-cluster-title{flex-shrink:0}
 }
 </style>
+<style id="debt-guide-founder-draft-style">
+.debt-guide-invite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:11px;background:#eff9f3;border:1px solid #9bcbb8;border-radius:12px;padding:12px 14px;margin:12px 0}
+.debt-guide-invite strong{display:block;font-size:15px;color:#134f43}.debt-guide-invite small{display:block;color:#48685e;font-size:12px}
+.debt-guide-invite a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 13px;background:#087f75;color:white;border-radius:9px;font-weight:750;font-size:13px;text-decoration:none}
+@media(max-width:370px){.debt-guide-invite,.debt-guide-invite>div,.debt-guide-invite a{min-width:0;max-width:100%}.debt-guide-invite a{white-space:normal}}
+</style>
+<script>
+(function(){
+  'use strict';
+  var q=new URLSearchParams(location.search);
+  if(q.get('service')!=='s002')return;
+  var host=document.getElementById('helpContent');
+  if(!host)return;
+  var section=document.createElement('section');
+  section.id='debtGuideInvite';
+  section.className='debt-guide-invite';
+  var blurb=document.createElement('div'),heading=document.createElement('strong'),sub=document.createElement('small'),link=document.createElement('a');
+  heading.textContent='NEW · Debt & Creditor Guide v1';
+  sub.textContent='Private founder draft · 5 guided situations · practice wording · local action-plan download';
+  link.href='one-place/debt-creditor-guide.html';
+  link.textContent='Try the private guide →';
+  blurb.append(heading,sub);section.append(blurb,link);host.prepend(section);
+})();
+</script>
 </body></html>
