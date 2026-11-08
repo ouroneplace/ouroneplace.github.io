@@ -35,7 +35,7 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
   await expect(page.locator('#match-count')).toContainText('2 of 36 lessons shown');
   await search.fill('');
   await page.locator('button[data-area="Outside & Yard"]').click();
-  await expect(page.locator('details.skill:visible')).toHaveCount(5);
+  await expect(page.locator('details.skill:visible')).toHaveCount(6);
   await expect(page.locator('button[data-area="Outside & Yard"]')).toHaveAttribute('aria-pressed','true');
   await page.locator('details.skill:visible').first().locator('summary').click();
   await expect(page.locator('details.skill:visible').first().locator('.steps li')).toHaveCount(4);
