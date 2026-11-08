@@ -65,3 +65,18 @@ One Place should be pleasant to visit when a person needs practical help, wants 
 - Independent review of limitations and global inclusivity.
 
 The first slice should remain small enough for a founder to inspect and enjoy. It is a starting room in a very large house, not a claim to have solved humanity.
+
+## 2026-11-08 founder screen-recording walkthrough (three clips; observation, not release acceptance)
+The founder supplied three visual walkthroughs of the **extracted local HTML copy**, approximately 45, 51, and 94 seconds. The original recordings were reviewed in the private ChatGPT conversation; **recordings and full local device paths are not committed to this public repository**.
+
+**Observed:**
+- The welcome, five room links, topic summaries and expanded explanations rendered; multiple rooms were browsed, including self, love, family, society, and joy.
+- Practice choices expanded to reveal consequences. “Surprise me” navigated into the content. End-of-page references and return-to-home controls appeared.
+- The founder navigated back to One Place Home and entered Human Literacy lesson routes. This establishes visible usability for those observed routes only; no complete automated/mobile acceptance is implied.
+- One click to the TEAL directory in the extracted copy opened Chrome's folder index rather than TEAL. The file had used a directory-only relative link; now use explicit `../teal/index.html` and `../human-literacy/index.html` so local `file://` ZIP reviews don't depend on directory index behavior. A regression test checks HTTP routing; founder should still retest the extracted copy.
+- Collapsing subjects could leave an oversized empty area because grid items stretched to the height of neighboring expanded cards. Add `align-items:start` to topic grid and a layout regression assertion.
+- The first “Try this” sentence began with an extra “Try:”; removed the duplicate instruction.
+
+**Not established:** independent source accuracy, all 28 subject links, screen-reader semantics, phone layout, 200% zoom, completion by someone unfamiliar with the project, and final editorial acceptance. No claim that every feature passed. The video browsing included a local folder index; this was a viewing defect, not proof the hosted production website had the same route error.
+
+**Follow-up:** Update the extracted ZIP to the newest draft head, verify TEAL and Human Literacy navigation in that copy, check expanded/collapsed card heights, then separately evaluate readability and whether this feels like a welcoming exploratory home rather than a lengthy reference list. Keep all existing founder acceptance and publication gates open.
