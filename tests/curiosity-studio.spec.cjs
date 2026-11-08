@@ -89,6 +89,27 @@ test('Curiosity Studio makes external resources optional and clearly distinguish
   await expect(outside.nth(1)).toHaveAttribute('rel','noopener noreferrer');
 });
 
+test('Curiosity Studio creates a self-contained printable pattern SVG without uploading data',async({page})=>{
+  await page.goto(url);
+  await page.locator('#petals').fill('9');
+  await page.locator('#pattern-color').selectOption('indigo');
+  const [download]=await Promise.all([
+    page.waitForEvent('download'),
+    page.getByRole('button',{name:'Keep this pattern (SVG)'}).click()
+  ]);
+  expect(download.suggestedFilename()).toBe('one-place-pattern-9-petals.svg');
+  const stream=await download.createReadStream();
+  const chunks=[];
+  for await (const chunk of stream) chunks.push(chunk);
+  const svg=Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('<svg');
+  expect(svg).toContain('viewBox="0 0 320 320"');
+  expect((svg.match(/<ellipse/g)||[]).length).toBe(9);
+  expect(svg).toContain('Midnight indigo');
+  expect(svg).not.toContain('<script');
+  await expect(page.locator('#pattern-download-note')).toContainText('Check your browser');
+});
+
 test('Curiosity Studio: no automatic third-party requests or browser storage',async({page})=>{
  const requests=[];
  page.on('request',req=>requests.push(req.url()));
