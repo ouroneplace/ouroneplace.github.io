@@ -63,3 +63,24 @@ test('Money & Bills buttons work with keyboard and direct destination links',asy
   await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
   await expect(page.getByRole('heading',{name:'Debt & Creditor Guide'})).toBeVisible();
 });
+
+
+test('Money & Bills essential-bill and creditor pages give meaningful, scoped guidance',async({page})=>{
+ await page.goto('/index.html?service=s001');
+ await expect(page.getByRole('heading',{name:'Start with the notice, then contact the provider'})).toBeVisible();
+ await expect(page.locator('#helpContent ol li')).toHaveCount(3);
+ await expect(page.locator('#aside a[target="_blank"]')).toHaveAttribute('href','https://211.org/get-help/i-need-help-paying-my-bills');
+ await expect(page.locator('#helpContent .notice')).toContainText('eviction papers');
+ await expect(page.locator('.money-pilot')).toHaveCount(0);
+
+ await page.goto('/index.html?service=s002');
+ await expect(page.locator('#debtGuideInvite')).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Start by reviewing the notice and your response options'})).toBeVisible();
+ await expect(page.locator('#helpContent ol li')).toHaveCount(3);
+ await expect(page.locator('#aside a[target="_blank"]')).toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/debt-collection/know-your-rights-when-a-debt-collector-calls/');
+ await expect(page.locator('.money-pilot')).toHaveCount(0);
+ await expect(page.locator('#solutionKit')).toHaveCount(0);
+ await page.locator('#debtGuideInvite a').click();
+ await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
+ await expect(page.getByRole('heading',{name:'Debt & Creditor Guide'})).toBeVisible();
+});
