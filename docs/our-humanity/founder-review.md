@@ -114,3 +114,24 @@ These support the explanations, **not** a claim of measured learning improvement
 **Editorial repair:** Prior Our Humanity copy contained \`Try this: Try:\` in **27** topics. All duplicates were removed. Preserve all 28 topics, the four curated perspective moments and original practice scenarios.
 
 **Verification gate:** \`tests/curiosity-studio.spec.cjs\` now checks the link from Our Humanity, color presets, keyboard slider adjustments, pattern count/angle, reset, surprise, phone widths (320/390), other widths (768/1366), and no automatic external requests or browser storage. Exact-head CI must finish successfully; real phone/Chromebook, 200% zoom and screen-reader testing remain necessary. Technical checks are not user acceptance. Existing PR #4 remains draft; no merge, public site change, paid service, tracking, new account or new priorities.
+
+## 2026-11-08 — Founder Curiosity Studio recording review (4m 39s, visual observation)
+The founder supplied one `.webm` screen recording of a Chromium/Chrome desktop walkthrough (1920×1080) covering Our Humanity and Curiosity Studio. It has **no audio track**, so this is evidence of visible actions and reactions, not spoken feedback. **The video and founder device paths remain private in the conversation; do not upload them to this public repository.**
+
+### Recorded walkthrough — observed, not independently reproduced
+- The founder used the Our Humanity page, saw and opened topic explanations and practice responses, and navigated the broader “Start anywhere” choices.
+- The dedicated Curiosity Studio page loaded from the new Our Humanity path. Light sliders changed RGB numbers and the colored sample; a Yellow preset visibly restored RGB(255,255,0).
+- The rotational-pattern experience visibly updated between six, nine and twelve petals and different colors (including teal and indigo). The numeric angle/readout tracked the changed petal count. Controls for Surprise and Reset were visible; the video is not proof of every possible state or keyboard path.
+- The founder followed the optional University of Arizona and Khan Academy background links. The external Khan Academy website displayed a fundraising/donation panel. That is **third-party behavior**, not One Place advertising or a purchase requirement. We added wording before external links that they are optional, open in new tabs, and may show donation/sign-in requests.
+- Return navigation to Our Humanity and movement into the existing Family Handoff tool and One Place homepage were visible; no evidence that the live production site was modified during this review.
+
+### Confirmed defect found in the recording — fixed in draft
+In Our Humanity → **Enjoy being alive**, the “Explore the Curiosity Studio” invitation was accidentally injected **inside** the first “Music, art and imagination” summary. The text visibly ran together, and the literal fragment `pan>+` appeared. Cause: content insertion used a previously computed character offset after earlier text replacements, splitting the closing `</span>` tag. This was a markup defect, not a browser rendering quirk.
+- Repair: restore the exact first summary markup, move the Studio invitation to its own paragraph **before** the five-subject grid, and preserve the intact `<span>` elements.
+- Regression: add a browser assertion that the separate invitation is present, the first summary has the exact expected text without an embedded link, all five Wonder subjects remain, and the invitation leads into Curiosity Studio.
+
+### Still not demonstrated by the video
+- Touch phone operation; 320px/390px responsive behavior; 200% zoom; screen reader; keyboard-only navigation; all preset states; reset correctness and rare random combinations; all 28 subject citations; comprehensive privacy, offline behavior or learning effectiveness.
+- The Khan Academy donation notice does not mean One Place solicits money. This review made the external-source boundary clearer, but visitors should not be required to leave One Place to enjoy or understand its activities.
+
+**Gate:** Recheck the exact current PR head in automated CI, then verify that the repaired Wonder topic has a clean heading and invitation in the extracted ZIP on desktop and phone. Founder acceptance and separate public release approval remain open. Preserve all current One Place commitments and original approved project priorities.
