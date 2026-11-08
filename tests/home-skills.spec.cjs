@@ -270,6 +270,31 @@ test('Home Skills: dryer vent concept diagram can be enlarged using keyboard at 
  await f.getByRole('button',{name:'Fit diagram to screen'}).click();await expect(f).toHaveAttribute('data-zoom','false');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
+
+test('Home Skills: all 36 lessons teach why and warn of a task-specific mistake',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('details.skill')).toHaveCount(36);
+ await expect(page.locator('details.skill .lesson-why')).toHaveCount(36);
+ await expect(page.locator('details.skill .lesson-pitfall')).toHaveCount(36);
+ const whyTexts=await page.locator('.lesson-why').allTextContents();
+ const mistakeTexts=await page.locator('.lesson-pitfall').allTextContents();
+ expect(new Set(whyTexts).size).toBe(36);
+ expect(new Set(mistakeTexts).size).toBe(36);
+ for(const id of [1,7,18,28,32,33,34,35,36]){
+  const card=page.locator('#skill-'+id);
+  await card.locator('summary').click();
+  await expect(card.locator('.lesson-why')).toBeVisible();
+  await expect(card.locator('.lesson-pitfall')).toBeVisible();
+ }
+});
+test('Home Skills: why and mistake explanations remain readable on 320px phone',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto(url);
+ await page.locator('#skill-33 summary').click();
+ await expect(page.locator('#skill-33 .lesson-pitfall')).toContainText('suspected gas leak');
+ const rect=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+ expect(rect.scroll).toBeLessThanOrEqual(rect.client+1);
+});
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
