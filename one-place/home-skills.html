@@ -99,7 +99,7 @@ footer{border-top:1px solid var(--line);display:flex;justify-content:space-betwe
 function update(){
  var text=q.value.trim().toLowerCase(),found=0;
  cards.forEach(function(card){var ok=(area==='all'||card.dataset.area===area)&&(!text||card.textContent.toLowerCase().indexOf(text)!==-1);card.hidden=!ok;if(ok)found++});
- counter.textContent=found+' of '+cards.length+' lessons shown'+(!found+'. Try another room or search term.');
+ counter.textContent=found+' of '+cards.length+' lessons shown'+(found?'':'. Try another room or search term.');
 }
 buttons.forEach(function(b){b.addEventListener('click',function(){area=b.getAttribute('data-area');buttons.forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});update()})});
 q.addEventListener('input',update);
