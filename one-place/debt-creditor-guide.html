@@ -76,7 +76,7 @@ footer{padding:15px 0;border-top:1px solid var(--line);font-size:12px;color:var(
 <div id="checklist"></div>
 <label for="next"><strong>One next action (optional)</strong></label>
 <input id="next" type="text" maxlength="180" placeholder="Example: Check the notice deadline">
-<p class="hint">Use fictional or non-sensitive words. Nothing is saved automatically; downloads stay on your device.</p>
+<p class="hint">Use only fictional or non-sensitive wording. Your edits stay available while this page is open—even if you switch situations. Start over clears all edits. Downloads remain on your device.</p>
 <div class="actions"><button class="primary" type="button" id="download">Download my next-step plan (.txt)</button><button type="button" id="reset">Start over / clear</button></div>
 <p class="hint" id="status" role="status" aria-live="polite"></p>
 </section>
@@ -112,10 +112,39 @@ options:{title:"I want to compare my options",summary:"Possible paths include as
 var radios=Array.from(document.querySelectorAll('input[name="path"]'));
 var title=document.getElementById('path-title'),summary=document.getElementById('summary'),warning=document.getElementById('warning'),steps=document.getElementById('steps'),script=document.getElementById('script'),tip=document.getElementById('practice-tip'),checks=document.getElementById('checklist'),next=document.getElementById('next'),status=document.getElementById('status'),link=document.getElementById('source-link');
 function path(){return (radios.find(function(r){return r.checked})||radios[0]).value}
-function render(){var x=sources[path()];title.textContent=x.title;summary.textContent=x.summary;warning.textContent=x.warning;warning.className=path()==='court'?'info urgent':'info';steps.replaceChildren();x.steps.forEach(function(t){var li=document.createElement('li');li.textContent=t;steps.appendChild(li)});script.value=x.script;tip.textContent=x.tip;checks.replaceChildren();x.tasks.forEach(function(t,i){var label=document.createElement('label');label.className='check';var cb=document.createElement('input');cb.type='checkbox';cb.value=t;cb.id='task-'+i;var span=document.createElement('span');span.textContent=t;label.append(cb,span);checks.appendChild(label)});link.href=x.link;link.textContent=x.label;next.value='';status.textContent=''}
-radios.forEach(function(r){r.addEventListener('change',render)});
-document.getElementById('reset').addEventListener('click',function(){radios[0].checked=true;render();status.textContent='Cleared the local worksheet. Nothing was sent.';radios[0].focus()});
-document.getElementById('download').addEventListener('click',function(){var x=sources[path()];var lines=['ONE PLACE · Debt & Creditor Guide v1 · PRIVATE FOUNDER DRAFT','Generated: '+new Date().toLocaleString(),'General U.S. educational information, not legal or financial advice.','No message was sent or filing made.','',x.title,'',x.summary,'','Important: '+x.warning,'','Starting steps:'];x.steps.forEach(function(t,i){lines.push((i+1)+'. '+t)});lines.push('','Practice wording (review before using):',script.value,'','Checklist:');Array.from(checks.querySelectorAll('input')).forEach(function(c){lines.push((c.checked?'[x] ':'[ ] ')+c.value)});lines.push('','My next action: '+(next.value.trim()||'Not entered'),'','Original guidance: '+x.link,'','Verify deadlines and terms with official sources. Do not include sensitive identifiers.');var blob=new Blob([lines.join('\n')+'\n'],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-debt-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},3000);status.textContent='A local TXT download was requested. Check your browser downloads.'});
+// Edits survive switching situations in memory only. Nothing is persisted to storage or sent.
+var drafts=Object.create(null),lastPath=null;
+function saveCurrent(){
+ if(!lastPath)return;
+ drafts[lastPath]={
+  script:script.value,
+  next:next.value,
+  checked:Array.from(checks.querySelectorAll('input[type="checkbox"]')).map(function(cb){return cb.checked;})
+ };
+}
+function render(){
+ var selected=path(),x=sources[selected],saved=drafts[selected];
+ title.textContent=x.title;summary.textContent=x.summary;warning.textContent=x.warning;
+ warning.className=selected==='court'?'info urgent':'info';
+ steps.replaceChildren();
+ x.steps.forEach(function(t){var li=document.createElement('li');li.textContent=t;steps.appendChild(li);});
+ script.value=saved?saved.script:x.script;
+ tip.textContent=x.tip;
+ checks.replaceChildren();
+ x.tasks.forEach(function(t,i){
+  var label=document.createElement('label');label.className='check';
+  var cb=document.createElement('input');cb.type='checkbox';cb.value=t;cb.id='task-'+i;
+  cb.checked=!!(saved&&saved.checked[i]);
+  var span=document.createElement('span');span.textContent=t;
+  label.append(cb,span);checks.appendChild(label);
+ });
+ link.href=x.link;link.textContent=x.label;
+ next.value=saved?saved.next:'';
+ lastPath=selected;status.textContent='';
+}
+radios.forEach(function(r){r.addEventListener('change',function(){saveCurrent();render();})});
+document.getElementById('reset').addEventListener('click',function(){drafts=Object.create(null);lastPath=null;radios[0].checked=true;render();status.textContent='All temporary edits and checkmarks have been cleared. Nothing was sent.';radios[0].focus()});
+document.getElementById('download').addEventListener('click',function(){var x=sources[path()];var lines=['ONE PLACE · Debt & Creditor Guide v1 · PRIVATE FOUNDER DRAFT','Generated: '+new Date().toLocaleString(),'General U.S. educational information, not legal or financial advice.','No message was sent or filing made.','',x.title,'',x.summary,'','Important: '+x.warning,'','Starting steps:'];x.steps.forEach(function(t,i){lines.push((i+1)+'. '+t)});lines.push('','Practice wording (review before using):',script.value,'','Checklist:');Array.from(checks.querySelectorAll('input')).forEach(function(c){lines.push((c.checked?'[x] ':'[ ] ')+c.value)});lines.push('','My next action: '+(next.value.trim()||'Not entered'),'','Original guidance: '+x.link,'','Verify deadlines and terms with official sources. Do not include sensitive identifiers.');var blob=new Blob([lines.join('\n')+'\n'],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-debt-'+path()+'-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},3000);status.textContent='Downloaded '+a.download+' to this browser. Check your downloads.'});
 render();
 })();
 </script>
