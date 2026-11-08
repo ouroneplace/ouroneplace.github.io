@@ -89,7 +89,7 @@ select{width:100%;padding:11px;border:1px solid #9fbfac;border-radius:10px;backg
 <div class="control"><label for="petals">Repeated petals <output id="petals-value" for="petals">6</output></label><input id="petals" type="range" min="3" max="12" step="1" value="6"></div>
 <div class="control"><label for="pattern-color">Pattern color</label>
 <select id="pattern-color"><option value="teal">Ocean teal</option><option value="indigo">Midnight indigo</option><option value="amber">Sunlit amber</option></select></div>
-<div class="choice-row"><button id="pattern-surprise" type="button">Surprise me</button><button id="pattern-reset" type="button">Reset</button></div>
+<div class="choice-row"><button id="pattern-surprise" type="button">Surprise me</button><button id="pattern-reset" type="button">Reset</button><button id="pattern-download" type="button">Keep this pattern (SVG)</button></div><p class="note" id="pattern-download-note" role="status" aria-live="polite">Save your creation as a small, printable SVG image. The file stays on your device.</p>
 <p class="note"><strong>What to notice:</strong> The same petal is copied and rotated around the center. Try an odd number, then an even number.</p>
 </div>
 <div class="preview">
@@ -108,7 +108,7 @@ select{width:100%;padding:11px;border:1px solid #9fbfac;border-radius:10px;backg
 </g></svg>
 </div>
 <div class="readout" role="status" id="pattern-output">Six repeating petals · Ocean teal · 60° between petals</div>
-<p class="note">Each petal has the same size and shape. The number of petals changes the rotation between copies. Patterns in art and nature can have many forms of symmetry.</p></div>
+<p class="note">Each petal has the same size and shape. The number of petals changes the rotation between copies. Patterns in art and nature can have many forms of symmetry. You can keep your design using the SVG button. SVG images can be resized without becoming blurry.</p></div>
 </div></section>
 
 <section class="learning" aria-labelledby="learning-title">
@@ -174,6 +174,28 @@ document.getElementById('pattern-surprise').addEventListener('click',function(){
  var shades=['teal','indigo','amber'];
  if(next===Number(counts.value)&&shades[shades.indexOf(color.value)]===color.value){next=next===12?3:next+1}
  counts.value=String(next);color.value=shades[Math.floor(Math.random()*shades.length)];renderPattern();
+});
+document.getElementById('pattern-download').addEventListener('click',function(){
+  // Export only the local, predefined SVG pattern—never any visitor information.
+  var drawing=document.getElementById('pattern-svg').cloneNode(true);
+  drawing.setAttribute('xmlns',xmlns);
+  drawing.setAttribute('width','320');
+  drawing.setAttribute('height','320');
+  drawing.removeAttribute('role');
+  drawing.removeAttribute('aria-labelledby');
+  var bg=makeSvg('rect',{x:0,y:0,width:320,height:320,fill:'#f5fbf7'});
+  drawing.insertBefore(bg,drawing.querySelector('#pattern-art'));
+  var xml='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(drawing);
+  var blob=new Blob([xml],{type:'image/svg+xml;charset=utf-8'});
+  var downloadUrl=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=downloadUrl;
+  a.download='one-place-pattern-'+Number(counts.value)+'-petals.svg';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  document.getElementById('pattern-download-note').textContent='A download was requested. Check your browser’s Downloads folder for the SVG; nothing was uploaded.';
+  setTimeout(function(){URL.revokeObjectURL(downloadUrl)},5000);
 });
 renderLight();renderPattern();
 }());
