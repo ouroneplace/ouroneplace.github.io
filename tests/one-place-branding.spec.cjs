@@ -16,10 +16,18 @@ for (const width of [1366, 320]) {
     const solutions = [];
     for (const area of areas) {
       await page.goto('/' + area);
-      await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-      solutions.push(...await page.locator('.offers > a.offer').evaluateAll(links => links.map(a => a.getAttribute('href'))));
+      if (area.includes('area=Money%20%26%20Bills')) {
+        await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+        await expect(page.locator('#money-task-options button')).toHaveCount(5);
+      } else {
+        await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+        solutions.push(...await page.locator('.offers > a.offer').evaluateAll(links => links.map(a => a.getAttribute('href'))));
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     }
+    // Preserve 72 direct legacy routes in the repository without advertising Money & Bills' old cards.
+    expect(new Set(solutions).size).toBe(68);
+    for (const id of ['s001','s002','s003','s004']) solutions.push('index.html?service=' + id);
     expect(new Set(solutions).size).toBe(72);
     for (const solution of solutions) {
       await page.goto('/' + solution);
