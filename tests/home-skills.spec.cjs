@@ -585,6 +585,31 @@ test('Home Skills: focused reading, diagrams and references avoid redundant noti
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
+
+test('Home Skills: each of 72 unsafe answers explains its own mistake',async({page})=>{
+ await page.goto(url);
+ const wrong=page.locator('.skill-check button[data-correct="false"]');
+ await expect(wrong).toHaveCount(72);
+ const notes=await wrong.evaluateAll(nodes=>nodes.map(n=>n.dataset.explain));
+ expect(notes.every(x=>typeof x==='string'&&x.length>32)).toBe(true);
+ expect(new Set(notes).size).toBe(72);
+ await page.locator('#skill-9 summary').click();
+ await page.locator('#skill-9 .skill-check button[data-answer="0"]').click();
+ await expect(page.locator('#skill-9 .check-feedback')).toContainText('Plunging chemical cleaner can splash');
+ await page.locator('#skill-9 .skill-check button[data-answer="2"]').click();
+ await expect(page.locator('#skill-9 .check-feedback')).toContainText('Mixing drain products can cause');
+ await page.locator('#skill-9 .skill-check button[data-correct="true"]').click();
+ await expect(page.locator('#skill-9 .check-feedback')).toContainText('Good reasoning.');
+ await page.locator('#skill-29 summary').click();
+ await page.locator('#skill-29 .skill-check button[data-answer="0"]').click();
+ await expect(page.locator('#skill-29 .check-feedback')).toContainText('Searching inside delays evacuation');
+ await page.locator('#skill-29 .skill-check button[data-answer="2"]').click();
+ await expect(page.locator('#skill-29 .check-feedback')).toContainText('Silencing the alarm');
+ await page.reload();
+ await expect(page.locator('#skill-29 .check-feedback')).toContainText('Choose an answer');
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
