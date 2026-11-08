@@ -112,3 +112,24 @@ The planner is now described accurately as a **manual worksheet without automati
 - Synced the same lesson-library changes into combined PR #6. This does not merge any PR or deploy to GitHub Pages.
 
 **Remaining safeguards:** Independently review/maintain source links (background source is not always a specific model tutorial), add original visuals and accessible alternatives where they materially improve learning, do device and real-world safe task trials with fictional/non-sensitive data, ensure provenance and copyright compliance, and preserve expert escalation warnings. Only the founder can mark acceptance after manual review. No spending/release authority.
+
+
+## November 8, 2026 — Visual learning refinement (founder QA remains open)
+
+The founder's ongoing request to refine Home Skills identified a weakness in text-only teaching: a visitor can follow written steps without recognizing a part, its orientation, or the intended result.
+
+**Four original inline SVG instructional schematics** now accompany existing lessons without adding pages, paid services, third-party images or loading resources:
+- `skill-6` toilet dye test: tank/flapper/bowl flow and what colored bowl water suggests. Supported by EPA WaterSense: https://www.epa.gov/watersense/home-maintenance
+- `skill-8` faucet aerator: recognizably separate spout, sealing washer, filter/screen insert and housing. Reference is the existing DOE aerator installation job aid: https://www.energy.gov/cmei/scep/wap/articles/job-aid-24-2-install-low-flow-faucet-aerator
+- `skill-19` HVAC air-filter direction: return air, filter, arrow, and air-handler orientation. Refined reference to a step-by-step PNNL guide: https://basc.pnnl.gov/diy-guides/replace-air-filter-located-furnace-or-central-heat-pump-air-filter-slot
+- `skill-24` roof, gutter, downspout, extension and water directed away from foundation. Refined reference to DOE Building Science: https://bsesc.energy.gov/energy-basics/stormwater-gutters-downspouts
+
+These are deliberately simplified explanatory sketches, **not installation drawings**, guarantees, or substitutes for the correct appliance/fixture manual and local codes. They have semantic SVG titles and detailed descriptions, text captions, 320px responsive fit and user-controlled enlarged horizontal inspection with keyboard focus. A new “Start with a picture” section allows direct entry into the four lessons and clears conflicting search filters rather than hiding the chosen result. The 36-lesson catalog, caution labels, safety warnings and links to the core Housing guide remain.
+
+**Verified-source basis:** EPA describes the toilet dye test and worn flappers; the Department of Energy describes roof runoff and foundation exposure; the PNNL guide describes matching air-filter direction to equipment; the DOE weatherization job aid explains faucet aerator components. The particular sketches are original interpretive diagrams.
+
+**New automation:** Assert all four diagrams and semantic descriptions; verified direct source URLs; keyboard navigation and auto-reveal despite unrelated filters; zoom and horizontal internal scrolling at 320px without whole-page overflow. Automated tests alone do not prove the diagram is understandable by a new user, accurate for every device, or usable with a screen reader.
+
+**Next quality gates:** Manually review each diagram at 320px, 200% zoom and in ChromeVox/TalkBack; check color-independent understanding; confirm actual hardware/model differences; audit the remaining 32 text-only lessons for which diagrams, original photos, simple videos or more specific manufacturer instructions are appropriate. This is incremental progress within Housing, **not** acceptance of an exhaustive home-repair course.
+
+**Change control:** No merge, public deploy, visitor tracking, cloud account, external resource purchase, new area or change to founder priorities. Keep PR #5 and PR #6 separate from `main` until explicitly authorized.
