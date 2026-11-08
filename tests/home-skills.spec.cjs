@@ -63,6 +63,7 @@ test('Home Skills: expert-only hazard guidance never invites DIY, verified direc
 
 test('Home Skills: open lessons hidden by filters are identified clearly',async({page})=>{
   await page.goto(url);
+  await page.locator('#compare-lessons').check();
   await page.locator('#skill-1 summary').click();
   await page.locator('#skill-2 summary').click();
   await expect(page.locator('#open-count')).toHaveText('2 lessons open');
