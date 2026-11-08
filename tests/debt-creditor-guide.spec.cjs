@@ -54,7 +54,7 @@ test('Debt Guide preserves editable wording and exports only local text',async({
   expect(text).toContain('[x]');
   expect(text).toContain('not legal or financial advice');
   expect(text).not.toContain('personally identifying account number');
-  await expect(page.locator('#status')).toContainText('local TXT download');
+  await expect(page.locator('#status')).toContainText('one-place-debt-unknown-next-steps.txt');
   await page.getByRole('button',{name:/Start over/}).click();
   await expect(page.getByRole('radio',{name:"I can't afford my payments"})).toBeChecked();
   await expect(page.locator('#next')).toBeEmpty();
@@ -77,3 +77,39 @@ for(const width of [320,390,1366]){
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
   });
 }
+
+
+test('Debt Guide preserves fictional edits between situations and clears every path on reset',async({page})=>{
+ await page.goto('/one-place/debt-creditor-guide.html');
+ await page.locator('#script').fill('Fictional hardship request with safe wording.');
+ await page.locator('#next').fill('Contact card issuer through verified phone');
+ await page.locator('#checklist input').first().check();
+ await page.getByRole('radio',{name:"I don't recognize a debt"}).check();
+ await page.locator('#script').fill('Fictional dispute request.');
+ await page.locator('#next').fill('Check notice date');
+ await page.locator('#checklist input').nth(1).check();
+ await page.getByRole('radio',{name:"I can't afford my payments"}).check();
+ await expect(page.locator('#script')).toHaveValue('Fictional hardship request with safe wording.');
+ await expect(page.locator('#next')).toHaveValue('Contact card issuer through verified phone');
+ await expect(page.locator('#checklist input').first()).toBeChecked();
+ const downloadPromise=page.waitForEvent('download');
+ await page.getByRole('button',{name:/Download my next-step plan/}).click();
+ const file=await downloadPromise;
+ expect(file.suggestedFilename()).toBe('one-place-debt-hardship-next-steps.txt');
+ const result=await fs.readFile(await file.path(),'utf8');
+ expect(result).toContain('Fictional hardship request with safe wording.');
+ expect(result).toContain('Contact card issuer through verified phone');
+ await page.getByRole('radio',{name:"I don't recognize a debt"}).check();
+ await expect(page.locator('#script')).toHaveValue('Fictional dispute request.');
+ await expect(page.locator('#checklist input').nth(1)).toBeChecked();
+ await page.getByRole('button',{name:/Start over/}).click();
+ await expect(page.getByRole('radio',{name:"I can't afford my payments"})).toBeChecked();
+ await expect(page.locator('#next')).toBeEmpty();
+ await expect(page.locator('#checklist input').first()).not.toBeChecked();
+ await expect(page.locator('#script')).not.toHaveValue('Fictional hardship request with safe wording.');
+ await page.getByRole('radio',{name:"I don't recognize a debt"}).check();
+ await expect(page.locator('#script')).not.toHaveValue('Fictional dispute request.');
+ await expect(page.locator('#next')).toBeEmpty();
+ await expect(page.locator('#checklist input').nth(1)).not.toBeChecked();
+ expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
+});
