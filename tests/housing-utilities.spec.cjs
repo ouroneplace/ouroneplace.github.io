@@ -5,6 +5,7 @@ test('Housing & Utilities: four catalog offerings lead to actual, free experienc
   const errs=[];page.on('pageerror',e=>errs.push(e.message));
   await page.goto('/index.html?area=Housing%20%26%20Utilities');
   await expect(page.getByRole('heading',{level:1,name:'Housing & Utilities',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/Our own free action kit/})).toHaveCount(0);
   const offers=page.locator('.offer');
   await expect(offers).toHaveCount(4);
   const paths=['assist','safety','maintenance','plan'];
