@@ -80,3 +80,18 @@ The founder supplied three visual walkthroughs of the **extracted local HTML cop
 **Not established:** independent source accuracy, all 28 subject links, screen-reader semantics, phone layout, 200% zoom, completion by someone unfamiliar with the project, and final editorial acceptance. No claim that every feature passed. The video browsing included a local folder index; this was a viewing defect, not proof the hosted production website had the same route error.
 
 **Follow-up:** Update the extracted ZIP to the newest draft head, verify TEAL and Human Literacy navigation in that copy, check expanded/collapsed card heights, then separately evaluate readability and whether this feels like a welcoming exploratory home rather than a lengthy reference list. Keep all existing founder acceptance and publication gates open.
+
+## 2026-11-08 — Interactive discovery slice (draft only)
+**Why:** The screen recordings confirmed functional reading and practice content, but the page still resembled an encyclopedia. Many visitors don't arrive knowing which question to ask. The new optional `#begin` experience gives them four small situations without requiring a personal disclosure, AI account, assessment, or chatbot.
+
+**What changed:** The existing five rooms, 28 subjects, four practice scenarios, citations, source links, footer, and site pathways remain. A compact **Start anywhere** section now offers:
+1. **Understand a feeling:** An unanswered message invites awareness of what is known versus assumed.
+2. **Understand someone:** A conflict statement invites perspective-taking without surrendering boundaries.
+3. **Share the care:** A family responsibility example offers concrete help, capacity limits, and a route to the existing `family-handoff.html` tool.
+4. **Just be curious:** A sensory observation invites wonder without an achievement or problem-solving requirement.
+
+Each presents three optional responses and a short, contextual explanation. A visitor may change approaches, open a relevant existing topic, browse the rest of the chapter, or leave. There is no correct-choice score, psychological inference, stored answer, tracker, or external script. It is a **curated educational exercise**, not personalized professional guidance or a substitute for the more detailed Life Simulator.
+
+**Accessibility & engineering:** Static initial scenario and subject links remain useful without script execution. Ordinary native buttons expose `aria-pressed`; the explanatory feedback uses an `aria-live=polite` region. At 500px and under, navigation/choice buttons reflow. Reduced-motion preferences are respected by the original page. Tests have been added for all four branches, selected-button semantics, keyboard activation, absence of network/storage activity, and four viewport widths; these are smoke checks, **not a certified accessibility audit**.
+
+**Founder gates remain:** Readability and pacing on real phone, ChromeVox/TalkBack, practical usefulness and perception of safety, source accuracy, representative usability review, final acceptance, and separate permission to publish. Exact-head CI must pass after these edits. Do not commit any private family examples; all situations are fictional and general. Keep original One Place site and pending priorities unchanged.
