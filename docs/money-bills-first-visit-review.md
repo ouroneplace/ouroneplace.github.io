@@ -54,3 +54,17 @@ New tests: \`tests/money-category-journey.spec.cjs\`, covering all five choice p
 **Open improvements for future separate approval:** local/region-specific assistance lookup, verified translation and language access, context-sensitive practice scripts for essential-bill phone calls, better financial definitions, real accessibility testing with screen readers, live outside-link monitoring, and evidence from visitors. Do not implement these silently or claim they exist.
 
 **Release control:** PR #3 remains draft. PR #1 (bill planner links and category return), PR #2 (Our Story copy) remain separately open. Do not merge or publish any changes without explicit founder approval. Do not alter established One Place priorities or enable payments, tracking, accounts or spending.
+
+
+## November 7 refinement — reduce clutter and protect drafted work
+
+Following additional founder desktop walkthroughs, the draft receives a focused usability enhancement:
+
+- Five situation choices continue to be visible immediately. On narrow screens, selecting an option brings its relevant guidance into view instead of leaving the result below five stacked options. A **← Choose another situation** control returns to the choices; normal desktop behavior is unchanged.
+- Original four Money & Bills catalog entries remain in the DOM and at their established routes, but sit inside a clearly labeled **Show all four guides and tools** disclosure. This reduces visual competition while preserving discovery and the approved 72-solution architecture.
+- The prominent note asks visitors with court, eviction or shutoff notices to check deadlines promptly. No deadlines are invented or calculated.
+- In the Debt & Creditor Guide, editable practice wording, checklist selections and next-action text survive changes between situations **in memory during the open page session only**. Start over clears edits for every situation, not only the visible one. No localStorage, uploads, accounts, analytics or persistence was added.
+- Download filenames include the selected situation (e.g. \`one-place-debt-hardship-next-steps.txt\`) to reduce confusion when testing multiple drafts.
+- Updated regression tests cover 320px mobile choice/result/return flow, disclosure accessibility, per-path editing, downloads and cross-path reset. Verified browser tests remain separate from founder acceptance.
+
+This still does **not** authorize release or change draft PR #1 and #2. The source revision should be previewed through a pinned revision URL, never confused with the unchanged public homepage.
