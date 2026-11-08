@@ -59,6 +59,9 @@ test('Housing & Utilities: five situations show distinct guidance, sources, and 
     await expect(page.locator('#scenario-resources a')).toHaveCount(key==='rent'?3:2);
     await expect(page.locator('#scenario-script')).not.toBeEmpty();
   }
+  await page.locator('button[data-scenario="shelter"]').click();
+  await expect(page.locator('#scenario-resources a').first()).toHaveAttribute('href','https://www.hud.gov/FindShelter');
+  await expect(page.getByText('Some sites may show donation or sign-in requests',{exact:false})).toBeVisible();
   await expect(buttons.nth(0)).toHaveAttribute('aria-pressed','false');
   expect(errs).toEqual([]);
 });
@@ -116,6 +119,32 @@ test('Housing & Utilities: editable plan and safe TXT export preserve user chang
   await expect(page.getByRole('button',{name:'Download TXT'})).toBeDisabled();
   await expect(page.getByRole('button',{name:'Print'})).toBeDisabled();
   expect(errs).toEqual([]);
+});
+
+test('Housing & Utilities: changing inputs warns that the plan needs refreshing and protects edits',async({page})=>{
+  await page.goto(guide);
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  const plan=page.locator('#plan-text'),notice=page.locator('#plan-stale');
+  await expect(notice).toBeHidden();
+  await page.locator('#task-list .taskrow').first().locator('input').first().fill('Fictional updated task');
+  await expect(notice).toBeVisible();
+  await expect(plan).not.toHaveValue(/Fictional updated task/);
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  await expect(plan).toHaveValue(/Fictional updated task/);
+  await expect(notice).toBeHidden();
+
+  await plan.fill('Important fictional manual edits to protect');
+  await page.locator('button[data-scenario="repair"]').click();
+  await expect(notice).toBeVisible();
+  page.once('dialog',dialog=>dialog.dismiss());
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  await expect(plan).toHaveValue('Important fictional manual edits to protect');
+  page.once('dialog',dialog=>dialog.accept());
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  await expect(plan).toHaveValue(/Home repairs or unsafe conditions/);
+  await expect(notice).toBeHidden();
+  await page.getByRole('button',{name:'Clear plan'}).click();
+  await expect(notice).toBeHidden();
 });
 
 test('Housing & Utilities: print the edited plan, not the whole workspace',async({page})=>{
