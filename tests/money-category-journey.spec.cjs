@@ -14,14 +14,16 @@ for(const width of [320,390,1366]){
     await expect(page.getByRole('heading',{name:'What do you need help with today?'})).toBeVisible();
     const choices=page.locator('#money-task-options button');
     await expect(choices).toHaveCount(5);
-    await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-    await expect(page.locator('#money-more')).not.toHaveAttribute('open',/.+/);
-    await expect(page.locator('#money-more summary')).toContainText('Other Money & Bills resources (4)');
+    await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+    await expect(page.locator('#money-more')).toHaveCount(0);
+    await expect(page.getByText('Other Money & Bills resources (4)')).toHaveCount(0);
     await expect(page.locator('#areaKit')).toHaveCount(0);
     await expect(page.locator('.money-pilot')).toHaveCount(0);
     await expect(page.locator('main > #oneplacePublicMetrics')).toBeVisible();
     expect(await page.evaluate(()=>document.getElementById('main').lastElementChild.id)).toBe('oneplacePublicMetrics');
-    await expect(page.locator('.offers > a.offer').nth(3)).toContainText('Not available');
+    await expect(page.getByText('Debt Action Planner',{exact:true})).toHaveCount(0);
+    await expect(page.getByText('Household Budget Studio',{exact:true})).toHaveCount(0);
+    await expect(page.getByText('Paid options are prototypes only.')).toHaveCount(0);
     await expect(page.locator('.money-task-urgency')).toContainText('court, eviction or shutoff');
     await expect(page.getByRole('heading',{name:'Choose your situation'})).toBeVisible();
     await expect(page.locator('#money-path-primary')).toBeHidden();
@@ -50,7 +52,7 @@ for(const width of [320,390,1366]){
     }
     await expect(page.locator('#money-path-primary')).toContainText('simple budget worksheet');
     await expect(page.locator('#money-path-secondary')).toContainText('How to make a budget');
-    await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+    await expect(page.locator('.offers > a.offer')).toHaveCount(0);
     expect(await page.evaluate(()=>Object.keys(localStorage))).toEqual([]);
     expect(unwanted).toEqual([]);
     expect(errors).toEqual([]);
@@ -109,9 +111,8 @@ test('Money & Bills mobile shows the selected answer, then lets visitor change c
  await page.getByRole('button',{name:'Choose another situation'}).click();
  const current=await button.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.top<window.innerHeight;});
  expect(current).toBe(true);
- await page.locator('#money-more summary').click();
- await expect(page.locator('#money-more')).toHaveAttribute('open','');
- await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+ await expect(page.locator('#money-more')).toHaveCount(0);
+ await expect(page.locator('.offers > a.offer')).toHaveCount(0);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
 });
 
@@ -124,4 +125,19 @@ test('Money & Bills budgeting resource serves individual consumers, not financia
   await expect(page.locator('#money-path-summary')).toContainText('for individuals');
   await expect(page.locator('#money-path-primary')).not.toHaveAttribute('href',/\/educator-tools\/|\/tools-and-resources\//);
   await expect(page.locator('#money-path-primary')).not.toHaveAttribute('href',/\/consumer-tools\/educator-tool\/your-money-your-goals\/toolkit\//);
+});
+
+
+test('Money & Bills search routes relevant needs to its task-based category, not unavailable concepts',async({page})=>{
+  await page.goto('/');
+  await page.getByRole('searchbox').fill('debt');
+  const results=page.locator('#results');
+  const category=results.getByRole('link',{name:/Money & Bills — choose your situation/});
+  await expect(category).toHaveAttribute('href','index.html?area=Money%20%26%20Bills');
+  await expect(results.getByText('Debt Action Planner')).toHaveCount(0);
+  await expect(results.getByText('Understand debt and creditor options')).toHaveCount(0);
+  await category.click();
+  await expect(page.getByRole('heading',{name:'What do you need help with today?'})).toBeVisible();
+  await expect(page.locator('.offers > a.offer')).toHaveCount(0);
+  await expect(page.locator('#money-task-options button')).toHaveCount(5);
 });
