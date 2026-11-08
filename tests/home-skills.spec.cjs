@@ -60,6 +60,20 @@ test('Home Skills: expert-only hazard guidance never invites DIY, verified direc
   await expect(page.locator('#skill-27 a.reference')).toHaveAttribute('href',/extension.psu.edu/);
 });
 
+test('Home Skills: open lessons hidden by filters are identified clearly',async({page})=>{
+  await page.goto(url);
+  await page.locator('#skill-1 summary').click();
+  await page.locator('#skill-2 summary').click();
+  await expect(page.locator('#open-count')).toHaveText('2 lessons open');
+  await page.locator('button[data-area="Laundry"]').click();
+  await expect(page.locator('details.skill:visible')).toHaveCount(3);
+  await expect(page.locator('#open-count')).toHaveText('2 lessons open (0 in current results; 2 hidden by filters)');
+  await page.getByRole('button',{name:'Close open lessons'}).click();
+  await expect(page.locator('#open-count')).toHaveText('No lessons open');
+  await page.locator('button[data-area="all"]').click();
+  await expect(page.locator('details.skill[open]')).toHaveCount(0);
+});
+
 test('Home Skills: search, filters and honest zero-result feedback',async({page})=>{
   await page.goto(url);
   const search=page.getByRole('searchbox',{name:'Search a task, room, or issue'});
