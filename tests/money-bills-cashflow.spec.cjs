@@ -98,7 +98,7 @@ test('Money & Bills planner provides a direct category return on desktop and 320
     await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
     await back.click();
-    await expect(page).toHaveURL(/\/index\.html\?area=Money(?:%20|\+)%(?:26)Bills$/);
+    await expect(page).toHaveURL(/\/index\.html\?area=Money%20%26%20Bills$/);
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
     await expect(page.locator('.offers > a.offer')).toHaveCount(4);
   }
