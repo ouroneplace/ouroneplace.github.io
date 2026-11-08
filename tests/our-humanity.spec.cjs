@@ -49,6 +49,21 @@ test('Our Humanity: five rooms, 28 subjects, four practice situations and honest
   await expect(option).toHaveAttribute('open','');
 });
 
+test('Our Humanity: collapsed cards stay compact beside expanded cards', async ({page}) => {
+  await page.setViewportSize({width:1366,height:768});
+  await page.goto(path);
+  const first=page.locator('#self details.subject').nth(0);
+  const second=page.locator('#self details.subject').nth(1);
+  await expect(first).toHaveAttribute('open','');
+  await expect(second).not.toHaveAttribute('open','');
+  const tall=await first.boundingBox();
+  const compact=await second.boundingBox();
+  expect(compact.height).toBeLessThan(tall.height);
+  await first.locator('summary').click();
+  const closed=await first.boundingBox();
+  expect(closed.height).toBeLessThan(tall.height);
+});
+
 for (const width of [320,390,768,1366]) {
   test('Our Humanity: no sideways overflow at '+width+'px', async ({page}) => {
     await page.setViewportSize({width,height:800});
