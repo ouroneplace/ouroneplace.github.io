@@ -17,6 +17,8 @@ for(const width of [320,390,1366]){
     await expect(page.locator('.offers > a.offer')).toHaveCount(4);
     await expect(page.locator('#areaKit')).toHaveCount(0);
     await expect(page.locator('.money-pilot')).toHaveCount(0);
+    await expect(page.locator('main > #oneplacePublicMetrics')).toBeVisible();
+    expect(await page.evaluate(()=>document.getElementById('main').lastElementChild.id)).toBe('oneplacePublicMetrics');
     await expect(page.getByRole('heading',{name:'Other ways to explore Money & Bills'})).toBeVisible();
     await expect(page.locator('.offers > a.offer').nth(3)).toContainText('Not available');
     await expect(page.locator('#money-path-caution')).toContainText('eviction or court notice');
