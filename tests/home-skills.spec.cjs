@@ -97,7 +97,7 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
 
 test('Home Skills: four original diagrams teach specific parts with accessible descriptions',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(12);
+ await expect(page.locator('.skill-visual')).toHaveCount(16);
  const sample=[
   ['6','Simple toilet tank dye test schematic','How the toilet dye test works'],
   ['8','Exploded faucet aerator parts schematic','Recognize the faucet aerator parts'],
@@ -183,8 +183,8 @@ test('Home Skills: beginner home-care schedule opens correct lessons after confl
 
 test('Home Skills: previously illustrated eight remain valid after library expansion',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(12);
- await expect(page.locator('.skill-check')).toHaveCount(12);
+ await expect(page.locator('.skill-visual')).toHaveCount(16);
+ await expect(page.locator('.skill-check')).toHaveCount(16);
  const illustrated=['4','6','8','11','13','16','19','24'];
  for(const id of illustrated){
    const lesson=page.locator('#skill-'+id);
@@ -196,7 +196,7 @@ test('Home Skills: previously illustrated eight remain valid after library expan
  }
  await expect(page.locator('#skill-4 a.reference')).toHaveAttribute('href',/producthelp\.whirlpool\.com/);
  await expect(page.locator('#skill-13 a.reference')).toHaveAttribute('href',/repair\.geappliances\.com/);
- await expect(page.locator('[data-show-skill]')).toHaveCount(25);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(29);
 });
 
 test('Home Skills: practice answers explain unsafe choices without storing scores',async({page})=>{
@@ -234,8 +234,8 @@ test('Home Skills: new visual shortcuts open model-specific lessons after contra
 
 test('Home Skills: twelve illustrations and twelve optional checks remain distinct',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(12);
- await expect(page.locator('.skill-check')).toHaveCount(12);
+ await expect(page.locator('.skill-visual')).toHaveCount(16);
+ await expect(page.locator('.skill-check')).toHaveCount(16);
  const ids=[4,6,7,8,11,12,13,16,18,19,24,28];
  for(const id of ids){
   const lesson=page.locator('#skill-'+id);
@@ -243,8 +243,8 @@ test('Home Skills: twelve illustrations and twelve optional checks remain distin
   await expect(lesson.locator('svg[role="img"] desc')).not.toBeEmpty();
   await expect(lesson.locator('.skill-check button')).toHaveCount(3);
  }
- await expect(page.locator('.visual-actions button')).toHaveCount(12);
- await expect(page.locator('[data-show-skill]')).toHaveCount(25);
+ await expect(page.locator('.visual-actions button')).toHaveCount(16);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(29);
  await expect(page.locator('#skill-18 a.reference')).toHaveAttribute('href','https://www.cpsc.gov/s3fs-public/5032.pdf');
 });
 test('Home Skills: safety checks correct unsafe answers and show no lasting score',async({page})=>{
@@ -295,6 +295,49 @@ test('Home Skills: why and mistake explanations remain readable on 320px phone',
  const rect=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
  expect(rect.scroll).toBeLessThanOrEqual(rect.client+1);
 });
+
+test('Home Skills: 16 original diagrams and 16 optional understanding checks',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('details.skill')).toHaveCount(36);
+ await expect(page.locator('.skill-visual')).toHaveCount(16);
+ await expect(page.locator('.skill-check')).toHaveCount(16);
+ await expect(page.locator('.visual-actions button')).toHaveCount(16);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(29);
+ for(const id of [9,10,23,31]){
+  const card=page.locator('#skill-'+id);
+  await expect(card.locator('svg[role="img"] title')).not.toBeEmpty();
+  await expect(card.locator('svg[role="img"] desc')).not.toBeEmpty();
+  await expect(card.locator('.skill-check button')).toHaveCount(3);
+  await expect(card.locator('.lesson-why')).toHaveCount(1);
+  await expect(card.locator('.lesson-pitfall')).toHaveCount(1);
+ }
+ await expect(page.locator('#skill-9 a.reference')).toHaveAttribute('href','https://www.lowes.com/n/how-to/clear-clogged-drain');
+ await expect(page.locator('#skill-23 a.reference')).toHaveAttribute('href','https://www.epa.gov/watersense/fix-leak-week');
+});
+
+test('Home Skills: leaking hose and caulk exercises explain safe stop conditions',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto(url);
+ await page.getByRole('button',{name:'Caulk joint',exact:true}).click();
+ const caulk=page.locator('#skill-10');
+ await expect(caulk).toHaveAttribute('open','');
+ await caulk.locator('button[data-answer="0"]').click();
+ await expect(caulk.locator('.check-feedback')).toContainText('Not quite.');
+ await caulk.locator('button[data-answer="2"]').click();
+ await expect(caulk.locator('.check-feedback')).toContainText('Good reasoning.');
+ await page.locator('#search').fill('a-term-that-does-not-match');
+ await page.locator('button[data-area="Kitchen"]').click();
+ await page.getByRole('button',{name:'Garden hose washer',exact:true}).click();
+ const hose=page.locator('#skill-23');
+ await expect(hose).toHaveAttribute('open','');
+ await expect(page.locator('#search')).toHaveValue('');
+ await expect(page.locator('button[data-area="all"]')).toHaveAttribute('aria-pressed','true');
+ await hose.locator('button[data-answer="0"]').click();
+ await expect(hose.locator('.check-feedback')).toContainText('Good reasoning.');
+ const layout=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
+ expect(layout.scroll).toBeLessThanOrEqual(layout.vp+1);expect(layout.local).toBe(0);expect(layout.session).toBe(0);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
