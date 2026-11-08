@@ -679,6 +679,40 @@ test('Home Skills: first-step helper is keyboard usable and saves no personal in
  expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
 });
 
+
+test('Home Skills: three practice cases each teach identify, choose and verify decisions',async({page})=>{
+ await page.goto(url);await page.locator('#practice-lab summary').click();
+ const select=page.locator('#practice-case');await expect(select.locator('option')).toHaveCount(4);
+ const cases=[['aerator',[0,1,2],'8'],['filter',[0,1,0],'19'],['dishwasher',[1,0,1],'4']];
+ for(const [name,answers,lesson] of cases){
+  await select.selectOption(name);
+  for(let i=0;i<3;i++){
+   await expect(page.locator('#practice-progress')).toHaveText('Step '+(i+1)+' of 3');
+   const buttons=page.locator('[data-practice-choice]');await expect(buttons).toHaveCount(3);
+   await buttons.nth((answers[i]+1)%3).click();await expect(page.locator('#practice-feedback')).toContainText('Not safe yet.');
+   await expect(page.locator('#practice-next')).toBeHidden();
+   await buttons.nth(answers[i]).click();await expect(page.locator('#practice-feedback')).toContainText('Appropriate decision.');
+   await page.locator('#practice-next').click();
+  }
+  await expect(page.locator('#practice-complete')).toBeVisible();
+  await page.locator('#practice-lesson').click();await expect(page.locator('#skill-'+lesson)).toHaveAttribute('open','');
+ }
+});
+test('Home Skills: safe practice remains local and keyboard usable at 320px',async({page})=>{
+ await page.setViewportSize({width:320,height:780});await page.goto(url);
+ await page.locator('#practice-lab summary').focus();await page.keyboard.press('Enter');
+ await page.locator('#practice-case').selectOption('aerator');
+ await page.locator('[data-practice-choice="0"]').focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#practice-next')).toBeVisible();
+ await page.locator('#practice-case').selectOption('filter');
+ await expect(page.locator('#practice-next')).toBeHidden();
+ await page.locator('#practice-reset').click();await expect(page.locator('#practice-progress')).toHaveText('Step 1 of 3');
+ await page.reload();await page.locator('#practice-lab summary').click();
+ await expect(page.locator('#practice-case')).toHaveValue('');await expect(page.locator('#practice-stage')).toBeHidden();
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
