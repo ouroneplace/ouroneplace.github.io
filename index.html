@@ -275,6 +275,9 @@ if(!intro||!offers)return;
 // Preserve all 4 catalog choices and 72 solution URLs; change the priority and presentation only.
 var pilot=main.querySelector('.money-pilot');
 if(pilot)pilot.remove();
+// Retain public accountability, but keep the urgent task selector first.
+var metrics=main.querySelector(':scope > #oneplacePublicMetrics');
+if(metrics)main.appendChild(metrics);
 var eyebrow=main.querySelector(':scope > .eyebrow');
 if(eyebrow)eyebrow.textContent='FIND A USEFUL NEXT STEP';
 intro.textContent='Start with what is happening today. We will show an appropriate place to begin; you can still explore every free guide and tool below.';
