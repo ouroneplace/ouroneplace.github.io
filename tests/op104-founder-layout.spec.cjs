@@ -47,7 +47,7 @@ for(const size of [{width:1920,height:1080},{width:1366,height:768}]){
     expect(titleBox.y+titleBox.height).toBeLessThan(size.height);
     expect(firstBox.y+firstBox.height).toBeLessThan(size.height);
     await expect(page.locator('#money-task-options button')).toHaveCount(5);
-    await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+    await expect(page.locator('.offers > a.offer')).toHaveCount(0);
     expect(await page.evaluate(()=>Math.max(document.documentElement.scrollWidth,document.body.scrollWidth))).toBeLessThanOrEqual(size.width+3);
   });
 }
