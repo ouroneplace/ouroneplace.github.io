@@ -4,7 +4,7 @@ const guide = '/one-place/housing-utilities.html';
 test('Housing & Utilities: four catalog offerings lead to actual, free experiences',async({page})=>{
   const errs=[];page.on('pageerror',e=>errs.push(e.message));
   await page.goto('/index.html?area=Housing%20%26%20Utilities');
-  await expect(page.getByRole('heading',{name:'Housing & Utilities'})).toBeVisible();
+  await expect(page.getByRole('heading',{level:1,name:'Housing & Utilities',exact:true})).toBeVisible();
   const offers=page.locator('.offer');
   await expect(offers).toHaveCount(4);
   const paths=['assist','safety','maintenance','plan'];
