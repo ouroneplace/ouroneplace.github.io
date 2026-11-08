@@ -86,3 +86,20 @@ test('Money & Bills resource links and exported language are appropriate for the
   expect(txt).toContain('Public tool preview - organizational guidance, not financial advice.');
   expect(txt).not.toContain('Founder review -');
 });
+
+
+test('Money & Bills planner provides a direct category return on desktop and 320px mobile', async ({page}) => {
+  for(const width of [1366,320]) {
+    await page.setViewportSize({width,height:844});
+    await page.goto('/one-place/money-bills.html');
+    const nav=page.getByRole('navigation',{name:'Money & Bills navigation'});
+    const back=nav.getByRole('link',{name:'← Money & Bills'});
+    await expect(back).toBeVisible();
+    await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+    await back.click();
+    await expect(page).toHaveURL(/\/index\.html\?area=Money(?:%20|\+)%(?:26)Bills$/);
+    await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
+    await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+  }
+});
