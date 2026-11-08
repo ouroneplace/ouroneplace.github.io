@@ -233,4 +233,157 @@ const footer=document.querySelector('footer');if(footer)footer.insertAdjacentHTM
   blurb.append(heading,sub);section.append(blurb,link);host.prepend(section);
 })();
 </script>
+
+<style id="money-task-flow-style">
+/* Money & Bills founder UX review: lead with visitor needs, preserve the 4 catalog records. */
+.money-task-flow{border:1px solid #c7e4d6;border-radius:16px;background:#fff;padding:clamp(14px,2vw,22px);margin:14px 0 18px}
+.money-task-flow h2{font-size:clamp(21px,2vw,27px);line-height:1.2;margin:4px 0 7px;color:#173935}
+.money-task-flow .money-helper{font-size:14px;color:#506b62;line-height:1.45;margin:0 0 14px}
+.money-task-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);gap:17px}
+.money-task-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+.money-task-options button{font:700 14px/1.35 system-ui,sans-serif;color:#16483e;min-height:68px;padding:10px 12px;border-radius:10px;border:1px solid #c5dfd2;background:#f8fcfa;text-align:left;cursor:pointer;white-space:normal;overflow-wrap:anywhere}
+.money-task-options button[aria-pressed="true"]{border:2px solid #087f75;background:#ebf8f2;color:#064c43}
+.money-task-options button:focus-visible,.money-task-result a:focus-visible{outline:3px solid #bd782b;outline-offset:3px}
+.money-task-options button small{display:block;margin-top:3px;font-size:12px;font-weight:500;color:#526d64}
+.money-task-result{border:1px solid #c8e3d8;background:#f6fbf8;border-radius:12px;padding:15px 17px;min-width:0}
+.money-task-result h3{font-size:19px;margin:0 0 7px;line-height:1.25}
+.money-task-result p{font-size:14px;margin:0 0 8px;line-height:1.45}
+.money-task-result ol{font-size:13px;margin:6px 0 12px;padding-left:21px}
+.money-task-result li{margin:5px 0}
+.money-task-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.money-task-buttons a{display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:10px 12px;border-radius:9px;text-decoration:none;font-weight:800;font-size:13px;max-width:100%;overflow-wrap:anywhere;border:1px solid #b2d7c7}
+.money-task-buttons .money-primary{background:#087f75;color:#fff;border-color:#087f75}
+.money-task-buttons .money-secondary{background:#fff;color:#0d6358}
+.money-task-caution{border-left:3px solid #aa6b27;padding-left:10px;color:#6b491c;font-size:13px!important;margin-top:11px!important}
+.money-subsection-head{font-size:19px;line-height:1.25;margin:18px 0 4px;color:#173935}
+.money-subsection-note{margin:0 0 9px!important;font-size:13px!important;color:#55746b}
+.money-task-flow + .money-subsection-head{margin-top:13px}
+main.inside .offers>a.offer[data-money-future]{border-style:dashed;background:#f9fbfa}
+@media(max-width:850px){.money-task-layout{grid-template-columns:1fr}.money-task-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:470px){.money-task-options{grid-template-columns:1fr}.money-task-options button{min-height:48px}.money-task-flow{margin:10px 0;padding:13px}.money-task-buttons a{width:100%}.money-task-result{padding:13px}.money-task-flow h2{font-size:22px}}
+</style>
+<script>
+(function(){
+'use strict';
+var query=new URLSearchParams(location.search);
+if(query.get('area')!=='Money & Bills'||query.has('service'))return;
+var main=document.getElementById('main');
+if(!main)return;
+var intro=main.querySelector(':scope > .desc');
+var offers=main.querySelector(':scope > .offers');
+if(!intro||!offers)return;
+// Preserve all 4 catalog choices and 72 solution URLs; change the priority and presentation only.
+var pilot=main.querySelector('.money-pilot');
+if(pilot)pilot.remove();
+var eyebrow=main.querySelector(':scope > .eyebrow');
+if(eyebrow)eyebrow.textContent='FIND A USEFUL NEXT STEP';
+intro.textContent='Start with what is happening today. We will show an appropriate place to begin; you can still explore every free guide and tool below.';
+var scenarios={
+essential:{
+title:'I cannot cover an essential bill',
+sub:'Rent, electricity, water, food or another essential need',
+heading:'Start with the bill and its deadline',
+summary:'If an essential payment is at risk, check the exact notice or due date and contact the provider or landlord through a trusted number. Community assistance may be available but is not guaranteed.',
+steps:['Locate any shutoff, eviction, or payment notice and note the stated deadline.','Ask the provider or landlord about assistance, payment arrangements, and written terms.','Ask 211 about local support; confirm availability and eligibility directly.'],
+primary:{label:'See bill-help starting points →',url:'index.html?service=s001'},
+secondary:{label:'Find community help through 211 ↗',url:'https://211.org/get-help/i-need-help-paying-my-bills',external:true},
+caution:'If you have a formal eviction or court notice, seek qualified local legal help promptly; this tool cannot interpret or calculate response deadlines.'
+},
+timing:{
+title:'My bills arrive before my next paycheck',
+sub:'Plan due dates, available cash and expected income',
+heading:'See what comes due before money arrives',
+summary:'The free bill planner can compare dated unpaid bills with expected income and flag potential shortfalls. It is not connected to bank accounts and does not determine whether you can afford a payment.',
+steps:['List each unpaid bill, amount, and due date, along with expected income dates.','Check what funds are actually available now; review essential obligations that may be missing.','Use the resulting timeline to decide whom to call before a deadline.'],
+primary:{label:'Open the free bill planner →',url:'one-place/money-bills.html'},
+secondary:{label:'Read CFPB bill-planning guidance ↗',url:'https://www.consumerfinance.gov/consumer-tools/unexpected-job-loss/',external:true},
+caution:'Do not treat expected future income as available cash today.'
+},
+collector:{
+title:'A creditor or debt collector contacted me',
+sub:'Understand the notice and your possible responses',
+heading:'Check who contacted you and what they claim',
+summary:'Read the written validation information, identify the creditor, and check any dispute or response deadline. A collection call does not prove the debt is accurate.',
+steps:['Keep the notice and identify the sender, creditor and amount claimed.','Review any stated dispute period before agreeing to terms.','Use the draft guide to practice a response, or read official consumer-rights guidance.'],
+primary:{label:'Try the Debt & Creditor Guide (draft) →',url:'one-place/debt-creditor-guide.html'},
+secondary:{label:'CFPB: Know your collection rights ↗',url:'https://www.consumerfinance.gov/consumer-tools/debt-collection/know-your-rights-when-a-debt-collector-calls/',external:true},
+caution:'A dispute to a debt collector does not replace responding to court papers.'
+},
+court:{
+title:'I received court papers about a debt',
+sub:'A legal deadline may apply',
+heading:'Read the court notice and act on the deadline',
+summary:'Debt lawsuits have formal response rules. If you have received court papers, check the deadline shown in the documents and seek qualified local legal assistance promptly.',
+steps:['Find the court name, required response date, and official instructions on the papers.','Contact legal aid or a qualified attorney for help with your specific state and case.','Follow court filing instructions; talking to a creditor is not necessarily a legal response.'],
+primary:{label:'CFPB: What to do when sued ↗',url:'https://www.consumerfinance.gov/ask-cfpb/what-should-i-do-if-im-sued-by-a-debt-collector-or-creditor-en-334/',external:true},
+secondary:{label:'Explore our educational draft guide →',url:'one-place/debt-creditor-guide.html'},
+caution:'IMPORTANT: Missing a deadline can lead to a default judgment. This website does not calculate deadlines, file court papers, or give legal advice.'
+},
+budget:{
+title:'I want to make a monthly spending plan',
+sub:'Compare income, expenses and debt payments',
+heading:'Start with a simple monthly picture',
+summary:'The Household Budget Studio is an illustrative exercise, not a full financial assessment. Use the free bill planner if you also need real due-date and income timing.',
+steps:['Write down monthly income and essential expenses using fictional examples while testing.','Compare broad categories and identify questions to review.','For actual bill deadlines, use the free local planner rather than relying on the illustration.'],
+primary:{label:'Explore Budget Studio (illustration) →',url:'index.html?service=s003'},
+secondary:{label:'Open the free bill planner →',url:'one-place/money-bills.html'},
+caution:'This preview cannot confirm your account balances, credit score, eligibility, or financial safety.'
+}
+};
+var section=document.createElement('section');
+section.className='money-task-flow';
+section.setAttribute('aria-labelledby','money-task-heading');
+section.innerHTML='<p class="eyebrow">START HERE · FREE</p><h2 id="money-task-heading">What do you need help with today?</h2><p class="money-helper">Choose the situation closest to yours. No account, bank connection, or personal details required. Nothing you select here is stored or sent.</p><div class="money-task-layout"><div class="money-task-options" role="group" aria-label="Choose your money situation" id="money-task-options"></div><div class="money-task-result" id="money-task-result" role="region" aria-labelledby="money-path-heading"><h3 id="money-path-heading" tabindex="-1"></h3><p id="money-path-summary" aria-live="polite"></p><ol id="money-path-steps"></ol><div class="money-task-buttons"><a class="money-primary" id="money-path-primary"></a><a class="money-secondary" id="money-path-secondary"></a></div><p class="money-task-caution" id="money-path-caution"></p></div></div>';
+offers.before(section);
+var options=section.querySelector('#money-task-options');
+var title=section.querySelector('#money-path-heading');
+var summary=section.querySelector('#money-path-summary');
+var steps=section.querySelector('#money-path-steps');
+var primary=section.querySelector('#money-path-primary');
+var secondary=section.querySelector('#money-path-secondary');
+var caution=section.querySelector('#money-path-caution');
+function setLink(anchor,item){
+ anchor.textContent=item.label;
+ anchor.href=item.url;
+ if(item.external){anchor.target='_blank';anchor.rel='noopener noreferrer';}
+ else{anchor.removeAttribute('target');anchor.removeAttribute('rel');}
+}
+function choose(id){
+ var item=scenarios[id];if(!item)return;
+ Array.from(options.querySelectorAll('button')).forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.need===id));});
+ title.textContent=item.heading;summary.textContent=item.summary;
+ steps.replaceChildren();
+ item.steps.forEach(function(t){var li=document.createElement('li');li.textContent=t;steps.appendChild(li);});
+ setLink(primary,item.primary);setLink(secondary,item.secondary);
+ caution.textContent=item.caution;
+}
+Object.keys(scenarios).forEach(function(id){
+ var item=scenarios[id],btn=document.createElement('button');
+ btn.type='button';btn.dataset.need=id;btn.setAttribute('aria-controls','money-task-result');btn.setAttribute('aria-pressed','false');
+ var heading=document.createElement('span'),sub=document.createElement('small');
+ heading.textContent=item.title;sub.textContent=item.sub;
+ btn.append(heading,sub);
+ btn.addEventListener('click',function(){choose(id);});
+ options.appendChild(btn);
+});
+choose('essential');
+var resourceHeading=document.createElement('h2');
+resourceHeading.className='money-subsection-head';resourceHeading.textContent='Other ways to explore Money & Bills';
+resourceHeading.id='money-resource-heading';offers.before(resourceHeading);
+offers.setAttribute('aria-labelledby',resourceHeading.id);
+var foot=document.createElement('p');foot.className='money-subsection-note';
+foot.textContent='Two free guidance pages, one illustrative budget tool, and one future service concept. The concept is not available or bookable.';
+resourceHeading.after(foot);
+var cards=offers.querySelectorAll(':scope > a.offer');
+if(cards.length===4){
+ var budgetSmall=cards[2].querySelector('small');
+ if(budgetSmall)budgetSmall.textContent='Illustrative budgeting exercise; no bank connection';
+ var futureSmall=cards[3].querySelector('small');
+ if(futureSmall)futureSmall.textContent='Not available · No booking, payment, or intake';
+ var futureAction=cards[3].querySelector('em');
+ if(futureAction)futureAction.textContent='Read the concept only →';
+ cards[3].dataset.moneyFuture='true';
+}
+})();
+</script>
 </body></html>
