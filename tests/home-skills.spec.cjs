@@ -97,7 +97,7 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
 
 test('Home Skills: four original diagrams teach specific parts with accessible descriptions',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(8);
+ await expect(page.locator('.skill-visual')).toHaveCount(12);
  const sample=[
   ['6','Simple toilet tank dye test schematic','How the toilet dye test works'],
   ['8','Exploded faucet aerator parts schematic','Recognize the faucet aerator parts'],
@@ -184,7 +184,7 @@ test('Home Skills: beginner home-care schedule opens correct lessons after confl
 test('Home Skills: eight model-cautious diagrams and eight optional learning checks',async({page})=>{
  await page.goto(url);
  await expect(page.locator('.skill-visual')).toHaveCount(8);
- await expect(page.locator('.skill-check')).toHaveCount(8);
+ await expect(page.locator('.skill-check')).toHaveCount(12);
  const illustrated=['4','6','8','11','13','16','19','24'];
  for(const id of illustrated){
    const lesson=page.locator('#skill-'+id);
@@ -196,7 +196,7 @@ test('Home Skills: eight model-cautious diagrams and eight optional learning che
  }
  await expect(page.locator('#skill-4 a.reference')).toHaveAttribute('href',/producthelp\.whirlpool\.com/);
  await expect(page.locator('#skill-13 a.reference')).toHaveAttribute('href',/repair\.geappliances\.com/);
- await expect(page.locator('[data-show-skill]')).toHaveCount(21);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(25);
 });
 
 test('Home Skills: practice answers explain unsafe choices without storing scores',async({page})=>{
@@ -231,6 +231,45 @@ test('Home Skills: new visual shortcuts open model-specific lessons after contra
  await expect(page.locator('#skill-13 svg title')).toHaveText('Washing machine supply hose inspection points schematic');
 });
 
+
+test('Home Skills: twelve illustrations and twelve optional checks remain distinct',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('.skill-visual')).toHaveCount(12);
+ await expect(page.locator('.skill-check')).toHaveCount(12);
+ const ids=[4,6,7,8,11,12,13,16,18,19,24,28];
+ for(const id of ids){
+  const lesson=page.locator('#skill-'+id);
+  await expect(lesson.locator('svg[role="img"] title')).not.toBeEmpty();
+  await expect(lesson.locator('svg[role="img"] desc')).not.toBeEmpty();
+  await expect(lesson.locator('.skill-check button')).toHaveCount(3);
+ }
+ await expect(page.locator('.visual-actions button')).toHaveCount(12);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(25);
+ await expect(page.locator('#skill-18 a.reference')).toHaveAttribute('href','https://www.cpsc.gov/s3fs-public/5032.pdf');
+});
+test('Home Skills: safety checks correct unsafe answers and show no lasting score',async({page})=>{
+ await page.setViewportSize({width:320,height:800});
+ await page.goto(url);
+ await page.locator('#skill-7 summary').click();
+ await page.locator('#skill-7 .skill-check button').first().click();
+ await expect(page.locator('#skill-7 .check-feedback')).toContainText('Not quite.');
+ await page.locator('#skill-7 .skill-check button').nth(1).click();
+ await expect(page.locator('#skill-7 .check-feedback')).toContainText('Good reasoning.');
+ await page.getByRole('button',{name:'Smoke alarm test',exact:true}).click();
+ await expect(page.locator('#skill-28')).toHaveAttribute('open','');
+ await page.locator('#skill-28 .skill-check button').nth(1).click();
+ await expect(page.locator('#skill-28 .check-feedback')).toContainText('Good reasoning.');
+ const x=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
+ expect(x.scroll).toBeLessThanOrEqual(x.viewport+1);expect(x.local).toBe(0);expect(x.session).toBe(0);
+});
+test('Home Skills: dryer vent concept diagram can be enlarged using keyboard at 320px',async({page})=>{
+ await page.setViewportSize({width:320,height:780});await page.goto(url);
+ await page.getByRole('button',{name:'Dryer vent pathway',exact:true}).focus();await page.keyboard.press('Enter');
+ const f=page.locator('#skill-12 figure.skill-visual');await expect(f).toBeVisible();
+ await f.getByRole('button',{name:'Enlarge diagram'}).click();await expect(f).toHaveAttribute('data-zoom','true');
+ await f.getByRole('button',{name:'Fit diagram to screen'}).click();await expect(f).toHaveAttribute('data-zoom','false');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+});
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
