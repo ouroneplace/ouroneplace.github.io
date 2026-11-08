@@ -97,7 +97,7 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
 
 test('Home Skills: four original diagrams teach specific parts with accessible descriptions',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
  const sample=[
   ['6','Simple toilet tank dye test schematic','How the toilet dye test works'],
   ['8','Exploded faucet aerator parts schematic','Recognize the faucet aerator parts'],
@@ -183,8 +183,8 @@ test('Home Skills: beginner home-care schedule opens correct lessons after confl
 
 test('Home Skills: previously illustrated eight remain valid after library expansion',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
- await expect(page.locator('.skill-check')).toHaveCount(28);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
  const illustrated=['4','6','8','11','13','16','19','24'];
  for(const id of illustrated){
    const lesson=page.locator('#skill-'+id);
@@ -196,7 +196,7 @@ test('Home Skills: previously illustrated eight remain valid after library expan
  }
  await expect(page.locator('#skill-4 a.reference')).toHaveAttribute('href',/producthelp\.whirlpool\.com/);
  await expect(page.locator('#skill-13 a.reference')).toHaveAttribute('href',/repair\.geappliances\.com/);
- await expect(page.locator('[data-show-skill]')).toHaveCount(41);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
 });
 
 test('Home Skills: practice answers explain unsafe choices without storing scores',async({page})=>{
@@ -234,8 +234,8 @@ test('Home Skills: new visual shortcuts open model-specific lessons after contra
 
 test('Home Skills: twelve illustrations and twelve optional checks remain distinct',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
- await expect(page.locator('.skill-check')).toHaveCount(28);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
  const ids=[4,6,7,8,11,12,13,16,18,19,24,28];
  for(const id of ids){
   const lesson=page.locator('#skill-'+id);
@@ -243,8 +243,8 @@ test('Home Skills: twelve illustrations and twelve optional checks remain distin
   await expect(lesson.locator('svg[role="img"] desc')).not.toBeEmpty();
   await expect(lesson.locator('.skill-check button')).toHaveCount(3);
  }
- await expect(page.locator('.visual-actions button')).toHaveCount(28);
- await expect(page.locator('[data-show-skill]')).toHaveCount(41);
+ await expect(page.locator('.visual-actions button')).toHaveCount(36);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
  await expect(page.locator('#skill-18 a.reference')).toHaveAttribute('href','https://www.cpsc.gov/s3fs-public/5032.pdf');
 });
 test('Home Skills: safety checks correct unsafe answers and show no lasting score',async({page})=>{
@@ -299,10 +299,10 @@ test('Home Skills: why and mistake explanations remain readable on 320px phone',
 test('Home Skills: 16 original diagrams and 16 optional understanding checks',async({page})=>{
  await page.goto(url);
  await expect(page.locator('details.skill')).toHaveCount(36);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
- await expect(page.locator('.skill-check')).toHaveCount(28);
- await expect(page.locator('.visual-actions button')).toHaveCount(28);
- await expect(page.locator('[data-show-skill]')).toHaveCount(41);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
+ await expect(page.locator('.visual-actions button')).toHaveCount(36);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
  for(const id of [9,10,23,31]){
   const card=page.locator('#skill-'+id);
   await expect(card.locator('svg[role="img"] title')).not.toBeEmpty();
@@ -342,10 +342,10 @@ test('Home Skills: leaking hose and caulk exercises explain safe stop conditions
 test('Home Skills: twenty original diagrams and non-scored checks cover four domains',async({page})=>{
  await page.goto(url);
  await expect(page.locator('details.skill')).toHaveCount(36);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
- await expect(page.locator('.skill-check')).toHaveCount(28);
- await expect(page.locator('.visual-actions button')).toHaveCount(28);
- await expect(page.locator('[data-show-skill]')).toHaveCount(41);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
+ await expect(page.locator('.visual-actions button')).toHaveCount(36);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
  const expected=[2,5,20,26];
  for(const id of expected){
   const card=page.locator('#skill-'+id);
@@ -399,10 +399,10 @@ test('Home Skills: thermostat and refrigerator images enlarge without page overf
 test('Home Skills: 28 independent diagrams and 28 practice explanations cover safety and upkeep',async({page})=>{
  await page.goto(url);
  await expect(page.locator('details.skill')).toHaveCount(36);
- await expect(page.locator('.skill-visual')).toHaveCount(28);
- await expect(page.locator('.skill-check')).toHaveCount(28);
- await expect(page.locator('.visual-actions button')).toHaveCount(28);
- await expect(page.locator('[data-show-skill]')).toHaveCount(41);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
+ await expect(page.locator('.visual-actions button')).toHaveCount(36);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
  const ids=[1,3,14,17,21,25,29,30];
  for(const id of ids){
   const lesson=page.locator('#skill-'+id);
@@ -455,6 +455,66 @@ test('Home Skills: all 28 visual shortcuts navigate to matching distinct lessons
  await expect(fig).toHaveAttribute('data-zoom','true');
  await fig.getByRole('button',{name:'Fit diagram to screen'}).click();
  await expect(fig).toHaveAttribute('data-zoom','false');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+});
+
+
+test('Home Skills: all 36 lessons have distinct diagrams, explanations and stop guidance',async({page})=>{
+ await page.goto(url);
+ const cards=page.locator('details.skill');
+ await expect(cards).toHaveCount(36);
+ await expect(page.locator('.skill-visual')).toHaveCount(36);
+ await expect(page.locator('.skill-check')).toHaveCount(36);
+ await expect(page.locator('.visual-actions button')).toHaveCount(36);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(49);
+ const figureIds=await page.locator('.skill-visual svg title').evaluateAll(nodes=>nodes.map(n=>n.id));
+ expect(new Set(figureIds).size).toBe(36);
+ for(let id=1;id<=36;id++){
+  const card=page.locator('#skill-'+id);
+  await expect(card.locator('.skill-visual svg[role="img"] title')).not.toBeEmpty();
+  await expect(card.locator('.skill-visual svg[role="img"] desc')).not.toBeEmpty();
+  await expect(card.locator('.skill-check button[data-answer]')).toHaveCount(3);
+  await expect(card.locator('.lesson-why')).toHaveCount(1);
+  await expect(card.locator('.lesson-pitfall')).toHaveCount(1);
+  await expect(card.locator('.stop')).toHaveCount(1);
+ }
+});
+test('Home Skills: hazardous repair lessons reinforce no-DIY stop boundaries',async({page})=>{
+ await page.goto(url);
+ for(const id of [32,33,34,35,36]){
+  const card=page.locator('#skill-'+id);
+  await expect(card.locator('summary .tier.expert')).toContainText('Expert needed');
+  await expect(card.locator('h3')).toContainText('Recognize the hazard');
+  await expect(card.locator('.stop')).not.toBeEmpty();
+  const correct=card.locator('.skill-check button[data-correct="true"]');
+  await expect(correct).toHaveCount(1);
+ }
+ await page.setViewportSize({width:320,height:780});
+ await page.getByRole('button',{name:'Gas emergency',exact:true}).click();
+ await expect(page.locator('#skill-33')).toHaveAttribute('open','');
+ await page.locator('#skill-33 .skill-check button').nth(0).click();
+ await expect(page.locator('#skill-33 .check-feedback')).toContainText('Not quite.');
+ await page.locator('#skill-33 .skill-check button').nth(1).click();
+ await expect(page.locator('#skill-33 .check-feedback')).toContainText('Good reasoning.');
+ const width=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
+ expect(width.scroll).toBeLessThanOrEqual(width.vp+1);expect(width.local).toBe(0);expect(width.session).toBe(0);
+});
+test('Home Skills: all visual shortcuts target one real illustrated lesson',async({page})=>{
+ await page.goto(url);
+ const ids=await page.locator('.visual-actions button[data-show-skill]').evaluateAll(ns=>ns.map(n=>n.dataset.showSkill));
+ expect(ids).toHaveLength(36);expect(new Set(ids).size).toBe(36);
+ for(const id of ids){await expect(page.locator('#skill-'+id+' figure.skill-visual')).toHaveCount(1);}
+ await page.setViewportSize({width:320,height:780});
+ await page.locator('#search').fill('unrelated-no-result');
+ await page.locator('button[data-area="Kitchen"]').click();
+ await page.getByRole('button',{name:'Structural and spring',exact:true}).click();
+ await expect(page.locator('#search')).toHaveValue('');
+ await expect(page.locator('#skill-36')).toHaveAttribute('open','');
+ const zoom=page.locator('#skill-36 figure.skill-visual');
+ await zoom.getByRole('button',{name:'Enlarge diagram'}).click();
+ await expect(zoom).toHaveAttribute('data-zoom','true');
+ await zoom.getByRole('button',{name:'Fit diagram to screen'}).click();
+ await expect(zoom).toHaveAttribute('data-zoom','false');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
