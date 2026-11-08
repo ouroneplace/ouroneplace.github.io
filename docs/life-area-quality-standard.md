@@ -48,7 +48,7 @@ The founder's second Housing & Utilities walkthrough exposed a systematic weakne
 | Housing and utility assistance | Five situation pathways with external providers | Preserved | Local relevance, source and time-sensitive eligibility review |
 | Smoke, CO, home emergency safety | Reviewable five-item checklist | Preserved, plus multiple skills | Physical-device usability and safety editing |
 | General home maintenance | Three editable example tasks, JSON save/reopen | Preserved | Real-world import/reopen testing and clear link between lessons and tasks |
-| Repair teaching | Essentially absent | New `one-place/home-skills.html` with 36 lessons | More visuals, accessibility, model-specific caveats, independent content review |
+| Repair teaching | Essentially absent | 36 lessons, 8 original schematics and 8 optional understanding checks | 28 still text-only; manual/model variation, accessibility, independent content and safety review |
 | Kitchen | Only indirect references | Five hands-on lessons | Model-specific appliance checks, more food safety topics |
 | Bathroom/plumbing | Only cautionary text | Five skills including toilet leak, flapper, aerator, simple clog, caulk | Quality of sequencing, fixture variations, leak escalation |
 | Laundry | Only broad appliance references | Three skills | Safe vent-cleaning boundaries and equipment types |
@@ -57,7 +57,7 @@ The founder's second Housing & Utilities walkthrough exposed a systematic weakne
 | Exterior/yard | Not covered | Six skills | Seasonal/climate differences, landscape safety |
 | Emergency essentials | Basic cautions | Four additional skills | Disaster/accessibility scenarios |
 | Dangerous repairs | General hazard warnings | Five clear stop/escalate guides | Specialist review; avoid implying universal legal rules |
-| Whole-home inventory/annual schedule | Not built | Intro framework, no automatic reminders | Consider guided calendar and home-system inventory in a later reviewed slice |
+| Whole-home inventory/annual schedule | Not built | 5 expandable timeframes and 13 linked routine checks; no automatic reminders | Personal home-system inventory, calendar/recovery tools, physical-device and accessibility testing |
 
 ## Founder review evidence (new November 8 11:28 AM recording)
 The 3m08s recording shows navigation among the updated Housing guide, its planner and plans, One Place Home, Human Literacy, the team page, and external resources. The public homepage still does **not** show Our Humanity because the feature lives only on a separate, unmerged PR #4 branch. This is an integration/release distinction, not proof that the feature is in production. The video confirms the site does not yet provide comprehensive homeowner teaching; it also shows the new tasks-save buttons but not all export/import error states.
@@ -70,3 +70,8 @@ This updated branch adds the missing teaching content but must **not** be called
 - Preserve PR #3 (Debt Guide), #4 (Our Humanity), #5 (Housing), and the 18/72 catalog.
 - Do not merge, publish, add analytics/accounts/paid features, recruit outside users or spend money without separate explicit permission.
 - A complete site can always evolve; a public version should be a clearly bounded, stable, honestly described collection of useful experiences, not a claim that the developer has solved every life situation.
+
+## November 8, 2026 — Current founder-only Housing coverage (v2 development)
+The practical Home Skills library retains 36 lessons and now provides eight original introductory diagrams and eight optional understanding checks. Four illustrations explain toilet dye tests, faucet aerators, HVAC filter airflow and roof drainage; four more address dishwasher filters, lint screens, washer inlet hoses and weatherstripping. A separate five-timeframe schedule links 13 checks to specific lessons and the existing editable maintenance list. Every feature remains a draft without hosted accounts, paid access, tracking, automatic reminders or release authorization.
+
+**Do not mark the category complete:** 28 lessons still have no built-in illustration. Sketches are simplified examples and do not establish safe competency, licensed work, appliance compatibility, building-code compliance or first-time-user comprehension. Before founder acceptance, prioritize hands-on learning outcomes, region/model-aware instructions, source verification, age/disability accommodations, 320px and 200% zoom, keyboard/screen reader checks, and import/export recovery. All untested features remain explicitly unaccepted. The original 18 categories, 72 offerings and unrelated PRs are unchanged.
