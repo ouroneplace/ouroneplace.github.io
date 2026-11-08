@@ -27,6 +27,39 @@ test('Home Skills: 36 real guides, 8 areas and safety classifications',async({pa
   expect(all).toBe(36);
 });
 
+test('Home Skills: starter toolkit and close-open-lessons control',async({page})=>{
+  await page.goto(url);
+  const toolkit=page.locator('#begin-tools');
+  await expect(toolkit).toBeVisible();
+  await toolkit.locator('summary').click();
+  await expect(toolkit).toHaveAttribute('open','');
+  await expect(toolkit).toContainText('Manufacturer manual');
+  const close=page.getByRole('button',{name:'Close open lessons'});
+  await expect(close).toBeDisabled();
+  await page.locator('#skill-1 summary').click();
+  await page.locator('#skill-2 summary').click();
+  await expect(close).toBeEnabled();
+  await expect(page.locator('#open-count')).toHaveText('2 lessons open');
+  await close.click();
+  await expect(page.locator('details.skill[open]')).toHaveCount(0);
+  await expect(close).toBeDisabled();
+  await expect(page.locator('#open-count')).toHaveText('No lessons open');
+});
+
+test('Home Skills: expert-only hazard guidance never invites DIY, verified direct references',async({page})=>{
+  await page.goto(url);
+  const expert=page.locator('details.skill[data-level="Expert needed"]');
+  await expect(expert).toHaveCount(5);
+  for(let i=0;i<5;i++){
+    await expert.nth(i).locator('summary').click();
+    await expect(expert.nth(i).locator('h3')).toHaveText('Recognize the hazard — do not attempt the repair');
+  }
+  await expect(page.locator('#skill-16 a.reference')).toHaveAttribute('href','https://www.energy.gov/cmei/scep/wap/articles/job-aid-11-1-install-weatherstripping-exterior-door');
+  await expect(page.locator('#skill-8 a.reference')).toHaveAttribute('href','https://www.energy.gov/cmei/scep/wap/articles/job-aid-24-2-install-low-flow-faucet-aerator');
+  await expect(page.locator('#skill-26 a.reference')).toHaveAttribute('href',/extension.umn.edu/);
+  await expect(page.locator('#skill-27 a.reference')).toHaveAttribute('href',/extension.psu.edu/);
+});
+
 test('Home Skills: search, filters and honest zero-result feedback',async({page})=>{
   await page.goto(url);
   const search=page.getByRole('searchbox',{name:'Search a task, room, or issue'});
