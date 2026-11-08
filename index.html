@@ -93,10 +93,13 @@ if(impact){
  root.querySelector('#serviceSelect').onchange=e=>{sub=e.target.value;mode='all';show()};
  };show();
 }else if(area){
- const steps=plans[area]||['Identify your need','Compare credible options','Choose one next step'];
  root.insertAdjacentHTML('afterbegin',metric());
- root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
- copy(area,steps,'areaKit');
+ // Housing has its own complete, section-specific guide; avoid a duplicate generic kit.
+ if(area!=='Housing & Utilities'){
+  const steps=plans[area]||['Identify your need','Compare credible options','Choose one next step'];
+  root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
+  copy(area,steps,'areaKit');
+ }
 }else if(service){
  const x=rows.find(r=>r.id===service);
  if(x){const steps=plans[x.area]||['Identify your need','Compare credible options','Choose one next step'];
