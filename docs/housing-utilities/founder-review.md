@@ -86,3 +86,10 @@ Founder submitted a **5-minute, 56-second screen recording without audio** of th
 - The new maintenance import/export and plan-regeneration confirmation need real Chromebook and phone testing, plus 200% zoom and assistive technology review.
 - Manual usability review still needed for whether visitors understand that a plain TXT plan, editable maintenance list and optional JSON backup are different artifacts.
 - Preserve founder review and release boundaries: **no merge, publication, paid services or new collection of visitor information**. PR #3, PR #4, other life-area catalog routes and priorities remain unchanged.
+
+### Additional content improvement discovered in the recording
+The recorded flow eventually produced a plan after several tasks had been added and a different housing situation selected. Previously, every exported plan repeated the same generic 211/HUD URLs regardless of situation. The new generator now inserts **that specific scenario's labeled resource links**, so shelter yields HUD Find Shelter and repair yields home-repair guidance. Tests check that unrelated scenario links do not leak into those plans.
+
+The planner is now described accurately as a **manual worksheet without automatic reminders**. A saved, locally held JSON file allows continuation after reloading, but it is the visitor's responsibility to keep the file private, avoid sensitive details on shared devices, and import it when returning. This improves continuity without a hosted account.
+
+**Current QA state:** The exact-head full regression suite runs against the newest PR commit. Do not mark it passed until GitHub reports success. Screen recording alone does not demonstrate the new features (they were added after the recording).
