@@ -267,8 +267,9 @@ s.steps.forEach(function(step,i){lines.push((i+1)+'. '+step)});
 lines.push('','A question I could ask:',s.script,'','My home-safety review: '+sDone+' of 5 checklist items reviewed. A checked item is not a safety certification.','');
 lines.push('Maintenance tasks to review:');
 if(tasks.length){tasks.forEach(function(t){lines.push('- '+(t.task.trim()||'[Unnamed task]')+' | '+(t.when.trim()||'When: not set'))})}else{lines.push('- None added')}
-lines.push('','Local contacts/resources:','211.org/get-help/housing-expenses','hud.gov/hud-partners/single-family-about-housing-counseling','',
-'Remember: This is general U.S. education. Local rules, eligibility and availability vary. Do not rely on this guide for emergency or legal decisions.','',
+lines.push('','Starting resources for this situation (verify local availability):');
+s.links.forEach(function(row){lines.push('- '+row[0]+': '+row[1])});
+lines.push('','Remember: This is general U.S. education. Local rules, eligibility and availability vary. Do not rely on this guide for emergency or legal decisions.','',
 'Next action I choose: ______________________________');
 plan.value=lines.join('\n');lastGeneratedPlan=plan.value;hasGeneratedPlan=true;stale.classList.add('hidden');updatePlanButtons();planStatus.textContent='Plan ready to edit. Nothing was submitted or saved online.';plan.focus();
 });
