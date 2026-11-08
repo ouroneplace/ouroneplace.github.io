@@ -23,3 +23,16 @@ This testing-only branch is derived from Housing & Utilities draft PR #5 and inc
 - Consolidate accepted feature changes through an intentional, reviewed merge plan, not by blindly merging multiple overlapping PRs.
 - Verify navigation, key visitor tasks, content/health/safety accuracy, phones, 200% zoom, keyboards, accessibility, download, resilience and privacy.
 - Separate founder acceptance and explicit final deployment approval remain mandatory. Passing CI doesn't equal acceptance.
+
+
+## November 8, 2026 — Founder unified-preview desktop walkthrough (2m 38s)
+
+Founder submitted a 158-second desktop Chrome recording of an extracted local preview. The video had no audio, and no recording or personal device path was uploaded into this repository.
+
+**Directly observed:** Our Humanity opened and its scenario choices displayed; Curiosity Studio's RGB and symmetry activities were visible; Housing & Utilities assistance, safety and task-planning pages appeared; Home Skills Academy room filters moved among laundry and hazard-recognition subjects; the beginner toolkit and lesson expansion/collapse were used. Recorded views show continuity among several One Place experiences within one downloaded ZIP. This does not itself verify the exact tested Git commit, all navigation links, or every control.
+
+**Confirmed usability defect:** After opening two Home Skills lessons, the founder switched to Laundry. The interface announced “2 lessons open” although both open lessons were filtered out of view. This preserved state correctly but confused visible and hidden counts. The current draft now says how many open lessons are hidden by filters and updates that status as filters/search change. A Playwright test reproduces the sequence and checks that “Close open lessons” clears all open entries.
+
+**Unresolved before acceptance:** Demonstrate mobile 320px and 200% zoom in real browsers, keyboard and assistive technologies, accuracy and teaching quality of task-specific references, task-list file import/export, successful completion of a safe physical household task, and visual instructional aids. The recording is evidence of observed usage, **not** complete founder approval or evidence of practical repair competence.
+
+The website's production main branch remains outside this review; publication and merging still require separate explicit founder approval.
