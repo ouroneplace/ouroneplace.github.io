@@ -518,6 +518,34 @@ test('Home Skills: all visual shortcuts target one real illustrated lesson',asyn
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
+
+test('Home Skills: searchable, ordered and scroll-contained picture shortcuts at 320px',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto(url);
+ const visual=page.locator('.visual-starters');
+ const items=visual.locator('.visual-actions button[data-show-skill]');
+ await expect(items).toHaveCount(36);
+ const order=await items.evaluateAll(ns=>ns.map(n=>Number(n.dataset.showSkill)));
+ expect(order).toEqual(Array.from({length:36},(_,i)=>i+1));
+ const content=await page.locator('.visual-actions').evaluate(n=>({visible:n.clientHeight,total:n.scrollHeight}));
+ expect(content.total).toBeGreaterThan(content.visible);
+ await page.locator('#visual-search').fill('carbon monoxide');
+ await expect(visual.locator('#visual-count')).toContainText('1 of 36');
+ await expect(items.filter({visible:true})).toHaveCount(1);
+ await page.getByRole('button',{name:'CO alarm safety',exact:true}).click();
+ await expect(page.locator('#skill-29')).toHaveAttribute('open','');
+ await page.locator('#visual-search').fill('no-example-by-this-name');
+ await expect(visual.locator('#visual-count')).toContainText('No picture lessons found');
+ await page.getByRole('button',{name:'Clear picture search'}).click();
+ await expect(page.locator('#visual-search')).toHaveValue('');
+ await expect(items.filter({visible:true})).toHaveCount(36);
+ await page.locator('#visual-search').fill('kitchen');
+ await expect(items.filter({visible:true})).toHaveCount(5);
+ const width=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
+ expect(width.scroll).toBeLessThanOrEqual(width.vp+1);
+ expect(width.local).toBe(0);expect(width.session).toBe(0);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
