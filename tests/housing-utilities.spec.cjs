@@ -66,6 +66,19 @@ test('Housing & Utilities: five situations show distinct guidance, sources, and 
   expect(errs).toEqual([]);
 });
 
+test('Housing & Utilities: generated plans use scenario-specific sources',async({page})=>{
+  await page.goto(guide);
+  await page.locator('button[data-scenario="shelter"]').click();
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  await expect(page.locator('#plan-text')).toHaveValue(/https:\/\/www\.hud\.gov\/FindShelter/);
+  await expect(page.locator('#plan-text')).not.toHaveValue(/https:\/\/www\.usa\.gov\/home-repair-programs/);
+  await page.locator('button[data-scenario="repair"]').click();
+  await expect(page.locator('#plan-stale')).toBeVisible();
+  await page.getByRole('button',{name:'Make my next-step plan'}).click();
+  await expect(page.locator('#plan-text')).toHaveValue(/https:\/\/www\.usa\.gov\/home-repair-programs/);
+  await expect(page.locator('#plan-text')).not.toHaveValue(/https:\/\/www\.hud\.gov\/FindShelter/);
+});
+
 test('Housing & Utilities: safety checklist counts only reviewed items',async({page})=>{
   await page.goto(guide);
   const count=page.locator('#safety-count');
@@ -134,6 +147,8 @@ test('Housing & Utilities: editable plan and safe TXT export preserve user chang
   await page.getByRole('button',{name:'Make my next-step plan'}).click();
   const plan=page.locator('#plan-text');
   await expect(plan).toHaveValue(/Utility bill or shutoff concerns/);
+  await expect(plan).toHaveValue(/https:\/\/www\.usa\.gov\/help-with-energy-bills/);
+  await expect(plan).not.toHaveValue(/https:\/\/www\.usa\.gov\/home-repair-programs/);
   await expect(plan).toHaveValue(/1 of 5 checklist items reviewed/);
   await expect(plan).toHaveValue(/Fictional air-filter review/);
   await plan.fill('My edited fictional next action\nCall a verified provider.');
