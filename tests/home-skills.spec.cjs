@@ -713,6 +713,21 @@ test('Home Skills: safe practice remains local and keyboard usable at 320px',asy
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
 });
 
+
+test('Home Skills: learner can choose uncertainty without being pushed to guess',async({page})=>{
+ await page.setViewportSize({width:320,height:780});await page.goto('/one-place/home-skills.html');
+ await page.locator('#practice-lab summary').click();
+ await page.locator('#practice-case').selectOption('filter');
+ await page.locator('#practice-unsure').click();
+ await expect(page.locator('#practice-feedback')).toContainText('Not sure is a valid stop decision');
+ await expect(page.locator('#practice-next')).toBeHidden();
+ await page.locator('[data-practice-choice="0"]').click();
+ await expect(page.locator('#practice-next')).toBeVisible();
+ await page.locator('#practice-unsure').click();
+ await expect(page.locator('#practice-next')).toBeHidden();
+ await expect(page.locator('[data-practice-choice][aria-pressed="true"]')).toHaveCount(0);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
