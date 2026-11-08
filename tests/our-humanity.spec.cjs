@@ -64,6 +64,56 @@ test('Our Humanity: collapsed cards stay compact beside expanded cards', async (
   expect(closed.height).toBeLessThan(tall.height);
 });
 
+
+test('Our Humanity: choice-based welcome moments are useful without a score', async ({page}) => {
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(path);
+  const doors=page.locator('.moment-door');
+  await expect(doors).toHaveCount(4);
+  await expect(page.locator('#moment-title')).toHaveText('A message goes unanswered.');
+  await expect(page.locator('#moment-choices button')).toHaveCount(3);
+  await expect(doors.nth(0)).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#moment-result')).toBeHidden();
+  await page.locator('#moment-choices button').first().click();
+  await expect(page.locator('#moment-result')).toBeVisible();
+  await expect(page.locator('#moment-result')).toContainText('no reply alone cannot tell you');
+  await expect(page.locator('#moment-choices button').first()).toHaveAttribute('aria-pressed','true');
+  await doors.nth(1).click();
+  await expect(page.locator('#moment-title')).toHaveText('“You never listen.”');
+  await expect(page.locator('#moment-result')).toBeHidden();
+  await expect(doors.nth(0)).toHaveAttribute('aria-pressed','false');
+  await expect(doors.nth(1)).toHaveAttribute('aria-pressed','true');
+  await page.locator('#moment-choices button').nth(1).click();
+  await expect(page.locator('#moment-result')).toContainText('specific conversation');
+  await doors.nth(2).click();
+  await expect(page.locator('#moment-title')).toHaveText('There is too much to carry.');
+  await expect(page.locator('#moment-deeper')).toHaveAttribute('href','family-handoff.html');
+  await page.locator('#moment-choices button').nth(2).click();
+  await expect(page.locator('#moment-result')).toContainText('professional, community or public assistance');
+  await doors.nth(3).click();
+  await expect(page.locator('#moment-title')).toHaveText('Notice something ordinary.');
+  await expect(page.locator('#moment-deeper')).toHaveAttribute('href','#topic-27');
+  await page.locator('#moment-choices button').first().click();
+  await expect(page.locator('#moment-result')).toContainText('enjoy careful observation');
+  expect(errors).toEqual([]);
+});
+
+test('Our Humanity: keyboard access to welcome experience and privacy', async ({page}) => {
+  const requests=[];
+  page.on('request',req=>requests.push(req.url()));
+  await page.goto(path);
+  const wonder=page.locator('button[data-moment="wonder"]');
+  await wonder.focus();
+  await page.keyboard.press('Enter');
+  await expect(wonder).toHaveAttribute('aria-pressed','true');
+  await page.locator('#moment-choices button').first().focus();
+  await page.keyboard.press('Space');
+  await expect(page.locator('#moment-result')).toBeVisible();
+  await expect(page.locator('#moment-result')).toHaveAttribute('aria-live','polite');
+  expect(requests.every(url=>new URL(url).hostname==='127.0.0.1')).toBeTruthy();
+  const storage=await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}));
+  expect(storage).toEqual({local:0,session:0});
+});
 for (const width of [320,390,768,1366]) {
   test('Our Humanity: no sideways overflow at '+width+'px', async ({page}) => {
     await page.setViewportSize({width,height:800});
