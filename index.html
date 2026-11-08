@@ -246,7 +246,7 @@ const footer=document.querySelector('footer');if(footer)footer.insertAdjacentHTM
 .money-task-options button:focus-visible,.money-task-result a:focus-visible{outline:3px solid #bd782b;outline-offset:3px}
 .money-task-options button small{display:block;margin-top:3px;font-size:12px;font-weight:500;color:#526d64}
 .money-task-result{border:1px solid #c8e3d8;background:#f6fbf8;border-radius:12px;padding:15px 17px;min-width:0}
-.money-task-result h3{font-size:19px;margin:0 0 7px;line-height:1.25}
+.money-task-result h3{font-size:19px;margin:0 0 7px;line-height:1.25;scroll-margin-top:12px}.money-change-choice{display:none;border:1px solid #a8d4c3;background:#fff;color:#086e63;border-radius:8px;min-height:44px;padding:8px 10px;font:750 13px system-ui;cursor:pointer;margin:0 0 10px}
 .money-task-result p{font-size:14px;margin:0 0 8px;line-height:1.45}
 .money-task-result ol{font-size:13px;margin:6px 0 12px;padding-left:21px}
 .money-task-result li{margin:5px 0}
@@ -256,10 +256,10 @@ const footer=document.querySelector('footer');if(footer)footer.insertAdjacentHTM
 .money-task-buttons .money-secondary{background:#fff;color:#0d6358}
 .money-task-caution{border-left:3px solid #aa6b27;padding-left:10px;color:#6b491c;font-size:13px!important;margin-top:11px!important}
 .money-subsection-head{font-size:19px;line-height:1.25;margin:18px 0 4px;color:#173935}
-.money-subsection-note{margin:0 0 9px!important;font-size:13px!important;color:#55746b}
+.money-subsection-note{margin:0 0 9px!important;font-size:13px!important;color:#55746b}.money-other-resources{border:1px solid #cce4d8;border-radius:11px;background:white;margin:9px 0 14px;padding:0 10px}.money-other-resources>summary{cursor:pointer;min-height:48px;padding:13px 6px;font-weight:800;color:#075f57}.money-other-resources[open]>summary{border-bottom:1px solid #d8e9e0;margin-bottom:10px}.money-other-resources .offers{margin-bottom:12px}.money-task-urgency{font-size:13px;margin:0 0 12px;color:#755023;background:#fff8e9;border-left:3px solid #b77d30;padding:8px 11px;border-radius:6px}
 .money-task-flow + .money-subsection-head{margin-top:13px}
 main.inside .offers>a.offer[data-money-future]{border-style:dashed;background:#f9fbfa}
-@media(max-width:850px){.money-task-layout{grid-template-columns:1fr}.money-task-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.money-task-layout{grid-template-columns:1fr}.money-task-options{grid-template-columns:repeat(2,minmax(0,1fr))}.money-change-choice{display:inline-flex;align-items:center}.money-task-result{scroll-margin-top:12px}}
 @media(max-width:470px){.money-task-options{grid-template-columns:1fr}.money-task-options button{min-height:48px}.money-task-flow{margin:10px 0;padding:13px}.money-task-buttons a{width:100%}.money-task-result{padding:13px}.money-task-flow h2{font-size:22px}}
 </style>
 <script>
@@ -336,7 +336,7 @@ caution:'This preview cannot confirm your account balances, credit score, eligib
 var section=document.createElement('section');
 section.className='money-task-flow';
 section.setAttribute('aria-labelledby','money-task-heading');
-section.innerHTML='<p class="eyebrow">START HERE · FREE</p><h2 id="money-task-heading">What do you need help with today?</h2><p class="money-helper">U.S.-focused resources for now. Choose the situation closest to yours. No account, bank connection, or personal details required. Nothing you select here is stored or sent.</p><div class="money-task-layout"><div class="money-task-options" role="group" aria-label="Choose your money situation" id="money-task-options"></div><div class="money-task-result" id="money-task-result" role="region" aria-labelledby="money-path-heading"><h3 id="money-path-heading" tabindex="-1"></h3><p id="money-path-summary" aria-live="polite"></p><ol id="money-path-steps"></ol><div class="money-task-buttons"><a class="money-primary" id="money-path-primary"></a><a class="money-secondary" id="money-path-secondary"></a></div><p class="money-task-caution" id="money-path-caution"></p></div></div>';
+section.innerHTML='<p class="eyebrow">START HERE · FREE</p><h2 id="money-task-heading">What do you need help with today?</h2><p class="money-helper">U.S.-focused resources. Choose one situation; you'll see a suggested first step. No account, bank connection or personal information needed.</p><p class="money-task-urgency">If you have a court, eviction or shutoff notice, check its deadline first.</p><div class="money-task-layout"><div class="money-task-options" role="group" aria-label="Choose your money situation" id="money-task-options"></div><div class="money-task-result" id="money-task-result" role="region" aria-labelledby="money-path-heading"><button id="money-change-choice" type="button" class="money-change-choice">← Choose another situation</button><h3 id="money-path-heading" tabindex="-1"></h3><p id="money-path-summary" aria-live="polite"></p><ol id="money-path-steps"></ol><div class="money-task-buttons"><a class="money-primary" id="money-path-primary"></a><a class="money-secondary" id="money-path-secondary"></a></div><p class="money-task-caution" id="money-path-caution"></p></div></div>';
 offers.before(section);
 var options=section.querySelector('#money-task-options');
 var title=section.querySelector('#money-path-heading');
@@ -366,10 +366,11 @@ Object.keys(scenarios).forEach(function(id){
  var heading=document.createElement('span'),sub=document.createElement('small');
  heading.textContent=item.title;sub.textContent=item.sub;
  btn.append(heading,sub);
- btn.addEventListener('click',function(){choose(id);});
+ btn.addEventListener('click',function(){choose(id);if(window.matchMedia('(max-width:850px)').matches){title.focus({preventScroll:true});title.scrollIntoView({block:'start'});}});
  options.appendChild(btn);
 });
 choose('essential');
+section.querySelector('#money-change-choice').addEventListener('click',function(){options.scrollIntoView({block:'start'});var active=options.querySelector('button[aria-pressed="true"]');if(active)active.focus({preventScroll:true});});
 var resourceHeading=document.createElement('h2');
 resourceHeading.className='money-subsection-head';resourceHeading.textContent='Other ways to explore Money & Bills';
 resourceHeading.id='money-resource-heading';offers.before(resourceHeading);
@@ -377,6 +378,9 @@ offers.setAttribute('aria-labelledby',resourceHeading.id);
 var foot=document.createElement('p');foot.className='money-subsection-note';
 foot.textContent='Two free guidance pages, one illustrative budget tool, and one future service concept. The concept is not available or bookable.';
 resourceHeading.after(foot);
+// The original four entries remain accessible, but do not compete with the task-first panel.
+var more=document.createElement('details');more.id='money-more';more.className='money-other-resources';
+var toggle=document.createElement('summary');toggle.textContent='Show all four guides and tools';more.appendChild(toggle);offers.before(more);more.appendChild(offers);
 var cards=offers.querySelectorAll(':scope > a.offer');
 if(cards.length===4){
  var budgetSmall=cards[2].querySelector('small');
