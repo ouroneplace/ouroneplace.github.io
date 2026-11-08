@@ -15,6 +15,8 @@ for(const width of [320,390,1366]){
     const choices=page.locator('#money-task-options button');
     await expect(choices).toHaveCount(5);
     await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+    await expect(page.locator('#money-more')).not.toHaveAttribute('open',/.+/);
+    await expect(page.locator('#money-more summary')).toContainText('Show all four');
     await expect(page.locator('#areaKit')).toHaveCount(0);
     await expect(page.locator('.money-pilot')).toHaveCount(0);
     await expect(page.locator('main > #oneplacePublicMetrics')).toBeVisible();
@@ -85,4 +87,24 @@ test('Money & Bills essential-bill and creditor pages give meaningful, scoped gu
  await page.locator('#debtGuideInvite a').click();
  await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
  await expect(page.getByRole('heading',{name:'Debt & Creditor Guide'})).toBeVisible();
+});
+
+
+
+test('Money & Bills mobile shows the selected answer, then lets visitor change choice',async({page})=>{
+ await page.setViewportSize({width:320,height:640});
+ await page.goto('/index.html?area=Money%20%26%20Bills');
+ const button=page.getByRole('button',{name:/I received court papers about a debt/});
+ await button.click();
+ await expect(button).toHaveAttribute('aria-pressed','true');
+ await expect(page.getByRole('heading',{name:'Read the court notice and act on the deadline'})).toBeVisible();
+ const visible=await page.locator('#money-path-heading').evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.top<window.innerHeight;});
+ expect(visible).toBe(true);
+ await page.getByRole('button',{name:'Choose another situation'}).click();
+ const current=await button.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.top<window.innerHeight;});
+ expect(current).toBe(true);
+ await page.locator('#money-more summary').click();
+ await expect(page.locator('#money-more')).toHaveAttribute('open','');
+ await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
 });
