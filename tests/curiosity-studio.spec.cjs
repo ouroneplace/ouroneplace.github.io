@@ -79,6 +79,16 @@ for(const width of [320,390,768,1366]){
  });
 }
 
+
+test('Curiosity Studio makes external resources optional and clearly distinguishes them',async({page})=>{
+  await page.goto(url);
+  await expect(page.getByText('Those sites may display donation or sign-in requests',{exact:false})).toBeVisible();
+  const outside=page.locator('section.learning a[target="_blank"]');
+  await expect(outside).toHaveCount(2);
+  await expect(outside.nth(0)).toHaveAttribute('rel','noopener noreferrer');
+  await expect(outside.nth(1)).toHaveAttribute('rel','noopener noreferrer');
+});
+
 test('Curiosity Studio: no automatic third-party requests or browser storage',async({page})=>{
  const requests=[];
  page.on('request',req=>requests.push(req.url()));
