@@ -95,6 +95,47 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
   await expect(page.locator('details.skill:visible')).toHaveCount(2);
 });
 
+test('Home Skills: four original diagrams teach specific parts with accessible descriptions',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('.skill-visual')).toHaveCount(4);
+ const sample=[
+  ['6','Simple toilet tank dye test schematic','How the toilet dye test works'],
+  ['8','Exploded faucet aerator parts schematic','Recognize the faucet aerator parts'],
+  ['19','HVAC filter airflow direction schematic','Follow the direction of airflow'],
+  ['24','Home roof drainage and foundation schematic','Where rainwater should go']
+ ];
+ for(const [id,diagramTitle,caption] of sample){
+  const lesson=page.locator('#skill-'+id);
+  await lesson.locator('summary').click();
+  await expect(lesson.locator('figure.skill-visual')).toBeVisible();
+  await expect(lesson.locator('svg[role="img"] title')).toHaveText(diagramTitle);
+  await expect(lesson.locator('svg desc')).not.toBeEmpty();
+  await expect(lesson.locator('figcaption strong')).toHaveText(caption);
+  await expect(lesson.locator('figcaption')).toContainText('Simplified illustration');
+  await expect(lesson.locator('a.reference')).toHaveAttribute('rel','noopener noreferrer');
+ }
+ await expect(page.locator('#skill-19 a.reference')).toHaveAttribute('href','https://basc.pnnl.gov/diy-guides/replace-air-filter-located-furnace-or-central-heat-pump-air-filter-slot');
+ await expect(page.locator('#skill-24 a.reference')).toHaveAttribute('href','https://bsesc.energy.gov/energy-basics/stormwater-gutters-downspouts');
+});
+
+test('Home Skills: illustration shortcuts reveal lessons even after a conflicting search/filter',async({page})=>{
+ await page.goto(url);
+ const search=page.locator('#search');
+ await search.fill('roof');
+ await page.locator('button[data-area="Know Your Limits"]').click();
+ await expect(page.locator('details.skill:visible')).toHaveCount(1);
+ const btn=page.getByRole('button',{name:'Faucet aerator',exact:true});
+ await btn.focus();
+ await page.keyboard.press('Enter');
+ await expect(search).toHaveValue('');
+ await expect(page.locator('button[data-area="all"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#skill-8')).toBeVisible();
+ await expect(page.locator('#skill-8')).toHaveAttribute('open','');
+ await expect(page.locator('#skill-8 summary')).toBeFocused();
+ await expect(page.locator('#skill-8 figure.skill-visual')).toBeVisible();
+ await expect(page.locator('#open-count')).toContainText('1 lesson open');
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
