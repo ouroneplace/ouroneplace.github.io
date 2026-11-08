@@ -97,7 +97,7 @@ test('Home Skills: search, filters and honest zero-result feedback',async({page}
 
 test('Home Skills: four original diagrams teach specific parts with accessible descriptions',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(16);
+ await expect(page.locator('.skill-visual')).toHaveCount(20);
  const sample=[
   ['6','Simple toilet tank dye test schematic','How the toilet dye test works'],
   ['8','Exploded faucet aerator parts schematic','Recognize the faucet aerator parts'],
@@ -183,8 +183,8 @@ test('Home Skills: beginner home-care schedule opens correct lessons after confl
 
 test('Home Skills: previously illustrated eight remain valid after library expansion',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(16);
- await expect(page.locator('.skill-check')).toHaveCount(16);
+ await expect(page.locator('.skill-visual')).toHaveCount(20);
+ await expect(page.locator('.skill-check')).toHaveCount(20);
  const illustrated=['4','6','8','11','13','16','19','24'];
  for(const id of illustrated){
    const lesson=page.locator('#skill-'+id);
@@ -196,7 +196,7 @@ test('Home Skills: previously illustrated eight remain valid after library expan
  }
  await expect(page.locator('#skill-4 a.reference')).toHaveAttribute('href',/producthelp\.whirlpool\.com/);
  await expect(page.locator('#skill-13 a.reference')).toHaveAttribute('href',/repair\.geappliances\.com/);
- await expect(page.locator('[data-show-skill]')).toHaveCount(29);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(33);
 });
 
 test('Home Skills: practice answers explain unsafe choices without storing scores',async({page})=>{
@@ -234,8 +234,8 @@ test('Home Skills: new visual shortcuts open model-specific lessons after contra
 
 test('Home Skills: twelve illustrations and twelve optional checks remain distinct',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(16);
- await expect(page.locator('.skill-check')).toHaveCount(16);
+ await expect(page.locator('.skill-visual')).toHaveCount(20);
+ await expect(page.locator('.skill-check')).toHaveCount(20);
  const ids=[4,6,7,8,11,12,13,16,18,19,24,28];
  for(const id of ids){
   const lesson=page.locator('#skill-'+id);
@@ -243,8 +243,8 @@ test('Home Skills: twelve illustrations and twelve optional checks remain distin
   await expect(lesson.locator('svg[role="img"] desc')).not.toBeEmpty();
   await expect(lesson.locator('.skill-check button')).toHaveCount(3);
  }
- await expect(page.locator('.visual-actions button')).toHaveCount(16);
- await expect(page.locator('[data-show-skill]')).toHaveCount(29);
+ await expect(page.locator('.visual-actions button')).toHaveCount(20);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(33);
  await expect(page.locator('#skill-18 a.reference')).toHaveAttribute('href','https://www.cpsc.gov/s3fs-public/5032.pdf');
 });
 test('Home Skills: safety checks correct unsafe answers and show no lasting score',async({page})=>{
@@ -299,10 +299,10 @@ test('Home Skills: why and mistake explanations remain readable on 320px phone',
 test('Home Skills: 16 original diagrams and 16 optional understanding checks',async({page})=>{
  await page.goto(url);
  await expect(page.locator('details.skill')).toHaveCount(36);
- await expect(page.locator('.skill-visual')).toHaveCount(16);
- await expect(page.locator('.skill-check')).toHaveCount(16);
- await expect(page.locator('.visual-actions button')).toHaveCount(16);
- await expect(page.locator('[data-show-skill]')).toHaveCount(29);
+ await expect(page.locator('.skill-visual')).toHaveCount(20);
+ await expect(page.locator('.skill-check')).toHaveCount(20);
+ await expect(page.locator('.visual-actions button')).toHaveCount(20);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(33);
  for(const id of [9,10,23,31]){
   const card=page.locator('#skill-'+id);
   await expect(card.locator('svg[role="img"] title')).not.toBeEmpty();
@@ -336,6 +336,63 @@ test('Home Skills: leaking hose and caulk exercises explain safe stop conditions
  await expect(hose.locator('.check-feedback')).toContainText('Good reasoning.');
  const layout=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
  expect(layout.scroll).toBeLessThanOrEqual(layout.vp+1);expect(layout.local).toBe(0);expect(layout.session).toBe(0);
+});
+
+
+test('Home Skills: twenty original diagrams and non-scored checks cover four domains',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('details.skill')).toHaveCount(36);
+ await expect(page.locator('.skill-visual')).toHaveCount(20);
+ await expect(page.locator('.skill-check')).toHaveCount(20);
+ await expect(page.locator('.visual-actions button')).toHaveCount(20);
+ await expect(page.locator('[data-show-skill]')).toHaveCount(33);
+ const expected=[2,5,20,26];
+ for(const id of expected){
+  const card=page.locator('#skill-'+id);
+  await expect(card.locator('svg[role="img"] title')).not.toBeEmpty();
+  await expect(card.locator('svg[role="img"] desc')).not.toBeEmpty();
+  await expect(card.locator('.skill-check button')).toHaveCount(3);
+  await expect(card.locator('.lesson-why')).toHaveCount(1);
+  await expect(card.locator('.lesson-pitfall')).toHaveCount(1);
+ }
+ await expect(page.locator('#skill-2 a.reference')).toHaveAttribute('href','https://www.energystar.gov/products/refrigerators');
+ await expect(page.locator('#skill-5 a.reference')).toHaveAttribute('href',/contentId=18983/);
+ await expect(page.locator('#skill-20 a.reference')).toHaveAttribute('href','https://www.energystar.gov/products/smart_thermostats');
+ await expect(page.locator('#skill-26 a.reference')).toHaveAttribute('href',/CPSC-Issues-Safety-Tips-For-Rotary-Power-Mowers/);
+});
+test('Home Skills: charcoal-filter and mower safety teach no-exposure decisions',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto(url);
+ await page.locator('#search').fill('filter');
+ await page.locator('button[data-area="Know Your Limits"]').click();
+ await page.getByRole('button',{name:'Range-hood filters',exact:true}).click();
+ const hood=page.locator('#skill-5');
+ await expect(hood).toHaveAttribute('open','');
+ await hood.locator('.skill-check button').nth(1).click();
+ await expect(hood.locator('.check-feedback')).toContainText('Not quite.');
+ await hood.locator('.skill-check button').nth(0).click();
+ await expect(hood.locator('.check-feedback')).toContainText('Good reasoning.');
+ await page.getByRole('button',{name:'Mower safety',exact:true}).click();
+ const mower=page.locator('#skill-26');
+ await expect(mower).toHaveAttribute('open','');
+ await mower.locator('.skill-check button').nth(1).click();
+ await expect(mower.locator('.check-feedback')).toContainText('Good reasoning.');
+ const size=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,local:localStorage.length,session:sessionStorage.length}));
+ expect(size.scroll).toBeLessThanOrEqual(size.vp+1);
+ expect(size.local).toBe(0);expect(size.session).toBe(0);
+});
+test('Home Skills: thermostat and refrigerator images enlarge without page overflow',async({page})=>{
+ await page.setViewportSize({width:320,height:760});await page.goto(url);
+ for(const [id,name] of [[20,'Thermostat schedules'],[2,'Fridge door seals']]){
+  await page.getByRole('button',{name,exact:true}).click();
+  const visual=page.locator('#skill-'+id+' .skill-visual');
+  await visual.getByRole('button',{name:'Enlarge diagram'}).click();
+  await expect(visual).toHaveAttribute('data-zoom','true');
+  await visual.getByRole('button',{name:'Fit diagram to screen'}).click();
+  await expect(visual).toHaveAttribute('data-zoom','false');
+ }
+ const width=await page.evaluate(()=>({vp:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+ expect(width.scroll).toBeLessThanOrEqual(width.vp+1);
 });
 
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
