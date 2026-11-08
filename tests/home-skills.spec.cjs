@@ -31,7 +31,7 @@ test('Home Skills: starter toolkit and close-open-lessons control',async({page})
   await page.goto(url);
   const toolkit=page.locator('#begin-tools');
   await expect(toolkit).toBeVisible();
-  await toolkit.locator('summary').click();
+  await toolkit.locator('summary').first().click();
   await expect(toolkit).toHaveAttribute('open','');
   await expect(toolkit).toContainText('Manufacturer manual');
   const close=page.getByRole('button',{name:'Close open lessons'});
