@@ -181,9 +181,9 @@ test('Home Skills: beginner home-care schedule opens correct lessons after confl
 });
 
 
-test('Home Skills: eight model-cautious diagrams and eight optional learning checks',async({page})=>{
+test('Home Skills: previously illustrated eight remain valid after library expansion',async({page})=>{
  await page.goto(url);
- await expect(page.locator('.skill-visual')).toHaveCount(8);
+ await expect(page.locator('.skill-visual')).toHaveCount(12);
  await expect(page.locator('.skill-check')).toHaveCount(12);
  const illustrated=['4','6','8','11','13','16','19','24'];
  for(const id of illustrated){
