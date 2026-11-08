@@ -386,4 +386,42 @@ if(cards.length===4){
 }
 })();
 </script>
+
+<script id="money-focused-guidance-script">
+(function(){
+ 'use strict';
+ var q=new URLSearchParams(location.search),id=q.get('service');
+ if(id!=='s001'&&id!=='s002')return;
+ var content=document.getElementById('helpContent'),aside=document.getElementById('aside');
+ if(!content||!aside)return;
+ var h=content.querySelector('h2'),ol=content.querySelector('ol'),resource=aside.querySelector('a[target="_blank"]');
+ if(!h||!ol||!resource)return;
+ var data=id==='s001'?{
+  heading:'Start with the notice, then contact the provider',
+  steps:[
+   'Check the bill, any shutoff or eviction notice, the due date, and who issued it.',
+   'Contact the provider or landlord using an independently verified number. Ask about assistance, payment plans, extensions and written terms.',
+   'Contact 211 for local assistance options and confirm any program’s eligibility and availability.'
+  ],
+  link:'https://211.org/get-help/i-need-help-paying-my-bills',
+  label:'United Way 211 · Help paying bills ↗',
+  note:'If you have court or eviction papers, seek qualified legal assistance promptly; this page cannot determine deadlines or defenses.'
+ }:{
+  heading:'Start by reviewing the notice and your response options',
+  steps:[
+   'Identify the creditor or collector and read the written debt-validation information.',
+   'Check dispute periods and keep copies of notices or correspondence before agreeing to payments.',
+   'If court papers were served, check the court deadline and seek qualified local legal help; a creditor dispute does not replace a court response.'
+  ],
+  link:'https://www.consumerfinance.gov/consumer-tools/debt-collection/know-your-rights-when-a-debt-collector-calls/',
+  label:'CFPB · Know your rights when contacted ↗',
+  note:'The full five-situation guide above is an unpublished learning prototype. Avoid sharing sensitive account information or relying on sample text as a legal filing.'
+ };
+ h.textContent=data.heading;ol.replaceChildren();
+ data.steps.forEach(function(t){var li=document.createElement('li');li.textContent=t;ol.appendChild(li)});
+ resource.href=data.link;resource.textContent=data.label;
+ var note=document.createElement('p');note.className='notice';note.textContent=data.note;
+ ol.after(note);
+})();
+</script>
 </body></html>
