@@ -1,0 +1,72 @@
+# ONE PLACE — Life-Area Completeness & Quality Standard
+Status: Private founder-development draft · 2026-11-08 · No release authorization
+
+## Why this standard exists
+The founder's second Housing & Utilities walkthrough exposed a systematic weakness: a category can be technically functional yet fail its core promise. A maintenance planner does not teach maintenance, and a resource list is not a skill-building program. The same failure can exist in any of the other 17 life areas. Every area must be reviewed as a human need, not just a collection of cards.
+
+**Operating principle:** No empty promises. Every labeled "available" service must lead to a real, accessible, truthful outcome. Do not claim completeness where material, device, law, disability, age, location, or risk vary.
+
+## Category review: twelve non-negotiable lenses
+1. **Visitor entry points:** The person may need help, want to learn, practice a skill, complete a task, or simply explore. They should not have to guess an AI prompt or technical keyword.
+2. **Comprehensive problem map:** Map prevention, ordinary routine, troubleshooting, urgent response, follow-up, and specialist escalation. Identify both inside and outside, beginning and advanced skills, and relevant life stages.
+3. **Actual usable outcomes:** At least one valuable result within One Place itself (step-by-step explanation, safe practice, planning template, printable artifact, structured decision aid). A directory alone is not enough.
+4. **Plain-language teaching:** Explain WHY, WHAT, TOOLS, PREPARATION, HOW, CHECK THE RESULT, COMMON MISTAKES, and WHEN TO STOP. Use diagrams/photos/audio/video where they truly help, with descriptions and captions.
+5. **Safety:** Immediate danger and vulnerabilities first. For medical, mental-health, legal, finance, electrical, structural and other high-stakes decisions, identify the difference between learning and specialized services. Avoid false certainty and victim blaming.
+6. **Evidence:** Use authoritative, current, region-appropriate sources; verify links, claims and dates. Distinguish general guidance from laws, requirements, policy, estimates or local availability.
+7. **Truthful feature labels:** Implemented vs prototype vs unavailable must be explicit. Do not create fake buttons, artificial data, misleading scores, or hollow "Future Service" cards.
+8. **Navigation:** Reach the area from the homepage. Every section has recognizable Home, Area, and Back paths; deep links, browser history and downloaded preview copies work as expected.
+9. **Privacy and consent:** Minimal inputs; data is never silently uploaded, retained or published. Explain plain-file downloads, browser storage, sharing risks and when a visitor leaves for an external site.
+10. **Accessibility and inclusion:** 320px mobile, 200% zoom, keyboard, screen reader, reduced motion, low-literacy alternatives, different household types, renters/owners, disability, language and local context.
+11. **State and recovery:** Test blank, edited, invalid, repeated and limit inputs; save/reopen and reset where appropriate. Guard manual edits against destructive regeneration; error messages must preserve work.
+12. **Proof, not a checkbox:** Record the exact revision, automated evidence, founder-video observations, failures, repairs, independent or first-time-user feedback, and remaining acceptance gates. Do not mark a section passed solely because CI is green.
+
+## All 18 life areas: required content coverage map
+| Area | Primary deeper curriculum (examples, not a completion claim) | Particular safety or trust risk |
+|---|---|---|
+| Money & Bills | Budgeting, bill priorities, credit/debt, hardship contacts, scams, recordkeeping, safe negotiation | Misleading financial outcomes, data exposure |
+| Housing & Utilities | Housing access; leases; home systems; inside/outside maintenance; safe repairs; energy/water; safety; emergency response | DIY injury, local housing law, hidden hazards |
+| Family & Caregiving | Care handoffs, boundaries, support networks, elder care, children's routines, caregiver rest and crisis transitions | Consent, vulnerable household members, private records |
+| Health & Wellness | Understanding care options, preparing appointments, preventive care, basic health literacy, wellness habits, medication questions | Clinical accuracy and professional scope |
+| Mental Health & Safety | Coping, safety planning, support navigation, communication, crisis resources, trauma-aware practice | Crisis handling, coercion, stigma |
+| Work & Careers | Job goals, applications, interviews, training, workplace rights, scams, transitions | Job scams, jurisdiction differences |
+| Business & Entrepreneurship | Idea validation, legal basics, costs, pricing, taxes, recordkeeping, customer care, ethical sales | Regulatory and money advice |
+| Learning & Education | Foundational knowledge, skill practice, independent learning, memory, digital literacy and curiosity | Accessibility, instructional truth |
+| Technology & Digital Safety | Device setup, password security, privacy, scams, troubleshooting, software updates | Security errors and unsafe instructions |
+| Legal & Consumer Rights | Consumer disputes, contracts, evidence, complaints, housing rights, legal aid | Unauthorized legal advice, false deadlines |
+| Veterans & Military | Benefits navigation, transition, family support, training, healthcare/referral pathways | Wrong eligibility claims, sensitive service records |
+| Relationships | Listening, consent, affection, conflict, boundaries, parenting, repair and unsafe dynamics | Abuse normalization, unqualified counseling |
+| Daily Organization | Cleaning, cooking, routines, time, documents, chores, decluttering, household teamwork | Unrealistic productivity demands |
+| Travel & Transport | Planning, travel documents, public transit, accessibility, vehicle upkeep, road safety | Current schedules, legal and safety rules |
+| Aging & Accessibility | Fall prevention, technology access, mobility, home modification, caregiver collaboration, benefits | Disability exclusion, medical risks |
+| Emergencies | Fire, weather, outage, evacuation, alerts, supplies, neighborhood preparedness | Dangerous advice and stale location data |
+| Creativity & Legacy | Making, writing, storytelling, arts, crafts, saving memories, sharing with consent | Copyright, privacy, identity, minors |
+| Community & Civic | Local help, participation, service, volunteer activities, evidence-based civics, constructive disagreement | Partisanship, misinformation, unreliable local availability |
+
+## Housing & Utilities — current gap inventory
+| Domain | Old PR #5 | New private build | Still needed before founder acceptance |
+|---|---|---|---|
+| Housing and utility assistance | Five situation pathways with external providers | Preserved | Local relevance, source and time-sensitive eligibility review |
+| Smoke, CO, home emergency safety | Reviewable five-item checklist | Preserved, plus multiple skills | Physical-device usability and safety editing |
+| General home maintenance | Three editable example tasks, JSON save/reopen | Preserved | Real-world import/reopen testing and clear link between lessons and tasks |
+| Repair teaching | Essentially absent | New `one-place/home-skills.html` with 36 lessons | More visuals, accessibility, model-specific caveats, independent content review |
+| Kitchen | Only indirect references | Five hands-on lessons | Model-specific appliance checks, more food safety topics |
+| Bathroom/plumbing | Only cautionary text | Five skills including toilet leak, flapper, aerator, simple clog, caulk | Quality of sequencing, fixture variations, leak escalation |
+| Laundry | Only broad appliance references | Three skills | Safe vent-cleaning boundaries and equipment types |
+| Living rooms/interior | Not covered | Five skills | Material- and home-age-specific risks |
+| Heating/cooling | Filter example only | Three skills | Equipment-specific information and inspection/referral |
+| Exterior/yard | Not covered | Six skills | Seasonal/climate differences, landscape safety |
+| Emergency essentials | Basic cautions | Four additional skills | Disaster/accessibility scenarios |
+| Dangerous repairs | General hazard warnings | Five clear stop/escalate guides | Specialist review; avoid implying universal legal rules |
+| Whole-home inventory/annual schedule | Not built | Intro framework, no automatic reminders | Consider guided calendar and home-system inventory in a later reviewed slice |
+
+## Founder review evidence (new November 8 11:28 AM recording)
+The 3m08s recording shows navigation among the updated Housing guide, its planner and plans, One Place Home, Human Literacy, the team page, and external resources. The public homepage still does **not** show Our Humanity because the feature lives only on a separate, unmerged PR #4 branch. This is an integration/release distinction, not proof that the feature is in production. The video confirms the site does not yet provide comprehensive homeowner teaching; it also shows the new tasks-save buttons but not all export/import error states.
+
+This updated branch adds the missing teaching content but must **not** be called accepted until tested. Recording and any personally entered values remain in the private conversation; no personal video is committed.
+
+## Release and change control
+- The Housing Academy is an **internal sub-experience of Housing & Utilities**, not a 19th category or an additional catalog offering. Original four Housing entries remain available.
+- The new Our Humanity top-level menu link is committed only in **draft PR #4**, not main. A future integrated private founder review must verify both branches together before a separate publication decision.
+- Preserve PR #3 (Debt Guide), #4 (Our Humanity), #5 (Housing), and the 18/72 catalog.
+- Do not merge, publish, add analytics/accounts/paid features, recruit outside users or spend money without separate explicit permission.
+- A complete site can always evolve; a public version should be a clearly bounded, stable, honestly described collection of useful experiences, not a claim that the developer has solved every life situation.
