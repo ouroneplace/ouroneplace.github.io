@@ -156,6 +156,30 @@ test('Home Skills: illustration shortcuts reveal lessons even after a conflictin
  await expect(page.locator('#open-count')).toContainText('1 lesson open');
 });
 
+
+test('Home Skills: beginner home-care schedule opens correct lessons after conflicting filters',async({page})=>{
+ await page.setViewportSize({width:320,height:800});
+ await page.goto(url);
+ const schedule=page.locator('#care-schedule');
+ await expect(schedule).toBeVisible();
+ await expect(schedule.locator('details.schedule-group')).toHaveCount(5);
+ const links=schedule.locator('button[data-show-skill]');
+ await expect(links).toHaveCount(13);
+ const ids=await links.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-show-skill')));
+ expect(new Set(ids).size).toBe(13);
+ for(const id of ids)await expect(page.locator('#skill-'+id)).toHaveCount(1);
+ await page.locator('#search').fill('zzzz-no-match');
+ await page.locator('button[data-area="Know Your Limits"]').click();
+ await page.locator('#schedule-monthly summary').click();
+ await schedule.getByRole('button',{name:/Open lesson: Test smoke alarms/}).click();
+ await expect(page.locator('#search')).toHaveValue('');
+ await expect(page.locator('button[data-area="all"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#skill-28')).toHaveAttribute('open','');
+ await expect(page.locator('#skill-28 summary')).toBeFocused();
+ const size=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+ expect(size.scroll).toBeLessThanOrEqual(size.viewport+1);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
