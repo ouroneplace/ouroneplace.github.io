@@ -610,6 +610,24 @@ test('Home Skills: each of 72 unsafe answers explains its own mistake',async({pa
  expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
 });
 
+
+test('Home Skills: instructional text and quiz options meet readable minimums at phone width',async({page})=>{
+ await page.setViewportSize({width:320,height:800});
+ await page.goto(url);
+ await page.locator('#skill-1 summary').click();
+ const sizes=await page.locator('#skill-1').evaluate(el=>{
+  const pixels=selector=>parseFloat(getComputedStyle(el.querySelector(selector)).fontSize);
+  return {kit:pixels('.kit'),step:pixels('.steps li'),quiz:pixels('.check-options button'),caption:pixels('figcaption'),source:pixels('.source-note'),reference:pixels('.reference')};
+ });
+ expect(sizes.kit).toBeGreaterThanOrEqual(15);
+ expect(sizes.step).toBeGreaterThanOrEqual(16);
+ expect(sizes.quiz).toBeGreaterThanOrEqual(15);
+ expect(sizes.caption).toBeGreaterThanOrEqual(14);
+ expect(sizes.source).toBeGreaterThanOrEqual(12);
+ expect(sizes.reference).toBeGreaterThanOrEqual(14);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBe(true);
+});
+
 test('Home Skills: user can read every skill without interaction and cited sources are optional',async({page})=>{
   await page.goto(url);
   for(const i of [0,5,15,20,27,31,35]){
