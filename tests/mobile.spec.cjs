@@ -15,20 +15,22 @@ async function confirm(page) {
   await expect(page.locator('#coachReview')).not.toHaveAttribute('open');
 }
 async function readableActions(page) {
-  const controls = await page.locator('.actions button:visible, .actions a:visible, #coachUnderstand:visible, .coach-option button:visible').evaluateAll(nodes => nodes.map(node => {
-    const range = document.createRange(); range.selectNodeContents(node);
-    const lines = [];
-    for (const rect of range.getClientRects()) {
-      if (rect.width && rect.height && !lines.some(top => Math.abs(top - rect.top) < 3)) lines.push(rect.top);
-    }
-    return { text: node.textContent.trim(), lines: lines.length, height: node.getBoundingClientRect().height, clipped: node.scrollWidth > node.clientWidth };
-  }));
-  expect(controls.length).toBeGreaterThan(0);
-  for (const control of controls) {
-    expect(control, 'Action text stays on one line').toMatchObject({ lines: 1, clipped: false });
-    expect(control.height, control.text).toBeGreaterThanOrEqual(44);
-  }
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  // Wait for the current stage's layout to settle. Do not relax any readability requirement.
+  await expect.poll(async () => {
+    const controls = await page.locator('.actions button:visible, .actions a:visible, #coachUnderstand:visible, .coach-option button:visible').evaluateAll(nodes => nodes.map(node => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const tops = [];
+      for (const rect of range.getClientRects()) {
+        if (rect.width && rect.height && !tops.some(top => Math.abs(top - rect.top) < 3)) tops.push(rect.top);
+      }
+      return { text: node.textContent.trim(), lines: tops.length, height: node.getBoundingClientRect().height, clipped: node.scrollWidth > node.clientWidth };
+    }));
+    if (controls.length === 0) return 'No visible controls';
+    const invalid = controls.filter(c => c.lines !== 1 || c.clipped || c.height < 44);
+    if (invalid.length) return invalid.map(c => JSON.stringify(c)).join(' | ');
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+    return overflow ? 'Whole page has horizontal overflow' : 'ok';
+  }, { message: 'Mobile controls must settle at one visible line, at least 44px tall, without clipping or horizontal overflow', timeout: 6000 }).toBe('ok');
 }
 
 for (const width of [320, 390]) {
