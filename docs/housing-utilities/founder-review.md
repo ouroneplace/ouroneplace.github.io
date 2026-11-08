@@ -93,3 +93,22 @@ The recorded flow eventually produced a plan after several tasks had been added 
 The planner is now described accurately as a **manual worksheet without automatic reminders**. A saved, locally held JSON file allows continuation after reloading, but it is the visitor's responsibility to keep the file private, avoid sensitive details on shared devices, and import it when returning. This improves continuity without a hosted account.
 
 **Current QA state:** The exact-head full regression suite runs against the newest PR commit. Do not mark it passed until GitHub reports success. Screen recording alone does not demonstrate the new features (they were added after the recording).
+
+## 2026-11-08 12:48 PM — Second founder walk-through: Home Skills and main navigation (5m29s)
+**Evidence:** Founder-uploaded desktop Chrome screen recording (no audio). The private recording and any local file paths are not copied into GitHub.
+
+**Observed coverage:** The recording begins in the Housing & Utilities category with all four original entries present. It navigates to the expanded Housing guide, then the Home Skills Academy. The founder opens practical lessons covering cleaning, accessible refrigerator care, dishwasher/range-hood filters, toilet leak tests and flappers, aerators and simple drains, dryer lint/venting and washer hoses, doors and weatherstripping, drywall and lighting, HVAC, exterior drainage, lawn and roof warnings, smoke and CO alarms, emergency preparedness, and expert-only hazard categories. Several source destinations visibly open as separate browser tabs, including EPA WaterSense, USFA dryer safety, DOE and CPSC material. The founder returns to the planner and main One Place homepage.
+
+**Important gap the recording confirms:** The **Our Humanity** menu is absent in the tested main homepage at about 5:06–5:24. That is consistent with opening the Housing-only ZIP rather than the **separate unified founder branch** `review/integrated-one-place-founder-20261108` (PR #6). PR #5 never included the Our Humanity menu. Do not treat this as an Our Humanity defect in PR #6 or proof the live website was updated. Our test instructions must distinguish the ZIPs and lead with the combined branch.
+
+**Product-level assessment:** The 36-guide library offers real text, preparatory tools, short actions, verification and stop conditions. It is **not yet a complete home-maintenance course**: the founder video does not establish independent repair competence or cover equipment-specific procedures, guided images/videos, seasonal inventory, renters, accessibility or learning recall. Search filters, close-all, mobile responsiveness, 200% zoom, and task progression require separate checks. Several opened external sites take time to load; the video is not proof that particular URLs are permanently broken.
+
+**New refinements committed in response:**
+- A starter toolkit and instructions for finding a manufacturer manual before work.
+- A Close open lessons control, with accessible count, to prevent a very long stack of expanded lessons.
+- Five “Expert needed” lessons now use the heading **Recognize the hazard — do not attempt the repair**, not the misleading invitation to try the repair step by step.
+- Replaced five weak/general source links with task-relevant background: DOE exterior door weatherstripping job aid; DOE faucet aerator job aid; University of Minnesota lawn mower safety; Penn State Extension tree pruning safety; and a clearly labeled commercial how-to on squeaky hinges. External links may include marketing; no purchase is required.
+- New Playwright regression tests cover the toolkit, open-state control, expert heading and exact selected sources.
+- Synced the same lesson-library changes into combined PR #6. This does not merge any PR or deploy to GitHub Pages.
+
+**Remaining safeguards:** Independently review/maintain source links (background source is not always a specific model tutorial), add original visuals and accessible alternatives where they materially improve learning, do device and real-world safe task trials with fictional/non-sensitive data, ensure provenance and copyright compliance, and preserve expert escalation warnings. Only the founder can mark acceptance after manual review. No spending/release authority.
