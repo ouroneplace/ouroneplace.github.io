@@ -118,6 +118,26 @@ test('Home Skills: four original diagrams teach specific parts with accessible d
  await expect(page.locator('#skill-24 a.reference')).toHaveAttribute('href','https://bsesc.energy.gov/energy-basics/stormwater-gutters-downspouts');
 });
 
+test('Home Skills: original diagrams can be enlarged and inspected at phone width',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto(url);
+ await page.getByRole('button',{name:'HVAC filter airflow'}).click();
+ const figure=page.locator('#skill-19 figure.skill-visual');
+ const enlarge=figure.getByRole('button',{name:'Enlarge diagram'});
+ await expect(enlarge).toBeVisible();
+ await enlarge.click();
+ await expect(figure).toHaveAttribute('data-zoom','true');
+ await expect(figure.getByRole('button',{name:'Fit diagram to screen'})).toHaveAttribute('aria-pressed','true');
+ const sizes=await figure.evaluate(el=>({inner:el.clientWidth,scroll:el.scrollWidth}));
+ expect(sizes.scroll).toBeGreaterThan(sizes.inner);
+ const pageSize=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+ expect(pageSize.scroll).toBeLessThanOrEqual(pageSize.viewport+1);
+ const fit=figure.getByRole('button',{name:'Fit diagram to screen'});
+ await fit.click();
+ await expect(figure).toHaveAttribute('data-zoom','false');
+ await expect(figure.getByRole('button',{name:'Enlarge diagram'})).toHaveAttribute('aria-pressed','false');
+});
+
 test('Home Skills: illustration shortcuts reveal lessons even after a conflicting search/filter',async({page})=>{
  await page.goto(url);
  const search=page.locator('#search');
