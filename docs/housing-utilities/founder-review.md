@@ -62,3 +62,27 @@ Last web review: **November 8, 2026**. Check links and policy changes again befo
 
 ## Next project phase
 After this first guide's functional and editorial check, improve remaining life areas **one at a time**. Reuse the same review model, preserve original four-offering count in every area unless founder approves a catalog change, avoid duplicate features and hollow preview cards, and distinguish implemented functionality from conceptual offerings. Continue to let the founder enjoy the work without a release deadline.
+
+## 2026-11-08 founder walkthrough analysis and refinement (source file kept private)
+Founder submitted a **5-minute, 56-second screen recording without audio** of the extracted review build, made in desktop Chrome. This record contains only generalized observations, **not family details, personally entered task values, the video, screenshot files, or the local device path**.
+
+### What the recording visually confirms
+- The five assistance paths were selected; the appropriate headings, steps, first-sentence scripts and source links changed. Several external providers opened in browser tabs, including USAGov, 211 and HUD; website opening does **not** verify local availability, eligibility or outcome.
+- Safety cautions and the five review checkboxes were displayed and interacted with. A checked box records visitor review, not professional home-safety certification.
+- The maintenance planner accepted additional tasks and frequencies, editing existing entries and removing an entry. This is strong evidence of basic practical workflow, not just decorative cards.
+- The Next-Step Navigator generated text incorporating selected guidance and edited tasks; the browser's print-preview dialog opened; a TXT download was requested. A different, previously downloaded text guide appeared in the editor at one point; **the recording itself does not prove that the Housing TXT contents were inspected**, although separate automated tests check the output.
+- The recording did not cover the four original catalog cards, 320-pixel mobile view, full keyboard/screen-reader use, every error boundary, or a real assistance application.
+
+### Defects or risks identified and addressed in this draft
+1. **Insufficiently focused shelter referral**: The shelter path previously linked a generic HUD offices page. Replaced it with the verified, purpose-built HUD **Find Shelter** resource at https://www.hud.gov/FindShelter.
+2. **Too many external destinations without explicit orientation**: The guide already opened external resources in new tabs; its explanatory note now explicitly says so and warns that external providers may display optional donation or sign-in prompts. There are no paid One Place requirements.
+3. **Plan can become stale when inputs change**: After generating a plan, changing a situation, checklist item, or maintenance task now displays a warning that the text is not automatically synchronized. Existing manual edits are protected by a confirmation before regeneration; the visitor can preserve them instead.
+4. **Maintenance tasks disappeared on refresh**: A planner that takes time to fill in needs a reasonable way to continue later. Added **Save task list** and **Open saved task list** using a locally created JSON file, explicit import validation, file-size and task-count limits, confirmation before replacing the existing list, and a clear warning that downloaded JSON is unencrypted. It does **not** add cloud storage, accounts, analytics or background saving. Bad or unsupported files leave existing tasks intact.
+5. **Privacy language accuracy**: Removed an absolute claim of 'no tracking' that could be misread as a promise about hosting-provider logs or browsers. The new text truthfully describes that this page sends no form entries to a One Place server.
+
+### Remaining product judgment before acceptance
+- The guide is U.S.-focused; it is not a current local-housing search engine or licensed legal representative. Actual eligibility, waitlists, eviction deadlines and utility protections must be checked with local qualified resources.
+- Urgent danger requires clear exit/dispatch language; multiple safety checkboxes do not substitute for inspection.
+- The new maintenance import/export and plan-regeneration confirmation need real Chromebook and phone testing, plus 200% zoom and assistive technology review.
+- Manual usability review still needed for whether visitors understand that a plain TXT plan, editable maintenance list and optional JSON backup are different artifacts.
+- Preserve founder review and release boundaries: **no merge, publication, paid services or new collection of visitor information**. PR #3, PR #4, other life-area catalog routes and priorities remain unchanged.
