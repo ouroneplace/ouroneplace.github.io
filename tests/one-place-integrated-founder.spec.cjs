@@ -1,4 +1,10 @@
 const {test,expect}=require('@playwright/test');
+test('combined founder copy is clearly labeled unreleased and not a public deployment',async({page})=>{
+ await page.goto('/');
+ await expect(page.locator('header .flag')).toHaveText('FOUNDER DRAFT · NO PURCHASES');
+ await expect(page.locator('header .flag')).not.toContainText('PUBLIC PREVIEW');
+});
+
 test('Founder integration: both Our Humanity and Home Skills are discoverable from one homepage',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/index.html');
