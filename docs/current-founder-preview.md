@@ -1,3 +1,11 @@
+# CURRENT POLICY — Public Live Updates (Founder approved November 8, 2026, ~9:16 PM Central)
+
+The founder explicitly chose **ONE PLACE public website as the always-current version**, without a separate preview or ZIP-review process. This supersedes the earlier founder-preview publishing plan below. Keep GitHub Pages publishing from protected `main`, not `founder-preview`. Implement changes on a working branch, run browser checks and merge via the required pull request to `main`; GitHub Pages publishes after the merge. No formal prepublication founder preview is required for ordinary content changes. Postpublication founder review and corrections occur at the same public URL: https://ouroneplace.github.io/.
+
+Retain branch protection and automated regression checks; public visibility does not remove security, privacy, or safety obligations. Do not publish private financial/medical/family information, passwords, or licensed content. Label incomplete offerings accurately; do not imply deployed features are functional if they're not. Get specific approval for money, external accounts, or significant commitments. Approved Lesson 03 video file still requires a single direct upload to the repository (currently local/ChatGPT file only); keep video section hidden if file missing to avoid broken playback. Earlier sections below describe the superseded staging proposal only.
+
+---
+
 # ONE PLACE — Always-current Founder Preview
 
 **Source branch:** `founder-preview` (public repository). **Intended site URL after GitHub Pages configuration:** https://ouroneplace.github.io/
