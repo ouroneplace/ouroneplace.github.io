@@ -46,3 +46,9 @@
  .panel .option{min-height:44px}
  .teal-record-card{margin-top:14px}
 }
+
+
+/* Founder-approved lesson heading alignment: center identifiers and main stage
+   headings across Lessons 01–10; keep body text and video controls unchanged. */
+.brand,.lesson-heading,#app > h1{text-align:center}
+.lesson-heading{align-items:center}
