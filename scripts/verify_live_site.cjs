@@ -18,7 +18,16 @@ fs.mkdirSync(output,{recursive:true});
    page.on('response',r=>{const u=new URL(r.url());if(u.origin===origin&&r.status()>=400&&u.pathname!=='/favicon.ico')missing.push(r.status()+' '+r.url());});
    page.on('request',r=>{if(!r.url().startsWith(origin+'/')&&!r.url().startsWith('data:')&&!r.url().startsWith('blob:'))outbound.push(r.url());if(!['GET','HEAD'].includes(r.method()))writes.push(r.method()+' '+r.url());});
    async function visible(locator){await locator.waitFor({state:'visible',timeout:15000});}
-   async function goto(path){const r=await page.goto(origin+path,{waitUntil:'load'});assert.ok(r&&r.ok(),path);await visible(page.locator('h1').first());}
+   async function goto(path){
+    let status=0,finalUrl='';
+    for(let attempt=1;attempt<=3;attempt++){
+     const r=await page.goto(origin+path,{waitUntil:'load'});
+     status=r?.status()||0;finalUrl=page.url();
+     if(r?.ok()){await visible(page.locator('h1').first());return;}
+     if(attempt<3)await new Promise(resolve=>setTimeout(resolve,400*attempt));
+    }
+    throw new Error('Live route unsuccessful: '+path+' HTTP '+status+' final URL '+finalUrl);
+   }
    async function reflow(){
     await page.waitForLoadState('load');
     await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
