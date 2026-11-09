@@ -1,0 +1,31 @@
+name: Import approved Lesson 04 video
+on:
+  push:
+    branches:
+      - feature/lesson04-native-player-fix-20261108
+    paths:
+      - .github/workflows/import-lesson04-media.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve approved video from its public share page
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check yt-dlp
+          mkdir -p media
+          yt-dlp --no-playlist --merge-output-format mp4 --recode-video mp4 -o 'media/lesson04.%(ext)s' 'https://share.descript.com/view/f17fyNgzbZM'
+          test -s media/lesson04.mp4
+          ffprobe -v error -show_entries format=duration -of default=nw=1 media/lesson04.mp4
+      - name: Commit native video and remove temporary importer
+        run: |
+          set -euo pipefail
+          git config user.name "ONE PLACE automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media/lesson04.mp4
+          git rm .github/workflows/import-lesson04-media.yml
+          git commit -m "Add Lesson 04 native video asset"
+          git push origin HEAD:feature/lesson04-native-player-fix-20261108
