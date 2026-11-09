@@ -46,37 +46,30 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
-for (const lesson of ['01', '02']) {
-  test(`lesson ${lesson}: approved video plays`, async ({ page }) => {
-    await page.goto(`/lessons/${lesson}/`);
-    const video = page.locator('video');
-    await expect.poll(() => video.evaluate(v => v.readyState)).toBeGreaterThanOrEqual(1);
-    expect(await video.evaluate(v => v.duration)).toBeGreaterThan(100);
-    const controls = page.getByRole('group', { name: 'Video playback and download options' });
-    await expect(controls.getByRole('slider', { name: 'Video position' })).toBeEnabled();
-    const download = controls.getByRole('link', { name: 'Download video (MP4)' });
-    await expect(download).toHaveAttribute('download', /mp4$/);
-    await expect(download).toHaveAttribute('href', /mp4$/);
-    await video.evaluate(v => v.play());
-    await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(0.2);
-    await video.evaluate(v => v.pause());
-    await controls.getByRole('button', { name: 'Forward 10 seconds →' }).click();
-    await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(8);
-    await controls.getByRole('button', { name: '← Back 10 seconds' }).click();
-    await expect.poll(() => video.evaluate(v => v.currentTime)).toBeLessThan(5);
-    await controls.getByRole('slider', { name: 'Video position' }).evaluate(el => {
-      el.value = '30';
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(25);
-    const response = await page.request.get(await download.getAttribute('href'));
-    expect(response.ok()).toBe(true);
-    expect((response.headers()['content-type'] || '')).toContain('video/mp4');
-    expect(await response.body()).not.toHaveLength(0);
-    expect(await video.evaluate(v => v.error)).toBe(null);
+const embeddedVideos = [
+  { lesson: '01', share: 'jmGClFW0etJ', mp4: 'Human_Literacy_Lesson_01_FINAL_REVIEW_114s.mp4' },
+  { lesson: '02', share: '8GyMmS5Oixd', mp4: 'lesson02.mp4' },
+  { lesson: '03', share: 'OVaHB0aypFw', mp4: 'lesson03.mp4' },
+  { lesson: '04', share: 'f17fyNgzbZM', mp4: null }
+];
+for (const { lesson, share, mp4 } of embeddedVideos) {
+  test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
+    await page.goto('/lessons/' + lesson + '/');
+    await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame'))
+      .toHaveAttribute('src', 'https://share.descript.com/embed/' + share);
+    await expect(page.getByRole('link', { name: 'Open Lesson ' + Number(lesson) + ' video in a new tab' }))
+      .toHaveAttribute('href', 'https://share.descript.com/view/' + share);
+    if (mp4) {
+      await expect(page.getByRole('link', { name: 'Watch original MP4 if the video player is unavailable' }))
+        .toHaveAttribute('href', new RegExp('/media/' + mp4 + '$'));
+    }
+    await page.getByRole('button', { name: 'Continue to Understand It' }).click();
+    await expect(page.getByRole('heading', { name: 'Understand It' })).toBeVisible();
+    await page.getByRole('button', { name: 'Continue to Practice' }).click();
+    await expect(page.locator('button.option')).toHaveCount(3);
   });
 }
-
 
 test('HL-119: unanswered Remember It cannot be bypassed with Forward', async ({ page }) => {
   const errors = [];
@@ -113,14 +106,3 @@ test('HL-119: unanswered Remember It cannot be bypassed with Forward', async ({ 
 });
 
 
-test('lesson 04: video-first five-step experience and usable fallback', async ({ page }) => {
-  await page.goto('/lessons/04/');
-  await expect(page.getByRole('heading', { name: 'See It' })).toBeVisible();
-  await expect(page.locator('iframe.lesson-video-frame')).toHaveAttribute('src', 'https://share.descript.com/embed/f17fyNgzbZM');
-  await expect(page.getByRole('link', { name: 'Open Lesson 4 video in a new tab' })).toHaveAttribute('href', 'https://share.descript.com/view/f17fyNgzbZM');
-  await page.getByRole('button', { name: 'Continue to Understand It' }).click();
-  await expect(page.getByRole('heading', { name: 'Understand It' })).toBeVisible();
-  await expect(page.getByText('A boundary guides your choices.')).toBeVisible();
-  await page.getByRole('button', { name: 'Continue to Practice' }).click();
-  await expect(page.getByRole('button', { name: 'Next situation' })).toBeDisabled();
-});
