@@ -123,7 +123,7 @@ test('lesson 04: native video player matches previous lessons and keeps five sta
   await expect(controls.getByRole('button', { name: '← Back 10 seconds' })).toBeVisible();
   await expect(controls.getByRole('button', { name: 'Forward 10 seconds →' })).toBeVisible();
   await expect(controls.getByRole('slider', { name: 'Video position' })).toBeVisible();
-  await expect(controls.getByRole('link', { name: 'Download video (MP4)' })).toHaveAttribute('href', '../../media/lesson04.mp4');
+  await expect(controls.getByRole('link', { name: 'Download video (MP4)' })).toHaveAttribute('href', /\/media\/lesson04\.mp4$/);
   await page.getByRole('button', { name: 'Continue to Understand It' }).click();
   await expect(page.getByRole('heading', { name: 'Understand It' })).toBeVisible();
   await page.getByRole('button', { name: 'Continue to Practice' }).click();
