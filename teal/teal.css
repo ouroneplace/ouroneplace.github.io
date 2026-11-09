@@ -25,3 +25,35 @@ h1,h2,h3,h4,p,summary,a,button{overflow-wrap:anywhere}.letter-layout>*,.cause-in
 /* OP-104: opaque sticky navigation and readable anchor targets at zoom. */
 #message-title,#cause,#goals,#learn,#act,#share,#sources{scroll-margin-top:7rem}
 .goal-label{font-size:.72rem;line-height:1.7;letter-spacing:.13em;font-weight:500;color:#a3dcd1}
+
+
+/* TEAL-101 complete reading edition — approved wording, source order preserved */
+.philosophy-section{background:linear-gradient(180deg,#0a2e38 0%,#071e2a 100%);scroll-margin-top:5.25rem}
+.philosophy-section h2{margin-bottom:1.3rem}
+.philosophy-section h2 em{color:var(--teal)}
+.teal101-lede{max-width:890px;font-size:1rem;color:#c6e1da;line-height:1.8;margin:0 0 1.3rem}
+.teal101-lede strong{color:#a5f9e6;font-weight:600}
+.teal101-chapters{margin:2.8rem 0 1.7rem;border-top:1px solid #476c6b}
+.teal101-chapter{scroll-margin-top:6rem;border-bottom:1px solid #466965}
+.teal101-chapter summary{list-style:none;cursor:pointer;display:flex;gap:1.2rem;align-items:center;
+  min-height:64px;padding:1rem .9rem .95rem .25rem;font-size:clamp(1rem,1.6vw,1.25rem);font-weight:600;line-height:1.5}
+.teal101-chapter summary::-webkit-details-marker{display:none}
+.teal101-chapter summary::after{content:"+";margin-left:auto;color:#8eeddc;font-size:1.65rem;font-weight:300}
+.teal101-chapter[open] summary::after{content:"−"}
+.teal101-chapter .teal101-section-num{flex:0 0 2.2rem;color:#77e0d0;font-size:.8rem;letter-spacing:.13em}
+.teal101-chapter[open]>summary{color:#c5fff3}
+.teal101-copy{max-width:900px;margin:0 auto;padding:1.2rem clamp(.5rem,3.7vw,3rem) 3rem;color:#e1f2ec;
+ border-left:2px solid #4bbab1;background:linear-gradient(90deg,#1450563d 0%,transparent 100%)}
+.teal101-copy p{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1rem,1.3vw,1.14rem);line-height:1.85;margin:0 0 1.45rem}
+.teal101-copy h3{font-family:system-ui,sans-serif;font-size:clamp(1.12rem,1.7vw,1.5rem);font-weight:600;letter-spacing:-.01em;
+ color:#acfae9;margin:2.2rem 0 1rem}
+.teal101-copy ul,.teal101-copy ol{padding-left:1.6rem;margin:0 0 1.4rem}
+.teal101-copy li{line-height:1.75;margin:.35rem 0}
+.teal101-copy strong{font-weight:650;color:#effffa}
+.teal101-copy em{font-style:italic}
+.teal101-endnote{font-size:.83rem;line-height:1.7;color:#bdd7d0;max-width:920px}
+@media(max-width:700px){.teal101-chapter summary{gap:.65rem;padding-inline:.15rem;font-size:.98rem}
+ .teal101-chapter .teal101-section-num{flex-basis:1.6rem}
+ .teal101-copy{padding:1rem .85rem 2rem}
+ .teal101-copy p{font-size:1rem;line-height:1.8}
+ .teal101-copy h3{font-size:1.11rem;margin-top:1.8rem}}

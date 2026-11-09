@@ -18,7 +18,7 @@ test('OP-104 v4: learning, TEAL and simulator remain navigable',async({page})=>{
  await page.locator('.op4-menu summary').click();
  await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy'}).click();
  await expect(page.locator('#teal-philosophy')).toContainText('Trinity Equals Amazing Love');
- await page.locator('#teal-philosophy a').click();
+ await page.locator('#teal-philosophy').getByRole('link',{name:'Read the public TEAL invitation'}).click();
  await expect(page).toHaveURL(/\/teal\/$/);
  await page.getByRole('link',{name:'One Place Home'}).first().click();
  await page.locator('.grid > a.new-card').filter({hasText:'Human Literacy'}).click();
@@ -59,7 +59,7 @@ test('OP-104 / TEAL: founding flow reflows and keyboard entry is meaningful', as
     await page.setViewportSize({ width, height: 844 });
     await page.goto('/teal/');
     await expect(page).toHaveTitle(/TEAL/);
-    await expect(page.getByText('Trinity Equals Amazing Love', { exact: true })).toBeVisible();
+    await expect(page.locator('.founding-brand .brand-meaning')).toHaveText('Trinity Equals Amazing Love');
     await expect(page.locator('a.symbol-entry')).toHaveAttribute('href', '#message-title');
     await expect(page.locator('a.alternative-entry')).toHaveAttribute('href', '#message-title');
     await expect.poll(async () => page.evaluate(
