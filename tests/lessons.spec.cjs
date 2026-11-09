@@ -46,10 +46,10 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
-test('Lessons 01–04: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
+test('Lessons 01–05: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 850 });
-    for (const lesson of ['01', '02', '03', '04']) {
+    for (const lesson of ['01', '02', '03', '04', '05']) {
       await page.goto('/lessons/' + lesson + '/');
       const layout = await page.evaluate(() => {
         const lineLeft = (node) => {
@@ -90,7 +90,8 @@ const embeddedVideos = [
   { lesson: '01', share: 'jmGClFW0etJ', mp4: 'Human_Literacy_Lesson_01_FINAL_REVIEW_114s.mp4' },
   { lesson: '02', share: '8GyMmS5Oixd', mp4: 'lesson02.mp4' },
   { lesson: '03', share: 'OVaHB0aypFw', mp4: 'lesson03.mp4' },
-  { lesson: '04', share: 'f17fyNgzbZM', mp4: null }
+  { lesson: '04', share: 'f17fyNgzbZM', mp4: null },
+  { lesson: '05', share: 'CZsVq0YNMTq', mp4: null }
 ];
 for (const { lesson, share, mp4 } of embeddedVideos) {
   test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
