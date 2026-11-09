@@ -16,11 +16,19 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
 
 /* HL-119: allow enlarged result feedback and other prose to wrap at 320px. */
 .panel,.feedback,.feedback strong,.feedback p,.summary{min-width:0;overflow-wrap:anywhere}
+/* LESSON VIDEO STANDARD: match approved Lesson 04 headings and portrait Descript player. */
+.lesson-heading{display:flex!important;flex-direction:column;gap:5px;visibility:visible!important;opacity:1!important}.lesson-heading span{color:#087f78;font-size:.9rem;letter-spacing:.05em}.lesson-heading strong{font-size:clamp(1.1rem,4.2vw,1.35rem)}.lesson-navigation{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px}.lesson-navigation .action{flex:1 1 120px;padding:11px 12px;font-size:.95rem}.lesson-navigation .action:disabled{opacity:.4;cursor:not-allowed}
+/* Lesson 08 See It: approved portrait video stage. */
+.video-lesson{margin:22px 0 28px;padding:20px 16px;border:1px solid #cbe5df;border-radius:20px;background:#f4fbf9;text-align:center}
+.video-lesson .lesson-video-frame{display:block;width:min(100%,360px);max-width:100%;aspect-ratio:9/16;height:auto;margin:auto;border:0;border-radius:14px;background:#0c2730}
+.video-lesson a{display:inline-block;margin-top:14px;color:#075d54;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.video-lesson .muted{font-size:.9rem}
+
 </style>
 <link rel="stylesheet" href="../../shared/lesson-record.css">
 <link rel="canonical" href="https://ouroneplace.github.io/lessons/08/">
 </head>
-<body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><div class="lesson-heading" aria-label="Lesson number and title">LESSON 08 · Asking for Help</div><section class="panel" id="app" aria-live="polite"></section><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+<body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><header class="lesson-heading" aria-label="Lesson number and title"><span>LESSON 08</span><strong>Asking for Help</strong></header><div id="app" aria-live="polite"></div><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
 <script>
 'use strict';
 const scenarios=[
@@ -163,7 +171,7 @@ function bestIndex(item){return typeof item.correct==='number'?item.correct:opti
 function resetSelection(){selected=-1;viewed=new Set();firstChoiceRecorded=false;submitted=false}
 function advance(){savePage();index++;resetSelection();if(stage==='practice'&&index===scenarioItems.length){stage='quiz';index=0}else if(stage==='quiz'&&index===quizItems.length){stage='results';index=0}render();window.scrollTo(0,0)}
 function restart(){pageSnapshots.clear();stage='intro';index=0;practiceScore=0;quizAnswers=[];resetSelection();render();window.scrollTo(0,0)}
-const pageOrder=[{stage:'intro',index:0},...scenarioItems.map((_,i)=>({stage:'practice',index:i})),...quizItems.map((_,i)=>({stage:'quiz',index:i})),{stage:'results',index:0},{stage:'live',index:0}];
+const pageOrder=[{stage:'intro',index:0},{stage:'understand',index:0},...scenarioItems.map((_,i)=>({stage:'practice',index:i})),...quizItems.map((_,i)=>({stage:'quiz',index:i})),{stage:'results',index:0},{stage:'live',index:0}];
 const pageSnapshots=new Map();
 function pageKey(){return stage+':'+index}
 function savePage(){pageSnapshots.set(pageKey(),{selected,viewed:[...viewed],firstChoiceRecorded,submitted})}
@@ -172,14 +180,28 @@ function navigation(){const bar=element('nav','lesson-navigation');bar.setAttrib
 function progress(){const total=scenarioItems.length+quizItems.length,done=(stage==='quiz'?scenarioItems.length:0)+index;const p=element('div','progress');p.setAttribute('role','progressbar');p.setAttribute('aria-label','Lesson progress');p.setAttribute('aria-valuemin','0');p.setAttribute('aria-valuemax',String(total));p.setAttribute('aria-valuenow',String(done));const fill=element('div','fill');fill.style.width=(100*done/total)+'%';p.append(fill)}
 function render(){app.replaceChildren();navigation();
 if(stage==='intro'){
-element('div','eyebrow','SEE IT · UNDERSTAND IT');
-element('h1','','Asking for help is a practical skill');
+element('h1','','See It');
+const videoEntry=element('section','video-lesson');
+const frame=element('iframe','lesson-video-frame',undefined,videoEntry);
+frame.setAttribute('title','Asking for Help — Lesson 8 video');
+frame.src='https://share.descript.com/embed/LhyDGOcpa2v';
+frame.setAttribute('loading','eager');
+frame.setAttribute('allow','fullscreen; picture-in-picture; encrypted-media');
+frame.setAttribute('allowfullscreen','');
+const fallback=element('a','','Open Lesson 8 video in a new tab',videoEntry);
+fallback.href='https://share.descript.com/view/LhyDGOcpa2v';
+fallback.target='_blank';fallback.rel='noopener noreferrer';
+action('Continue to Understand It',()=>{savePage();stage='understand';index=0;resetSelection();render();window.scrollTo(0,0)});
+return}
+if(stage==='understand'){
+element('h1','','Understand It');
+element('h2','','Asking for help is a practical skill');
 element('p','','You have more responsibilities than you can finish today. Someone you trust might be able to help, but you worry that asking will make you seem incapable.');
 const a=element('section','feedback');element('strong','','WHAT YOU NOTICE',a);element('p','','You need support with a specific task. Needing help does not mean you have failed.',a);
 const b=element('section','feedback');element('strong','','WHAT YOU CAN CHOOSE',b);element('p','','Name the task, explain when help is needed, and allow the other person to answer honestly.',b);
 const c=element('section','feedback');element('strong','','IF THEY SAY NO',c);element('p','','Respect their answer. Consider a different person, service, time, or plan without treating the refusal as a rejection of you.',c);
 element('h2','','Remember this');element('p','summary','Ask clearly. Respect their choice. Stay involved in decisions about your needs.');
-action('Start interactive practice',()=>{stage='practice';index=0;resetSelection();render();window.scrollTo(0,0)});return}
+action('Continue to Practice',()=>{savePage();stage='practice';index=0;resetSelection();render();window.scrollTo(0,0)});return}
 if(stage==='live'){
 element('div','eyebrow','STEP 5 OF 5 · LIVE IT');
 element('h1','','Practice making a clear request');

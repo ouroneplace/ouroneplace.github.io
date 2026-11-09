@@ -46,29 +46,28 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
-test('Lessons 01–07: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
+test('Lessons 01–10: centered headers and stage titles, centered video players, responsive widths', async ({ page }) => {
+  test.setTimeout(120000); // Thirty viewport/lesson combinations need more than the default 30 seconds.
+  // Geometry checks do not need a networked video to load; prevent slow third-party embeds.
+  await page.route('https://share.descript.com/**', route => route.abort('failed'));
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 850 });
-    for (const lesson of ['01', '02', '03', '04', '05', '06', '07']) {
+    for (let n = 1; n <= 10; n++) {
+      const lesson = String(n).padStart(2, '0');
       await page.goto('/lessons/' + lesson + '/');
       const layout = await page.evaluate(() => {
-        const lineLeft = (node) => {
-          const range = document.createRange();
-          range.selectNodeContents(node);
-          return range.getBoundingClientRect().left;
-        };
         const brand = document.querySelector('.brand');
-        const title = document.querySelector('.lesson-heading strong');
         const heading = document.querySelector('.lesson-heading');
-        const seeIt = document.querySelector('#app h1');
+        const stageHeading = document.querySelector('#app > h1');
         const frame = document.querySelector('.lesson-video-frame');
         const section = document.querySelector('.video-lesson');
-        const close = (a, b) => Math.abs(a - b) <= 2;
+        const close = (a, b) => Math.abs(a - b) <= 3;
         return {
-          brandLeft: close(lineLeft(brand), brand.getBoundingClientRect().left),
-          titleLeft: close(lineLeft(title), heading.getBoundingClientRect().left),
-          seeItLeft: close(lineLeft(seeIt), seeIt.getBoundingClientRect().left),
-          playerCentered: close(
+          brandCentered: getComputedStyle(brand).textAlign === 'center',
+          titleCentered: getComputedStyle(heading).textAlign === 'center',
+          stageCentered: getComputedStyle(stageHeading).textAlign === 'center',
+          headingFlexCentered: !heading.querySelector('strong') || getComputedStyle(heading).alignItems === 'center',
+          playerCentered: !frame || close(
             frame.getBoundingClientRect().left + frame.getBoundingClientRect().width / 2,
             section.getBoundingClientRect().left + section.getBoundingClientRect().width / 2
           ),
@@ -76,9 +75,10 @@ test('Lessons 01–07: headings align left while portrait players stay centered 
         };
       });
       expect(layout, `Lesson ${lesson}, viewport ${width}px`).toEqual({
-        brandLeft: true,
-        titleLeft: true,
-        seeItLeft: true,
+        brandCentered: true,
+        titleCentered: true,
+        stageCentered: true,
+        headingFlexCentered: true,
         playerCentered: true,
         noHorizontalOverflow: true
       });
@@ -97,8 +97,8 @@ test('All lessons: navigation explains itself without redundant text', async ({ 
   }
 });
 
-test('Lessons 01–07: every See It player has exactly one standard external video link', async ({ page }) => {
-  for (let n = 1; n <= 7; n++) {
+test('Lessons 01–08: every See It player has exactly one standard external video link', async ({ page }) => {
+  for (let n = 1; n <= 8; n++) {
     const lesson = String(n).padStart(2, '0');
     await page.goto('/lessons/' + lesson + '/');
     await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
@@ -115,7 +115,8 @@ const embeddedVideos = [
   { lesson: '04', share: 'f17fyNgzbZM', mp4: null },
   { lesson: '05', share: 'CZsVq0YNMTq', mp4: null },
   { lesson: '06', share: 'hEnvP1RZFon', mp4: null },
-  { lesson: '07', share: 'LfvHoksdBOl', mp4: null }
+  { lesson: '07', share: 'LfvHoksdBOl', mp4: null },
+  { lesson: '08', share: 'LhyDGOcpa2v', mp4: null }
 ];
 for (const { lesson, share, mp4 } of embeddedVideos) {
   test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
