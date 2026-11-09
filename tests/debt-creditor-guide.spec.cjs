@@ -1,13 +1,13 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs/promises');
 
-test('Debt Guide private invitation and five distinct paths remain navigable',async({page})=>{
+test('Debt Guide appears in Money & Bills and five distinct paths remain navigable',async({page})=>{
   const errs=[];page.on('pageerror',e=>errs.push(e.message));
-  await page.goto('/index.html?service=s002');
-  const invitation=page.locator('#debtGuideInvite');
-  await expect(invitation).toBeVisible();
-  await expect(invitation.getByRole('link',{name:/Try the private guide/})).toHaveAttribute('href','one-place/debt-creditor-guide.html');
-  await invitation.getByRole('link').click();
+  await page.goto('/index.html?area=Money%20%26%20Bills');
+  const guideLink=page.getByRole('link',{name:/Debt & Creditor Guide/});
+  await expect(guideLink).toBeVisible();
+  await expect(guideLink).toHaveAttribute('href','one-place/debt-creditor-guide.html');
+  await guideLink.click();
   await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
   await expect(page).toHaveTitle(/Debt & Creditor Guide/);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content','noindex,nofollow,noarchive');
