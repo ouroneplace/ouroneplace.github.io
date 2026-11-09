@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 test('public work-in-progress copy is clearly labeled',async({page})=>{
  await page.goto('/');
- await expect(page.locator('header .flag')).toHaveText('FOUNDER DRAFT · NO PURCHASES');
+ await expect(page.locator('header .flag')).toHaveText('PUBLIC WORK IN PROGRESS · NO PURCHASES');
  await expect(page.locator('header .flag')).not.toContainText('PUBLIC PREVIEW');
 });
 
