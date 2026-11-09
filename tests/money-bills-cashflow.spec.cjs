@@ -70,3 +70,34 @@ test('same-day cumulative bills report the full first-day shortage', async ({pag
   await enterBill(page, 'electric', 100, billDate);
   await expect(page.locator('#cashResult')).toHaveText('$150.00 short');
 });
+
+
+test('Money & Bills: current public resource labels and plan disclaimer', async ({page}) => {
+  await page.goto('/one-place/money-bills.html');
+  await expect(page.getByRole('link',{name:/CFPB · Consumer financial guidance/}))
+    .toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/');
+  await page.getByRole('tab',{name:'4. My action plan'}).click();
+  await expect(page.getByRole('link',{name:/CFPB · Money-management worksheets/}))
+    .toHaveAttribute('href','https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/tools-and-resources/');
+  const started=page.waitForEvent('download');
+  await page.locator('#exportPlan').click();
+  const txt=await fs.readFile(await (await started).path(),'utf8');
+  expect(txt).toContain('Public tool preview - organizational guidance, not financial advice.');
+  expect(txt).not.toContain('Founder review - organizational guidance');
+});
+
+test('Money & Bills: return to category without losing existing Debt Guide link',async({page}) => {
+  for(const width of [1366,390,320]){
+    await page.setViewportSize({width,height:850});
+    await page.goto('/one-place/money-bills.html');
+    const nav=page.getByRole('navigation',{name:'Money & Bills navigation'});
+    await expect(nav.getByRole('link',{name:'Debt & Creditor Guide'})).toHaveAttribute('href','debt-creditor-guide.html');
+    const back=nav.getByRole('link',{name:'← Money & Bills'});
+    await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
+    await expect(back).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+    await back.click();
+    await expect(page).toHaveURL(/index\.html\?area=Money%20%26%20Bills$/);
+    await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
+  }
+});
