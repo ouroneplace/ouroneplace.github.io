@@ -1,5 +1,5 @@
 const {test,expect}=require('@playwright/test');
-test('combined founder copy is clearly labeled unreleased and not a public deployment',async({page})=>{
+test('public work-in-progress copy is clearly labeled',async({page})=>{
  await page.goto('/');
  await expect(page.locator('header .flag')).toHaveText('FOUNDER DRAFT · NO PURCHASES');
  await expect(page.locator('header .flag')).not.toContainText('PUBLIC PREVIEW');
