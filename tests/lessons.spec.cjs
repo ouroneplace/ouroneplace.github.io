@@ -46,7 +46,7 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
-for (const lesson of ['01', '02']) {
+for (const lesson of ['01', '02', '03', '04']) {
   test(`lesson ${lesson}: approved video plays`, async ({ page }) => {
     await page.goto(`/lessons/${lesson}/`);
     const video = page.locator('video');
@@ -113,14 +113,19 @@ test('HL-119: unanswered Remember It cannot be bypassed with Forward', async ({ 
 });
 
 
-test('lesson 04: video-first five-step experience and usable fallback', async ({ page }) => {
+test('lesson 04: native video player matches previous lessons and keeps five stages', async ({ page }) => {
   await page.goto('/lessons/04/');
   await expect(page.getByRole('heading', { name: 'See It' })).toBeVisible();
-  await expect(page.locator('iframe.lesson-video-frame')).toHaveAttribute('src', 'https://share.descript.com/embed/f17fyNgzbZM');
-  await expect(page.getByRole('link', { name: 'Open Lesson 4 video in a new tab' })).toHaveAttribute('href', 'https://share.descript.com/view/f17fyNgzbZM');
+  const video = page.locator('video');
+  await expect(video.locator('source')).toHaveAttribute('src', '../../media/lesson04.mp4');
+  await expect.poll(() => video.evaluate(v => v.readyState)).toBeGreaterThanOrEqual(1);
+  const controls = page.getByRole('group', { name: 'Video playback and download options' });
+  await expect(controls.getByRole('button', { name: '← Back 10 seconds' })).toBeVisible();
+  await expect(controls.getByRole('button', { name: 'Forward 10 seconds →' })).toBeVisible();
+  await expect(controls.getByRole('slider', { name: 'Video position' })).toBeVisible();
+  await expect(controls.getByRole('link', { name: 'Download video (MP4)' })).toHaveAttribute('href', '../../media/lesson04.mp4');
   await page.getByRole('button', { name: 'Continue to Understand It' }).click();
   await expect(page.getByRole('heading', { name: 'Understand It' })).toBeVisible();
-  await expect(page.getByText('A boundary guides your choices.')).toBeVisible();
   await page.getByRole('button', { name: 'Continue to Practice' }).click();
   await expect(page.getByRole('button', { name: 'Next situation' })).toBeDisabled();
 });
