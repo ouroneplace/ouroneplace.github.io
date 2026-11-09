@@ -40,7 +40,9 @@ for (let lesson = 1; lesson <= 10; lesson++) {
     await expect(page.getByRole('button', { name: '← Back', exact: true })).toBeDisabled();
     await page.getByRole('button', { name: '⌂ Home', exact: true }).click();
     await expect(page).toHaveTitle(/ONE PLACE/);
-    await page.getByRole('link', { name: 'All lessons', exact: true }).click();
+    // v4: the homepage now presents Human Literacy as a first-class category card.
+    await page.locator('.grid > a.new-card').filter({ hasText: 'Human Literacy' }).click();
+    await expect(page).toHaveURL(/\/human-literacy\/$/);
     await expect(page.getByRole('link', { name: 'Start Lesson 10', exact: true })).toBeVisible();
     expect(errors).toEqual([]);
   });
