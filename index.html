@@ -270,6 +270,26 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
 @media(max-width:700px){.op4-header{min-height:112px;height:112px;padding-inline:45px}.op4-brand svg{width:71px;height:67px}.op4-brand{font-size:22px}.op4-menu{top:9px;right:0;font-size:12px}.op4-menu summary{padding:8px 12px}.op4-home{gap:10px}.op4-home .grid{gap:7px}.op4-home .tile{min-height:80px;padding:8px}.op4-home .tile strong{font-size:11px}.op4-home .tile .emoji{font-size:21px}.op4-hero h1{font-size:29px}.op4-hero p.desc{font-size:12px}.op4-home .section-title small{display:none}}
 @media(max-width:360px){.op4-brand{font-size:19px}.op4-brand svg{width:63px;height:62px}.op4-home .tile strong{font-size:10px}.op4-home .tile{min-height:72px}.op4-about article{padding:13px}}
 @media(prefers-reduced-motion:reduce){.op4-header::before{filter:none}}
+
+/* Founder-selected TEAL art from the existing TEAL experience, not a replacement drawing. */
+.op4-header{height:166px;min-height:166px;background:
+  radial-gradient(ellipse at 50% 30%,rgba(77,246,221,.24) 0%,rgba(30,131,139,.17) 32%,transparent 70%),
+  linear-gradient(90deg,#041923 0%,#104f5b 23%,#08363c 50%,#104f5b 77%,#041923 100%);
+  border-bottom:1px solid #65c7bb}
+.op4-header::before{inset:0 1% auto;height:98px;background:
+  radial-gradient(ellipse at center,rgba(165,255,244,.76) 0%,rgba(80,235,210,.4) 23%,rgba(20,174,171,.12) 55%,transparent 78%);
+  filter:blur(14px)}
+.op4-brand{color:#ebfffc;font-size:clamp(21px,2.15vw,31px);text-shadow:0 2px 14px #00252e;gap:3px;letter-spacing:.09em}
+.op4-brand .op4-name{margin-top:0}
+.op4-source-symbol{display:block;flex:none;width:117px;height:117px;border-radius:50%;
+  background:#023f4b url("teal/assets/earth-1536.webp") center 50% / 475px auto no-repeat;
+  box-shadow:0 0 18px 3px #93ffed6f,0 0 54px 16px #13d7ca49;
+  border:1px solid #bbfff6;overflow:hidden}
+.op4-brand:hover .op4-name{text-decoration-color:#a9fce8}
+.op4-menu summary{background:#f6fffc;color:#0a524e;border-color:#7ccabb}
+@media(max-width:1050px){.op4-header{height:143px;min-height:143px}.op4-source-symbol{width:92px;height:92px;background-size:380px auto}.op4-brand{font-size:23px}}
+@media(max-width:700px){.op4-header{height:121px;min-height:121px}.op4-source-symbol{width:79px;height:79px;background-size:325px auto}.op4-brand{font-size:19px}.op4-menu{top:7px}.op4-menu summary{padding:8px 11px}}
+@media(max-width:360px){.op4-source-symbol{width:70px;height:70px;background-size:295px auto}.op4-brand{font-size:17px}}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
@@ -278,9 +298,9 @@ const isAbout=params.has('about')||params.has('team');
 if(!isHome&&!isAbout)return;
 const main=document.getElementById('main'),shell=document.querySelector('.shell');
 if(!main||!shell)return;
-const logo='<svg viewBox="0 0 110 100" role="img" aria-label="TEAL symbol, three hearts within a circular emblem"><defs><radialGradient id="op4-glow"><stop offset="0%" stop-color="#ecfffa"/><stop offset="65%" stop-color="#4fbaa9"/><stop offset="100%" stop-color="#0b756e"/></radialGradient></defs><circle cx="55" cy="49" r="44" fill="url(#op4-glow)" stroke="#0b7f73" stroke-width="3"/><path d="M55 16 C71 27 81 25 81 46 C81 66 69 78 55 87 C41 78 29 66 29 46 C29 25 39 27 55 16Z" fill="#eafff7" fill-opacity=".9" stroke="#178477" stroke-width="2"/><path d="M55 48 C49 39 35 41 35 51 C35 59 47 65 55 71 C63 65 75 59 75 51 C75 41 61 39 55 48Z" fill="#0c514d" stroke="#83eee0" stroke-width="1.7"/><path d="M44 35 C40 28 30 29 30 36 C30 42 39 47 44 51 C49 47 58 42 58 36 C58 29 48 28 44 35Z" fill="#0c514d" stroke="#83eee0" stroke-width="1.7"/><path d="M66 35 C62 28 52 29 52 36 C52 42 61 47 66 51 C71 47 80 42 80 36 C80 29 70 28 66 35Z" fill="#0c514d" stroke="#83eee0" stroke-width="1.7"/><path d="M55 10 V0 M18 49 H4 M92 49 H106 M24 17 L14 8 M86 17 L96 8" stroke="#60dfc4" stroke-width="2.8" stroke-linecap="round"/></svg>';
+const logo='<span class="op4-source-symbol" role="img" aria-label="Original glowing three-heart TEAL emblem"></span>'
 const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['TEAL Philosophy','teal-philosophy'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ','faq'],['Questions & Answers','qa'],['Public Record','record'],['Version & Updates','version']];
-const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('');
+const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('')+'<a href="teal/#teal-101">TEAL-101 · All 12 Sections</a>';
 const priorHeader=shell.querySelector('header');
 if(priorHeader)priorHeader.outerHTML='<header class="op4-header"><a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a><details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details></header>';
 shell.querySelector('.learning-nav')?.remove();
@@ -302,7 +322,7 @@ if(isHome){
  ['vision','Our Vision','A world where every person is treated with dignity and has a meaningful opportunity to learn, grow and live with greater peace, love and happiness.'],
  ['mission','Our Mission','Help people understand everyday life, learn useful skills, practice thoughtful decisions, and find trustworthy resources—all through one welcoming place. Teach practical steps in plain language, with honesty about limitations and with respect for individual choice.'],
  ['dream','Our Dream','Earth: The Planet of Love. We are One. We envision a future with less preventable hunger, meaningful access to essential healthcare, and education that helps every child thrive. This is a direction to work toward, not a promise that one website can accomplish it alone.'],
- ['teal-philosophy','The TEAL Philosophy','TEAL means <strong>Trinity Equals Amazing Love</strong>. Its three foundations are <strong>Respect for Self • Respect for Others • Respect for Everything</strong>. <strong>Peace • Love • Happiness</strong> are aspirations, not a required sequence. Respect means acting with truth, compassion, responsibility, boundaries and repair. Continue learning, remain willing to change, and help make the world better where you reasonably can. <strong>Earth: The Planet of Love. We are One.</strong> This is a voluntary, nonpartisan and nonsectarian invitation. <a href="teal/">Read the public TEAL invitation</a>.'],
+ ['teal-philosophy','The TEAL Philosophy','TEAL means <strong>Trinity Equals Amazing Love</strong>. Its three foundations are <strong>Respect for Self • Respect for Others • Respect for Everything</strong>. <strong>Peace • Love • Happiness</strong> are aspirations, not a required sequence. Respect means acting with truth, compassion, responsibility, boundaries and repair. Continue learning, remain willing to change, and help make the world better where you reasonably can. <strong>Earth: The Planet of Love. We are One.</strong> This is a voluntary, nonpartisan and nonsectarian invitation. <a href="teal/">Read the public TEAL invitation</a>, or <a href="teal/#teal-101">explore the complete approved TEAL-101 philosophy (12 sections)</a>.'],
  ['founder','Founder Bio','Shawn is a U.S. Army veteran, former nursing assistant and radiologic technologist, husband, grandfather and family caregiver. His experiences across service, healthcare and family life shaped his belief that practical knowledge and respectful guidance should be easier to access. ONE PLACE is his founder-led, human-directed project.'],
  ['story','Our Story','ONE PLACE grew out of Human Literacy and TEAL: a desire to make learning useful in everyday life. It is being built progressively, beginning with interactive lessons and simple practical tools. The founder reviews each major direction and accepts responsibility for what is published.'],
  ['team','Our Team & AI','ONE PLACE has one human founder. ChatGPT and other AI tools assist with research, drafts, design, code and quality checks. AI does not own the mission, replace professionals, or validate its own work. Human decisions and accountable review remain essential.'],
@@ -312,7 +332,7 @@ if(isHome){
  ['version','Version & Last Update','<p class="op4-version"><strong>Homepage version 4.0.0</strong><br>Last content update: November 9, 2026 at 4:41 AM CST.<br>Public code and subsequent revisions: <a href="https://github.com/ouroneplace/ouroneplace.github.io/commits/main/" target="_blank" rel="noopener noreferrer">GitHub commit history</a>.</p><p>This is a homepage and About-information revision. Publication does not certify every lesson, resource or accessibility scenario.</p>']
  ];
  const jump=menuLinks.map(([name,id])=>'<a href="#'+id+'">'+name+'</a>').join('');
- main.innerHTML='<a class="back" href="index.html">← All life areas</a><h1>About ONE PLACE</h1><p class="op4-lead">A practical home for learning, understanding, caring and exploring.</p><nav class="op4-about-nav" aria-label="About topics">'+jump+'</nav>'+sections.map(([id,title,copy])=>'<article id="'+id+'"><h2>'+title+'</h2>'+(copy.startsWith('<details')||copy.startsWith('<p')?copy:'<p>'+copy+'</p>')+'</article>').join('')+'<p class="notice">ONE PLACE is an evolving public educational project. Existing TEAL-101 master drafting and private founder records are not published through this page.</p>';
+ main.innerHTML='<a class="back" href="index.html">← All life areas</a><h1>About ONE PLACE</h1><p class="op4-lead">A practical home for learning, understanding, caring and exploring.</p><nav class="op4-about-nav" aria-label="About topics">'+jump+'</nav>'+sections.map(([id,title,copy])=>'<article id="'+id+'"><h2>'+title+'</h2>'+(copy.startsWith('<details')||copy.startsWith('<p')?copy:'<p>'+copy+'</p>')+'</article>').join('')+'<p class="notice">ONE PLACE is an evolving public educational project. The approved TEAL-101 philosophy is available publicly in the TEAL section; private source records and archival appendices remain separate.</p>';
  if(location.hash)setTimeout(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView(),0);
 }
 })();
