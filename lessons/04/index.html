@@ -21,16 +21,17 @@ h1,h2,.lesson-heading{overflow-wrap:anywhere}
 .choice{font:inherit;color:inherit;text-align:left;background:#fff;border:2px solid #cbe5df;border-radius:18px;padding:18px;line-height:1.55;cursor:pointer;display:block;width:100%;margin-top:12px}.choice.selected{border-color:#087f78;background:#effaf7}.choice[disabled]{cursor:default}.button{display:block;width:100%;margin-top:22px;border:0;border-radius:16px;padding:17px;background:#087f78;color:white;font:inherit;font-weight:750;cursor:pointer}.feedback{border-left:4px solid #087f78;background:#eff8f5;padding:16px 18px;border-radius:12px;margin-top:22px;line-height:1.6}.feedback strong{display:block;font-size:1.08rem;margin-bottom:8px}.question{font-weight:650}.panel{margin-top:0}.brand{margin-bottom:24px}.progress>div{height:100%;background:#087f78}.choice:focus-visible,.button:focus-visible{outline:3px solid #1a8079;outline-offset:3px}@media(max-width:430px){.choice{padding:16px}}
 .explore{color:#087f78;font-weight:700;font-size:.88rem;margin-top:16px}.choice:focus-visible{outline:3px solid #087f78;outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed}.feedback p{margin:8px 0}.feedback strong{display:block;margin-bottom:8px}.lesson-heading{font-weight:800;font-size:clamp(1rem,3.8vw,1.18rem);line-height:1.45;color:#18353a;margin:-12px 0 22px;padding-bottom:15px;border-bottom:1px solid #cce6df}button:disabled{opacity:.48;cursor:not-allowed}.lesson-heading{display:flex!important;flex-direction:column;gap:5px;visibility:visible!important;opacity:1!important}.lesson-heading span{color:#087f78;font-size:.9rem;letter-spacing:.05em}.lesson-heading strong{font-size:clamp(1.1rem,4.2vw,1.35rem)}.lesson-navigation{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px}.lesson-navigation .action{flex:1 1 120px;padding:11px 12px;font-size:.95rem}.lesson-navigation .action:disabled{opacity:.4;cursor:not-allowed}
 
-/* Lesson 04 See It: same portrait video stage as Lessons 1–3. */
+/* Lesson 4 See It uses the same visual stage as Lesson 2. */
 .video-lesson{margin:22px 0 28px;padding:20px 16px;border:1px solid #cbe5df;border-radius:20px;background:#f4fbf9;text-align:center}
-.video-lesson .lesson-video-frame{display:block;width:min(100%,360px);max-width:100%;aspect-ratio:9/16;height:auto;margin:auto;border:0;border-radius:14px;background:#0c2730}
-.video-lesson a{display:inline-block;margin-top:14px;color:#075d54;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.video-lesson[hidden]{display:none!important}
+.video-lesson video{display:block;width:min(100%,360px);max-width:100%;height:auto;aspect-ratio:9/16;object-fit:contain;margin:auto;border-radius:14px;background:#0c2730}
+.video-lesson video[hidden]{display:none}
 .video-lesson .muted{font-size:.9rem}
 </style>
 <link rel="stylesheet" href="../../shared/lesson-record.css">
 <link rel="canonical" href="https://ouroneplace.github.io/lessons/04/">
 </head>
-<body><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><header class="lesson-heading" aria-label="Lesson number and title"><span>LESSON 04</span><strong>Understanding Boundaries</strong></header><div id="app" aria-live="polite"></div><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
+<body><script src="../../shared/lesson-video-controls.js"></script><main><div class="brand">HUMAN LITERACY · INTERACTIVE LESSON</div><nav class="op104-global-lesson-nav" aria-label="One Place and lessons"><a href="../../index.html">One Place Home</a><a href="../../human-literacy/index.html#lessons">All Lessons</a></nav><header class="lesson-heading" aria-label="Lesson number and title"><span>LESSON 04</span><strong>Understanding Boundaries</strong></header><div id="app" aria-live="polite"></div><footer>Educational practice, not a diagnosis or individualized professional advice. Your choices stay on this device; no account required.</footer></main>
 <script>
 'use strict';
 const scenarios=[
@@ -79,15 +80,23 @@ function render(){app.replaceChildren();navigation();
 if(stage==='intro'){
 element('h1','','See It');
 const videoEntry=element('section','video-lesson');
-const frame=element('iframe','lesson-video-frame',undefined,videoEntry);
-frame.setAttribute('title','Understanding Boundaries — Lesson 4 video');
-frame.src='https://share.descript.com/embed/f17fyNgzbZM';
-frame.setAttribute('loading','eager');
-frame.setAttribute('allow','fullscreen; picture-in-picture; encrypted-media');
-frame.setAttribute('allowfullscreen','');
-const fallback=element('a','','Open Lesson 4 video in a new tab',videoEntry);
-fallback.href='https://share.descript.com/view/f17fyNgzbZM';
-fallback.target='_blank';fallback.rel='noopener noreferrer';
+videoEntry.hidden=true;
+const player=element('video','',undefined,videoEntry);
+player.controls=true;player.playsInline=true;player.preload='metadata';
+player.setAttribute('aria-label','Understanding Boundaries — Lesson 4 video');
+const source=document.createElement('source');
+source.src='../../media/lesson04.mp4';
+source.type='video/mp4';
+player.append(source);
+player.addEventListener('loadedmetadata',()=>{
+  if(!player.isConnected)return;
+  videoEntry.hidden=false;
+  if(!videoEntry.dataset.controlsAdded && typeof window.attachLessonVideoControls==='function'){
+    videoEntry.dataset.controlsAdded='true';
+    window.attachLessonVideoControls(videoEntry,player,source.src);
+  }
+},{once:true});
+player.addEventListener('error',()=>{videoEntry.hidden=true;});
 action('Continue to Understand It',()=>{savePage();stage='understand';index=0;resetSelection();render();window.scrollTo(0,0)});
 return}
 if(stage==='understand'){
