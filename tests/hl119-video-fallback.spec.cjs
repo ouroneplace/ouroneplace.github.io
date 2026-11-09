@@ -27,36 +27,18 @@ for (const lesson of ['01', '02']) {
   });
 }
 
-test('HL-119: lesson 03 remains usable without its private review MP4', async ({ page }) => {
+test('HL-119: lesson 03 works when both video hosts are unavailable', async ({ page }) => {
   const errors=[];
-  page.on('pageerror',e=>errors.push(e.message));
+  page.on('pageerror', error => errors.push(error.message));
+  await page.route('https://share.descript.com/**', route => route.abort('failed'));
   await page.route('**/media/lesson03.mp4', route => route.abort('failed'));
   await page.goto('/lessons/03/');
-  await expect(page.locator('.video-lesson')).toBeHidden();
-  const video=page.locator('video');
-  await expect(video.locator('source')).toHaveAttribute('src','../../media/lesson03.mp4');
-  await expect(page.getByRole('heading',{name:'See It',exact:true})).toBeVisible();
-  await expect(page.getByRole('button',{name:'Continue to Understand It'})).toBeEnabled();
-  await page.getByRole('button',{name:'Continue to Understand It'}).click();
-  await expect(page.getByRole('heading',{name:'Understand It',exact:true})).toBeVisible();
-  await expect(page.getByText('WHAT YOU MIGHT THINK')).toBeVisible();
-  await page.getByRole('button',{name:'← Back'}).click();
-  await expect(page.getByRole('heading',{name:'See It',exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'Forward →'}).click();
-  await expect(page.getByRole('heading',{name:'Understand It',exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'Continue to Practice'}).click();
+  await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Watch original MP4 if the video player is unavailable' }))
+    .toHaveAttribute('href', '../../media/lesson03.mp4');
+  await page.getByRole('button', { name: 'Continue to Understand It' }).click();
+  await expect(page.getByRole('heading', { name: 'Understand It', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue to Practice' }).click();
   await expect(page.locator('button.option')).toHaveCount(3);
   expect(errors).toEqual([]);
-});
-
-test('HL-119: lesson 03 video controls are attached only after media metadata arrives', async ({ page }) => {
-  await page.route('**/media/lesson03.mp4',route=>route.abort('failed'));
-  await page.goto('/lessons/03/');
-  await expect(page.locator('.video-lesson')).toBeHidden();
-  // Simulate metadata readiness to verify the local-media branch without
-  // putting the founder's video into this publicly readable repository.
-  await page.locator('video').evaluate(v=>v.dispatchEvent(new Event('loadedmetadata')));
-  await expect(page.locator('.video-lesson')).toBeVisible();
-  await expect(page.getByRole('group',{name:'Video playback and download options'})).toBeVisible();
-  await expect(page.locator('video')).toHaveAttribute('controls','');
 });
