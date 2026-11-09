@@ -26,9 +26,12 @@ fs.mkdirSync(output,{recursive:true});
     if(Math.max(layout.document,layout.body)>layout.width+1){await page.screenshot({path:output+'/overflow-'+width+'.png',fullPage:true});throw new Error('Horizontal overflow at '+page.url()+' '+JSON.stringify(layout));}
    }
    await goto('/');assert.match(await page.title(),/^ONE PLACE/);
-   assert.equal(await page.locator('.grid > a.tile').count(),18);await reflow();
+   assert.equal(await page.locator('.grid > a.tile').count(),21,'18 original areas + 3 learning cards');
+   assert.equal(await page.locator('.grid > .tile.pending').count(),3,'3 intentionally inactive Pending cards');
+   await reflow();
    await page.screenshot({path:output+'/one-place-'+width+'.png',fullPage:true});
-   const areas=await page.locator('.grid > a.tile').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
+   const areas=await page.locator('.grid > a.tile[href*="?area="]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
+   assert.equal(areas.length,18,'18 original life areas');
    const solutions=[];
    for(const route of areas){await goto('/'+route);assert.equal(await page.locator('.offers > a.offer').count(),4);solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));await reflow();}
    assert.equal(new Set(solutions).size,72);
@@ -39,8 +42,36 @@ fs.mkdirSync(output,{recursive:true});
     await page.getByRole('link',{name:'One Place Home',exact:true}).click();
     await visible(page.getByRole('heading',{name:'Explore every part of life',exact:true}));
    }
-   for(const [name,path] of [['Life Simulator','/simulator/01/'],['TEAL foundation (draft)','/teal/'],['Learning home','/human-literacy/'],['Money & Bills','/one-place/money-bills.html'],['Family & Caregiving','/one-place/family-handoff.html']]){
-    await goto('/');await page.getByRole('navigation',{name:'One Place navigation'}).getByRole('link',{name,exact:true}).click();await visible(page.locator('h1').first());assert.equal(new URL(page.url()).pathname,path);await reflow();await page.getByRole('link',{name:/One Place Home/i}).first().click();await visible(page.getByRole('heading',{name:'Explore every part of life'}));
+   // v4.1 uses first-class homepage category cards, not the retired navigation bar.
+   for(const [name,path] of [['Life Simulator','/simulator/01/'],['Human Literacy','/human-literacy/'],['Our Humanity','/one-place/our-humanity.html']]){
+    await goto('/');
+    await page.locator('.grid > a.new-card').filter({hasText:name}).click();
+    await visible(page.locator('h1').first());
+    assert.equal(new URL(page.url()).pathname,path);
+    await reflow();
+    await page.getByRole('link',{name:/One Place Home/i}).first().click();
+    await visible(page.getByRole('heading',{name:'Explore every part of life'}));
+   }
+   // The complete TEAL philosophy is reached from the new About dropdown.
+   await goto('/');
+   await page.locator('.op4-menu summary').click();
+   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:/TEAL-101/}).click();
+   await visible(page.locator('#teal-101'));
+   assert.equal(new URL(page.url()).pathname,'/teal/');
+   assert.equal(await page.locator('#teal-101 details.teal101-chapter').count(),12);
+   await reflow();
+   await page.getByRole('link',{name:/One Place Home/i}).first().click();
+   await visible(page.getByRole('heading',{name:'Explore every part of life'}));
+   // Preserve smoke coverage of the two live tools via their area entry cards.
+   for(const [index,selector,path] of [[0,'[data-money-pilot-link]','/one-place/money-bills.html'],[2,'[data-care-pilot-link]','/one-place/family-handoff.html']]){
+    await goto('/');
+    await page.locator('.grid > a.tile[href*="?area="]').nth(index).click();
+    await page.locator(selector).click();
+    await visible(page.locator('h1').first());
+    assert.equal(new URL(page.url()).pathname,path);
+    await reflow();
+    await page.getByRole('link',{name:/One Place Home/i}).first().click();
+    await visible(page.getByRole('heading',{name:'Explore every part of life'}));
    }
    await goto('/simulator/01/');await page.locator('#yourReply').fill('Please leave me alone.');await page.locator('#send').click();await visible(page.locator('#completionTitle'));
    await goto('/teal/');assert.equal(await page.getByRole('link',{name:'GitHub issue tracker',exact:true}).getAttribute('href'),'https://github.com/ouroneplace/ouroneplace.github.io/issues');const share=await page.locator('#invitation-text').inputValue();assert.ok(share.includes(origin+'/teal/'));assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'),origin+'/teal/');
@@ -48,7 +79,7 @@ fs.mkdirSync(output,{recursive:true});
    const download=page.waitForEvent('download');await page.locator('#exportTop').click();await (await download).saveAs(output+'/fictional-money-plan-'+width+'.txt');
    await goto('/one-place/family-handoff.html');await page.locator('#sample').click();await page.getByRole('tab',{name:'1. Household',exact:true}).click();await page.locator('#person').fill('Fictional household');await reflow();
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(outbound,[]);assert.deepEqual(writes,[]);
-   result.widths.push({width,areas:18,solutions:72,lessons:10,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',outbound_requests:0,server_writes:0});
+   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',outbound_requests:0,server_writes:0});
    await context.close();
   }
   const context=await browser.newContext();const request=context.request;
