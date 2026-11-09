@@ -138,3 +138,12 @@ for (const prefix of ['Human-literacy-online', 'One-Place']) {
     await expect(page).toHaveURL(new RegExp(mount + 'one-place/money-bills\\.html$'));
   });
 }
+
+
+test('ONE PLACE public Our Story wording matches the public website', async ({page}) => {
+  await page.goto('/index.html?team');
+  const notice=page.locator('main .notice');
+  await expect(notice).toContainText('Public preview.');
+  await expect(notice).not.toContainText('Founder-only preview');
+  await expect(notice).toContainText('No purchase or booking is possible.');
+});
