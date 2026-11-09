@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - founder-preview
   pull_request:
   workflow_dispatch:
 
