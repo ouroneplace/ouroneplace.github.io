@@ -97,8 +97,8 @@ test('All lessons: navigation explains itself without redundant text', async ({ 
   }
 });
 
-test('Lessons 01–09: every See It player has exactly one standard external video link', async ({ page }) => {
-  for (let n = 1; n <= 9; n++) {
+test('Lessons 01–10: every See It player has exactly one standard external video link', async ({ page }) => {
+  for (let n = 1; n <= 10; n++) {
     const lesson = String(n).padStart(2, '0');
     await page.goto('/lessons/' + lesson + '/');
     await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
@@ -117,7 +117,8 @@ const embeddedVideos = [
   { lesson: '06', share: 'hEnvP1RZFon', mp4: null },
   { lesson: '07', share: 'LfvHoksdBOl', mp4: null },
   { lesson: '08', share: 'LhyDGOcpa2v', mp4: null },
-  { lesson: '09', share: 'SA7a2B7Yo0l', mp4: null }
+  { lesson: '09', share: 'SA7a2B7Yo0l', mp4: null },
+  { lesson: '10', share: '6RV8mLe8v2W', mp4: null }
 ];
 for (const { lesson, share, mp4 } of embeddedVideos) {
   test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
