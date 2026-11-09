@@ -12,7 +12,7 @@ test('OP-104 v4: learning, TEAL and simulator remain navigable',async({page})=>{
  await expect(page.locator('.grid > a.new-card')).toHaveCount(3);
  await expect(page.locator('.grid > .tile.pending')).toHaveCount(3);
  await page.locator('.grid > a.tile').first().click();
- await expect(page.getByRole('heading',{name:'Money & Bills'})).toBeVisible();
+ await expect(page.getByRole('heading',{level:1,name:'Money & Bills',exact:true})).toBeVisible();
  await page.getByRole('link',{name:'One Place home',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Explore every part of life'})).toBeVisible();
  await page.locator('.op4-menu summary').click();
