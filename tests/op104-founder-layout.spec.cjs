@@ -63,15 +63,16 @@ test('TEAL entrance, message and simple reading offer One Place exit',async({pag
   await expect(page.locator('.reading-header').getByRole('link',{name:'One Place Home'})).toBeVisible();
 });
 
-test('OP-104 compact desktop grouped learning links retain 44px targets',async({page})=>{
-  await page.setViewportSize({width:1366,height:768});
-  await page.goto('/one-place/');
-  const nav=page.getByRole('navigation',{name:'One Place navigation'});
-  const group=nav.getByRole('group',{name:'Human Literacy: learning'});
-  await expect(group).toBeVisible();
-  for(const link of await nav.getByRole('link').all()){
-    const box=await link.boundingBox();
-    expect(box, 'Every learning or TEAL link remains visible').not.toBeNull();
-    expect(box.height, 'Readable 44px tap target').toBeGreaterThanOrEqual(44);
-  }
+test('OP-104 v4: compact desktop About and category controls retain 44px targets',async({page})=>{
+ await page.setViewportSize({width:1366,height:768});
+ await page.goto('/one-place/');
+ const about=page.locator('.op4-menu summary');
+ await expect(about).toBeVisible();
+ const box=await about.boundingBox();
+ expect(box.height).toBeGreaterThanOrEqual(44);
+ for(const link of await page.locator('.grid > a.tile').all()){
+  const size=await link.boundingBox();
+  expect(size).not.toBeNull();
+  expect(size.height).toBeGreaterThanOrEqual(44);
+ }
 });

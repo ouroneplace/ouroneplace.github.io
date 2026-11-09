@@ -28,12 +28,12 @@ test('Housing & Utilities: old four service URLs resolve to their new working vi
   }
 });
 
-test('Housing & Utilities: the homepage search finds the implemented maintenance planner',async({page})=>{
-  await page.goto('/index.html');
-  await page.getByRole('searchbox').fill('Home Maintenance Planner');
-  await expect(page.getByRole('link',{name:/Home Maintenance Planner/})).toBeVisible();
-  await page.getByRole('button',{name:'Find help'}).click();
-  await expect(page).toHaveURL(/\/one-place\/housing-utilities\.html#maintenance$/);
+test('Housing & Utilities: homepage category finds the implemented maintenance planner',async({page})=>{
+ await page.goto('/index.html');
+ await page.locator('.grid > a.tile').nth(1).click();
+ await expect(page.getByRole('heading',{level:1,name:'Housing & Utilities'})).toBeVisible();
+ await page.getByRole('link',{name:/Home Maintenance Planner/}).click();
+ await expect(page).toHaveURL(/\/one-place\/housing-utilities\.html#maintenance$/);
 });
 
 test('Housing & Utilities: five situations show distinct guidance, sources, and uncertainty',async({page})=>{

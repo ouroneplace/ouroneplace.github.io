@@ -1,30 +1,25 @@
 const { test, expect } = require('@playwright/test');
 const path = '/one-place/our-humanity.html';
 
-test('Our Humanity has a visible first-class navigation menu entry on the draft homepage',async({page})=>{
-  await page.goto('/index.html');
-  const nav=page.getByRole('navigation',{name:'One Place navigation'});
-  const link=nav.getByRole('link',{name:'Our Humanity',exact:true});
-  await expect(link).toBeVisible();
-  await expect(link).toHaveAttribute('href','one-place/our-humanity.html');
-  await link.click();
-  await expect(page).toHaveURL(/\/one-place\/our-humanity\.html$/);
-  await expect(page.getByRole('heading',{name:/Come as you are/})).toBeVisible();
+test('Our Humanity has a visible first-class category card on v4 home',async({page})=>{
+ await page.goto('/index.html');
+ const link=page.locator('.grid > a.new-card').filter({hasText:'Our Humanity'});
+ await expect(link).toBeVisible();
+ await expect(link).toHaveAttribute('href','one-place/our-humanity.html');
+ await link.click();
+ await expect(page).toHaveURL(/\/one-place\/our-humanity\.html$/);
+ await expect(page.getByRole('heading',{name:/Come as you are/})).toBeVisible();
 });
-
-test('Our Humanity: entry from One Place home and return navigation', async ({page}) => {
-  const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/index.html');
-  const entry = page.getByRole('link', { name: /Discover our humanity/i });
-  await expect(entry).toBeVisible();
-  await entry.click();
-  await expect(page).toHaveURL(/\/one-place\/our-humanity\.html$/);
-  await expect(page.getByRole('heading', { name: /Come as you are/i })).toBeVisible();
-  await expect(page.getByRole('navigation', {name:'Our Humanity navigation'})).toBeVisible();
-  await page.getByRole('link',{name:'Return to One Place Home'}).click();
-  await expect(page).toHaveURL(/\/index\.html$/);
-  expect(errors).toEqual([]);
+test('Our Humanity: entry from v4 category card and return navigation',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('/index.html');
+ await page.locator('.grid > a.new-card').filter({hasText:'Our Humanity'}).click();
+ await expect(page).toHaveURL(/\/one-place\/our-humanity\.html$/);
+ await expect(page.getByRole('heading',{name:/Come as you are/i})).toBeVisible();
+ await expect(page.getByRole('navigation',{name:'Our Humanity navigation'})).toBeVisible();
+ await page.getByRole('link',{name:'Return to One Place Home'}).click();
+ await expect(page).toHaveURL(/\/index\.html$/);
+ expect(errors).toEqual([]);
 });
 
 test('Our Humanity: directory links use explicit HTML files for extracted previews', async ({page}) => {
