@@ -23,7 +23,10 @@ fs.mkdirSync(output,{recursive:true});
     for(let attempt=1;attempt<=3;attempt++){
      const r=await page.goto(origin+path,{waitUntil:'load'});
      status=r?.status()||0;finalUrl=page.url();
-     if(r?.ok()){await visible(page.locator('h1').first());return;}
+     if(r?.ok() || (!r && page.url()===origin+path)){
+      // Playwright returns null for valid same-document hash navigations.
+      await visible(page.locator('h1').first());return;
+     }
      if(attempt<3)await new Promise(resolve=>setTimeout(resolve,400*attempt));
     }
     throw new Error('Live route unsuccessful: '+path+' HTTP '+status+' final URL '+finalUrl);
