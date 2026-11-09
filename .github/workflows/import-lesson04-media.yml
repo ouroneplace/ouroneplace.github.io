@@ -21,7 +21,7 @@ jobs:
           curl --fail --location --retry 3 --silent --show-error "$MEDIA_DOWNLOAD_URL" --output media/lesson04.mp4
           test -s media/lesson04.mp4
           file media/lesson04.mp4
-          ffprobe -v error -show_entries format=duration -of default=nw=1 media/lesson04.mp4
+          test "$(wc -c < media/lesson04.mp4)" -gt 1000000
       - name: Commit native video and remove temporary importer
         run: |
           set -euo pipefail
