@@ -46,6 +46,46 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
+test('Lessons 01–04: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
+  for (const width of [1280, 390, 320]) {
+    await page.setViewportSize({ width, height: 850 });
+    for (const lesson of ['01', '02', '03', '04']) {
+      await page.goto('/lessons/' + lesson + '/');
+      const layout = await page.evaluate(() => {
+        const lineLeft = (node) => {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          return range.getBoundingClientRect().left;
+        };
+        const brand = document.querySelector('.brand');
+        const title = document.querySelector('.lesson-heading strong');
+        const heading = document.querySelector('.lesson-heading');
+        const seeIt = document.querySelector('#app h1');
+        const frame = document.querySelector('.lesson-video-frame');
+        const section = document.querySelector('.video-lesson');
+        const close = (a, b) => Math.abs(a - b) <= 2;
+        return {
+          brandLeft: close(lineLeft(brand), brand.getBoundingClientRect().left),
+          titleLeft: close(lineLeft(title), heading.getBoundingClientRect().left),
+          seeItLeft: close(lineLeft(seeIt), seeIt.getBoundingClientRect().left),
+          playerCentered: close(
+            frame.getBoundingClientRect().left + frame.getBoundingClientRect().width / 2,
+            section.getBoundingClientRect().left + section.getBoundingClientRect().width / 2
+          ),
+          noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth
+        };
+      });
+      expect(layout, `Lesson ${lesson}, viewport ${width}px`).toEqual({
+        brandLeft: true,
+        titleLeft: true,
+        seeItLeft: true,
+        playerCentered: true,
+        noHorizontalOverflow: true
+      });
+    }
+  }
+});
+
 const embeddedVideos = [
   { lesson: '01', share: 'jmGClFW0etJ', mp4: 'Human_Literacy_Lesson_01_FINAL_REVIEW_114s.mp4' },
   { lesson: '02', share: '8GyMmS5Oixd', mp4: 'lesson02.mp4' },
