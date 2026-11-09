@@ -2,11 +2,19 @@
 
 The founder explicitly chose **ONE PLACE public website as the always-current version**, without a separate preview or ZIP-review process. This supersedes the earlier founder-preview publishing plan below. Keep GitHub Pages publishing from protected `main`, not `founder-preview`. Implement changes on a working branch, run browser checks and merge via the required pull request to `main`; GitHub Pages publishes after the merge. No formal prepublication founder preview is required for ordinary content changes. Postpublication founder review and corrections occur at the same public URL: https://ouroneplace.github.io/.
 
-Retain branch protection and automated regression checks; public visibility does not remove security, privacy, or safety obligations. Do not publish private financial/medical/family information, passwords, or licensed content. Label incomplete offerings accurately; do not imply deployed features are functional if they're not. Get specific approval for money, external accounts, or significant commitments. Approved Lesson 03 video file still requires a single direct upload to the repository (currently local/ChatGPT file only); keep video section hidden if file missing to avoid broken playback. Earlier sections below describe the superseded staging proposal only.
+Retain branch protection and automated regression checks; public visibility does not remove security, privacy, or safety obligations. Do not publish private financial/medical/family information, passwords, or licensed content. Label incomplete offerings accurately; do not imply deployed features are functional if they're not. Get specific approval for money, external accounts, or significant commitments. As verified November 9, all ten approved lessons use published Descript embeds and are live; the original local MP4 files for Lessons 01–03 are in the repository. Do not treat the earlier missing-Lesson-03-file or former local-player workflow as current. Descript availability and accessible media alternatives remain distinct quality checks. Earlier sections below describe the superseded staging proposal only.
+
+## November 9 source-of-truth checkpoint
+
+- Current public workflow: working branch → PR → browser regression success → squash merge to `main` → GitHub Pages deployment verification. No ZIP or separate founder preview needed for ordinary approved updates.
+- Ten live video lessons now share the founder-approved centered heading and Descript player format; each has independent See It and Understand It stages plus Practice, Remember It, Results and Live It. This supersedes the old notes below about Lesson 03 being unavailable.
+- [OP-104 / HL-119 current founder acceptance guide](../review/HL-119-founder-acceptance.md) specifies representative real-device, keyboard, playback and accessibility checks. The prior review's local clone commands and 10-second MP4 controls are historical only.
+- Published baseline at this checkpoint: `main` `760e4e28d5c5f12e1663f6eec3b44493d4a8d358`, [Pages success](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/42589725553), [post-merge browser suite success](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/42589727160). Verify new deployments again rather than using this as a permanent release SHA.
+- Ordinary live updates remain authorized; financial expenditure, private information, outside services and substantial new functionality require appropriate separate decision gates. Open draft PRs #3–#5 remain unmerged and are not blanket-release approvals.
 
 ---
 
-# ONE PLACE — Always-current Founder Preview
+# HISTORICAL ONLY — ONE PLACE Always-current Founder Preview (superseded)
 
 **Source branch:** `founder-preview` (public repository). **Intended site URL after GitHub Pages configuration:** https://ouroneplace.github.io/
 
