@@ -76,9 +76,7 @@ frame.setAttribute('allowfullscreen','');
 const fallback=element('a','','Open Lesson 1 video in a new tab',videoEntry);
 fallback.href='https://share.descript.com/view/jmGClFW0etJ';
 fallback.target='_blank';fallback.rel='noopener noreferrer';
-const original=element('a','original-file','Watch original MP4 if the video player is unavailable',videoEntry);
-original.href='../../media/Human_Literacy_Lesson_01_FINAL_REVIEW_114s.mp4';
-original.target='_blank';original.rel='noopener noreferrer';
+/* Original MP4 retained in repository as a backup; only the standard video link is shown. */
 action('Continue to Understand It',()=>{savePage();stage='understand';index=0;resetSelection();render();window.scrollTo(0,0)});
 return}
 if(stage==='understand'){

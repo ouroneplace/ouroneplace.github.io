@@ -46,10 +46,10 @@ for (let lesson = 1; lesson <= 10; lesson++) {
   });
 }
 
-test('Lessons 01–06: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
+test('Lessons 01–07: headings align left while portrait players stay centered on desktop and mobile', async ({ page }) => {
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 850 });
-    for (const lesson of ['01', '02', '03', '04', '05', '06']) {
+    for (const lesson of ['01', '02', '03', '04', '05', '06', '07']) {
       await page.goto('/lessons/' + lesson + '/');
       const layout = await page.evaluate(() => {
         const lineLeft = (node) => {
@@ -86,13 +86,36 @@ test('Lessons 01–06: headings align left while portrait players stay centered 
   }
 });
 
+test('All lessons: navigation explains itself without redundant text', async ({ page }) => {
+  for (let n = 1; n <= 10; n++) {
+    const lesson = String(n).padStart(2, '0');
+    await page.goto('/lessons/' + lesson + '/');
+    await expect(page.getByRole('button', { name: '← Back', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '⌂ Home', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Forward →', exact: true })).toBeVisible();
+    await expect(page.getByText('Navigation lets you review or skip pages.', { exact: false })).toHaveCount(0);
+  }
+});
+
+test('Lessons 01–07: every See It player has exactly one standard external video link', async ({ page }) => {
+  for (let n = 1; n <= 7; n++) {
+    const lesson = String(n).padStart(2, '0');
+    await page.goto('/lessons/' + lesson + '/');
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
+    await expect(page.locator('.video-lesson a')).toHaveCount(1);
+    await expect(page.locator('.video-lesson a')).toHaveText('Open Lesson ' + n + ' video in a new tab');
+    await expect(page.getByText('Watch original MP4 if the video player is unavailable')).toHaveCount(0);
+  }
+});
+
 const embeddedVideos = [
-  { lesson: '01', share: 'jmGClFW0etJ', mp4: 'Human_Literacy_Lesson_01_FINAL_REVIEW_114s.mp4' },
-  { lesson: '02', share: '8GyMmS5Oixd', mp4: 'lesson02.mp4' },
-  { lesson: '03', share: 'OVaHB0aypFw', mp4: 'lesson03.mp4' },
+  { lesson: '01', share: 'jmGClFW0etJ', mp4: null },
+  { lesson: '02', share: '8GyMmS5Oixd', mp4: null },
+  { lesson: '03', share: 'OVaHB0aypFw', mp4: null },
   { lesson: '04', share: 'f17fyNgzbZM', mp4: null },
   { lesson: '05', share: 'CZsVq0YNMTq', mp4: null },
-  { lesson: '06', share: 'hEnvP1RZFon', mp4: null }
+  { lesson: '06', share: 'hEnvP1RZFon', mp4: null },
+  { lesson: '07', share: 'LfvHoksdBOl', mp4: null }
 ];
 for (const { lesson, share, mp4 } of embeddedVideos) {
   test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
