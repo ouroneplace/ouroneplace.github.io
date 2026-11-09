@@ -1,7 +1,17 @@
 name: Site and browser regression tests
 on:
   push:
+    branches:
+      - main
+      - founder-preview
   pull_request:
+  workflow_dispatch:
+
+# An open PR needs one run, not both a branch-push run and a PR run.
+# When a new commit arrives, discard older in-progress runs for that PR.
+concurrency:
+  group: site-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   browser-tests:
