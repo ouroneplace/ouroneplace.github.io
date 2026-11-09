@@ -111,3 +111,16 @@ test('HL-119: unanswered Remember It cannot be bypassed with Forward', async ({ 
   await expect(page.locator('h1')).toContainText('Take the skill into real life');
   expect(errors).toEqual([]);
 });
+
+
+test('lesson 04: video-first five-step experience and usable fallback', async ({ page }) => {
+  await page.goto('/lessons/04/');
+  await expect(page.getByRole('heading', { name: 'See It' })).toBeVisible();
+  await expect(page.locator('iframe.lesson-video-frame')).toHaveAttribute('src', 'https://share.descript.com/embed/f17fyNgzbZM');
+  await expect(page.getByRole('link', { name: 'Open Lesson 4 video in a new tab' })).toHaveAttribute('href', 'https://share.descript.com/view/f17fyNgzbZM');
+  await page.getByRole('button', { name: 'Continue to Understand It' }).click();
+  await expect(page.getByRole('heading', { name: 'Understand It' })).toBeVisible();
+  await expect(page.getByText('A boundary guides your choices.')).toBeVisible();
+  await page.getByRole('button', { name: 'Continue to Practice' }).click();
+  await expect(page.getByRole('button', { name: 'Next situation' })).toBeDisabled();
+});
