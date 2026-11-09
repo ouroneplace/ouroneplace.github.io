@@ -47,6 +47,9 @@ for (let lesson = 1; lesson <= 10; lesson++) {
 }
 
 test('Lessons 01–10: centered headers and stage titles, centered video players, responsive widths', async ({ page }) => {
+  test.setTimeout(120000); // Thirty viewport/lesson combinations need more than the default 30 seconds.
+  // Geometry checks do not need a networked video to load; prevent slow third-party embeds.
+  await page.route('https://share.descript.com/**', route => route.abort('failed'));
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 850 });
     for (let n = 1; n <= 10; n++) {
