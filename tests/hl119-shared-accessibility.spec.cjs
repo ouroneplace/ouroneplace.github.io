@@ -17,13 +17,14 @@ for (let lesson = 1; lesson <= 10; lesson++) {
     };
 
     await reflow('entry');
-    // Lessons 03-10 move directly from See It to Practice; 01-02 include Understand It.
-    for (let step = 0; step < 3 && (await page.locator('button.option').count()) === 0; step++) {
-      const advance = page.locator('#app > button.action').first();
-      await expect(advance).toBeEnabled();
-      await advance.click();
-      await reflow('before Practice It, step ' + (step + 1));
-    }
+    // The approved five-stage experience is the same in every lesson.
+    // Test both distinct steps instead of allowing a missing Understand It to pass.
+    await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Continue to Understand It', exact: true }).click();
+    await reflow('Understand It');
+    await expect(page.getByRole('heading', { name: 'Understand It', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Continue to Practice', exact: true }).click();
+    await reflow('Practice It entry');
     await expect(page.locator('button.option')).toHaveCount(3);
 
     for (let scene = 0; scene < 3; scene++) {
