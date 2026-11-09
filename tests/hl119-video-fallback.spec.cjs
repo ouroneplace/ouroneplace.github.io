@@ -35,8 +35,16 @@ test('HL-119: lesson 03 remains usable without its private review MP4', async ({
   await expect(page.locator('.video-lesson')).toBeHidden();
   const video=page.locator('video');
   await expect(video.locator('source')).toHaveAttribute('src','../../media/lesson03.mp4');
-  await expect(page.getByRole('heading',{name:'Notice the feeling before choosing'})).toBeVisible();
-  await page.getByRole('button',{name:'Start interactive practice'}).click();
+  await expect(page.getByRole('heading',{name:'See It',exact:true})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Continue to Understand It'})).toBeEnabled();
+  await page.getByRole('button',{name:'Continue to Understand It'}).click();
+  await expect(page.getByRole('heading',{name:'Understand It',exact:true})).toBeVisible();
+  await expect(page.getByText('WHAT YOU MIGHT THINK')).toBeVisible();
+  await page.getByRole('button',{name:'← Back'}).click();
+  await expect(page.getByRole('heading',{name:'See It',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Forward →'}).click();
+  await expect(page.getByRole('heading',{name:'Understand It',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Continue to Practice'}).click();
   await expect(page.locator('button.option')).toHaveCount(3);
   expect(errors).toEqual([]);
 });
