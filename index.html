@@ -223,4 +223,97 @@ const footer=document.querySelector('footer');if(footer)footer.insertAdjacentHTM
  .learning-cluster-title{flex-shrink:0}
 }
 </style>
-</body></html>
+<style id="op4-homepage-style">
+/* OP-104 v4: homepage-only redesign; existing learning, services and tools retained. */
+body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 50% 0%,#def9ef 0%,transparent 46%),#fbfdf9}
+.shell:has(.op4-home),.shell:has(.op4-about){grid-template-rows:auto minmax(0,1fr);max-width:1920px;padding-inline:clamp(14px,2.1vw,44px)}
+.op4-header{position:relative;display:flex;align-items:center;justify-content:center;height:138px;min-height:138px;padding:5px 62px 8px;border-bottom:1px solid #d1e7db;overflow:visible;background:linear-gradient(90deg,transparent 0%,#d7f5e54a 16%,#b5ecdfaa 50%,#d7f5e54a 84%,transparent 100%)}
+.op4-header::before{content:"";pointer-events:none;position:absolute;inset:10px 4% auto;height:74px;background:radial-gradient(ellipse at center,#96dfc6a8 0%,#abf1dc77 22%,transparent 74%);filter:blur(9px)}
+.op4-brand{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:0;color:#073e38;text-decoration:none;font-weight:950;font-size:clamp(24px,2.4vw,36px);letter-spacing:.08em;line-height:1.04}
+.op4-brand svg{display:block;width:96px;height:88px;filter:drop-shadow(0 0 15px #72edd2)}
+.op4-brand .op4-name{margin-top:-3px}
+.op4-brand:hover .op4-name{text-decoration:underline;text-decoration-color:#7fcbb4;text-underline-offset:4px}
+.op4-menu{position:absolute;z-index:30;right:0;top:15px;max-width:min(350px,calc(100vw - 30px));font-size:14px}
+.op4-menu summary{cursor:pointer;list-style:none;background:#fff;border:1px solid #9ccfbe;border-radius:999px;padding:11px 18px;font-weight:850;color:#11574e;min-height:44px}
+.op4-menu summary::-webkit-details-marker{display:none}
+.op4-menu summary::after{content:" ▾";font-size:12px}
+.op4-menu[open] summary::after{content:" ▴"}
+.op4-menu-links{position:absolute;right:0;top:calc(100% + 8px);width:220px;max-height:70vh;overflow-y:auto;padding:8px;background:#fff;box-shadow:0 14px 38px #123d3442;border:1px solid #b9d8ca;border-radius:14px}
+.op4-menu-links a{display:block;color:#164c43;text-decoration:none;padding:8px 10px;border-radius:7px;font-size:13px}
+.op4-menu-links a:hover,.op4-menu-links a:focus-visible{background:#e9f8ef}
+.op4-home{justify-content:flex-start;padding:clamp(9px,1.5vh,19px) 0 24px;gap:clamp(10px,1.4vh,18px)}
+.op4-home .op4-hero{margin:auto;text-align:center;padding:4px 0 0}
+.op4-hero .eyebrow{font-size:11px;letter-spacing:.14em}
+.op4-hero h1{font-size:clamp(28px,3.4vw,48px);letter-spacing:-.045em;line-height:1.1;margin:4px auto}
+.op4-hero p.desc{font-size:clamp(13px,1.25vw,16px);margin:6px 0 0;line-height:1.45}
+.op4-home .section-title{margin-bottom:12px}
+.op4-home .grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(8px,1vw,15px)}
+.op4-home .tile{min-height:clamp(102px,11.6vh,139px);padding:clamp(11px,1.05vw,17px)}
+.op4-home .tile strong{font-size:clamp(13px,1.12vw,18px);line-height:1.18}
+.op4-home .tile .emoji{font-size:clamp(23px,1.9vw,29px)}
+.op4-home .tile.pending{justify-content:center;align-items:center;background:#f2f7f2;border:1px dashed #b7d3c5;color:#628179;box-shadow:none}
+.op4-home .tile.pending strong{font-size:16px;font-weight:700;letter-spacing:.02em}
+.op4-home .tile.new-card{background:linear-gradient(145deg,#effbf4,#fff);border-color:#a1d3c0}
+.op4-home .tile.new-card strong{color:#0b5f56}
+.op4-about{display:block;max-width:970px;margin:0 auto;padding:22px 0 60px}
+.op4-about h1{font-size:clamp(30px,3.5vw,48px);margin:7px 0 6px}
+.op4-about .op4-lead{font-size:17px;color:#4d6c61}
+.op4-about-nav{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 26px}
+.op4-about-nav a{font-size:12px;padding:8px 12px;border:1px solid #b8dbcb;border-radius:999px;background:white;text-decoration:none;font-weight:700}
+.op4-about article{scroll-margin-top:12px;background:#fff;border:1px solid #d2e7db;border-radius:13px;padding:17px 20px;margin:14px 0}
+.op4-about article h2{font-size:21px;margin:0 0 7px}
+.op4-about article p{font-size:15px;line-height:1.55;margin:8px 0;color:#385b51}
+.op4-about article details{border-top:1px solid #e2eee7;padding:11px 0}
+.op4-about article summary{cursor:pointer;font-weight:750}
+.op4-version{font-variant-numeric:tabular-nums;background:#e7f7ef;padding:12px;border-radius:9px}
+@media(max-width:1050px){.op4-home .grid{grid-template-columns:repeat(3,minmax(0,1fr))}.op4-home .tile{min-height:90px}.op4-header{height:128px;min-height:128px}}
+@media(max-width:700px){.op4-header{min-height:112px;height:112px;padding-inline:45px}.op4-brand svg{width:71px;height:67px}.op4-brand{font-size:22px}.op4-menu{top:9px;right:0;font-size:12px}.op4-menu summary{padding:8px 12px}.op4-home{gap:10px}.op4-home .grid{gap:7px}.op4-home .tile{min-height:80px;padding:8px}.op4-home .tile strong{font-size:11px}.op4-home .tile .emoji{font-size:21px}.op4-hero h1{font-size:29px}.op4-hero p.desc{font-size:12px}.op4-home .section-title small{display:none}}
+@media(max-width:360px){.op4-brand{font-size:19px}.op4-brand svg{width:63px;height:62px}.op4-home .tile strong{font-size:10px}.op4-home .tile{min-height:72px}.op4-about article{padding:13px}}
+@media(prefers-reduced-motion:reduce){.op4-header::before{filter:none}}
+</style><script id="op4-homepage-script">
+(()=>{'use strict';
+const params=new URLSearchParams(location.search);
+const isHome=!params.has('area')&&!params.has('service')&&!params.has('impact')&&!params.has('team')&&!params.has('about');
+const isAbout=params.has('about')||params.has('team');
+if(!isHome&&!isAbout)return;
+const main=document.getElementById('main'),shell=document.querySelector('.shell');
+if(!main||!shell)return;
+const logo='<svg viewBox="0 0 110 100" role="img" aria-label="TEAL symbol, three hearts within a circular emblem"><defs><radialGradient id="op4-glow"><stop offset="0%" stop-color="#ecfffa"/><stop offset="65%" stop-color="#4fbaa9"/><stop offset="100%" stop-color="#0b756e"/></radialGradient></defs><circle cx="55" cy="49" r="44" fill="url(#op4-glow)" stroke="#0b7f73" stroke-width="3"/><path d="M55 16 C71 27 81 25 81 46 C81 66 69 78 55 87 C41 78 29 66 29 46 C29 25 39 27 55 16Z" fill="#eafff7" fill-opacity=".9" stroke="#178477" stroke-width="2"/><path d="M55 48 C49 39 35 41 35 51 C35 59 47 65 55 71 C63 65 75 59 75 51 C75 41 61 39 55 48Z" fill="#079d8b"/><path d="M44 35 C40 28 30 29 30 36 C30 42 39 47 44 51 C49 47 58 42 58 36 C58 29 48 28 44 35Z" fill="#40bc9d"/><path d="M66 35 C62 28 52 29 52 36 C52 42 61 47 66 51 C71 47 80 42 80 36 C80 29 70 28 66 35Z" fill="#37a9d2"/><path d="M55 10 V0 M18 49 H4 M92 49 H106 M24 17 L14 8 M86 17 L96 8" stroke="#60dfc4" stroke-width="2.8" stroke-linecap="round"/></svg>';
+const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['TEAL Philosophy','teal-philosophy'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ','faq'],['Questions & Answers','qa'],['Public Record','record'],['Version & Updates','version']];
+const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('');
+const priorHeader=shell.querySelector('header');
+if(priorHeader)priorHeader.outerHTML='<header class="op4-header"><a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a><details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details></header>';
+shell.querySelector('.learning-nav')?.remove();
+shell.querySelector('footer')?.remove();
+if(isHome){
+ document.title='ONE PLACE — Life, learning and practice';
+ const routes=[['Human Literacy','📘','human-literacy/'],['Our Humanity','🌍','one-place/our-humanity.html'],['Life Simulator','🗣️','simulator/01/']];
+ const safe=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"' :'&#39;'}[c]));
+ const card=(label,icon,href,extra)=>'<a class="tile '+extra+'" href="'+href+'"><span class="emoji" aria-hidden="true">'+icon+'</span><strong>'+safe(label)+'</strong><span class="arrow" aria-hidden="true">↗</span></a>';
+ const existing=source.map(a=>card(quickNames[a[0]]||a[0].replace(' & ',' + '),a[1],uArea(a[0]),''));
+ const newCards=routes.map(x=>card(x[0],x[1],x[2],'new-card'));
+ const pending=Array.from({length:3},()=>'<div class="tile pending" aria-label="Future category pending"><strong>Pending</strong></div>');
+ main.className='home op4-home';
+ main.innerHTML='<section class="op4-hero"><p class="eyebrow">ONE HOME FOR LIFE’S MANY NEEDS</p><h1>What do you need <em style="font-style:normal;color:#087f75">help with?</em></h1><p class="desc">Explore practical life areas, learning, human connection and safe ways to practice.</p></section><section aria-label="Explore life and learning"><div class="section-title"><h2>Explore every part of life</h2></div><div class="grid">'+existing.join('')+newCards.join('')+pending.join('')+'</div></section>';
+}else{
+ document.title='About ONE PLACE — Vision, mission, TEAL and project information';
+ main.className='op4-about';
+ const sections=[
+ ['vision','Our Vision','A world where every person is treated with dignity and has a meaningful opportunity to learn, grow and live with greater peace, love and happiness.'],
+ ['mission','Our Mission','Help people understand everyday life, learn useful skills, practice thoughtful decisions, and find trustworthy resources—all through one welcoming place. Teach practical steps in plain language, with honesty about limitations and with respect for individual choice.'],
+ ['dream','Our Dream','Earth: The Planet of Love. We are One. We envision a future with less preventable hunger, meaningful access to essential healthcare, and education that helps every child thrive. This is a direction to work toward, not a promise that one website can accomplish it alone.'],
+ ['teal-philosophy','The TEAL Philosophy','TEAL stands for <strong>Trinity Equals Amazing Love</strong>. Its three foundations are <strong>Respect for Self, Respect for Others, and Respect for Everything</strong>. Through consistent respect, we aspire to <strong>Peace, Love and Happiness</strong>. These aspirations strengthen one another; their order is not a rule. Respect includes boundaries, responsibility, dignity, and care for our shared world. TEAL welcomes questions, differing beliefs, and thoughtful disagreement. <a href="teal/">Read the public TEAL invitation</a>.'],
+ ['founder','Founder Bio','Shawn is a U.S. Army veteran, former nursing assistant and radiologic technologist, husband, grandfather and family caregiver. His experiences across service, healthcare and family life shaped his belief that practical knowledge and respectful guidance should be easier to access. ONE PLACE is his founder-led, human-directed project.'],
+ ['story','Our Story','ONE PLACE grew out of Human Literacy and TEAL: a desire to make learning useful in everyday life. It is being built progressively, beginning with interactive lessons and simple practical tools. The founder reviews each major direction and accepts responsibility for what is published.'],
+ ['team','Our Team & AI','ONE PLACE has one human founder. ChatGPT and other AI tools assist with research, drafts, design, code and quality checks. AI does not own the mission, replace professionals, or validate its own work. Human decisions and accountable review remain essential.'],
+ ['faq','Frequently Asked Questions','<details><summary>Is ONE PLACE free?</summary><p>The current public learning pages and available tools do not require a payment or account. Future offerings have not been activated.</p></details><details><summary>Is the website finished?</summary><p>No. Existing content is public while work continues. A working page does not establish educational effectiveness or professional review.</p></details><details><summary>Does ONE PLACE provide professional advice?</summary><p>No. Learning materials are educational; for medical, legal, financial or other high-risk matters, seek appropriately qualified support.</p></details><details><summary>Are my practice answers private?</summary><p>Some lesson tools keep optional information in local browser storage; external hosts and browser services can have their own data practices. Avoid entering sensitive information in public or shared devices.</p></details>'],
+ ['qa','Questions & Answers','<details><summary>Do I have to agree with TEAL?</summary><p>No. Every person deserves respect, including people who question or reject this philosophy.</p></details><details><summary>Can ONE PLACE solve every life problem?</summary><p>No. It aims to help visitors learn, clarify decisions and find next steps, not replace human relationships or qualified services.</p></details><details><summary>Can I suggest a correction or ask something else?</summary><p>You can use the <a href="https://github.com/ouroneplace/ouroneplace.github.io/issues" target="_blank" rel="noopener noreferrer">public project issue tracker</a>, which requires a GitHub account. Do not include personal or sensitive information. There is no private Q&A submission form on this website.</p></details>'],
+ ['record','Public Record & Accountability','The website does not currently connect visitor analytics, payments or a public giving ledger. Unknown numbers are not zero. <a href="index.html?impact">Review the existing public breakdown prototype</a>. Plans, estimates and intentions are not presented as verified outcomes.'],
+ ['version','Version & Last Update','<p class="op4-version"><strong>Homepage version 4.0.0</strong><br>Content updated: November 9, 2026 at 4:08 AM (America/Chicago).<br>Public code and subsequent revisions: <a href="https://github.com/ouroneplace/ouroneplace.github.io/commits/main/" target="_blank" rel="noopener noreferrer">GitHub commit history</a>.</p><p>This is a homepage and About-information revision. Publication does not certify every lesson, resource or accessibility scenario.</p>']
+ ];
+ const jump=menuLinks.map(([name,id])=>'<a href="#'+id+'">'+name+'</a>').join('');
+ main.innerHTML='<a class="back" href="index.html">← All life areas</a><h1>About ONE PLACE</h1><p class="op4-lead">A practical home for learning, understanding, caring and exploring.</p><nav class="op4-about-nav" aria-label="About topics">'+jump+'</nav>'+sections.map(([id,title,copy])=>'<article id="'+id+'"><h2>'+title+'</h2>'+(copy.startsWith('<details')||copy.startsWith('<p')?copy:'<p>'+copy+'</p>')+'</article>').join('')+'<p class="notice">ONE PLACE is an evolving public educational project. Existing TEAL-101 master drafting and private founder records are not published through this page.</p>';
+ if(location.hash)setTimeout(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView(),0);
+}
+})();
+</script></body></html>
