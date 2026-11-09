@@ -27,15 +27,15 @@ for (const lesson of ['01', '02']) {
   });
 }
 
-test('HL-119: lesson 03 works when both video hosts are unavailable', async ({ page }) => {
+test('HL-119: lesson 03 remains usable when the embedded video host is unavailable', async ({ page }) => {
   const errors=[];
   page.on('pageerror', error => errors.push(error.message));
   await page.route('https://share.descript.com/**', route => route.abort('failed'));
-  await page.route('**/media/lesson03.mp4', route => route.abort('failed'));
   await page.goto('/lessons/03/');
   await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Watch original MP4 if the video player is unavailable' }))
-    .toHaveAttribute('href', '../../media/lesson03.mp4');
+  await expect(page.getByRole('link', { name: 'Open Lesson 3 video in a new tab' }))
+    .toHaveAttribute('href', 'https://share.descript.com/view/OVaHB0aypFw');
+  await expect(page.getByText('Watch original MP4 if the video player is unavailable')).toHaveCount(0);
   await page.getByRole('button', { name: 'Continue to Understand It' }).click();
   await expect(page.getByRole('heading', { name: 'Understand It', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Continue to Practice' }).click();
