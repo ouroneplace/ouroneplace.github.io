@@ -1,44 +1,52 @@
 const { test, expect } = require('@playwright/test');
 
-// Silent approved lesson videos are optional for completing the structured
-// text lesson. This does not claim a visual-description transcript exists.
-for (const lesson of ['01', '02']) {
-  test('HL-119: lesson ' + lesson + ' remains usable if its silent video cannot load', async ({ page }) => {
-    const errors = [];
-    page.on('pageerror', error => errors.push(error.message));
+// Current HL-119/B10 behavior: all ten approved videos use Descript embeds.
+// Block the actual video host, not legacy local MP4 requests, and verify that
+// the independent text learning path still works. This does not prove playback,
+// captions, visual descriptions or a genuinely independent video backup.
+for (let n = 1; n <= 10; n++) {
+  const lesson = String(n).padStart(2, '0');
+  test('HL-119: Lesson ' + lesson + ' remains usable if Descript cannot load, at 320px / 200% text', async ({ page }) => {
+    const pageErrors = [];
+    page.on('pageerror', error => pageErrors.push(error.message));
     await page.setViewportSize({ width: 320, height: 700 });
-    await page.route('**/*.mp4', route => route.abort('failed'));
+    await page.route('https://share.descript.com/**', route => route.abort('failed'));
     await page.goto('/lessons/' + lesson + '/');
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
 
+    const reflow = async label => {
+      const metrics = await page.evaluate(() => ({
+        width: window.innerWidth,
+        pageWidth: document.documentElement.scrollWidth,
+      }));
+      expect(metrics.pageWidth, 'Lesson ' + lesson + ' / ' + label).toBeLessThanOrEqual(metrics.width);
+    };
+
     await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
-    const continueButton = page.getByRole('button', { name: 'Continue to Understand It', exact: true });
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
+    const externalLink = page.getByRole('link', {
+      name: 'Open Lesson ' + n + ' video in a new tab', exact: true,
+    });
+    await expect(externalLink).toHaveAttribute('href', /^https:\/\/share\.descript\.com\/view\//);
+    await expect(page.locator('.video-lesson a')).toHaveCount(1);
+    await reflow('blocked video');
+
+    const continueButton = page.getByRole('button', {
+      name: 'Continue to Understand It', exact: true,
+    });
     await expect(continueButton).toBeEnabled();
     await continueButton.focus();
     await page.keyboard.press('Enter');
 
     await expect(page.getByRole('heading', { name: 'Understand It', exact: true })).toBeVisible();
-    await expect(page.getByText('You sent a message', { exact: false }).first()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Continue to Practice' })).toBeEnabled();
-    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
-    await page.getByRole('button', { name: 'Continue to Practice' }).click();
+    await expect(page.getByRole('button', { name: 'Continue to Practice', exact: true })).toBeEnabled();
+    await reflow('Understand It');
+    await page.getByRole('button', { name: 'Continue to Practice', exact: true }).click();
+
     await expect(page.locator('button.option')).toHaveCount(3);
-    expect(errors).toEqual([]);
+    await expect(page.getByRole('navigation', { name: 'One Place and lessons' })
+      .getByRole('link', { name: 'All Lessons' })).toBeVisible();
+    await reflow('Practice');
+    expect(pageErrors).toEqual([]);
   });
 }
-
-test('HL-119: lesson 03 remains usable when the embedded video host is unavailable', async ({ page }) => {
-  const errors=[];
-  page.on('pageerror', error => errors.push(error.message));
-  await page.route('https://share.descript.com/**', route => route.abort('failed'));
-  await page.goto('/lessons/03/');
-  await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Lesson 3 video in a new tab' }))
-    .toHaveAttribute('href', 'https://share.descript.com/view/OVaHB0aypFw');
-  await expect(page.getByText('Watch original MP4 if the video player is unavailable')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Continue to Understand It' }).click();
-  await expect(page.getByRole('heading', { name: 'Understand It', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Continue to Practice' }).click();
-  await expect(page.locator('button.option')).toHaveCount(3);
-  expect(errors).toEqual([]);
-});
