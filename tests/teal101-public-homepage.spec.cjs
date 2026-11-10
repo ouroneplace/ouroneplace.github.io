@@ -67,8 +67,8 @@ for(const width of [320,390,768,1366]){
 test('ONE PLACE About includes a working route to TEAL-101 on the original TEAL page',async({page})=>{
  await page.goto('/index.html?about#teal-philosophy');
  const section=page.locator('#teal-philosophy');
- await expect(section.getByRole('link',{name:/complete approved TEAL-101 philosophy/i})).toHaveAttribute('href','teal/#teal-101');
- await section.getByRole('link',{name:/complete approved TEAL-101 philosophy/i}).click();
+ await expect(section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i})).toHaveAttribute('href','teal/#teal-101');
+ await section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i}).click();
  await expect(page).toHaveURL(/\/teal\/#teal-101$/);
  await expect(page.locator('#teal-101')).toBeVisible();
 });
