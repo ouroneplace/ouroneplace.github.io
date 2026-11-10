@@ -47,7 +47,7 @@ for (const width of [1366, 320]) {
   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy'}).click();
   await expect(page).toHaveURL(/index\.html\?about#teal-philosophy$/);
   await expect(page.locator('#teal-philosophy')).toContainText('Trinity Equals Amazing Love');
-  await expect(page.locator('#version')).toContainText('Homepage version 4.1.0');
+  await expect(page.locator('#version')).toContainText('Homepage version 4.2.0');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  });
 }
