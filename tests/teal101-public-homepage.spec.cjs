@@ -14,7 +14,7 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  await expect(page.locator('.op4-header .op4-name')).toHaveText('ONE PLACE');
  await expect(page.locator('.op4-header svg')).toHaveCount(0);
  await page.locator('.op4-menu summary').click();
- await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:/TEAL-101.*All 12 Sections/})).toHaveAttribute('href','teal/#teal-101');
+ await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy & all 12 sections'})).toHaveAttribute('href','teal/#teal-101');
  expect(errors).toEqual([]);
 });
 
@@ -65,10 +65,10 @@ for(const width of [320,390,768,1366]){
 }
 
 test('ONE PLACE About includes a working route to TEAL-101 on the original TEAL page',async({page})=>{
- await page.goto('/index.html?about#teal-philosophy');
- const section=page.locator('#teal-philosophy');
- await expect(section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i})).toHaveAttribute('href','teal/#teal-101');
- await section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i}).click();
+ await page.goto('/index.html?about');
+ const section=page.locator('nav.op4-about-nav');
+ await expect(section.getByRole('link',{name:/Explore TEAL/})).toHaveAttribute('href','teal/#teal-101');
+ await section.getByRole('link',{name:/Explore TEAL/}).click();
  await expect(page).toHaveURL(/\/teal\/#teal-101$/);
  await expect(page.locator('#teal-101')).toBeVisible();
 });
