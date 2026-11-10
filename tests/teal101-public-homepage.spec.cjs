@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 
-// Approved TEAL-101 public reading edition, using source text from founder-approved v1.1.
-// The source fingerprint covers the unchanged twelve-section Markdown in the private master.
+// TEAL-101 v2 public adaptation: twelve human-centered letter chapters.
+// The founder-approved private v1.1 remains historically preserved; the public v2 manuscript is tracked separately.
 test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the centered homepage header',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');
@@ -18,27 +18,32 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  expect(errors).toEqual([]);
 });
 
-test('Founder-approved TEAL-101 offers all twelve source-ordered philosophy sections without archival appendices',async({page})=>{
+test('TEAL-101 v2 preserves twelve complete human-centered letter chapters without archival appendices',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/teal/');
  const root=page.locator('#teal-101');
  await expect(root).toBeAttached();
- await expect(root).toHaveAttribute('data-source-sha256','63ff2e6435251b780d544113cca1e09c85d3cd73214ee0cc1d830f9da87f2bb0');
- await expect(root.getByRole('heading',{level:2})).toContainText('Trinity Equals');
+ await expect(root).toHaveAttribute('data-edition','v2.0.0');
+ await expect(root).toHaveAttribute('data-source-path','docs/teal/TEAL-101-letter-to-us-v2.md');
+ await expect(root.getByRole('heading',{level:2})).toContainText('A Love That');
+ await expect(root.locator('.teal101-intro')).toContainText('You do not have to believe a word of this');
  const chapters=root.locator('details.teal101-chapter');
  await expect(chapters).toHaveCount(12);
  await expect(chapters.first()).toHaveAttribute('open','');
  await expect(chapters.nth(1)).not.toHaveAttribute('open','');
  const titles=await chapters.locator('summary').allTextContents();
  expect(titles.map(x=>x.trim())).toEqual(expect.arrayContaining([
-   expect.stringContaining('Identity, Purpose, and Foundation'),
-   expect.stringContaining('The Three Respects'),
-   expect.stringContaining('The Founding History of TEAL'),
-   expect.stringContaining('Final Reconciliation, Unfinished Definitions')
+   expect.stringContaining('Before Anything Else, You Matter'),
+   expect.stringContaining('The Love You Give Must Include You'),
+   expect.stringContaining('The Human Behind the Dream'),
+   expect.stringContaining('The Promise We Can Make')
  ]));
  await chapters.last().locator('summary').click();
  await expect(chapters.last()).toHaveAttribute('open','');
- await expect(chapters.last()).toContainText('An aspiration for the world we may choose to build.');
+ await expect(chapters.last()).toContainText('You deserve the same love you are trying to give the world.');
+ expect((await chapters.locator('.teal101-copy').allTextContents()).every(x=>x.trim().length>500)).toBe(true);
+ await expect(root).not.toContainText(/Na.vi|Avatar|Pandora|Eywa/i);
+ await expect(root).toContainText('This is a founder-directed, AI-assisted public revision');
  await expect(root).not.toContainText('APPENDIX A — Source and version record');
  await expect(root).not.toContainText('Publication authorization: NOT GRANTED');
  expect(errors).toEqual([]);
