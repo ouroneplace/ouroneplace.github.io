@@ -445,8 +445,15 @@ const menuGroups=[
  ['HELP & ACCOUNTABILITY',[['FAQ & Questions','index.html?about#faq'],['Public Record','index.html?about#record'],['Version & Updates','index.html?about#version']]]
 ];
 const links=menuGroups.map(([heading,items])=>'<section class="op5-menu-group"><p class="op5-menu-heading">'+heading+'</p>'+items.map(([label,href])=>'<a href="'+href+'">'+label+'</a>').join('')+'</section>').join('');
-// Older bookmarks to the duplicate About summary now go to the single TEAL home.
-if(isAbout&&location.hash==='#teal-philosophy'){location.replace('teal/');return;}
+// Keep old deep links usable on both first load and same-document hash navigation.
+const redirectLegacyAboutHash=()=>{
+ if(!isAbout)return;
+ if(location.hash==='#teal-philosophy')location.replace('teal/');
+ else if(location.hash==='#qa')location.replace('index.html?about#faq');
+};
+window.addEventListener('hashchange',redirectLegacyAboutHash);
+redirectLegacyAboutHash();
+if(isAbout&&location.hash==='#teal-philosophy')return;
 const priorHeader=shell.querySelector('header');
 if(priorHeader){
  const aboutMenu='<details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
