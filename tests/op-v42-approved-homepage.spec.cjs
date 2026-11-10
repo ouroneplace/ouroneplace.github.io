@@ -63,3 +63,19 @@ test('The original category cards retain actual destinations after homepage rest
  await page.locator('.grid > a.new-card').filter({hasText:'Human Literacy'}).click();
  await expect(page).toHaveURL(/\/human-literacy\/$/);
 });
+
+test('Mobile TEAL scene loads from the existing source artwork at 320px and 390px',async({page})=>{
+ const art=await page.request.get('/teal/assets/cosmic-960.webp');
+ expect(art.ok()).toBe(true);
+ expect((await art.body()).length).toBeGreaterThan(10000);
+ for(const width of [320,390]){
+  await page.setViewportSize({width,height:800});
+  await page.goto('/');
+  const header=page.locator('.op5-cosmic');
+  await expect(header).toBeVisible();
+  await expect(header).toHaveCSS('background-image',/cosmic-960\.webp/);
+  await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
+  await expect(page.locator('.op5-menu-row summary')).toHaveText('About');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+ }
+});
