@@ -290,6 +290,78 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
 @media(max-width:1050px){.op4-header{height:143px;min-height:143px}.op4-source-symbol{width:92px;height:92px;background-size:380px auto}.op4-brand{font-size:23px}}
 @media(max-width:700px){.op4-header{height:121px;min-height:121px}.op4-source-symbol{width:79px;height:79px;background-size:325px auto}.op4-brand{font-size:19px}.op4-menu{top:7px}.op4-menu summary{padding:8px 11px}}
 @media(max-width:360px){.op4-source-symbol{width:70px;height:70px;background-size:295px auto}.op4-brand{font-size:17px}}
+
+/* OP-104 v4.2 · founder-approved 9 Nov homepage art direction.
+   Keep banner as a background and headings/cards as real accessible HTML. */
+.shell:has(.op4-home){max-width:none;padding:0;display:flex;flex-direction:column;min-height:100vh;min-height:100svh}
+.op5-cosmic{position:relative;isolation:isolate;overflow:hidden;display:flex;justify-content:center;align-items:center;
+  flex:0 0 auto;width:100%;height:clamp(240px,19.52vw,326px);min-height:0;padding:0;
+  border:0;background:#061c29 url("teal/assets/earth-1536.webp") 50% 53%/cover no-repeat}
+.op5-cosmic::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 24% 79% at 50% 39%,#031c2ad6 0%,#031c2a7a 54%,transparent 90%),
+             linear-gradient(180deg,#00121b25,transparent 50%,#00111ed0 100%);filter:none}
+.op5-cosmic .op4-brand{z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  height:100%;padding:12px 10px;color:#eafffd;line-height:1.02;letter-spacing:.13em;
+  text-align:center;font-size:clamp(29px,3.6vw,60px);font-weight:850;text-shadow:0 0 20px #64e6de9c,0 3px 14px #001722}
+.op5-cosmic .op4-source-symbol{width:clamp(135px,11.1vw,188px);height:clamp(135px,11.1vw,188px);
+  border:0;box-shadow:0 0 16px #b5fffba1,0 0 55px 16px #21d9cd8c;
+  background-position:center 50%;background-size:410% auto;
+  filter:drop-shadow(0 0 10px #9afef5)}
+.op5-cosmic .op4-brand .op4-name{margin-top:10px;text-transform:uppercase}
+.op5-cosmic .op4-brand:hover .op4-name{text-decoration:underline;text-underline-offset:5px}
+.op5-menu-row{position:relative;width:100%;height:0;z-index:20;flex:0 0 auto}
+.op5-menu-row .op4-menu{position:absolute;right:clamp(14px,2vw,45px);top:12px}
+.op5-menu-row .op4-menu summary{background:#f8fffb;border:1px solid #08958a;border-radius:28px;
+  padding:12px 26px;min-height:52px;font-size:16px;box-shadow:0 4px 14px #194b3820}
+.op5-menu-row .op4-menu-links{width:230px}
+.op5-menu-row .op4-menu summary:focus-visible,.op5-cosmic a:focus-visible{outline:3px solid #047e74;outline-offset:4px}
+.op4-home{flex:1;width:100%;gap:7px;justify-content:flex-start;
+  padding:9px clamp(14px,2.1vw,36px) 30px}
+.op4-home .op4-hero{margin:0;text-align:center;padding:0 160px}
+.op4-home .op4-hero .eyebrow{font-size:clamp(9px,.83vw,13px);letter-spacing:.12em;margin:0 0 4px}
+.op4-home .op4-hero h1{font-size:clamp(28px,3.05vw,49px);line-height:1.1;margin:0 0 6px}
+.op4-home .op4-hero p.desc{font-size:clamp(12px,1.1vw,18px);line-height:1.36;margin:0 0 1px}
+.op4-home .section-title{margin:0 0 12px}
+.op4-home .section-title h2{font-size:clamp(16px,1.45vw,24px);line-height:1.2}
+.op4-home .grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(9px,.9vw,16px)}
+.op4-home .tile{min-height:clamp(79px,9.9vh,102px);border-radius:18px;padding:clamp(10px,1.1vw,18px);gap:3px}
+.op4-home .tile strong{font-size:clamp(12px,1.05vw,18px);line-height:1.12}
+.op4-home .tile .emoji{font-size:clamp(22px,1.8vw,28px)}
+.op4-home .tile.pending{background:#f4f8f4}
+@media(max-width:1050px){
+ .op5-cosmic{height:clamp(222px,29vw,296px)}
+ .op5-cosmic .op4-brand{font-size:clamp(28px,4vw,49px)}
+ .op5-cosmic .op4-source-symbol{width:clamp(136px,17vw,175px);height:clamp(136px,17vw,175px)}
+ .op4-home .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .op4-home .tile{min-height:86px}
+ .op4-home .op4-hero{padding:0 112px}
+}
+@media(max-width:700px){
+ .op5-cosmic{height:clamp(191px,52vw,264px);background-position:50% 53%}
+ .op5-cosmic .op4-brand{font-size:clamp(25px,5.5vw,36px);padding:9px}
+ .op5-cosmic .op4-source-symbol{width:clamp(112px,26vw,142px);height:clamp(112px,26vw,142px)}
+ .op5-cosmic .op4-brand .op4-name{margin-top:6px}
+ .op5-menu-row{height:57px}
+ .op5-menu-row .op4-menu{right:14px;top:7px}
+ .op5-menu-row .op4-menu summary{min-height:43px;padding:8px 18px;font-size:13px}
+ .op4-home{padding:5px 13px 25px;gap:11px}
+ .op4-home .op4-hero{padding:0}
+ .op4-home .op4-hero .eyebrow{font-size:10px}
+ .op4-home .op4-hero h1{font-size:clamp(26px,6.5vw,34px)}
+ .op4-home .op4-hero p.desc{font-size:12px}
+ .op4-home .section-title{margin:0 0 7px}
+ .op4-home .section-title h2{font-size:17px}
+ .op4-home .grid{gap:8px}
+ .op4-home .tile{min-height:86px;border-radius:12px;padding:9px}
+ .op4-home .tile .emoji{font-size:22px}
+ .op4-home .tile strong{font-size:clamp(10px,2.6vw,13px)}
+}
+@media(max-width:360px){
+ .op5-cosmic .op4-brand{font-size:24px}
+ .op4-home .tile strong{font-size:10px}
+ .op4-home .tile{min-height:82px;padding:7px}
+}
+@media(prefers-reduced-motion:reduce){.op5-cosmic .op4-source-symbol{filter:none}}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
@@ -302,7 +374,16 @@ const logo='<span class="op4-source-symbol" role="img" aria-label="Original glow
 const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['TEAL Philosophy','teal-philosophy'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ','faq'],['Questions & Answers','qa'],['Public Record','record'],['Version & Updates','version']];
 const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('')+'<a href="teal/#teal-101">TEAL-101 · All 12 Sections</a>';
 const priorHeader=shell.querySelector('header');
-if(priorHeader)priorHeader.outerHTML='<header class="op4-header"><a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a><details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details></header>';
+if(priorHeader){
+ const aboutMenu='<details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
+ const brand='<a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a>';
+ if(isHome){
+  // Founder-approved 24-card homepage: cosmic hero, About below banner, actual HTML content below.
+  priorHeader.outerHTML='<header class="op4-header op5-cosmic">'+brand+'</header><div class="op5-menu-row">'+aboutMenu+'</div>';
+ }else{
+  priorHeader.outerHTML='<header class="op4-header">'+brand+aboutMenu+'</header>';
+ }
+}
 shell.querySelector('.learning-nav')?.remove();
 shell.querySelector('footer')?.remove();
 if(isHome){
