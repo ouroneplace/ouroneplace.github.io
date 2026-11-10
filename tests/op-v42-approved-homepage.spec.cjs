@@ -13,13 +13,21 @@ for(const width of [320,390,768,1050,1366,1670]){
   await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
   await expect(header.locator('.op4-source-symbol')).toBeVisible();
   const back=await header.evaluate(el=>getComputedStyle(el).backgroundImage);
-  expect(back).toContain(width<=700?'/teal/assets/cosmic-960.webp':'/teal/assets/earth-1536.webp');
+  expect(back).toContain('/teal/assets/earth-1536.webp');
   if(width<=700){
    // The original mobile scene contains the emblem; avoid a second visible copy.
    await expect(header.locator('.op4-source-symbol')).toHaveCSS('opacity','0');
    const layout=await page.evaluate(()=>({grid:getComputedStyle(document.querySelector('.grid')).gridTemplateColumns,scene:getComputedStyle(document.querySelector('.op5-cosmic')).backgroundSize}));
    expect(layout.grid.split(' ').length).toBe(3);
    expect(layout.scene).toBe('cover');
+   const seam=await header.evaluate(el=>({
+    outer:el.getBoundingClientRect().height,
+    overlay:parseFloat(getComputedStyle(el,'::before').height),
+    background:getComputedStyle(el).backgroundPosition
+   }));
+   // Guard against fixed-height legacy ::before, the 98px seam observed on Android.
+   expect(Math.abs(seam.outer-seam.overlay)).toBeLessThanOrEqual(2);
+   expect(seam.background).toContain('53%');
   }
   await expect(header).not.toContainText('Trinity Equals');
   await expect(header).not.toContainText('Respect for Self');
@@ -64,8 +72,8 @@ test('The original category cards retain actual destinations after homepage rest
  await expect(page).toHaveURL(/\/human-literacy\/$/);
 });
 
-test('Mobile TEAL scene loads from the existing source artwork at 320px and 390px',async({page})=>{
- const art=await page.request.get('/teal/assets/cosmic-960.webp');
+test('Mobile full Earth-and-TEAL scene loads without seam at 320px and 390px',async({page})=>{
+ const art=await page.request.get('/teal/assets/earth-1536.webp');
  expect(art.ok()).toBe(true);
  expect((await art.body()).length).toBeGreaterThan(10000);
  for(const width of [320,390]){
@@ -73,7 +81,7 @@ test('Mobile TEAL scene loads from the existing source artwork at 320px and 390p
   await page.goto('/');
   const header=page.locator('.op5-cosmic');
   await expect(header).toBeVisible();
-  await expect(header).toHaveCSS('background-image',/cosmic-960\.webp/);
+  await expect(header).toHaveCSS('background-image',/earth-1536\.webp/);
   await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
   await expect(page.locator('.op5-menu-row summary')).toHaveText('About');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
