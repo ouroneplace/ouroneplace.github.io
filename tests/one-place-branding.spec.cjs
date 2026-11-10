@@ -135,6 +135,6 @@ test('ONE PLACE v4: public story and update information are honest',async({page}
  await page.goto('/index.html?about#story');
  await expect(page.locator('#story')).toContainText('Human Literacy and TEAL');
  await expect(page.locator('#team')).toContainText('one human founder');
- await expect(page.locator('#version')).toContainText('November 9, 2026');
+ await expect(page.locator('#version')).toContainText('November 10, 2026');
  await expect(page.locator('#record')).toContainText('Unknown numbers are not zero');
 });
