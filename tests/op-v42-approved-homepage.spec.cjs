@@ -58,8 +58,8 @@ test('About is navigable under the banner and links to the complete TEAL-101',as
  await page.goto('/');
  await page.locator('.op5-menu-row .op4-menu summary').click();
  const menu=page.getByRole('navigation',{name:'About ONE PLACE'});
- await expect(menu.getByRole('link',{name:/TEAL-101/})).toBeVisible();
- await menu.getByRole('link',{name:/TEAL-101/}).click();
+ await expect(menu.getByRole('link',{name:'TEAL Philosophy & all 12 sections'})).toBeVisible();
+ await menu.getByRole('link',{name:'TEAL Philosophy & all 12 sections'}).click();
  await expect(page).toHaveURL(/\/teal\/#teal-101$/);
  await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
 });
