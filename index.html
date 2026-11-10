@@ -402,6 +402,31 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(13px,3vw,23px)}
  .op5-cosmic .op4-brand .op4-name{margin-top:0}
 }
+
+/* Unified desktop/About identity and grouped About dropdown. */
+.shell:has(.op4-about){max-width:none;padding:0;display:flex;flex-direction:column;min-height:100vh}
+.shell:has(.op4-about) .op4-about{width:min(100% - 40px,970px);max-width:970px;margin:0 auto;padding:22px 0 60px}
+.shell:has(.op4-about) .op5-menu-row{height:72px}
+@media(min-width:701px){
+ .op5-cosmic .op4-source-symbol{opacity:0;pointer-events:none;box-shadow:none;filter:none}
+ .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(14px,1.8vw,27px)}
+ .op5-cosmic .op4-brand .op4-name{margin-top:0}
+}
+.op5-menu-row .op4-menu{z-index:50}
+.op5-menu-row .op4-menu summary{display:flex;align-items:center;justify-content:center;min-width:120px}
+.op5-menu-row .op4-menu-links{width:min(325px,calc(100vw - 28px));padding:10px;border-radius:16px;max-height:min(72vh,580px);overflow-y:auto;box-shadow:0 16px 42px #082f2a38;border:1px solid #a5d4c2}
+.op5-menu-row .op4-menu-links a{display:block;padding:10px 13px;min-height:40px;border-radius:9px;color:#184f48;font-size:14px;text-decoration:none;line-height:1.3}
+.op5-menu-row .op4-menu-links a:hover,.op5-menu-row .op4-menu-links a:focus-visible{background:#e8f7ef}
+.op5-menu-caption{padding:12px 11px 5px;margin-top:4px;font-weight:850;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#567970}
+.op5-menu-caption:not(:first-child){border-top:1px solid #e1eee7}
+.op5-menu-row .op4-menu-links .op5-teal-link{background:#e4f6f0;color:#075f55;font-weight:850}
+.op4-about-nav{margin:14px 0 22px}
+.op4-about-nav a.op5-teal-inline{display:inline-flex;align-items:center;min-height:44px;border-color:#8ecfbc;background:#e8f8ef;font-size:14px}
+@media(max-width:700px){
+ .shell:has(.op4-about) .op4-about{width:calc(100% - 26px);padding-top:16px}
+ .shell:has(.op4-about) .op5-menu-row{height:57px}
+ .op5-menu-row .op4-menu-links{max-height:66vh}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
