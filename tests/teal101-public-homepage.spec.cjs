@@ -14,7 +14,7 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  await expect(page.locator('.op4-header .op4-name')).toHaveText('ONE PLACE');
  await expect(page.locator('.op4-header svg')).toHaveCount(0);
  await page.locator('.op4-menu summary').click();
- await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:/TEAL-101.*All 12 Sections/})).toHaveAttribute('href','teal/#teal-101');
+ await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'Message & Philosophy'})).toHaveAttribute('href','teal/');
  expect(errors).toEqual([]);
 });
 
@@ -64,13 +64,18 @@ for(const width of [320,390,768,1366]){
  });
 }
 
-test('ONE PLACE About includes a working route to TEAL-101 on the original TEAL page',async({page})=>{
- await page.goto('/index.html?about#teal-philosophy');
- const section=page.locator('#teal-philosophy');
- await expect(section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i})).toHaveAttribute('href','teal/#teal-101');
- await section.getByRole('link',{name:/read all 12 chapters of our letter to humanity/i}).click();
- await expect(page).toHaveURL(/\/teal\/#teal-101$/);
+test('ONE PLACE provides a single TEAL destination for the message and all twelve chapters',async({page})=>{
+ await page.goto('/index.html?about');
+ await page.locator('.op4-menu summary').click();
+ const nav=page.getByRole('navigation',{name:'About ONE PLACE'});
+ await expect(nav.getByRole('link',{name:'Message & Philosophy'})).toHaveCount(1);
+ await nav.getByRole('link',{name:'Message & Philosophy'}).click();
+ await expect(page).toHaveURL(/\/teal\/$/);
  await expect(page.locator('#teal-101')).toBeVisible();
+ await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
+ // Old deep links remain meaningful and redirect to the canonical TEAL page.
+ await page.goto('/index.html?about#teal-philosophy');
+ await expect(page).toHaveURL(/\/teal\/$/);
 });
 
 test('TEAL-101 v2 continuous letter is accessible, complete, and reachable without scripts',async({page})=>{
