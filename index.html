@@ -297,7 +297,7 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
 .op5-cosmic{position:relative;isolation:isolate;overflow:hidden;display:flex;justify-content:center;align-items:center;
   flex:0 0 auto;width:100%;height:clamp(240px,19.52vw,326px);min-height:0;padding:0;
   border:0;background:#061c29 url("teal/assets/earth-1536.webp") 50% 53%/cover no-repeat}
-.op5-cosmic::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+.op5-cosmic::before{content:"";position:absolute;inset:0;height:100%;width:100%;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 24% 79% at 50% 39%,#031c2ad6 0%,#031c2a7a 54%,transparent 90%),
              linear-gradient(180deg,#00121b25,transparent 50%,#00111ed0 100%);filter:none}
 .op5-cosmic .op4-brand{z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -383,10 +383,16 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
    cropped copy of the emblem on the wide desktop backdrop. */
 @media (max-width:700px){
  .op5-cosmic{
-  background-image:url("teal/assets/cosmic-960.webp");
-  background-position:center center;
+  /* Preserve the full approved Earth-and-TEAL composition on phones. */
+  background-image:url("teal/assets/earth-1536.webp");
+  background-position:center 53%;
   background-size:cover;
   background-repeat:no-repeat;
+ }
+ .op5-cosmic::before{
+  /* Old .op4-header::before fixed height (98px) caused the horizontal seam. */
+  height:100%;width:100%;
+  background:linear-gradient(180deg,rgba(0,18,27,.06) 0%,transparent 55%,rgba(0,17,30,.24) 100%);
  }
  .op5-cosmic .op4-source-symbol{
   opacity:0; /* accessible image semantics remain; full emblem is in scene art */
