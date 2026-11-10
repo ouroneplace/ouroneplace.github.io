@@ -361,6 +361,22 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op4-home .tile strong{font-size:10px}
  .op4-home .tile{min-height:82px;padding:7px}
 }
+/* Compact Chromebook heights: keep the full 24-card first task in view, no page scroll. */
+@media(min-width:1051px) and (max-height:820px){
+ .op5-cosmic{height:clamp(200px,29vh,234px)}
+ .op5-cosmic .op4-source-symbol{width:130px;height:130px}
+ .op5-cosmic .op4-brand{font-size:38px}
+ .op5-cosmic .op4-brand .op4-name{margin-top:5px}
+ .op4-home{padding-top:6px;padding-bottom:12px;gap:4px}
+ .op4-home .op4-hero .eyebrow{font-size:10px;margin-bottom:1px}
+ .op4-home .op4-hero h1{font-size:35px;margin-bottom:3px}
+ .op4-home .op4-hero p.desc{font-size:14px}
+ .op4-home .section-title{margin-bottom:6px}
+ .op4-home .grid{gap:8px}
+ .op4-home .tile{min-height:73px;padding:8px 12px}
+ .op4-home .tile .emoji{font-size:22px}
+ .op4-home .tile strong{font-size:13px}
+}
 @media(prefers-reduced-motion:reduce){.op5-cosmic .op4-source-symbol{filter:none}}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
