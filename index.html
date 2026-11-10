@@ -411,18 +411,19 @@ if(!isHome&&!isAbout)return;
 const main=document.getElementById('main'),shell=document.querySelector('.shell');
 if(!main||!shell)return;
 const logo='<span class="op4-source-symbol" role="img" aria-label="Original glowing three-heart TEAL emblem"></span>'
-const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['TEAL Philosophy','teal-philosophy'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ','faq'],['Questions & Answers','qa'],['Public Record','record'],['Version & Updates','version']];
-const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('')+'<a href="teal/#teal-101">TEAL-101 · All 12 Sections</a>';
+const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ & Answers','faq'],['Public Record','record'],['Version & Updates','version']];
+const groupLinks=(start,end)=>menuLinks.slice(start,end).map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('');
+const links='<div class="op5-menu-caption">Our purpose</div>'+groupLinks(0,3)
+ +'<div class="op5-menu-caption">Our people</div>'+groupLinks(3,6)
+ +'<div class="op5-menu-caption">TEAL — one home</div>'
+ +'<a class="op5-teal-link" href="teal/#teal-101">TEAL Philosophy & all 12 sections</a>'
+ +'<div class="op5-menu-caption">Help & transparency</div>'+groupLinks(6);
 const priorHeader=shell.querySelector('header');
 if(priorHeader){
  const aboutMenu='<details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
  const brand='<a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a>';
- if(isHome){
-  // Founder-approved 24-card homepage: cosmic hero, About below banner, actual HTML content below.
-  priorHeader.outerHTML='<header class="op4-header op5-cosmic">'+brand+'</header><div class="op5-menu-row">'+aboutMenu+'</div>';
- }else{
-  priorHeader.outerHTML='<header class="op4-header">'+brand+aboutMenu+'</header>';
- }
+ // One cosmic header and the same menu on homepage and About.
+ priorHeader.outerHTML='<header class="op4-header op5-cosmic">'+brand+'</header><div class="op5-menu-row">'+aboutMenu+'</div>';
 }
 shell.querySelector('.learning-nav')?.remove();
 shell.querySelector('footer')?.remove();
