@@ -16,10 +16,9 @@ test('OP-104 v4: learning, TEAL and simulator remain navigable',async({page})=>{
  await page.getByRole('link',{name:'One Place home',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Explore every part of life'})).toBeVisible();
  await page.locator('.op4-menu summary').click();
- await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy'}).click();
- await expect(page.locator('#teal-philosophy')).toContainText('Trinity Equals Amazing Love');
- await page.locator('#teal-philosophy').getByRole('link',{name:'Read the public TEAL invitation'}).click();
- await expect(page).toHaveURL(/\/teal\/$/);
+ await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy & all 12 sections'}).click();
+ await expect(page).toHaveURL(/\/teal\/#teal-101$/);
+ await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
  await page.getByRole('link',{name:'One Place Home'}).first().click();
  await page.locator('.grid > a.new-card').filter({hasText:'Human Literacy'}).click();
  await page.getByRole('link',{name:'Start Lesson 01',exact:true}).click();
