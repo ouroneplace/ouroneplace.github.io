@@ -72,3 +72,22 @@ test('ONE PLACE About includes a working route to TEAL-101 on the original TEAL 
  await expect(page).toHaveURL(/\/teal\/#teal-101$/);
  await expect(page.locator('#teal-101')).toBeVisible();
 });
+
+test('TEAL-101 v2 continuous letter is accessible, complete, and reachable without scripts',async({page})=>{
+ await page.goto('/teal/#teal-101');
+ const link=page.getByRole('link',{name:'Read all twelve chapters as one continuous letter'});
+ await expect(link).toHaveAttribute('href','teal-101-letter.html');
+ await link.click();
+ await expect(page).toHaveURL(/\/teal\/teal-101-letter\.html$/);
+ await expect(page.getByRole('heading',{level:1})).toContainText('A Love That');
+ const chapters=page.locator('.teal101-reading section');
+ await expect(chapters).toHaveCount(12);
+ await expect(chapters.first()).toContainText('You are somebody even when nobody needs anything from you');
+ await expect(chapters.last()).toContainText('You deserve the same love you are trying to give the world');
+ expect(await page.locator('script')).toHaveCount(0);
+ await expect(page).not.toContainText(/Na.vi|Avatar|Pandora|Eywa/i);
+ for(const width of [320,390,1366]){
+   await page.setViewportSize({width,height:800});
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+ }
+});
