@@ -378,6 +378,24 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op4-home .tile strong{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){.op5-cosmic .op4-source-symbol{filter:none}}
+
+/* Mobile: show the purpose-built TEAL scene itself rather than stacking a
+   cropped copy of the emblem on the wide desktop backdrop. */
+@media (max-width:700px){
+ .op5-cosmic{
+  background-image:url("teal/assets/cosmic-960.webp");
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+ }
+ .op5-cosmic .op4-source-symbol{
+  opacity:0; /* accessible image semantics remain; full emblem is in scene art */
+  box-shadow:none;
+  filter:none;
+ }
+ .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(13px,3vw,23px)}
+ .op5-cosmic .op4-brand .op4-name{margin-top:0}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);

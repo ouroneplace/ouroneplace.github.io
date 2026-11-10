@@ -13,7 +13,14 @@ for(const width of [320,390,768,1050,1366,1670]){
   await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
   await expect(header.locator('.op4-source-symbol')).toBeVisible();
   const back=await header.evaluate(el=>getComputedStyle(el).backgroundImage);
-  expect(back).toContain('/teal/assets/earth-1536.webp');
+  expect(back).toContain(width<=700?'/teal/assets/cosmic-960.webp':'/teal/assets/earth-1536.webp');
+  if(width<=700){
+   // The original mobile scene contains the emblem; avoid a second visible copy.
+   await expect(header.locator('.op4-source-symbol')).toHaveCSS('opacity','0');
+   const layout=await page.evaluate(()=>({grid:getComputedStyle(document.querySelector('.grid')).gridTemplateColumns,scene:getComputedStyle(document.querySelector('.op5-cosmic')).backgroundSize}));
+   expect(layout.grid.split(' ').length).toBe(3);
+   expect(layout.scene).toBe('cover');
+  }
   await expect(header).not.toContainText('Trinity Equals');
   await expect(header).not.toContainText('Respect for Self');
   await expect(header).not.toContainText('CLICK THE SYMBOL');
@@ -55,4 +62,20 @@ test('The original category cards retain actual destinations after homepage rest
  await page.getByRole('link',{name:/One Place home/i}).first().click();
  await page.locator('.grid > a.new-card').filter({hasText:'Human Literacy'}).click();
  await expect(page).toHaveURL(/\/human-literacy\/$/);
+});
+
+test('Mobile TEAL scene loads from the existing source artwork at 320px and 390px',async({page})=>{
+ const art=await page.request.get('/teal/assets/cosmic-960.webp');
+ expect(art.ok()).toBe(true);
+ expect((await art.body()).length).toBeGreaterThan(10000);
+ for(const width of [320,390]){
+  await page.setViewportSize({width,height:800});
+  await page.goto('/');
+  const header=page.locator('.op5-cosmic');
+  await expect(header).toBeVisible();
+  await expect(header).toHaveCSS('background-image',/cosmic-960\.webp/);
+  await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
+  await expect(page.locator('.op5-menu-row summary')).toHaveText('About');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+ }
 });
