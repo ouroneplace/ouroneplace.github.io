@@ -48,7 +48,7 @@ for (const width of [1366, 320]) {
   await expect(page).toHaveURL(/\/teal\/#teal-101$/);
   await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
   await page.goto('/index.html?about');
-  await expect(page.locator('#version')).toContainText('Homepage version 4.2.0');
+  await expect(page.locator('#version')).toContainText('Homepage version 4.3.0');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  });
 }
