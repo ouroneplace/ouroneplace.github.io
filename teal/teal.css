@@ -57,3 +57,13 @@ h1,h2,h3,h4,p,summary,a,button{overflow-wrap:anywhere}.letter-layout>*,.cause-in
  .teal101-copy{padding:1rem .85rem 2rem}
  .teal101-copy p{font-size:1rem;line-height:1.8}
  .teal101-copy h3{font-size:1.11rem;margin-top:1.8rem}}
+
+/* TEAL-101 v2: comfortable, uninterrupted public reading view. */
+.teal101-reading section{border-top:1px solid #bed3ca;margin-top:3.5rem;padding-top:2.1rem;scroll-margin-top:2rem}
+.teal101-reading h2{font-size:clamp(1.7rem,3.7vw,2.45rem);line-height:1.22;letter-spacing:-.025em;color:#145c54;margin:0 0 1.6rem}
+.teal101-reading strong{color:#123b35}
+.teal101-reading .letter-opening{margin-bottom:2rem}
+.teal101-intro{margin:1.7rem 0 2rem;border-left:2px solid #3cbcae;padding-left:clamp(.8rem,2.5vw,1.8rem)}
+.teal101-letter-link{margin:0 0 1.4rem;font-weight:700;color:#9cfae8}
+.teal101-letter-link a{display:inline-block;min-height:44px;line-height:44px}
+@media(max-width:700px){.teal101-reading section{margin-top:2.5rem;padding-top:1.5rem}.teal101-reading h2{font-size:1.62rem}}
