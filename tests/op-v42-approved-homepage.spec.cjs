@@ -13,7 +13,7 @@ for(const width of [320,390,768,1050,1366,1670]){
   await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
   await expect(header.locator('.op4-source-symbol')).toBeVisible();
   const back=await header.evaluate(el=>getComputedStyle(el).backgroundImage);
-  expect(back).toContain('/teal/assets/earth-1536.webp');
+  expect(back).toContain(width<=700?'/teal/assets/earth-1536.webp':'/teal/assets/one-place-desktop-panorama.svg');
   if(width<=700){
    // The original mobile scene contains the emblem; avoid a second visible copy.
    await expect(header.locator('.op4-source-symbol')).toHaveCSS('opacity','0');
@@ -28,6 +28,11 @@ for(const width of [320,390,768,1050,1366,1670]){
    // Guard against fixed-height legacy ::before, the 98px seam observed on Android.
    expect(Math.abs(seam.outer-seam.overlay)).toBeLessThanOrEqual(2);
    expect(seam.background).toContain('53%');
+  }else{
+   await expect(header.locator('.op4-source-symbol')).toHaveCSS('opacity','0');
+   const panorama=await page.request.get('/teal/assets/one-place-desktop-panorama.svg');
+   expect(panorama.ok()).toBe(true);
+   expect((await panorama.text()).length).toBeGreaterThan(200000);
   }
   await expect(header).not.toContainText('Trinity Equals');
   await expect(header).not.toContainText('Respect for Self');
@@ -58,9 +63,11 @@ test('About is navigable under the banner and links to the complete TEAL-101',as
  await page.goto('/');
  await page.locator('.op5-menu-row .op4-menu summary').click();
  const menu=page.getByRole('navigation',{name:'About ONE PLACE'});
- await expect(menu.getByRole('link',{name:/TEAL-101/})).toBeVisible();
- await menu.getByRole('link',{name:/TEAL-101/}).click();
- await expect(page).toHaveURL(/\/teal\/#teal-101$/);
+ await expect(menu.locator('.op5-menu-group')).toHaveCount(4);
+ await expect(menu.getByRole('link',{name:'Message & Philosophy'})).toHaveCount(1);
+ await expect(menu.getByRole('link',{name:/TEAL-101.*All 12 Sections/})).toHaveCount(0);
+ await menu.getByRole('link',{name:'Message & Philosophy'}).click();
+ await expect(page).toHaveURL(/\/teal\/$/);
  await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
 });
 test('The original category cards retain actual destinations after homepage restyle',async({page})=>{
