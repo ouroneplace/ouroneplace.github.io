@@ -402,6 +402,33 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(13px,3vw,23px)}
  .op5-cosmic .op4-brand .op4-name{margin-top:0}
 }
+
+/* OP v4.3 desktop: one original emblem, not a giant backdrop plus a second orb. */
+@media(min-width:701px){
+ .op5-cosmic{background:#071a2b url("teal/assets/one-place-desktop-panorama.svg") center center/cover no-repeat}
+ .op5-cosmic::before{height:100%;width:100%;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,16,28,.02) 55%,rgba(0,14,26,.14) 100%)}
+ .op5-cosmic .op4-source-symbol{position:absolute;opacity:0;width:1px;height:1px;box-shadow:none;filter:none;pointer-events:none}
+ .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(12px,1.2vw,25px);gap:0}
+ .op5-cosmic .op4-brand .op4-name{margin-top:0}
+}
+/* The About menu is a compact grouped directory rather than a long repeated list. */
+.op4-menu .op4-menu-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:min(435px,calc(100vw - 28px));
+ gap:10px 14px;max-height:min(72vh,620px);overflow-y:auto;padding:15px;background:#ffffff;
+ border:1px solid #b3d8cd;border-radius:17px;box-shadow:0 15px 50px #061e2842}
+.op5-menu-group{display:flex;flex-direction:column;gap:2px;min-width:0}
+.op5-menu-heading{font-size:11px;line-height:1.2;letter-spacing:.11em;font-weight:850;color:#147d70;margin:0;padding:2px 10px 6px}
+.op4-menu .op4-menu-links .op5-menu-group a{display:flex;align-items:center;min-height:36px;padding:6px 10px;border-radius:8px;
+ font-size:13px;line-height:1.35;font-weight:650;color:#17433c;text-decoration:none}
+.op4-menu .op4-menu-links .op5-menu-group a:hover,.op4-menu .op4-menu-links .op5-menu-group a:focus-visible{background:#e7f7f0;outline-offset:2px}
+.op4-menu summary{display:flex;gap:4px;align-items:center;justify-content:center}
+.op4-menu summary::after{display:none}
+.op4-about-nav{margin-top:15px}
+@media(max-width:700px){
+ .op4-menu .op4-menu-links{grid-template-columns:1fr;width:min(290px,calc(100vw - 26px));padding:11px;gap:9px;max-height:68svh}
+ .op4-menu .op4-menu-links .op5-menu-group a{min-height:35px;font-size:13px}
+ .op5-menu-heading{padding-bottom:3px}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
@@ -411,11 +438,18 @@ if(!isHome&&!isAbout)return;
 const main=document.getElementById('main'),shell=document.querySelector('.shell');
 if(!main||!shell)return;
 const logo='<span class="op4-source-symbol" role="img" aria-label="Original glowing three-heart TEAL emblem"></span>'
-const menuLinks=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['TEAL Philosophy','teal-philosophy'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ','faq'],['Questions & Answers','qa'],['Public Record','record'],['Version & Updates','version']];
-const links=menuLinks.map(([label,id])=>'<a href="index.html?about#'+id+'">'+label+'</a>').join('')+'<a href="teal/#teal-101">TEAL-101 · All 12 Sections</a>';
+const menuGroups=[
+ ['OUR PURPOSE',[['Vision','index.html?about#vision'],['Mission','index.html?about#mission'],['Dream','index.html?about#dream']]],
+ ['TEAL',[['Message & Philosophy','teal/']]],
+ ['PEOPLE & STORY',[['Founder Bio','index.html?about#founder'],['Our Story','index.html?about#story'],['Team & AI','index.html?about#team']]],
+ ['HELP & ACCOUNTABILITY',[['FAQ & Questions','index.html?about#faq'],['Public Record','index.html?about#record'],['Version & Updates','index.html?about#version']]]
+];
+const links=menuGroups.map(([heading,items])=>'<section class="op5-menu-group"><p class="op5-menu-heading">'+heading+'</p>'+items.map(([label,href])=>'<a href="'+href+'">'+label+'</a>').join('')+'</section>').join('');
+// Older bookmarks to the duplicate About summary now go to the single TEAL home.
+if(isAbout&&location.hash==='#teal-philosophy'){location.replace('teal/');return;}
 const priorHeader=shell.querySelector('header');
 if(priorHeader){
- const aboutMenu='<details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
+ const aboutMenu='<details class="op4-menu"><summary>About <span aria-hidden="true">▾</span></summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
  const brand='<a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a>';
  if(isHome){
   // Founder-approved 24-card homepage: cosmic hero, About below banner, actual HTML content below.
@@ -426,6 +460,10 @@ if(priorHeader){
 }
 shell.querySelector('.learning-nav')?.remove();
 shell.querySelector('footer')?.remove();
+const menuControl=shell.querySelector('.op4-menu');
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuControl?.open){menuControl.open=false;menuControl.querySelector('summary')?.focus();}});
+document.addEventListener('pointerdown',e=>{if(menuControl?.open&&!menuControl.contains(e.target)){menuControl.open=false;}});
+
 if(isHome){
  document.title='ONE PLACE — Life, learning and practice';
  const routes=[['Human Literacy','📘','human-literacy/'],['Our Humanity','🌍','one-place/our-humanity.html'],['Life Simulator','🗣️','simulator/01/']];
@@ -443,16 +481,14 @@ if(isHome){
  ['vision','Our Vision','A world where every person is treated with dignity and has a meaningful opportunity to learn, grow and live with greater peace, love and happiness.'],
  ['mission','Our Mission','Help people understand everyday life, learn useful skills, practice thoughtful decisions, and find trustworthy resources—all through one welcoming place. Teach practical steps in plain language, with honesty about limitations and with respect for individual choice.'],
  ['dream','Our Dream','Earth: The Planet of Love. We are One. We envision a future with less preventable hunger, meaningful access to essential healthcare, and education that helps every child thrive. This is a direction to work toward, not a promise that one website can accomplish it alone.'],
- ['teal-philosophy','The TEAL Philosophy','<strong>You are somebody, even when nobody needs anything from you.</strong> TEAL means <strong>Trinity Equals Amazing Love</strong>—Respect for Self, Respect for Others, and Respect for Everything. It is a letter about being human: loving without disappearing, disagreeing without cruelty, making mistakes and learning to repair them. <strong>Peace • Love • Happiness</strong> are hopes, not demands. <strong>Earth: The Planet of Love. We are One.</strong> <a href="teal/">Read the public TEAL invitation</a>, or <a href="teal/#teal-101">read all 12 chapters of our letter to humanity</a>.'],
  ['founder','Founder Bio','Shawn is a U.S. Army veteran, former nursing assistant and radiologic technologist, husband, grandfather and family caregiver. His experiences across service, healthcare and family life shaped his belief that practical knowledge and respectful guidance should be easier to access. ONE PLACE is his founder-led, human-directed project.'],
  ['story','Our Story','ONE PLACE grew out of Human Literacy and TEAL: a desire to make learning useful in everyday life. It is being built progressively, beginning with interactive lessons and simple practical tools. The founder reviews each major direction and accepts responsibility for what is published.'],
  ['team','Our Team & AI','ONE PLACE has one human founder. ChatGPT and other AI tools assist with research, drafts, design, code and quality checks. AI does not own the mission, replace professionals, or validate its own work. Human decisions and accountable review remain essential.'],
- ['faq','Frequently Asked Questions','<details><summary>Is ONE PLACE free?</summary><p>The current public learning pages and available tools do not require a payment or account. Future offerings have not been activated.</p></details><details><summary>Is the website finished?</summary><p>No. Existing content is public while work continues. A working page does not establish educational effectiveness or professional review.</p></details><details><summary>Does ONE PLACE provide professional advice?</summary><p>No. Learning materials are educational; for medical, legal, financial or other high-risk matters, seek appropriately qualified support.</p></details><details><summary>Are my practice answers private?</summary><p>Some lesson tools keep optional information in local browser storage; external hosts and browser services can have their own data practices. Avoid entering sensitive information in public or shared devices.</p></details>'],
- ['qa','Questions & Answers','<details><summary>Do I have to agree with TEAL?</summary><p>No. Every person deserves respect, including people who question or reject this philosophy.</p></details><details><summary>Can ONE PLACE solve every life problem?</summary><p>No. It aims to help visitors learn, clarify decisions and find next steps, not replace human relationships or qualified services.</p></details><details><summary>Can I suggest a correction or ask something else?</summary><p>You can use the <a href="https://github.com/ouroneplace/ouroneplace.github.io/issues" target="_blank" rel="noopener noreferrer">public project issue tracker</a>, which requires a GitHub account. Do not include personal or sensitive information. There is no private Q&A submission form on this website.</p></details>'],
+ ['faq','Frequently Asked Questions','<details><summary>Is ONE PLACE free?</summary><p>The current public learning pages and available tools do not require a payment or account. Future offerings have not been activated.</p></details><details><summary>Is the website finished?</summary><p>No. Existing content is public while work continues. A working page does not establish educational effectiveness or professional review.</p></details><details><summary>Does ONE PLACE provide professional advice?</summary><p>No. Learning materials are educational; for medical, legal, financial or other high-risk matters, seek appropriately qualified support.</p></details><details><summary>Are my practice answers private?</summary><p>Some lesson tools keep optional information in local browser storage; external hosts and browser services can have their own data practices. Avoid entering sensitive information in public or shared devices.</p></details><details><summary>Do I have to agree with TEAL?</summary><p>No. Every person deserves respect, including people who question or reject this philosophy.</p></details><details><summary>Can ONE PLACE solve every life problem?</summary><p>No. It aims to help visitors learn, clarify decisions and find next steps, not replace human relationships or qualified services.</p></details><details><summary>Can I suggest a correction or ask something else?</summary><p>You can use the <a href="https://github.com/ouroneplace/ouroneplace.github.io/issues" target="_blank" rel="noopener noreferrer">public project issue tracker</a>, which requires a GitHub account. Do not include personal or sensitive information. There is no private Q&A submission form on this website.</p></details>'],
  ['record','Public Record & Accountability','The website does not currently connect visitor analytics, payments or a public giving ledger. Unknown numbers are not zero. <a href="index.html?impact">Review the existing public breakdown prototype</a>. Plans, estimates and intentions are not presented as verified outcomes.'],
- ['version','Version & Last Update','<p class="op4-version"><strong>Homepage version 4.2.0</strong><br>Last content update: November 9, 2026 at 8:37 PM CST.<br>Public code and subsequent revisions: <a href="https://github.com/ouroneplace/ouroneplace.github.io/commits/main/" target="_blank" rel="noopener noreferrer">GitHub commit history</a>.</p><p>This is a homepage and About-information revision. Publication does not certify every lesson, resource or accessibility scenario.</p>']
+ ['version','Version & Last Update','<p class="op4-version"><strong>Homepage version 4.3.0</strong><br>Last content update: November 10, 2026 at 3:27 PM CST.<br>Public code and subsequent revisions: <a href="https://github.com/ouroneplace/ouroneplace.github.io/commits/main/" target="_blank" rel="noopener noreferrer">GitHub commit history</a>.</p><p>This is a homepage and About-information revision. Publication does not certify every lesson, resource or accessibility scenario.</p>']
  ];
- const jump=menuLinks.map(([name,id])=>'<a href="#'+id+'">'+name+'</a>').join('');
+ const jump=[['Vision','vision'],['Mission','mission'],['Dream','dream'],['Founder Bio','founder'],['Our Story','story'],['Team & AI','team'],['FAQ & Questions','faq'],['Public Record','record'],['Version & Updates','version']].map(([name,id])=>'<a href="#'+id+'">'+name+'</a>').join('');
  main.innerHTML='<a class="back" href="index.html">← All life areas</a><h1>About ONE PLACE</h1><p class="op4-lead">A practical home for learning, understanding, caring and exploring.</p><nav class="op4-about-nav" aria-label="About topics">'+jump+'</nav>'+sections.map(([id,title,copy])=>'<article id="'+id+'"><h2>'+title+'</h2>'+(copy.startsWith('<details')||copy.startsWith('<p')?copy:'<p>'+copy+'</p>')+'</article>').join('')+'<p class="notice">ONE PLACE is an evolving public educational project. The approved TEAL-101 philosophy is available publicly in the TEAL section; private source records and archival appendices remain separate.</p>';
  if(location.hash)setTimeout(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView(),0);
 }
