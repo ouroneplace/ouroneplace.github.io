@@ -44,9 +44,10 @@ for (const width of [1366, 320]) {
   }
   await page.goto('/');
   await page.locator('.op4-menu summary').click();
-  await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy'}).click();
-  await expect(page).toHaveURL(/index\.html\?about#teal-philosophy$/);
-  await expect(page.locator('#teal-philosophy')).toContainText('Trinity Equals Amazing Love');
+  await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy & all 12 sections'}).click();
+  await expect(page).toHaveURL(/\/teal\/#teal-101$/);
+  await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
+  await page.goto('/index.html?about');
   await expect(page.locator('#version')).toContainText('Homepage version 4.2.0');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  });
