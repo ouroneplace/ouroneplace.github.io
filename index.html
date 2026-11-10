@@ -422,7 +422,7 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  font-size:13px;line-height:1.35;font-weight:650;color:#17433c;text-decoration:none}
 .op4-menu .op4-menu-links .op5-menu-group a:hover,.op4-menu .op4-menu-links .op5-menu-group a:focus-visible{background:#e7f7f0;outline-offset:2px}
 .op4-menu summary{display:flex;gap:4px;align-items:center;justify-content:center}
-.op4-menu summary::after{display:none}
+.op4-menu summary::after{display:inline;color:#1a756b;font-size:12px}
 .op4-about-nav{margin-top:15px}
 @media(max-width:700px){
  .op4-menu .op4-menu-links{grid-template-columns:1fr;width:min(290px,calc(100vw - 26px));padding:11px;gap:9px;max-height:68svh}
@@ -449,7 +449,7 @@ const links=menuGroups.map(([heading,items])=>'<section class="op5-menu-group"><
 if(isAbout&&location.hash==='#teal-philosophy'){location.replace('teal/');return;}
 const priorHeader=shell.querySelector('header');
 if(priorHeader){
- const aboutMenu='<details class="op4-menu"><summary>About <span aria-hidden="true">▾</span></summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
+ const aboutMenu='<details class="op4-menu"><summary>About</summary><nav class="op4-menu-links" aria-label="About ONE PLACE">'+links+'</nav></details>';
  const brand='<a class="op4-brand" href="index.html" aria-label="ONE PLACE home">'+logo+'<span class="op4-name">ONE PLACE</span></a>';
  if(isHome){
   // Founder-approved 24-card homepage: cosmic hero, About below banner, actual HTML content below.
