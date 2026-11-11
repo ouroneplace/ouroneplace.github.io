@@ -14,7 +14,7 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  await expect(page.locator('.op4-header .op4-name')).toHaveText('ONE PLACE');
  await expect(page.locator('.op4-header svg')).toHaveCount(0);
  await page.locator('.op4-menu summary').click();
- await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy & all 12 sections'})).toHaveAttribute('href','teal/#teal-101');
+ await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL'})).toHaveAttribute('href','teal/');
  expect(errors).toEqual([]);
 });
 

@@ -427,6 +427,16 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .shell:has(.op4-about) .op5-menu-row{height:57px}
  .op5-menu-row .op4-menu-links{max-height:66vh}
 }
+
+/* Founder v5: desktop uses the same approved TEAL artwork composition as mobile,
+   adapted to a 1920x360 panoramic asset. Keep <=700px mobile rules unchanged. */
+@media(min-width:701px){
+ .op5-cosmic{background:#071a2b url("teal/assets/one-place-desktop-panorama.svg") center center/cover no-repeat}
+ .op5-cosmic::before{height:100%;width:100%;background:linear-gradient(180deg,transparent 0%,rgba(0,16,28,.02) 55%,rgba(0,14,26,.14) 100%)}
+ .op5-cosmic .op4-source-symbol{position:absolute;opacity:0;width:1px;height:1px;box-shadow:none;filter:none;pointer-events:none}
+ .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(12px,1.2vw,25px);gap:0}
+ .op5-cosmic .op4-brand .op4-name{margin-top:0}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
@@ -441,7 +451,7 @@ const groupLinks=(start,end)=>menuLinks.slice(start,end).map(([label,id])=>'<a h
 const links='<div class="op5-menu-caption">Our purpose</div>'+groupLinks(0,3)
  +'<div class="op5-menu-caption">Our people</div>'+groupLinks(3,6)
  +'<div class="op5-menu-caption">TEAL — one home</div>'
- +'<a class="op5-teal-link" href="teal/#teal-101">TEAL Philosophy & all 12 sections</a>'
+ +'<a class="op5-teal-link" href="teal/">TEAL</a>'
  +'<div class="op5-menu-caption">Help & transparency</div>'+groupLinks(6);
 const priorHeader=shell.querySelector('header');
 if(priorHeader){
