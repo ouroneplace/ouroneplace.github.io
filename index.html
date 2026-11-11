@@ -479,6 +479,21 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
   text-align:center;
  }
 }
+
+/* v5 exact founder reference 1666×330: image contains emblem and wordmark.
+   Do not compose, blend, crop, duplicate, or overlay separate art.
+   Do not change the already approved mobile rules <=700px. */
+@media(min-width:701px){
+ .op5-cosmic{
+   background-color:#061421;
+   background-image:url("teal/assets/one-place-desktop-approved.png");
+   background-position:center center;
+   background-size:100% 100%;
+   background-repeat:no-repeat;
+ }
+ .op5-cosmic::before{content:none}
+ .op5-cosmic .op4-source-symbol,.op5-cosmic .op4-name{display:none}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
