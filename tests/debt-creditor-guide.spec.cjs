@@ -73,7 +73,7 @@ for(const width of [320,390,1366]){
     const back=page.getByRole('navigation',{name:'Return navigation'}).getByRole('link',{name:/Money & Bills/});
     await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
     await back.click();
-    await expect(page).toHaveURL(/\/index\.html\?area=Money%20%26%20Bills$/);
+    await expect(page).toHaveURL(/money-center/);
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
   });
 }
