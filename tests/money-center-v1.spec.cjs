@@ -11,7 +11,7 @@ for(const width of [320,390,768,1366,1920]){
   await expect(page.getByRole('link',{name:'Open bill planner'})).toHaveAttribute('href','money-bills.html');
   await expect(page.getByRole('link',{name:'Open debt guide'})).toHaveAttribute('href','debt-creditor-guide.html');
   await expect(page.getByText('No pretend products, checkout, subscriptions or unlaunched assisted services.')).toBeVisible();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+  expect(await page.evaluate(()=>{window.scrollTo(1000,0);return window.scrollX===0 && getComputedStyle(document.body).overflowX==='clip';})).toBe(true);
   expect(errors).toEqual([]);
  });
 }
@@ -20,7 +20,7 @@ test('Situation guide, topic panel, comparison, and privacy-first downloadable p
  await page.locator('#situation').selectOption('debt');
  await expect(page.locator('#situationResult')).toContainText('identify');
  await page.getByRole('button',{name:'Budgeting & cash flow'}).click();
- await expect(page.locator('#topicPanel')).toContainText('expected income');
+ await expect(page.locator('#topicPanel')).toContainText('anticipated income');
  await page.locator('#priceA').fill('3.00');await page.locator('#qtyA').fill('8');
  await page.locator('#priceB').fill('3.77');await page.locator('#qtyB').fill('8');
  await expect(page.locator('#comparison')).toContainText('Store A');
