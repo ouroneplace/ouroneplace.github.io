@@ -69,7 +69,7 @@ test('ONE PLACE About includes a working route to TEAL-101 on the original TEAL 
  const section=page.locator('nav.op4-about-nav');
  await expect(section.getByRole('link',{name:/Explore TEAL/})).toHaveAttribute('href','teal/#teal-101');
  await section.getByRole('link',{name:/Explore TEAL/}).click();
- await expect(page).toHaveURL(/\/teal\/$/);
+ await expect(page).toHaveURL(/\/teal\/#teal-101$/);
  await expect(page.locator('#teal-101')).toBeVisible();
 });
 
