@@ -67,7 +67,7 @@ fs.mkdirSync(output,{recursive:true});
    // The complete TEAL philosophy is reached from the new About dropdown.
    await goto('/');
    await page.locator('.op4-menu summary').click();
-   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'Message & Philosophy'}).click();
+   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL'}).click();
    await visible(page.locator('#teal-101'));
    assert.equal(new URL(page.url()).pathname,'/teal/');
    assert.equal(await page.locator('#teal-101 details.teal101-chapter').count(),12);
