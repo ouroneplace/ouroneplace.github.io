@@ -39,3 +39,27 @@ test('ONE PLACE About has one TEAL philosophy destination and preserves question
  await expect(page).toHaveURL(/\/teal\/$/);
  await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
 });
+
+
+for(const width of [320,390,768,1366,1920]){
+ test('Founder v5 artwork and TEAL landing route at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto('/index.html');
+  const header=page.locator('header.op5-cosmic');
+  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536\\.webp/:/one-place-desktop-panorama\\.svg/);
+  await page.locator('.op5-menu-row summary').click();
+  await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL',exact:true}).click();
+  await expect(page).toHaveURL(/\\/teal\\/$/);
+  await expect(page.locator('header.opening')).toBeVisible();
+  await expect(page.locator('.teal-wordmark')).toHaveText('TEAL');
+  await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
+ });
+}
+test('Desktop panoramic image decodes at the approved dimensions',async({page})=>{
+ await page.goto('/');
+ const image=await page.evaluate(async()=>{
+  const img=new Image();img.src='/teal/assets/one-place-desktop-panorama.svg';
+  await img.decode();return [img.naturalWidth,img.naturalHeight];
+ });
+ expect(image).toEqual([1920,360]);
+});
