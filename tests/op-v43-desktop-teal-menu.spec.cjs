@@ -16,14 +16,14 @@ for (const width of [768,1050,1366,1920]) {
   await menu.locator('summary').click();
   const nav=page.getByRole('navigation',{name:'About ONE PLACE'});
   await expect(nav.locator('.op5-menu-group')).toHaveCount(4);
-  await expect(nav.getByRole('link',{name:'Message & Philosophy'})).toHaveCount(1);
+  await expect(nav.getByRole('link',{name:'TEAL'})).toHaveCount(1);
   await expect(nav.getByRole('link',{name:'FAQ & Questions'})).toHaveCount(1);
   await expect(nav.getByRole('link',{name:/TEAL-101/})).toHaveCount(0);
   await page.keyboard.press('Escape');
   await expect(menu).not.toHaveAttribute('open','');
   await expect(menu.locator('summary')).toBeFocused();
   await menu.locator('summary').click();
-  await nav.getByRole('link',{name:'Message & Philosophy'}).click();
+  await nav.getByRole('link',{name:'TEAL'}).click();
   await expect(page).toHaveURL(/\/teal\/$/);
   await expect(page.locator('#teal-101 .teal101-chapter')).toHaveCount(12);
   expect(errors).toEqual([]);
@@ -54,7 +54,7 @@ test('About ONE PLACE has one TEAL destination and one questions section',async(
  await expect(page.locator('#version')).toContainText('Homepage version 4.3.0');
  await page.locator('.op4-menu summary').click();
  const nav=page.getByRole('navigation',{name:'About ONE PLACE'});
- await expect(nav.getByRole('link',{name:'Message & Philosophy'})).toHaveAttribute('href','teal/');
+ await expect(nav.getByRole('link',{name:'TEAL'})).toHaveAttribute('href','teal/');
  await page.locator('#version').click();
  await expect(page.locator('.op4-menu')).not.toHaveAttribute('open','');
  await page.goto('/index.html?about#teal-philosophy');
