@@ -3,7 +3,8 @@ test('v4 removes the old public banner and exposes honest About information',asy
  await page.goto('/');
  await expect(page.locator('header .flag')).toHaveCount(0);
  await expect(page.locator('.op4-brand')).toContainText('ONE PLACE');
- await expect(page.locator('.op4-brand .op4-source-symbol')).toBeVisible();
+ await expect(page.locator('.op4-brand .op4-source-symbol')).toBeHidden();
+ await expect(page.locator('.op5-cosmic')).toHaveCSS('background-image',/one-place-desktop-single-emblem/);
  await expect(page.locator('.op4-brand svg')).toHaveCount(0);
  await expect(page.locator('.op4-menu summary')).toHaveText('About');
  await expect(page.locator('.grid .tile.pending')).toHaveCount(3);
