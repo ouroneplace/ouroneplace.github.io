@@ -461,9 +461,11 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op5-cosmic .op4-brand .op4-name{margin-top:10px}
 }
 
-/* v5 founder screenshot: artwork itself contains the glowing TEAL symbol.
+/* v5 founder screenshot: original artwork contains the glowing TEAL symbol.
    Never paint a second inset logo on top of that artwork. Desktop only. */
 @media (min-width:701px){
+ .op5-cosmic{background:#061c29 url("teal/assets/one-place-desktop-single-emblem.svg") center center/cover no-repeat}
+ .op5-cosmic::before{background:linear-gradient(180deg,transparent 0%,rgba(0,16,28,.04) 70%,rgba(0,14,26,.16) 100%)}
  .op5-cosmic .op4-source-symbol{
   display:none;
  }
