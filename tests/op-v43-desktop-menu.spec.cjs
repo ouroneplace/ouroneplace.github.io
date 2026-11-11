@@ -12,8 +12,8 @@ for(const width of [390,768,1366,1920]){
   await page.locator('.op5-menu-row .op4-menu summary').click();
   const nav=page.getByRole('navigation',{name:'About ONE PLACE'});
   await expect(nav.locator('.op5-menu-caption')).toHaveCount(4);
-  await expect(nav.getByRole('link',{name:'TEAL Philosophy & all 12 sections'})).toHaveCount(1);
-  await expect(nav.getByRole('link',{name:'TEAL Philosophy & all 12 sections'})).toHaveAttribute('href','teal/#teal-101');
+  await expect(nav.getByRole('link',{name:'TEAL'})).toHaveCount(1);
+  await expect(nav.getByRole('link',{name:'TEAL'})).toHaveAttribute('href','teal/');
   await expect(nav.getByRole('link',{name:'Vision',exact:true})).toBeVisible();
   await expect(nav.getByRole('link',{name:'FAQ & Answers'})).toBeVisible();
   await nav.getByRole('link',{name:'Vision'}).click();
@@ -35,7 +35,7 @@ test('ONE PLACE About has one TEAL philosophy destination and preserves question
  await expect(page.locator('#faq details')).toHaveCount(4);
  await expect(page.locator('#qa details')).toHaveCount(3);
  await page.locator('.op5-menu-row summary').click();
- await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL Philosophy & all 12 sections'}).click();
- await expect(page).toHaveURL(/\/teal\/#teal-101$/);
+ await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL'}).click();
+ await expect(page).toHaveURL(/\/teal\/$/);
  await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
 });
