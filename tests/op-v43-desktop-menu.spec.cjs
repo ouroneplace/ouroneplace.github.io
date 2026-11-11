@@ -71,6 +71,6 @@ test('Founder desktop reference at 1670px preserves original 326px high banner a
  await expect(hero).toHaveCSS('background-image',/earth-1536/);
  const h=await hero.evaluate(el=>el.getBoundingClientRect().height);
  expect(Math.abs(h-326)).toBeLessThanOrEqual(1);
- await expect(hero.locator('.op4-source-symbol')).toHaveCSS('opacity','1');
+ await expect(hero.locator('.op4-source-symbol')).toBeHidden();
  await expect(hero.locator('.op4-name')).toHaveText('ONE PLACE');
 });
