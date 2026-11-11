@@ -437,6 +437,29 @@ body:has(.op4-home),body:has(.op4-about){background:radial-gradient(ellipse at 5
  .op5-cosmic .op4-brand{justify-content:flex-end;padding-bottom:clamp(12px,1.2vw,25px);gap:0}
  .op5-cosmic .op4-brand .op4-name{margin-top:0}
 }
+
+/* Founder-approved desktop treatment restored from pre-mobile-fix homepage
+   (2026-11-10, commit 5d03b54917). Intentionally desktop-only: mobile remains approved. */
+@media (min-width:701px){
+ .op5-cosmic{
+  background:#061c29 url("teal/assets/earth-1536.webp") 50% 53%/cover no-repeat;
+ }
+ .op5-cosmic::before{
+  height:100%;width:100%;
+  background:radial-gradient(ellipse 24% 79% at 50% 39%,#031c2ad6 0%,#031c2a7a 54%,transparent 90%),
+             linear-gradient(180deg,#00121b25,transparent 50%,#00111ed0 100%);
+ }
+ .op5-cosmic .op4-brand{
+  justify-content:center;padding:12px 10px;gap:1px;
+ }
+ .op5-cosmic .op4-source-symbol{
+  position:static;opacity:1;pointer-events:auto;
+  width:clamp(135px,11.1vw,188px);height:clamp(135px,11.1vw,188px);
+  box-shadow:0 0 16px #b5fffba1,0 0 55px 16px #21d9cd8c;
+  filter:drop-shadow(0 0 10px #9afef5);
+ }
+ .op5-cosmic .op4-brand .op4-name{margin-top:10px}
+}
 </style><script id="op4-homepage-script">
 (()=>{'use strict';
 const params=new URLSearchParams(location.search);
