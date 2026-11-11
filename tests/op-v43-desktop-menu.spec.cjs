@@ -46,7 +46,7 @@ for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:850});
   await page.goto('/index.html');
   const header=page.locator('header.op5-cosmic');
-  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536/:/one-place-desktop-panorama/);
+  await expect(header).toHaveCSS('background-image',/earth-1536/);
   await page.locator('.op5-menu-row summary').click();
   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL',exact:true}).click();
   await expect(page).toHaveURL(/teal/);
@@ -55,11 +55,22 @@ for(const width of [320,390,768,1366,1920]){
   await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
  });
 }
-test('Desktop panoramic image decodes at the approved dimensions',async({page})=>{
+test('Archived panoramic asset remains loadable but is not displayed as the homepage hero',async({page})=>{
  await page.goto('/');
  const image=await page.evaluate(async()=>{
   const img=new Image();img.src='/teal/assets/one-place-desktop-panorama.svg';
   await img.decode();return [img.naturalWidth,img.naturalHeight];
  });
  expect(image).toEqual([1920,360]);
+});
+
+test('Founder desktop reference at 1670px preserves original 326px high banner and visible emblem',async({page})=>{
+ await page.setViewportSize({width:1670,height:941});
+ await page.goto('/index.html');
+ const hero=page.locator('header.op5-cosmic');
+ await expect(hero).toHaveCSS('background-image',/earth-1536/);
+ const h=await hero.evaluate(el=>el.getBoundingClientRect().height);
+ expect(Math.abs(h-326)).toBeLessThanOrEqual(1);
+ await expect(hero.locator('.op4-source-symbol')).toHaveCSS('opacity','1');
+ await expect(hero.locator('.op4-name')).toHaveText('ONE PLACE');
 });
