@@ -16,7 +16,7 @@ test('OP-104 v4: learning, TEAL and simulator remain navigable',async({page})=>{
  await page.getByRole('link',{name:'One Place home',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Explore every part of life'})).toBeVisible();
  await page.locator('.op4-menu summary').click();
- await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'Message & Philosophy'}).click();
+ await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL'}).click();
  await expect(page.locator('#teal-101')).toBeVisible();
  await expect(page).toHaveURL(/\/teal\/$/);
  await page.getByRole('link',{name:'One Place Home'}).first().click();
