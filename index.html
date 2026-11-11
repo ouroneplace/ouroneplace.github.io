@@ -440,11 +440,11 @@ if(!main||!shell)return;
 const logo='<span class="op4-source-symbol" role="img" aria-label="Original glowing three-heart TEAL emblem"></span>'
 const menuGroups=[
  ['OUR PURPOSE',[['Vision','index.html?about#vision'],['Mission','index.html?about#mission'],['Dream','index.html?about#dream']]],
- ['TEAL',[['Message & Philosophy','teal/']]],
+ ['', [['TEAL','teal/']]],
  ['PEOPLE & STORY',[['Founder Bio','index.html?about#founder'],['Our Story','index.html?about#story'],['Team & AI','index.html?about#team']]],
  ['HELP & ACCOUNTABILITY',[['FAQ & Questions','index.html?about#faq'],['Public Record','index.html?about#record'],['Version & Updates','index.html?about#version']]]
 ];
-const links=menuGroups.map(([heading,items])=>'<section class="op5-menu-group"><p class="op5-menu-heading">'+heading+'</p>'+items.map(([label,href])=>'<a href="'+href+'">'+label+'</a>').join('')+'</section>').join('');
+const links=menuGroups.map(([heading,items])=>'<section class="op5-menu-group">'+(heading?'<p class="op5-menu-heading">'+heading+'</p>':'')+items.map(([label,href])=>'<a href="'+href+'">'+label+'</a>').join('')+'</section>').join('');
 // Keep old deep links usable on both first load and same-document hash navigation.
 const redirectLegacyAboutHash=()=>{
  if(!isAbout)return;
