@@ -6,7 +6,7 @@ test('Debt Guide appears in Money & Bills and five distinct paths remain navigab
   await page.goto('/index.html?area=Money%20%26%20Bills');
   const guideLink=page.getByRole('link',{name:/Debt & Creditor Guide/});
   await expect(guideLink).toBeVisible();
-  await expect(guideLink).toHaveAttribute('href','one-place/debt-creditor-guide.html');
+  await expect(guideLink).toHaveAttribute('href','debt-creditor-guide.html');
   await guideLink.click();
   await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
   await expect(page).toHaveTitle(/Debt & Creditor Guide/);
