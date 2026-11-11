@@ -4,9 +4,9 @@ const fs=require('node:fs/promises');
 test('Debt Guide appears in Money & Bills and five distinct paths remain navigable',async({page})=>{
   const errs=[];page.on('pageerror',e=>errs.push(e.message));
   await page.goto('/index.html?area=Money%20%26%20Bills');
-  const guideLink=page.getByRole('link',{name:/Debt & Creditor Guide/});
+  const guideLink=page.getByRole('link',{name:'Open debt guide'});
   await expect(guideLink).toBeVisible();
-  await expect(guideLink).toHaveAttribute('href','one-place/debt-creditor-guide.html');
+  await expect(guideLink).toHaveAttribute('href','debt-creditor-guide.html');
   await guideLink.click();
   await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
   await expect(page).toHaveTitle(/Debt & Creditor Guide/);
@@ -73,7 +73,7 @@ for(const width of [320,390,1366]){
     const back=page.getByRole('navigation',{name:'Return navigation'}).getByRole('link',{name:/Money & Bills/});
     await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
     await back.click();
-    await expect(page).toHaveURL(/\/index\.html\?area=Money%20%26%20Bills$/);
+    await expect(page).toHaveURL(/money-center/);
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
   });
 }

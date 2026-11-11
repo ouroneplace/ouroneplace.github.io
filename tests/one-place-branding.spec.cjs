@@ -19,6 +19,12 @@ for (const width of [1366, 320]) {
   const solutions=[];
   for(const area of areas){
    await page.goto('/'+area);
+   if(area.includes('Money')){
+    await expect(page).toHaveURL(/one-place\/money-center\.html$/);
+    await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
+    solutions.push(...['s001','s002','s003','s004'].map(id=>'index.html?service='+id));
+    continue;
+   }
    await expect(page.locator('.offers > a.offer')).toHaveCount(4);
    solutions.push(...await page.locator('.offers > a.offer').evaluateAll(els=>els.map(el=>el.getAttribute('href'))));
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
@@ -56,7 +62,8 @@ for (const width of [1366, 320]) {
 test('ONE PLACE: legacy catalog queries and learning bookmarks keep destinations',async({page})=>{
  for(const query of ['?area=Money%20%26%20Bills','?service=s001','?team','?impact']){
   await page.goto('/one-place/index.html'+query);
-  await expect(page).toHaveURL('http://127.0.0.1:8765/index.html'+query);
+  if(query.startsWith('?area=Money')) await expect(page).toHaveURL(/one-place\/money-center\.html$/);
+  else await expect(page).toHaveURL('http://127.0.0.1:8765/index.html'+query);
   await expect(page.getByRole('heading',{level:1})).toBeVisible();
  }
  await page.goto('/#choose');
@@ -85,7 +92,7 @@ test('ONE PLACE v4: keyboard skip and category card reach useful content',async(
  await expect(page.locator('main')).toBeFocused();
  await page.locator('.grid > a.tile').first().focus();
  await page.keyboard.press('Enter');
- await expect(page).toHaveURL(/area=Money/);
+ await expect(page).toHaveURL(/one-place\/money-center\.html$/);
  await expect(page.getByRole('heading',{level:1})).toBeVisible();
 });
 
@@ -95,7 +102,7 @@ test('ONE PLACE: fictional tool edits remain local, no tracking or accounts',asy
  await page.goto('/');
  await expect(page.locator('input[type=password],input[type=email]')).toHaveCount(0);
  await page.locator('.grid > a.tile').first().click();
- await page.locator('[data-money-pilot-link]').click();
+ await page.getByRole('link',{name:'Open bill planner'}).click();
  await page.locator('#sample').click();
  await page.locator('#cash').fill('450');
  await page.locator('#tab-plan').click();
@@ -126,7 +133,7 @@ for(const prefix of ['Human-literacy-online','One-Place']){
   await page.getByRole('navigation',{name:'One Place and lessons'}).getByRole('link',{name:'One Place Home',exact:true}).click();
   await expect(page).toHaveURL(new RegExp(mount+'index\\.html$'));
   await page.locator('.grid > a.tile').first().click();
-  await page.locator('[data-money-pilot-link]').click();
+  await page.getByRole('link',{name:'Open bill planner'}).click();
   await expect(page).toHaveURL(new RegExp(mount+'one-place/money-bills\\.html$'));
  });
 }

@@ -97,7 +97,7 @@ test('Money & Bills: return to category without losing existing Debt Guide link'
     await expect(back).toBeVisible();
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
     await back.click();
-    await expect(page).toHaveURL(/index\.html\?area=Money%20%26%20Bills$/);
+    await expect(page).toHaveURL(/money-center/);
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
   }
 });
