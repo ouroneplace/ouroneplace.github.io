@@ -74,3 +74,16 @@ test('Founder desktop at 1670px preserves 326px banner and one artwork emblem',a
  await expect(hero.locator('.op4-source-symbol')).toBeHidden();
  await expect(hero.locator('.op4-name')).toHaveText('ONE PLACE');
 });
+
+test('Exact founder-supplied desktop banner loads without compositing',async({page})=>{
+ await page.setViewportSize({width:1666,height:941});
+ await page.goto('/index.html');
+ const image=await page.evaluate(async()=>{
+  const img=new Image();img.src='/teal/assets/one-place-desktop-approved.png';
+  await img.decode();return [img.naturalWidth,img.naturalHeight];
+ });
+ expect(image).toEqual([1666,330]);
+ await expect(page.locator('header.op5-cosmic')).toHaveCSS('background-image',/one-place-desktop-approved\\.png/);
+ await expect(page.locator('header.op5-cosmic .op4-source-symbol')).toBeHidden();
+ await expect(page.locator('header.op5-cosmic .op4-name')).toBeHidden();
+});
