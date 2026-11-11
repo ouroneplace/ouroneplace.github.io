@@ -46,7 +46,7 @@ for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:850});
   await page.goto('/index.html');
   const header=page.locator('header.op5-cosmic');
-  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536/:/one-place-desktop-single-emblem/);
+  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536/:/one-place-desktop-approved/);
   await page.locator('.op5-menu-row summary').click();
   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL',exact:true}).click();
   await expect(page).toHaveURL(/teal/);
@@ -68,7 +68,7 @@ test('Founder desktop at 1670px preserves 326px banner and one artwork emblem',a
  await page.setViewportSize({width:1670,height:941});
  await page.goto('/index.html');
  const hero=page.locator('header.op5-cosmic');
- await expect(hero).toHaveCSS('background-image',/one-place-desktop-single-emblem/);
+ await expect(hero).toHaveCSS('background-image',/one-place-desktop-approved/);
  const h=await hero.evaluate(el=>el.getBoundingClientRect().height);
  expect(Math.abs(h-326)).toBeLessThanOrEqual(1);
  await expect(hero.locator('.op4-source-symbol')).toBeHidden();
