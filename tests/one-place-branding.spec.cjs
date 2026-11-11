@@ -133,7 +133,7 @@ for(const prefix of ['Human-literacy-online','One-Place']){
   await page.getByRole('navigation',{name:'One Place and lessons'}).getByRole('link',{name:'One Place Home',exact:true}).click();
   await expect(page).toHaveURL(new RegExp(mount+'index\\.html$'));
   await page.locator('.grid > a.tile').first().click();
-  await page.locator('[data-money-pilot-link]').click();
+  await page.getByRole('link',{name:'Open bill planner'}).click();
   await expect(page).toHaveURL(new RegExp(mount+'one-place/money-bills\\.html$'));
  });
 }
