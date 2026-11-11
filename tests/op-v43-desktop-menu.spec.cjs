@@ -83,7 +83,7 @@ test('Exact founder-supplied desktop banner loads without compositing',async({pa
   await img.decode();return [img.naturalWidth,img.naturalHeight];
  });
  expect(image).toEqual([1666,330]);
- await expect(page.locator('header.op5-cosmic')).toHaveCSS('background-image',/one-place-desktop-approved\\.png/);
+ await expect(page.locator('header.op5-cosmic')).toHaveCSS('background-image',/one-place-desktop-approved/);
  await expect(page.locator('header.op5-cosmic .op4-source-symbol')).toBeHidden();
  await expect(page.locator('header.op5-cosmic .op4-name')).toBeHidden();
 });
