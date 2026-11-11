@@ -46,10 +46,10 @@ for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:850});
   await page.goto('/index.html');
   const header=page.locator('header.op5-cosmic');
-  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536\\.webp/:/one-place-desktop-panorama\\.svg/);
+  await expect(header).toHaveCSS('background-image',width<=700?/earth-1536/:/one-place-desktop-panorama/);
   await page.locator('.op5-menu-row summary').click();
   await page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL',exact:true}).click();
-  await expect(page).toHaveURL(/\\/teal\\/$/);
+  await expect(page).toHaveURL(/teal/);
   await expect(page.locator('header.opening')).toBeVisible();
   await expect(page.locator('.teal-wordmark')).toHaveText('TEAL');
   await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
