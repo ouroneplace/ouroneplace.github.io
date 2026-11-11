@@ -6,7 +6,7 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');
  const logo=page.locator('.op4-source-symbol');
- await expect(logo).toBeVisible();
+ await expect(logo).toBeHidden();
  const style=await logo.evaluate(el=>({image:getComputedStyle(el).backgroundImage,role:el.getAttribute('role'),alt:el.getAttribute('aria-label')}));
  expect(style.image).toContain('/teal/assets/earth-1536.webp');
  expect(style.role).toBe('img');
@@ -53,7 +53,8 @@ for(const width of [320,390,768,1366]){
  test('TEAL-101 full philosophy and ONE PLACE identity avoid horizontal overflow at '+width+'px',async({page})=>{
   await page.setViewportSize({width,height:width>=768?768:720});
   await page.goto('/');
-  await expect(page.locator('.op4-source-symbol')).toBeVisible();
+  if(width>700) await expect(page.locator('.op4-source-symbol')).toBeHidden();
+  else await expect(page.locator('.op4-source-symbol')).toHaveCSS('opacity','0');
   let x=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
   expect(x.scroll).toBeLessThanOrEqual(x.width+2);
   await page.goto('/teal/#teal-101');
