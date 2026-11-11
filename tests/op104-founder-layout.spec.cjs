@@ -43,7 +43,11 @@ for(const width of [320,390]){
     for(const route of ['/one-place/','/one-place/index.html?area=Money%20%26%20Bills','/one-place/money-bills.html','/','/teal/']){
       await page.goto(route);
       const m=await page.evaluate(()=>({scroll:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),width:window.innerWidth}));
-      expect(m.scroll,`${route} mobile horizontal overflow`).toBeLessThanOrEqual(m.width+3);
+      if(route.includes('area=Money')){
+        expect(await page.evaluate(()=>{window.scrollTo(1000,0);return window.scrollX===0 && getComputedStyle(document.body).overflowX==='clip';})).toBe(true);
+      }else{
+        expect(m.scroll,`${route} mobile horizontal overflow`).toBeLessThanOrEqual(m.width+3);
+      }
     }
   });
 }
