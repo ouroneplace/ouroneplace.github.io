@@ -14,7 +14,7 @@ test('ONE PLACE uses the existing original TEAL cosmic emblem asset in the cente
  await expect(page.locator('.op4-header .op4-name')).toHaveText('ONE PLACE');
  await expect(page.locator('.op4-header svg')).toHaveCount(0);
  await page.locator('.op4-menu summary').click();
- await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'Message & Philosophy'})).toHaveAttribute('href','teal/');
+ await expect(page.getByRole('navigation',{name:'About ONE PLACE'}).getByRole('link',{name:'TEAL'})).toHaveAttribute('href','teal/');
  expect(errors).toEqual([]);
 });
 
@@ -68,8 +68,8 @@ test('ONE PLACE provides a single TEAL destination for the message and all twelv
  await page.goto('/index.html?about');
  await page.locator('.op4-menu summary').click();
  const nav=page.getByRole('navigation',{name:'About ONE PLACE'});
- await expect(nav.getByRole('link',{name:'Message & Philosophy'})).toHaveCount(1);
- await nav.getByRole('link',{name:'Message & Philosophy'}).click();
+ await expect(nav.getByRole('link',{name:'TEAL'})).toHaveCount(1);
+ await nav.getByRole('link',{name:'TEAL'}).click();
  await expect(page).toHaveURL(/\/teal\/$/);
  await expect(page.locator('#teal-101')).toBeVisible();
  await expect(page.locator('#teal-101 details.teal101-chapter')).toHaveCount(12);
