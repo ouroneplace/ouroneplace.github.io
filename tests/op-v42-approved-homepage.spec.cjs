@@ -13,7 +13,7 @@ for(const width of [320,390,768,1050,1366,1670]){
   await expect(header.locator('.op4-name')).toHaveText('ONE PLACE');
   await expect(header.locator('.op4-source-symbol')).toBeAttached();
   const back=await header.evaluate(el=>getComputedStyle(el).backgroundImage);
-  expect(back).toContain('/teal/assets/earth-1536.webp');
+  expect(back).toContain(width<=700?'/teal/assets/earth-1536.webp':'/teal/assets/one-place-desktop-single-emblem.svg');
   if(width>700){
    // The emblem is baked into the approved art: do not display the extra CSS copy.
    await expect(header.locator('.op4-source-symbol')).toBeHidden();
