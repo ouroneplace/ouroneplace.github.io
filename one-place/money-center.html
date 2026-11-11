@@ -90,7 +90,22 @@ const topics=[
 ];
 const menu=$('topicsMenu'),panel=$('topicPanel');function topic(i){const t=topics[i];Array.from(menu.children).forEach((b,j)=>b.setAttribute('aria-pressed',String(i===j)));panel.replaceChildren();let h=document.createElement('h3');h.textContent=t[0];let p=document.createElement('p');p.textContent=t[1];let b=document.createElement('p');b.textContent='Try this: '+t[2];let a=document.createElement('a');a.href=t[3];a.textContent='Open relevant guide or source →';if(t[3].startsWith('https:')){a.target='_blank';a.rel='noopener noreferrer'}panel.append(h,p,b,a)}
 topics.forEach((t,i)=>{let b=document.createElement('button');b.type='button';b.className='topic-button';b.textContent=t[0];b.addEventListener('click',()=>topic(i));menu.appendChild(b)});topic(0);
-function compare(){const a=Number($('priceA').value),b=Number($('priceB').value),qa=Number($('qtyA').value),qb=Number($('qtyB').value),f=$('comparison');if(!($('priceA').value&&$('priceB').value&&qa>0&&qb>0&&a>=0&&b>=0)){f.textContent='Enter both prices and positive quantities to compare unit costs.';return}const u=$('unit').value,pa=a/qa,pb=b/qb,fmt=n=>'$'+n.toFixed(3);let s='Store A: '+fmt(pa)+' per '+u+' · Store B: '+fmt(pb)+' per '+u+'. ';s+=Math.abs(pa-pb)<.000001?'Same unit cost.':(pa<pb?'Store A':'Store B')+' has the lower unit cost by '+fmt(Math.abs(pa-pb))+' per '+u+'.';const annual=Number($('annual').value);if(annual>0&&Number.isInteger(annual)){const annualQty=qa*annual,delta=Math.abs(pa-pb)*annualQty;s+=' For '+annualQty.toLocaleString()+' '+u+'s per year, estimated unit-cost difference: f.textContent=s}
+function compare(){
+ const a=Number($('priceA').value),b=Number($('priceB').value),qa=Number($('qtyA').value),qb=Number($('qtyB').value),out=$('comparison');
+ if(!($('priceA').value && $('priceB').value && qa>0 && qb>0 && a>=0 && b>=0)){
+  out.textContent='Enter both prices and positive quantities to compare unit costs.';return;
+ }
+ const unit=$('unit').value,pa=a/qa,pb=b/qb;
+ const fmt=n=>String.fromCharCode(36)+n.toFixed(3);
+ let msg='Store A: '+fmt(pa)+' per '+unit+' · Store B: '+fmt(pb)+' per '+unit+'. ';
+ msg+=Math.abs(pa-pb)<0.000001?'Same unit cost.':(pa<pb?'Store A':'Store B')+' has the lower unit cost by '+fmt(Math.abs(pa-pb))+' per '+unit+'.';
+ const annual=Number($('annual').value);
+ if(annual>0 && Number.isInteger(annual)){
+  const annualQty=qa*annual,delta=Math.abs(pa-pb)*annualQty;
+  msg+=' For '+annualQty.toLocaleString()+' '+unit+'s per year, estimated unit-cost difference: '+String.fromCharCode(36)+delta.toFixed(2)+'.';
+ }
+ out.textContent=msg;
+}
 ['priceA','qtyA','priceB','qtyB','unit','annual'].forEach(id=>$(id).addEventListener('input',compare));
 const tasks=()=>Array.from(document.querySelectorAll('.task:checked')).map(x=>x.value);
 function updateTasks(){const n=tasks().length;$('checkupStatus').textContent=n+' priorities selected'+(n>3?'. Please choose no more than three to keep this manageable.':'. Choose one doable next action.');$('download').disabled=n>3}
