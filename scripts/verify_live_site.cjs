@@ -97,6 +97,15 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Mental Health support practice: safety notice before other teaching and live quiz flow.
+   await goto('/one-place/support-skills-safety.html');
+   assert.equal(await page.locator('section.lesson').count(),4,'Support Skills must offer four lessons');
+   assert.equal(await page.locator('form.practice').count(),4,'Support Skills must include four decisions');
+   assert.match(await page.locator('main > p.alert').innerText(),/Urgent help comes first/,'Urgent safety route must be visible');
+   await page.locator('#urgent input[type=radio]').nth(2).check();
+   await page.locator('#urgent button[type=submit]').click();
+   assert.match(await page.locator('#urgent .feedback').innerText(),/Safety comes first/,'Urgent safe choice feedback must work');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
