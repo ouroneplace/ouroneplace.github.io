@@ -8,6 +8,7 @@ for(const width of [320,390,1366,1920]){
   await expect(page.getByRole('heading',{name:'Health Literacy Practice Lab',level:1})).toBeVisible();
   await expect(page.locator('section.lesson')).toHaveCount(4);
   await expect(page.locator('form.practice')).toHaveCount(4);
+  await expect(page.locator('form.practice button[type="submit"]:enabled')).toHaveCount(4);
   const jumps=page.getByRole('navigation',{name:'Jump to a lesson'}).getByRole('link');
   await expect(jumps).toHaveCount(4);
   for(const [i,id] of ['label','medicines','claims','screening'].entries()){
@@ -65,6 +66,7 @@ test('Health Literacy Lab educational material remains visible with JavaScript o
   await expect(page.getByRole('heading',{name:'Health Literacy Practice Lab'})).toBeVisible();
   await expect(page.locator('section.lesson')).toHaveCount(4);
   await expect(page.locator('noscript p')).toContainText('Teaching and official links remain available');
+  await expect(page.locator('form.practice button[type="submit"]:disabled')).toHaveCount(4);
   await expect(page.getByRole('link',{name:/FDA Drug Facts label/})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  }finally{await context.close();}
