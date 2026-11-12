@@ -30,5 +30,15 @@
 - **Release rule:** Preserve this accepted area and toolkit, with its navigation, practical guidance, privacy warnings and export safeguards. Subsequent changes require focused QA and explicit authorization before merging or publishing.
 - **Limits:** Automated and recorded tests cannot guarantee all real-world care situations or continued availability of third-party resources.
 
-**Next development priority:** Phase 1 reliability — proposed automatic verification against the actual published Pages deployment after each `main` update. This is review-only until expressly authorized to merge; all accepted baselines remain protected.
+## Health & Wellness — Appointment Preparation Studio (component acceptance)
+
+- **Decision:** Founder explicitly approved the **Appointment Preparation Studio** on **November 12, 2026 (Central Time)**: “approve studio.”
+- **Status:** Founder accepted and protected component. **Not yet approval of the entire Health & Wellness v1.0 area.**
+- **Scope:** The released Studio at https://ouroneplace.github.io/one-place/health-wellness.html#plan: entry of appointment questions and concerns, editable draft, review-before-download, explicit local text-file download, reset confirmation, privacy and safety cautions.
+- **Verification:** [PR #50](https://github.com/ouroneplace/ouroneplace.github.io/pull/50) published the Health Center; [PR #51](https://github.com/ouroneplace/ouroneplace.github.io/pull/51) restored full verification. Baseline `9cbae7f39da55d6e4ef16d1864e2e109c0ab3939`; [Pages 43236311239](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43236311239), [19-file live smoke 43236311874](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43236311874), and [647/647 regression 43236311953](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43236311953) all passed.
+- **Acceptance evidence:** [Founder comment on PR #50](https://github.com/ouroneplace/ouroneplace.github.io/pull/50#issuecomment-6826575884).
+- **Release rule:** Preserve this approved component without unrequested design, function or privacy changes. New lessons require separate QA and explicit publication authorization.
+- **Limits:** This acceptance does not certify clinical advice, real-world health outcomes or remaining Health & Wellness curriculum.
+
+**Next development priority:** Health Literacy Practice Lab—substantive source-backed lessons and safe exercises, while preserving approved work.
 
