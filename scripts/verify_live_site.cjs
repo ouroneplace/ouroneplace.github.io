@@ -97,6 +97,60 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Wellness routine: no blank-form barrier, requires a deliberate reviewed build.
+   await goto('/one-place/health-wellness.html#habits');
+   assert.equal(await page.locator('[data-routine-example]').count(),4,'Wellness routine must offer four fictional starters');
+   await page.locator('[data-routine-example="rest"]').click();
+   assert.equal(await page.locator('#habitCue').inputValue(),'After putting my phone aside in the evening','Example cue must populate');
+   assert.equal(await page.locator('#habitResult').isHidden(),true,'Example must not auto-generate a plan');
+   await page.locator('#makeHabit').click();
+   assert.match(await page.locator('#habitResult').innerText(),/After putting my phone aside in the evening/,'Wellness plan must build on request');
+   await page.locator('#resetHabit').click();
+   assert.equal(await page.locator('#habitCue').inputValue(),'','Clear must remove example');
+   await reflow();
+   // Technology & Digital Safety: real fictional practice, zero personal data.
+   await goto('/one-place/digital-safety-practice.html');
+   assert.equal(await page.locator('section.lesson').count(),4,'Digital Safety must offer four lessons');
+   assert.equal(await page.locator('form.practice').count(),4,'Digital Safety must offer four practices');
+   await page.locator('#unexpected-message input[type=radio]').nth(1).check();
+   await page.locator('#unexpected-message button[type=submit]').click();
+   assert.match(await page.locator('#unexpected-message .feedback').innerText(),/Good decision/,'Digital Safety decision feedback must work');
+   await reflow();
+   // Mental Health support practice: safety notice before other teaching and live quiz flow.
+   await goto('/one-place/support-skills-safety.html');
+   assert.equal(await page.locator('section.lesson').count(),4,'Support Skills must offer four lessons');
+   assert.equal(await page.locator('form.practice').count(),4,'Support Skills must include four decisions');
+   assert.match(await page.locator('main > p.alert').innerText(),/Urgent help comes first/,'Urgent safety route must be visible');
+   await page.locator('#urgent input[type=radio]').nth(2).check();
+   await page.locator('#urgent button[type=submit]').click();
+   assert.match(await page.locator('#urgent .feedback').innerText(),/Safety comes first/,'Urgent safe choice feedback must work');
+   await reflow();
+   // Work & Careers: editable fictional start, deliberate preview, and reset.
+   await goto('/one-place/career-readiness-planner.html');
+   assert.equal(await page.locator('[data-career-example]').count(),4,'Career Planner should have four fictional examples');
+   await page.locator('[data-career-example="first"]').click();
+   assert.equal(await page.locator('#careerGoal').inputValue(),'Prepare for a first customer-support interview','Career starter did not populate');
+   assert.equal(await page.locator('#careerResult').isHidden(),true,'Career plan must not auto-generate output');
+   await page.locator('#reviewCareer').click();
+   assert.match(await page.locator('#careerResult').innerText(),/Prepare for a first customer-support interview/,'Career review result missing');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearCareer').click();
+   // Real clear requires an explicit confirmation; accept in controlled fictional smoke.
+   assert.equal(await page.locator('#careerGoal').inputValue(),'','Career plan was not cleared');
+   await reflow();
+   // Business idea cost check: fiction-only one-product math and no auto-export.
+   await goto('/one-place/business-idea-reality-check.html');
+   assert.equal(await page.locator('[data-example]').count(),3,'Business reality check should offer three fictional examples');
+   await page.locator('[data-example="service"]').click();
+   assert.equal(await page.locator('#price').inputValue(),'50.00','Business example price missing');
+   assert.equal(await page.locator('#result').isHidden(),true,'Business estimate must not auto-run');
+   await page.locator('#calculateBtn').click();
+   assert.match(await page.locator('#result').innerText(),/At least 10 sales per month/,'Business break-even result missing');
+   assert.match(await page.locator('#result').innerText(),/Monthly balance after ENTERED costs: 70.00/,'Business cost arithmetic incorrect');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearEstimate').click();
+   assert.equal(await page.locator('#price').inputValue(),'','Business estimate did not clear');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
