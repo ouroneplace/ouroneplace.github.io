@@ -45,8 +45,24 @@ fs.mkdirSync(output,{recursive:true});
    const areas=await page.locator('.grid > a.tile[href*="?area="]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
    assert.equal(areas.length,18,'18 original life areas');
    const solutions=[];
-   for(const route of areas){await goto('/'+route);assert.equal(await page.locator('.offers > a.offer').count(),4);solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));await reflow();}
-   assert.equal(new Set(solutions).size,72);
+   for(const route of areas){
+    await goto('/'+route);
+    const areaName=new URL(route,origin).searchParams.get('area');
+    if(areaName==='Money & Bills'){
+     // Founder-approved Money Center replaces the old four generic catalog cards.
+     assert.equal(new URL(page.url()).pathname,'/one-place/money-center.html');
+     assert.equal(await page.locator('#tools .card').count(),4,'Money Center has four working tool cards');
+     assert.equal(await page.locator('#situation').count(),1,'Money Center has a real situation selector');
+     for(const name of ['Open bill planner','Open debt guide','Compare prices','Start checkup']){
+      assert.equal(await page.getByRole('link',{name,exact:true}).count(),1,'Missing Money Center tool: '+name);
+     }
+    }else{
+     assert.equal(await page.locator('.offers > a.offer').count(),4,areaName+' has four working paths');
+     solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));
+    }
+    await reflow();
+   }
+   assert.equal(new Set(solutions).size,68,'17 catalog categories with four distinct paths, plus dedicated Money Center');
    for(const route of solutions){await goto('/'+route);await reflow();}
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
@@ -74,11 +90,16 @@ fs.mkdirSync(output,{recursive:true});
    await reflow();
    await page.getByRole('link',{name:/One Place Home/i}).first().click();
    await visible(page.getByRole('heading',{name:'Explore every part of life'}));
-   // Preserve smoke coverage of the two live tools via their area entry cards.
-   for(const [index,selector,path] of [[0,'[data-money-pilot-link]','/one-place/money-bills.html'],[2,'[data-care-pilot-link]','/one-place/family-handoff.html']]){
+   // Follow each approved life-area journey into its real first-party tool.
+   for(const [index,path] of [[0,'/one-place/money-bills.html'],[2,'/one-place/family-handoff.html']]){
     await goto('/');
     await page.locator('.grid > a.tile[href*="?area="]').nth(index).click();
-    await page.locator(selector).click();
+    if(index===0){
+     assert.equal(new URL(page.url()).pathname,'/one-place/money-center.html');
+     await page.getByRole('link',{name:'Open bill planner',exact:true}).click();
+    }else{
+     await page.locator('[data-care-pilot-link]').click();
+    }
     await visible(page.locator('h1').first());
     assert.equal(new URL(page.url()).pathname,path);
     await reflow();
@@ -93,7 +114,7 @@ fs.mkdirSync(output,{recursive:true});
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(siteWrites,[]);
    // Lesson media is loaded from Descript. Its third-party analytics/advertising
    // requests are reported, never hidden or misrepresented as first-party writes.
-   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
+   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,money_center_tools:4,legacy_catalog_links:68,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
    await context.close();
   }
   const context=await browser.newContext();const request=context.request;
