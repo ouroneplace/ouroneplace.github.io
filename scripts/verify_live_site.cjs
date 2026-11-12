@@ -19,11 +19,15 @@ fs.mkdirSync(output,{recursive:true});
    page.on('request',r=>{const u=r.url();if(u.startsWith('data:')||u.startsWith('blob:'))return;const host=new URL(u).hostname;const local=new URL(u).origin===origin;const write=!['GET','HEAD'].includes(r.method());if(!local)thirdPartyHosts.push(host);if(write){if(local)siteWrites.push(r.method()+' '+u);else thirdPartyWrites.push(host);}});
    async function visible(locator){await locator.waitFor({state:'visible',timeout:15000});}
    async function goto(path){
+    // Normalize relative ../ paths and fragments to their actual browser URL.
+    // Otherwise a valid hash-only navigation can incorrectly look like HTTP 0.
+    const destination=new URL(path,origin).href;
+    assert.equal(new URL(destination).origin,origin,'Smoke routes must stay on ONE PLACE');
     let status=0,finalUrl='';
     for(let attempt=1;attempt<=3;attempt++){
-     const r=await page.goto(origin+path,{waitUntil:'load'});
+     const r=await page.goto(destination,{waitUntil:'load'});
      status=r?.status()||0;finalUrl=page.url();
-     if(r?.ok() || (!r && page.url()===origin+path)){
+     if(r?.ok() || (!r && page.url()===destination)){
       // Playwright returns null for valid same-document hash navigations.
       await visible(page.locator('h1').first());return;
      }
