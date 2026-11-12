@@ -51,3 +51,22 @@ test('Money center source ends cleanly without visible code after footer',async(
  const source=await page.locator('html').evaluate(el=>el.outerHTML);
  expect(source).not.toContain('</html>+delta.toFixed');
 });
+
+test('Money & Bills resource links and all three tool headers have clear return paths',async({page})=>{
+ for(const width of [320,390,1366]){
+  await page.setViewportSize({width,height:850});
+  await page.goto('/one-place/money-center.html');
+  const cfpb='https://www.consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/';
+  await expect(page.getByRole('link',{name:/View CFPB resources/})).toHaveAttribute('href',cfpb);
+  await expect(page.locator('a[href*="consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/toolkit/"]')).toHaveCount(0);
+  await page.getByRole('link',{name:'Open bill planner'}).click();
+  await expect(page).toHaveURL(/money-bills\.html$/);
+  await page.getByRole('navigation',{name:'Money & Bills navigation'}).getByRole('link',{name:/Money & Bills home/}).click();
+  await expect(page).toHaveURL(/money-center\.html$/);
+  await page.getByRole('link',{name:'Open debt guide'}).click();
+  await expect(page).toHaveURL(/debt-creditor-guide\.html$/);
+  await page.getByRole('navigation',{name:'Return navigation'}).getByRole('link',{name:/Money & Bills home/}).click();
+  await expect(page).toHaveURL(/money-center\.html$/);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ }
+});
