@@ -97,6 +97,17 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Wellness routine: no blank-form barrier, requires a deliberate reviewed build.
+   await goto('/one-place/health-wellness.html#habits');
+   assert.equal(await page.locator('[data-routine-example]').count(),4,'Wellness routine must offer four fictional starters');
+   await page.locator('[data-routine-example="rest"]').click();
+   assert.equal(await page.locator('#habitCue').inputValue(),'After putting my phone aside in the evening','Example cue must populate');
+   assert.equal(await page.locator('#habitResult').isHidden(),true,'Example must not auto-generate a plan');
+   await page.locator('#makeHabit').click();
+   assert.match(await page.locator('#habitResult').innerText(),/After putting my phone aside in the evening/,'Wellness plan must build on request');
+   await page.locator('#resetHabit').click();
+   assert.equal(await page.locator('#habitCue').inputValue(),'','Clear must remove example');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
