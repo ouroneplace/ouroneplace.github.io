@@ -97,6 +97,14 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Technology & Digital Safety: real fictional practice, zero personal data.
+   await goto('/one-place/digital-safety-practice.html');
+   assert.equal(await page.locator('section.lesson').count(),4,'Digital Safety must offer four lessons');
+   assert.equal(await page.locator('form.practice').count(),4,'Digital Safety must offer four practices');
+   await page.locator('#unexpected-message input[type=radio]').nth(1).check();
+   await page.locator('#unexpected-message button[type=submit]').click();
+   assert.match(await page.locator('#unexpected-message .feedback').innerText(),/Good decision/,'Digital Safety decision feedback must work');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
