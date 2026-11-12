@@ -11,6 +11,7 @@ for(const width of [320,390,768,1366,1920]){
   await expect(page.getByText('FUTURE SERVICE',{exact:true})).toHaveCount(0);
   await expect(page.getByText('An unlaunched assisted-service idea',{exact:false})).toHaveCount(0);
   await expect(page.locator('#areaKit')).toHaveCount(0);
+  await expect(page.locator('.offers > a.offer')).toHaveCount(4);
   await expect(page.locator('#family-resources a')).toHaveCount(3);
   await expect(page.locator('#family-resources a').nth(0)).toHaveAttribute('href','https://eldercare.acl.gov/');
   await expect(page.locator('#family-resources a').nth(2)).toHaveAttribute('href','https://www.caregiver.va.gov/CAREGIVER/PGCSS.asp');
@@ -117,4 +118,19 @@ test('Verified family support resources stay available and external links are la
   await expect(a).toHaveAttribute('rel',/noopener noreferrer/);
  }
  await expect(page.getByRole('link',{name:/Eldercare Locator/})).toHaveAttribute('href','https://eldercare.acl.gov/');
+});
+
+
+test('All four Family category cards open distinct working Handoff steps',async({page})=>{
+ for(let i=1;i<=4;i++){
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/index.html?area=Family%20%26%20Caregiving');
+  const offer=page.locator('.offers > a.offer').nth(i-1);
+  await expect(offer).toHaveAttribute('href','one-place/family-handoff.html#p'+i);
+  await offer.click();
+  await expect(page).toHaveURL(new RegExp('family-handoff\\.html#p'+i+'$'));
+  await expect(page.locator('#p'+i)).toBeVisible();
+  await expect(page.locator('[role="tab"][data-panel="p'+i+'"]')).toHaveAttribute('aria-selected','true');
+  await expect(page.getByRole('link',{name:'One Place home',exact:true})).toBeVisible();
+ }
 });
