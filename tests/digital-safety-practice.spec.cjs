@@ -66,6 +66,7 @@ test('Digital Safety: all teaching remains available without JavaScript',async({
   const page=await context.newPage();
   await page.goto('/one-place/digital-safety-practice.html');
   await expect(page.locator('section.lesson:visible')).toHaveCount(4);
+  await expect(page.locator('button[type="submit"]:disabled')).toHaveCount(4);
   await expect(page.getByText('All four examples, safer choices, instructions and source links remain readable without JavaScript.')).toBeVisible();
   await page.getByRole('navigation',{name:'Jump to a practice situation'}).getByRole('link').nth(3).click();
   await expect(page).toHaveURL(/#already-paid$/);
