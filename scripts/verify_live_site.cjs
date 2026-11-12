@@ -58,6 +58,11 @@ fs.mkdirSync(output,{recursive:true});
      }
      assert.equal(await page.getByRole('link',{name:/View CFPB resources/}).count(),1,'Missing official CFPB resource');
     }else{
+     if(areaName==='Health & Wellness'){
+      assert.equal(new URL(page.url()).pathname,'/one-place/health-wellness.html');
+      assert.equal(await page.locator('#visitForm').count(),1,'Health visit planner must work');
+      assert.equal(await page.locator('#habitForm').count(),1,'Health routine builder must work');
+     }
      assert.equal(await page.locator('.offers > a.offer').count(),4,areaName+' has four working paths');
      solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));
     }
