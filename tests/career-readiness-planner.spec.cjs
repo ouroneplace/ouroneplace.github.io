@@ -199,3 +199,22 @@ test('Career Readiness: original source links are clearly labeled, independent a
   await expect(link).toContainText('(U.S., external)');
  }
 });
+
+test('Career Readiness: print view displays only reviewed output, not other form inputs',async({page})=>{
+ await page.goto('/one-place/career-readiness-planner.html');
+ await page.locator('#careerGoal').fill('Prepare for a reliable job interview');
+ await page.locator('#careerSkill').fill('Clear communication');
+ await page.locator('#careerAction').fill('I clarified a task');
+ await page.locator('#reviewCareer').click();
+ await page.emulateMedia({media:'print'});
+ const state=await page.evaluate(()=>{
+  const display=sel=>getComputedStyle(document.querySelector(sel)).display;
+  return {preview:display('#careerResult'),otherMain:display('main > p.lead'),fieldset:display('#careerForm fieldset'),buttons:display('#careerForm .actions'),extra:display('#planner > p')};
+ });
+ expect(state.preview).not.toBe('none');
+ expect(state.otherMain).toBe('none');
+ expect(state.fieldset).toBe('none');
+ expect(state.buttons).toBe('none');
+ expect(state.extra).toBe('none');
+ await expect(page.locator('#careerResult')).toContainText('Prepare for a reliable job interview');
+});
