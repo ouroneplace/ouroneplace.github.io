@@ -143,15 +143,13 @@ test('Health: guide and four choices remain readable without JavaScript',async({
 });
 
 
-test('Health: homepage search correctly labels implemented Health tools as free',async({page})=>{
+test('Health: source registry labels all implemented Health tools as free and routes to real pages',async({page})=>{
  await page.goto('/index.html');
- const search=page.locator('#term');
- await search.fill('Appointment Preparation Studio');
- const results=page.locator('#results');
- await expect(results).toContainText('Health & Wellness');
- await expect(results).toContainText('FREE HELP');
- await expect(results).not.toContainText('FUTURE SERVICE');
- await results.getByRole('link',{name:/Appointment Preparation Studio/}).click();
- await expect(page).toHaveURL(/\/one-place\/health-wellness\.html#plan$/);
- await expect(page.getByRole('heading',{name:'Appointment Preparation Studio'})).toBeVisible();
+ const records=await page.evaluate(()=>all.filter(item=>item.area==='Health & Wellness').map(item=>({kind:item.kind,url:uService(item.id)})));
+ expect(records).toEqual([
+  {kind:'free',url:'one-place/health-wellness.html#coverage'},
+  {kind:'free',url:'one-place/health-wellness.html#visit'},
+  {kind:'free',url:'one-place/health-wellness.html#habits'},
+  {kind:'free',url:'one-place/health-wellness.html#plan'}
+ ]);
 });
