@@ -767,3 +767,18 @@ test('Home Skills: no hidden form collection or browser storage',async({page})=>
   expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
   await expect(page.getByRole('link',{name:'One Place Home',exact:true})).toHaveAttribute('href','../index.html');
 });
+
+
+test('Home Skills Academy is correctly labeled public and retains its accepted lessons on phone and desktop',async({page})=>{
+ for(const width of [320,390,1366]){
+  await page.setViewportSize({width,height:850});
+  await page.goto('/one-place/home-skills.html');
+  await expect(page).toHaveTitle('Learn to Care for Your Home — ONE PLACE');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content','index,follow');
+  await expect(page.getByText('FREE PUBLIC HOME EDUCATION',{exact:true})).toBeVisible();
+  await expect(page.getByText('FOUNDER REVIEW · UNRELEASED',{exact:true})).toHaveCount(0);
+  await expect(page.locator('details.skill')).toHaveCount(36);
+  await expect(page.getByRole('link',{name:'← Housing & Utilities'})).toHaveAttribute('href','housing-utilities.html');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2)).toBe(true);
+ }
+});
