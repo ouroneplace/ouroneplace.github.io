@@ -71,7 +71,7 @@ for(const width of [320,390,1366]){
     await page.getByRole('radio',{name:'I received court papers'}).check();
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
     const back=page.getByRole('navigation',{name:'Return navigation'}).getByRole('link',{name:/Money & Bills/});
-    await expect(back).toHaveAttribute('href','../index.html?area=Money%20%26%20Bills');
+    await expect(back).toHaveAttribute('href','money-center.html');
     await back.click();
     await expect(page).toHaveURL(/money-center/);
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
