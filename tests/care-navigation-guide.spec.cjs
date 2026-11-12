@@ -84,6 +84,7 @@ test('Care Navigation guide preserves official links and honest scope boundaries
  await page.goto('/one-place/care-navigation.html');
  await expect(page.getByText('Respect the person:')).toBeVisible();
  await expect(page.getByText(/Local service availability and rules differ worldwide/)).toBeVisible();
+ await expect(page.locator('#results a[href="https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/"]')).toHaveCount(1);
  const links=page.locator('a[href^="https://"]');
  await expect(links).toHaveCount(4);
  for(const link of await links.all()){
