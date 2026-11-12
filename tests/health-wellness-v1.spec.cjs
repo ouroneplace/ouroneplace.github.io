@@ -8,7 +8,8 @@ for(const width of [320,390,1366,1920]){
   await expect(page).toHaveURL(/\/one-place\/health-wellness\.html$/);
   await expect(page.getByRole('heading',{level:1,name:'Health & Wellness',exact:true})).toBeVisible();
   await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-  await expect(page.getByRole('form').count()).toBeTruthy();
+  await expect(page.getByRole('form',{name:'Wellness routine builder'})).toHaveCount(1);
+  await expect(page.getByRole('form',{name:'Appointment preparation studio'})).toHaveCount(1);
   await expect(page.getByRole('button',{name:'Review my appointment notes'})).toBeEnabled();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   const targets=['coverage','visit','habits','plan'];
