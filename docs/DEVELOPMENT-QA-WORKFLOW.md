@@ -21,3 +21,20 @@ After merge, confirm GitHub Pages deploys the exact merge commit. Spot-check the
 ## 5. Accountability
 
 Keep accepted work unchanged unless specifically included in scope. Record tests run, pass/fail evidence, known unresolved problems, and whether the change was merged or deployed. Prefer smaller, reversible changes over broad redesigns.
+
+## 6. Founder decision and handoff standard (mandatory)
+
+The assistant owns technical review, defect discovery, source verification, testing, and interpreting pull requests. Do not delegate those duties to the founder through vague requests such as "review the PR", "check it when convenient", or "let me know what you think."
+
+Before every founder-facing status or handoff, explicitly communicate, concisely:
+
+1. **Verified:** What was completed, with exact evidence (test result, run, commit, deployment) and what is not yet verified.
+2. **Assessment:** What changes for visitors, any material risks or limitations, and a concrete recommendation.
+3. **Founder decision:** Exactly one specific decision, with choices and the outcome of each. If no decision is required, write **"No founder action needed."** Do not call a technical inspection a founder decision.
+4. **Next execution step:** What the assistant will do after that decision, including the release/QA gate. Never imply tests or publication are complete when they are not.
+
+Example: "PR #42 changes only the live-site verification workflow and founder acceptance record; regression passed, production-triggered verification remains unproven. I recommend merging after final QA. Founder decision: approve merge and subsequent live-site check, or request revision. If approved, I will verify the exact deployment SHA and report the result." This is a communication example, not authorization to merge PR #42.
+
+Do not ask for approval already granted. Do not repeatedly ask the founder to reproduce automated tests, locate defects, inspect YAML, or interpret logs. When founder visual or experiential review *is* necessary, specify the **one exact URL, action to perform, and success criterion**. Scope should be narrow; provide the expected result. If testing is in progress, say **"No action now; awaiting test outcome"**, not "review when convenient."
+
+For each new One Place conversation, retrieve this guide and the current repository state before giving a development-status recommendation. This documentation is a reinforcement mechanism, not a guarantee that memory or future conversations will behave perfectly.
