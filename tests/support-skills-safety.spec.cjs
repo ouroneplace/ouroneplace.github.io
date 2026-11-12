@@ -107,7 +107,7 @@ test('Support Skills uses no server writes, third parties or browser storage on 
 });
 test('Support Skills is discoverable from Mental Health and Safety without changing its four cards',async({page})=>{
  await page.goto('/index.html?area=Mental%20Health%20%26%20Safety');
- await expect(page.getByRole('heading',{name:'Mental Health & Safety'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Mental Health & Safety',level:1,exact:true})).toBeVisible();
  await expect(page.locator('.offers > a.offer')).toHaveCount(4);
  await page.getByRole('link',{name:'Open Support Skills & Safety Lab'}).click();
  await expect(page).toHaveURL(/\/one-place\/support-skills-safety\.html$/);
