@@ -97,6 +97,19 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Business idea cost check: fiction-only one-product math and no auto-export.
+   await goto('/one-place/business-idea-reality-check.html');
+   assert.equal(await page.locator('[data-example]').count(),3,'Business reality check should offer three fictional examples');
+   await page.locator('[data-example="service"]').click();
+   assert.equal(await page.locator('#price').inputValue(),'50.00','Business example price missing');
+   assert.equal(await page.locator('#result').isHidden(),true,'Business estimate must not auto-run');
+   await page.locator('#calculateBtn').click();
+   assert.match(await page.locator('#result').innerText(),/At least 10 sales per month/,'Business break-even result missing');
+   assert.match(await page.locator('#result').innerText(),/Monthly balance after ENTERED costs: 70.00/,'Business cost arithmetic incorrect');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearEstimate').click();
+   assert.equal(await page.locator('#price').inputValue(),'','Business estimate did not clear');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
