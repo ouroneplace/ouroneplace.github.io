@@ -72,7 +72,7 @@ test('Care Navigation guide connects Health Center, approved Studio, and family 
  await page.goto('/one-place/health-wellness.html#visit');
  await page.getByRole('link',{name:'Open the Care Navigation Guide'}).click();
  await expect(page).toHaveURL(/\/one-place\/care-navigation\.html$/);
- await page.getByRole('link',{name:'Appointment Preparation Studio'}).click();
+ await page.locator('#visit').getByRole('link',{name:'Appointment Preparation Studio'}).click();
  await expect(page).toHaveURL(/\/one-place\/health-wellness\.html#plan$/);
  await expect(page.getByRole('button',{name:'Review my appointment notes'})).toBeVisible();
  await page.goto('/one-place/care-navigation.html');
