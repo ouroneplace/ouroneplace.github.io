@@ -57,7 +57,7 @@ footer{padding:24px 16px;text-align:center;font-size:.85rem;color:#365c58}
 <h1>Health &amp; Wellness</h1>
 <p class="lead">Understand your options, prepare for a medical appointment, practice everyday health literacy, and take a small wellness step. These tools are free, without an account.</p>
 <p class="alert"><strong>Safety:</strong> This is education and planning, not diagnosis, treatment or medical advice. For a medical emergency, call your local emergency number (911 in the U.S.). For an urgent health concern, contact a qualified clinician or urgent-care service rather than relying on this website.</p>
-<p class="hint">Privacy first: Information typed into these tools stays in this browser page. It is not uploaded, saved to an account or kept after reload. Copying, printing or downloading creates a separate copy under your control. Avoid entering identifying or highly sensitive details on shared devices.</p>
+<p class="hint">Privacy first: Information typed into these tools stays in this browser page. One Place does not upload notes or save them to an account. Your browser may restore form entries during navigation or refresh; use Clear private draft on shared devices. Downloaded copies stay wherever you choose to save them.</p>
 </section>
 <section id="choose" class="panel" aria-labelledby="chooseTitle">
 <h2 id="chooseTitle">Four real starting points</h2>
@@ -92,7 +92,7 @@ footer{padding:24px 16px;text-align:center;font-size:.85rem;color:#365c58}
 <section id="habits" class="panel" aria-labelledby="habitsTitle">
 <p class="eyebrow">03 · PRACTICE AN EVERYDAY SKILL</p><h2 id="habitsTitle">Wellness Routine Builder</h2>
 <p>Build one realistic, adjustable routine. This is a personal organization aid—not a fitness prescription or measurement of health.</p>
-<form id="habitForm" aria-label="Wellness routine builder" novalidate>
+<form id="habitForm" aria-label="Wellness routine builder" autocomplete="off" novalidate>
 <div class="columns">
 <div><label for="habitTopic">What would you like to practice?</label>
 <select id="habitTopic"><option value="Sleep and rest">Sleep and rest</option><option value="Gentle movement">Gentle movement</option><option value="Food and hydration">Food and hydration</option><option value="Daily care organization">Daily care organization</option></select>
@@ -108,8 +108,8 @@ footer{padding:24px 16px;text-align:center;font-size:.85rem;color:#365c58}
 </section>
 <section id="plan" class="panel" aria-labelledby="planTitle">
 <p class="eyebrow">04 · MAKE A PRIVATE ACTION PLAN</p><h2 id="planTitle">Appointment Preparation Studio</h2>
-<p>Write only what you want to discuss. No names, identifying numbers or medical records are necessary. Your draft stays on this page until you intentionally download it.</p>
-<form id="visitForm" aria-label="Appointment preparation studio" novalidate>
+<p>Write only what you want to discuss. No names, identifying numbers or medical records are necessary. One Place does not submit your draft. Your browser may restore entries; clear private notes before sharing a device.</p>
+<form id="visitForm" aria-label="Appointment preparation studio" autocomplete="off" novalidate>
 <fieldset><legend class="hint">Your appointment preparation · all text fields optional, but enter at least one note to make a plan</legend>
 <div class="columns">
 <div><label for="visitType">Kind of visit</label><select id="visitType"><option>Routine or preventive visit</option><option>Discuss a new concern</option><option>Follow-up visit</option><option>Ask about medicines</option><option>Another healthcare visit</option></select>
