@@ -99,3 +99,12 @@ test('Every Money Center entry point uses the verified CFPB toolkit address',asy
  const bad=await page.evaluate(()=>[...document.querySelectorAll('a[href]')].map(a=>a.href).filter(u=>u.includes('/educator-tool/')));
  expect(bad).toEqual([]);
 });
+
+test('Money Center retains four free tools and two assistance-resource cards',async({page})=>{
+ await page.goto('/one-place/money-center.html');
+ await expect(page.locator('#tools .card')).toHaveCount(6);
+ for(const label of ['Open bill planner','Open debt guide','Compare prices','Start checkup','Find real assistance']){
+  await expect(page.getByRole('link',{name:label,exact:true})).toHaveCount(1);
+ }
+ await expect(page.getByRole('link',{name:/View CFPB resources/})).toHaveCount(1);
+});
