@@ -141,3 +141,17 @@ test('Health: guide and four choices remain readable without JavaScript',async({
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  }finally{await context.close();}
 });
+
+
+test('Health: homepage search correctly labels implemented Health tools as free',async({page})=>{
+ await page.goto('/index.html');
+ const search=page.locator('#term');
+ await search.fill('Appointment Preparation Studio');
+ const results=page.locator('#results');
+ await expect(results).toContainText('Health & Wellness');
+ await expect(results).toContainText('FREE HELP');
+ await expect(results).not.toContainText('FUTURE SERVICE');
+ await results.getByRole('link',{name:/Appointment Preparation Studio/}).click();
+ await expect(page).toHaveURL(/\/one-place\/health-wellness\.html#plan$/);
+ await expect(page.getByRole('heading',{name:'Appointment Preparation Studio'})).toBeVisible();
+});
