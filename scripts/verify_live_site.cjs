@@ -97,6 +97,19 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#home input[type=checkbox]').first().check();
    assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
    await reflow();
+   // Work & Careers: editable fictional start, deliberate preview, and reset.
+   await goto('/one-place/career-readiness-planner.html');
+   assert.equal(await page.locator('[data-career-example]').count(),4,'Career Planner should have four fictional examples');
+   await page.locator('[data-career-example="first"]').click();
+   assert.equal(await page.locator('#careerGoal').inputValue(),'Prepare for a first customer-support interview','Career starter did not populate');
+   assert.equal(await page.locator('#careerResult').isHidden(),true,'Career plan must not auto-generate output');
+   await page.locator('#reviewCareer').click();
+   assert.match(await page.locator('#careerResult').innerText(),/Prepare for a first customer-support interview/,'Career review result missing');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearCareer').click();
+   // Real clear requires an explicit confirmation; accept in controlled fictional smoke.
+   assert.equal(await page.locator('#careerGoal').inputValue(),'','Career plan was not cleared');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
