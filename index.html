@@ -36,6 +36,20 @@ if (['#choose', '#lessons', '#mission'].includes(location.hash)) {
 else if(service&&housingPaths[service]){location.replace('one-place/housing-utilities.html#'+housingPaths[service]);}
 else if(service){const x=all.find(z=>z.id===service);main.className='inside';if(!x){main.innerHTML='<a class="back" href="index.html">← All needs</a><h1>Solution not found</h1>'}else{document.title=x.title+' · ONE PLACE';main.innerHTML='<a class="back" href="'+uArea(x.area)+'">← '+esc(x.area)+'</a><div class="serviceview"><section class="content"><span class="tag '+x.kind+'">'+kinds[x.kind]+'</span><h1>'+esc(x.title)+'</h1><p class="desc">'+(x.kind==='free'?'Free starting points and a direct link to an established outside source.':x.kind==='product'?'Illustrative digital tool, not a finished product or checkout.':'A possible future service, not currently staffed or bookable.')+'</p><div id="helpContent"></div></section><aside class="aside" id="aside"></aside></div>';const body=$('helpContent'),aside=$('aside');if(x.kind==='free'){body.innerHTML='<h2>Three starting steps</h2><ol><li>Identify the problem and any urgent deadline.</li><li>Prepare only the details needed for the next action.</li><li>Open the provider resource and verify eligibility or local availability.</li></ol>';aside.innerHTML='<h2>Outside resources</h2><p>This project does not provide professional intervention or emergency response.</p><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">Open established resource ↗</a><p>Check the provider site for current information.</p>'}else if(x.kind==='service'){body.innerHTML='<h2>How this might work</h2><ol><li>Choose the specific outcome you need.</li><li>Review an understandable action checklist.</li><li>If professional expertise is needed, select a vetted outside provider.</li></ol>';aside.innerHTML='<h2>Concept only</h2><p>No service is active. No specialist, appointment, fee, client intake, or order is offered here.</p><a href="'+uArea(x.area)+'">See the free alternatives →</a>'}else{body.innerHTML='<h2>See the tool idea</h2><p>This is a prototype of a potential paid digital product. Try fictional inputs, not private information.</p><div id="demoHost"></div>';aside.innerHTML='<h2>Prototype only</h2><p>This is not a purchasable item. No checkout, delivery, subscription or service request is active.</p><a href="'+uArea(x.area)+'">Browse this life area →</a>';renderDemo(x.title)}aside.insertAdjacentHTML('beforeend','<p class="notice">General information only; no individualized medical, legal or financial advice. U.S. emergency: 911. Crisis support: call/text 988.</p>')}}
 else if(area==='Money & Bills'){location.replace('one-place/money-center.html');}
+else if(area==='Family & Caregiving'){
+main.className='inside';
+main.innerHTML='<a class="back" href="index.html">← All life areas</a>'+
+'<p class="eyebrow" style="margin-top:16px">FOUR REAL STEPS · NO ACCOUNTS</p>'+
+'<h1>Family &amp; Caregiving</h1>'+
+'<p class="desc">Coordinate responsibilities, respect the person receiving care, and prepare a clear handoff. Choose a free toolkit step below; you can move between all four steps without starting over.</p>'+
+'<div class="offers">'+
+'<a class="offer" href="one-place/family-handoff.html#p1"><span class="tag free">STEP 1 · FAMILY</span><strong>People and preferences</strong><small>Choose a care-team lead and backup, with the person’s wishes in mind.</small><em>Open step 1 →</em></a>'+
+'<a class="offer" href="one-place/family-handoff.html#p2"><span class="tag free">STEP 2 · RESPONSIBILITIES</span><strong>Assign everyday tasks</strong><small>Add, edit and assign practical responsibilities without uploading records.</small><em>Open step 2 →</em></a>'+
+'<a class="offer" href="one-place/family-handoff.html#p3"><span class="tag free">STEP 3 · FOLLOW-UP</span><strong>Track unresolved needs</strong><small>Identify who will follow up and when to ask a professional.</small><em>Open step 3 →</em></a>'+
+'<a class="offer" href="one-place/family-handoff.html#p4"><span class="tag free">STEP 4 · HANDOFF</span><strong>Review a shareable plan</strong><small>Check the summary and download or copy a handoff when ready.</small><em>Open step 4 →</em></a>'+
+'</div><p class="desc" id="family-resources" style="margin-top:10px"><strong>Outside help:</strong> <a href="https://eldercare.acl.gov/" target="_blank" rel="noopener noreferrer">Eldercare Locator ↗</a> · <a href="https://www.nia.nih.gov/health/caregiving/caregiver-worksheets" target="_blank" rel="noopener noreferrer">NIA caregiver worksheets ↗</a> · <a href="https://www.caregiver.va.gov/CAREGIVER/PGCSS.asp" target="_blank" rel="noopener noreferrer">VA caregiver support ↗</a></p>'+
+'<p class="notice">General U.S.-focused guidance. Outside organizations manage their own services and privacy policies. For immediate danger call local emergency services; do not enter medical records here.</p>';
+}
 else if(area==='Housing & Utilities'){
 main.className='inside';
 const housingList=[
@@ -97,7 +111,7 @@ if(impact){
 }else if(area){
  root.insertAdjacentHTML('afterbegin',metric());
  // Housing has its own complete, section-specific guide; avoid a duplicate generic kit.
- if(area!=='Housing & Utilities'){
+ if(area!=='Housing & Utilities'&&area!=='Family & Caregiving'){
   const steps=plans[area]||['Identify your need','Compare credible options','Choose one next step'];
   root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
   copy(area,steps,'areaKit');
