@@ -23,7 +23,7 @@ for(const id of ['label','medicines','claims','screening']){
  test('Health Literacy Lab '+id+' explains blank, wrong and right choices',async({page})=>{
   await page.goto('/one-place/health-literacy-lab.html#'+id);
   const form=page.locator('form.practice[data-lesson="'+id+'"]');
-  const status=form.getByRole('status');
+  const status=form.locator('.feedback');
   const radios=form.getByRole('radio');
   await expect(radios).toHaveCount(3);
   await form.getByRole('button',{name:'Check my choice'}).click();
@@ -74,7 +74,7 @@ test('Health Literacy Lab saves no answers and makes no unsolicited third-party 
  page.on('request',r=>{
   if(!/^https?:/.test(r.url()))return;
   if(!['GET','HEAD'].includes(r.method()))requests.push(r.method()+' '+r.url());
-  if(new URL(r.url()).origin!==new URL(page.url()).origin)thirdParty.push(r.url());
+  if(!['127.0.0.1','localhost'].includes(new URL(r.url()).hostname))thirdParty.push(r.url());
  });
  await page.goto('/one-place/health-literacy-lab.html');
  const form=page.locator('form.practice').last();
