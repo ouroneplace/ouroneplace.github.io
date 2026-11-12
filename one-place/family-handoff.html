@@ -82,13 +82,68 @@
 <p class="foot">ONE PLACE is human-led and AI-assisted. No customer account, server storage, purchase, booking or analytics is enabled on this page. This tool is informational and not clinical or legal advice.</p>
 </main><footer class="shell">One human founder · ChatGPT and AI tools help build the experience. <a href="../index.html?impact">Public numbers ↗</a></footer>
 <script>
-(()=>{'use strict';const $=id=>document.getElementById(id),tasks=[];let sample=false,id=0;const ids=['person','date','lead','backup','review','time','wishes','concern','followOwner','followWhen','questions'];const v=id=>$(id).value.trim(),text=s=>String(s||'').replace(/[\r\n\t]+/g,' ').trim();const now=()=>{let d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};$('date').value=now();$('review').value=now();
+(()=>{'use strict';const $=id=>document.getElementById(id),tasks=[];let sample=false,id=0,editingId=null;const ids=['person','date','lead','backup','review','time','wishes','concern','followOwner','followWhen','questions'];const v=id=>$(id).value.trim(),text=s=>String(s||'').replace(/[\r\n\t]+/g,' ').trim();const now=()=>{let d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};$('date').value=now();$('review').value=now();
 function go(dest,focus=false){document.querySelectorAll('[role=tab]').forEach(b=>{let yes=b.dataset.panel===dest;b.setAttribute('aria-selected',String(yes));b.tabIndex=yes?0:-1;$(b.dataset.panel).hidden=!yes;if(yes&&focus)b.focus()});render()}
 const tabs=[...document.querySelectorAll('[role=tab]')];tabs.forEach((b,i)=>{b.onclick=()=>go(b.dataset.panel);b.onkeydown=e=>{let n=i;if(e.key==='ArrowRight')n=(i+1)%tabs.length;else if(e.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')n=0;else if(e.key==='End')n=tabs.length-1;else return;e.preventDefault();go(tabs[n].dataset.panel,true)}});document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>go(b.dataset.next,true));
 function errors(){let a=[];if(!v('person'))a.push('Add a person or role label');if(!v('lead'))a.push('Name a primary helper');if(!v('backup'))a.push('Name a backup helper');if(!tasks.length)a.push('Add at least one responsibility');if(tasks.some(t=>!t.done&&!t.owner))a.push('Assign open tasks');if(tasks.some(t=>!t.done&&t.flag))a.push('Review unresolved tasks');if(v('date')&&v('review')<v('date'))a.push('Review date precedes the plan date');return a}
 function handoff(){let out=['ONE PLACE | FAMILY HANDOFF',sample?'FICTIONAL EXAMPLE — NOT REAL CARE DATA':'Local working document — verify before sharing','','Person: '+(v('person')||'Not entered'),'Plan date: '+(v('date')||'Not entered'),'Primary helper: '+(v('lead')||'Not assigned'),'Backup helper: '+(v('backup')||'Not assigned'),'Handoff time: '+(v('time')||'Not entered'),'Next review: '+(v('review')||'Not entered'),'Preferences: '+(text(v('wishes'))||'Not entered'),'','RESPONSIBILITIES'];tasks.forEach((t,i)=>{out.push((i+1)+'. ['+(t.done?'Done':'Open')+(t.flag&&!t.done?' / CONCERN':'')+'] '+text(t.title),'   Owner: '+(t.owner||'UNASSIGNED')+' · When: '+t.when,'   Note: '+(text(t.detail)||'—'))});if(!tasks.length)out.push('None entered');out.push('','FOLLOW-UP','Concern: '+(text(v('concern'))||'None entered'),'Owner: '+(v('followOwner')||'Unassigned'),'By: '+v('followWhen'),'Professional questions: '+(text(v('questions'))||'None entered'),'','REVIEW STATUS',errors().length?errors().join('; '):'Basic fields complete — confirm with the care team.','', 'PRIVACY AND SAFETY: This is a logistics handoff, not medical treatment, emergency response, or consent to share private records. Downloaded files are not encrypted.');return out.join('\n')}
-function render(){$('nTasks').textContent=tasks.length;$('nUnassigned').textContent=tasks.filter(t=>!t.done&&!t.owner).length;$('nFlags').textContent=tasks.filter(t=>!t.done&&t.flag).length;$('nReady').textContent=sample?'Sample':errors().length?'Needs review':'Review ready';$('count').textContent=tasks.length+' tasks';$('tasks').replaceChildren();for(const t of tasks){let row=document.createElement('div');row.className='task';let left=document.createElement('div'),b=document.createElement('b'),small=document.createElement('small');b.textContent=t.title;small.textContent=(t.owner||'UNASSIGNED')+' · '+t.when+(t.flag&&!t.done?' · Needs attention':'')+(t.done?' · Done':'');left.append(b,small);let right=document.createElement('div');for(const [label,act]of [[t.done?'Reopen':'Done','toggle'],['Remove','remove']]){let btn=document.createElement('button');btn.textContent=label;btn.type='button';btn.onclick=()=>{let i=tasks.indexOf(t);if(act==='remove')tasks.splice(i,1);else t.done=!t.done;render()};right.append(btn)}row.append(left,right);$('tasks').append(row)}if(!tasks.length)$('tasks').textContent='Add a responsibility and an owner to begin.';$('preview').textContent=handoff();$('alert').textContent=errors().length?'Before sharing: '+errors().join(' · '):'Basic handoff fields are complete. Confirm with the people involved.'}
-$('taskForm').onsubmit=e=>{e.preventDefault();if(!$('taskForm').reportValidity())return;if(tasks.length>=30){$('taskStatus').textContent='Maximum 30 tasks per handoff.';return}tasks.push({id:++id,title:v('title'),owner:v('owner'),when:v('when'),detail:v('detail'),flag:$('flag').checked,done:false});$('taskForm').reset();$('taskStatus').textContent='Task added';render()};
+
+function resetEdit(){
+ editingId=null;$('taskForm').reset();$('taskSubmit').textContent='Add task +';$('cancelEdit').hidden=true;
+}
+function editTask(t){
+ editingId=t.id;$('title').value=t.title;$('owner').value=t.owner;
+ $('when').value=t.when;$('detail').value=t.detail;$('flag').checked=t.flag;
+ $('taskSubmit').textContent='Save changes';$('cancelEdit').hidden=false;
+ go('p2',true);$('title').focus();
+ $('taskStatus').textContent='Editing '+t.title+'. Save changes or cancel edit.';
+}
+function render(){
+ $('nTasks').textContent=tasks.length;
+ $('nUnassigned').textContent=tasks.filter(t=>!t.done&&!t.owner).length;
+ $('nFlags').textContent=tasks.filter(t=>!t.done&&t.flag).length;
+ $('nReady').textContent=sample?'Sample':errors().length?'Needs review':'Review ready';
+ $('sampleNotice').hidden=!sample;
+ $('count').textContent=tasks.length+' tasks';$('tasks').replaceChildren();
+ for(const t of tasks){
+  const row=document.createElement('div');row.className='task';
+  const left=document.createElement('div'),b=document.createElement('b'),small=document.createElement('small');
+  b.textContent=t.title;small.textContent=(t.owner||'UNASSIGNED')+' · '+t.when+
+    (t.flag&&!t.done?' · Needs attention':'')+(t.done?' · Done':'');
+  left.append(b,small);
+  const right=document.createElement('div');
+  for(const [label,act] of [['Edit','edit'],[t.done?'Reopen':'Done','toggle'],['Remove','remove']]){
+   const btn=document.createElement('button');btn.textContent=label;btn.type='button';
+   btn.setAttribute('aria-label',label+' responsibility: '+t.title);
+   btn.onclick=()=>{
+    if(act==='edit'){editTask(t);return;}
+    const i=tasks.indexOf(t);
+    if(act==='remove'){tasks.splice(i,1);if(editingId===t.id)resetEdit();}
+    else t.done=!t.done;
+    render();
+   };right.append(btn);
+  }
+  row.append(left,right);$('tasks').append(row);
+ }
+ if(!tasks.length)$('tasks').textContent='Add a responsibility and an owner to begin.';
+ $('preview').textContent=handoff();
+ $('alert').textContent=errors().length?'Before sharing: '+errors().join(' · '):
+   'Basic handoff fields are complete. Confirm with the people involved.';
+}
+$('taskForm').onsubmit=e=>{
+ e.preventDefault();if(!$('taskForm').reportValidity())return;
+ const data={title:v('title'),owner:v('owner'),when:v('when'),detail:v('detail'),flag:$('flag').checked};
+ if(editingId!==null){
+  const t=tasks.find(x=>x.id===editingId);
+  if(!t){resetEdit();$('taskStatus').textContent='Task was removed. Start a new responsibility.';render();return;}
+  Object.assign(t,data);resetEdit();$('taskStatus').textContent='Responsibility updated.';
+ }else{
+  if(tasks.length>=30){$('taskStatus').textContent='Maximum 30 tasks per handoff.';return;}
+  tasks.push({id:++id,...data,done:false});resetEdit();$('taskStatus').textContent='Responsibility added.';
+ }
+ render();
+};
+$('cancelEdit').onclick=()=>{resetEdit();$('taskStatus').textContent='Edit canceled. Original responsibility preserved.';render()};
 ids.forEach(k=>$(k).addEventListener('input',render));
 $('sample').onclick=()=>{tasks.length=0;id=0;const x={person:'Family member A (fictional)',date:now(),lead:'Helper One',backup:'Helper Two',review:now(),time:'18:00',wishes:'Ask before assisting; use a calm tone.',concern:'Find backup coverage for the weekend',followOwner:'Helper Two',followWhen:'Tomorrow',questions:'Ask the care team about transport supports.'};Object.keys(x).forEach(k=>$(k).value=x[k]);tasks.push({id:++id,title:'Confirm transportation',owner:'Helper One',when:'Tomorrow',detail:'Call transport company for pickup time',flag:true,done:false},{id:++id,title:'Agree on weekend coverage',owner:'',when:'This week',detail:'Ask who can help',flag:false,done:false});sample=true;go('p4')};
 $('clear').onclick=()=>{if(!confirm('Clear all entries? Download first if you need them.'))return;ids.forEach(k=>$(k).value='');$('date').value=now();$('review').value=now();$('taskForm').reset();tasks.length=0;sample=false;id=0;go('p1')};
