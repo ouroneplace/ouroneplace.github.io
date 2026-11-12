@@ -10,6 +10,10 @@
 :root{font:17px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#18353a;background:#eaf8f5}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}
 a{color:#075d56}a:hover{text-decoration-thickness:2px}
+/* Allow every panel, control and long word to reflow at 320px with enlarged text. */
+body{overflow-wrap:anywhere}
+.top >*,.top nav,.panel,.columns >*,fieldset,form,.actions >*,.resources{min-width:0;max-width:100%}
+.actions button{min-width:0;white-space:normal;overflow-wrap:anywhere}
 .skip{position:absolute;left:-9999px;background:#fff;padding:12px;z-index:4}.skip:focus{left:12px;top:12px}
 .top{background:#102e33;color:#fff;padding:14px max(16px,calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .top a{color:#fff;font-weight:750;text-decoration:none}.top nav{display:flex;gap:14px;flex-wrap:wrap}
