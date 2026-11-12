@@ -23,7 +23,7 @@ p{margin:8px 0 14px}.eyebrow{font-size:.8rem;letter-spacing:.07em;color:#08736b;
 .scenario{font-weight:650;margin:12px 0 15px}
 .choice{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;padding:12px;border:1px solid #bdd9d2;border-radius:9px;background:white;cursor:pointer;min-width:0}
 .choice input{margin-top:7px;flex:none;accent-color:#087f73}.choice span{min-width:0}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}button{font:inherit;font-weight:750;min-height:46px;border:2px solid #086d64;border-radius:10px;background:#087f73;color:white;padding:10px 14px;cursor:pointer;white-space:normal;overflow-wrap:anywhere;max-width:100%}button.secondary{background:white;color:#075d56}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}button{font:inherit;font-weight:750;min-height:46px;border:2px solid #086d64;border-radius:10px;background:#087f73;color:white;padding:10px 14px;cursor:pointer;white-space:normal;overflow-wrap:anywhere;max-width:100%}button.secondary{background:white;color:#075d56}button:disabled{opacity:.55;cursor:not-allowed}
 .feedback{padding:12px;border-radius:9px;background:#e6f5ed;min-height:2em;overflow-wrap:anywhere}.feedback:empty{display:none}.feedback.try{background:#fff5de}
 .fine{font-size:.86rem;color:#486963}.bottom{text-align:center;background:#e2f4ed;padding:22px 16px}
 a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{outline:3px solid #a6681b;outline-offset:3px}
@@ -55,7 +55,7 @@ a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{ou
 <fieldset><legend>Practice with a fictional situation</legend><p class="scenario">Two OTC products have different brand names. What is the safest first step before using them together?</p>
 <label class="choice"><input type="radio" name="label-choice" value="0"><span>Assume the brand names guarantee different ingredients.</span></label><label class="choice"><input type="radio" name="label-choice" value="1"><span>Compare their active ingredients and warnings; ask a pharmacist if unsure.</span></label><label class="choice"><input type="radio" name="label-choice" value="2"><span>Pick whichever package has a shorter directions section.</span></label>
 </fieldset>
-<div class="actions"><button type="submit">Check my choice</button><button type="reset" class="secondary">Try again</button></div>
+<div class="actions"><button type="submit" disabled>Check my choice</button><button type="reset" class="secondary">Try again</button></div>
 <p class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 <p class="fine">These examples are educational; no grade, health information or answer is saved.</p>
 </form>
@@ -77,7 +77,7 @@ a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{ou
 <fieldset><legend>Practice with a fictional situation</legend><p class="scenario">Someone may have missed a dose and the instructions are unclear. What is the most useful next step?</p>
 <label class="choice"><input type="radio" name="medicines-choice" value="0"><span>Automatically double the next dose.</span></label><label class="choice"><input type="radio" name="medicines-choice" value="1"><span>Stop all medicines until the next visit.</span></label><label class="choice"><input type="radio" name="medicines-choice" value="2"><span>Check the medicine-specific instructions and contact a pharmacist or prescriber.</span></label>
 </fieldset>
-<div class="actions"><button type="submit">Check my choice</button><button type="reset" class="secondary">Try again</button></div>
+<div class="actions"><button type="submit" disabled>Check my choice</button><button type="reset" class="secondary">Try again</button></div>
 <p class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 <p class="fine">These examples are educational; no grade, health information or answer is saved.</p>
 </form>
@@ -99,7 +99,7 @@ a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{ou
 <fieldset><legend>Practice with a fictional situation</legend><p class="scenario">A viral post promises one supplement can cure every disease and links to a store. What should you do?</p>
 <label class="choice"><input type="radio" name="claims-choice" value="0"><span>Buy it because the video has many shares.</span></label><label class="choice"><input type="radio" name="claims-choice" value="1"><span>Investigate the sponsor, evidence and date; check independent sources before acting.</span></label><label class="choice"><input type="radio" name="claims-choice" value="2"><span>Assume every website is equally trustworthy.</span></label>
 </fieldset>
-<div class="actions"><button type="submit">Check my choice</button><button type="reset" class="secondary">Try again</button></div>
+<div class="actions"><button type="submit" disabled>Check my choice</button><button type="reset" class="secondary">Try again</button></div>
 <p class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 <p class="fine">These examples are educational; no grade, health information or answer is saved.</p>
 </form>
@@ -121,7 +121,7 @@ a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{ou
 <fieldset><legend>Practice with a fictional situation</legend><p class="scenario">After a fictional screening, someone does not know when to expect results. What is the best next step?</p>
 <label class="choice"><input type="radio" name="screening-choice" value="0"><span>Assume no news is proof that results are normal.</span></label><label class="choice"><input type="radio" name="screening-choice" value="1"><span>Order additional tests without talking to a clinician.</span></label><label class="choice"><input type="radio" name="screening-choice" value="2"><span>Ask the care team when results arrive, who explains them and how to follow up.</span></label>
 </fieldset>
-<div class="actions"><button type="submit">Check my choice</button><button type="reset" class="secondary">Try again</button></div>
+<div class="actions"><button type="submit" disabled>Check my choice</button><button type="reset" class="secondary">Try again</button></div>
 <p class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 <p class="fine">These examples are educational; no grade, health information or answer is saved.</p>
 </form>
@@ -135,6 +135,8 @@ a:focus-visible,input:focus-visible,button:focus-visible,.choice:focus-within{ou
 for(const form of document.querySelectorAll('form.practice')){
  const status=form.querySelector('.feedback');
  const radios=Array.from(form.querySelectorAll('input[type="radio"]'));
+ // Prevent JavaScript-disabled form GETs from putting practice answers in URLs.
+ form.querySelector('button[type="submit"]').disabled=false;
  form.addEventListener('submit',event=>{
   event.preventDefault();
   const chosen=radios.find(r=>r.checked);
