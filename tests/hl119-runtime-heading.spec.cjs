@@ -54,7 +54,7 @@ for(let lesson=1;lesson<=10;lesson++){
    await expect(heading).toHaveCount(1);
    await expect(heading).toBeVisible();
    await expect(heading).toContainText('Lesson '+number);
-   await expect(page.getByText('Interactive practice requires JavaScript')).toBeVisible();
+   await expect(page.locator('noscript p')).toContainText('Interactive practice requires JavaScript.');
    await expect(page.getByRole('link',{name:'all Human Literacy lessons'})).toHaveAttribute('href','../../human-literacy/index.html#lessons');
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
   }finally{await context.close();}
