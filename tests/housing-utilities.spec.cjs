@@ -252,3 +252,16 @@ test('Housing seasonal presets append safe editable tasks without replacing exis
  await page.getByRole('button',{name:'Restore example tasks'}).click();
  await expect(rows).toHaveCount(3);
 });
+
+
+test('Housing subsidized-housing guidance uses a working official destination',async({page,request})=>{
+ const url='https://www.usa.gov/subsidized-rental-housing';
+ await page.goto('/one-place/housing-utilities.html');
+ await page.getByRole('button',{name:'I\'m looking for affordable housing'}).click();
+ await expect(page.locator('#scenario-resources a').first()).toHaveAttribute('href',url);
+ const response=await request.get(url,{timeout:20000});
+ expect(response.status(),'USA.gov rental help returned HTTP '+response.status()).toBe(200);
+ const body=await response.text();
+ expect(body).toMatch(/Get subsidized housing/i);
+ expect(body).not.toMatch(/404: Page not found/i);
+});
