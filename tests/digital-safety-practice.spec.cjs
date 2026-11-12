@@ -27,7 +27,7 @@ for(let n=0;n<ids.length;n++){
  test('Digital Safety: '+ids[n]+' explains blank, unsafe, safe and reset choices',async({page})=>{
   await page.goto('/one-place/digital-safety-practice.html#'+ids[n]);
   const form=page.locator('#'+ids[n]+' form.practice');
-  const feedback=form.getByRole('status');
+  const feedback=form.locator('.feedback');
   const options=form.getByRole('radio');
   await expect(options).toHaveCount(3);
   await form.getByRole('button',{name:'Check my decision'}).click();
