@@ -20,4 +20,15 @@
 - **Release rule:** Preserve accepted Housing & Utilities functionality, navigation, safety guidance, and lessons while developing other life areas. Introduce future improvements through focused changes and verify against this baseline.
 - **Limits:** Approval is not a guarantee of future third-party link availability, housing-program eligibility, or safety of unsupervised repairs. Keep official sources checked and stop users from attempting hazardous work.
 
-**Next development priority:** To be chosen by the founder. Money & Bills v1.0, Housing & Utilities v1.0, and the approved One Place homepage are protected baselines.
+## Family & Caregiving v1.0
+
+- **Decision:** Approved by the founder on **November 11, 2026 (Central Time)** after a public desktop video walkthrough and explicit acceptance.
+- **Status:** Accepted and protected as an approved release baseline.
+- **Scope:** Four functional Family & Caregiving entry cards; free Family Handoff Toolkit with editable responsibilities, family preferences, follow-up planning, review-before-export and safe return navigation; official outside caregiver-resource links; privacy and fictional-example warnings.
+- **Verification at acceptance:** PR #40 merged as `4b4713bb28db0c4dd4696aa6b6b34fd36f9b5866`; [Pages deployment run 43155239977](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43155239977) succeeded; [post-merge browser regression run 43155240357](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43155240357) passed **604/604**. The founder reviewed desktop recordings showing navigation, toolkit task entry, summary/export feedback and return links. Separate founder mobile visual approval was not claimed; automated checks included mobile widths.
+- **Relevant release:** [PR #40](https://github.com/ouroneplace/ouroneplace.github.io/pull/40); [founder acceptance comment](https://github.com/ouroneplace/ouroneplace.github.io/pull/40#issuecomment-6815333090).
+- **Release rule:** Preserve this accepted area and toolkit, with its navigation, practical guidance, privacy warnings and export safeguards. Subsequent changes require focused QA and explicit authorization before merging or publishing.
+- **Limits:** Automated and recorded tests cannot guarantee all real-world care situations or continued availability of third-party resources.
+
+**Next development priority:** Phase 1 reliability — proposed automatic verification against the actual published Pages deployment after each `main` update. This is review-only until expressly authorized to merge; all accepted baselines remain protected.
+
