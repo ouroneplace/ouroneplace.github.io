@@ -80,7 +80,7 @@ test('CFPB toolkit link opens a real resource page instead of an error page',asy
  const body=await response.text();
  expect(body).toMatch(/Your Money, Your Goals toolkit/i);
  expect(body).toMatch(/Bill calendar/i);
- expect(body).not.toMatch(/404:\\s*Page not found/i);
+ expect(body).not.toMatch(/404: Page not found/i);
 });
 
 test('Every Money Center entry point uses the verified CFPB toolkit address',async({page})=>{
