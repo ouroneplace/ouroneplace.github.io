@@ -56,7 +56,7 @@ test('Money & Bills resource links and all three tool headers have clear return 
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:850});
   await page.goto('/one-place/money-center.html');
-  const cfpb='https://www.consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/';
+  const cfpb='https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/toolkit/';
   await expect(page.getByRole('link',{name:/View CFPB resources/})).toHaveAttribute('href',cfpb);
   await expect(page.locator('a[href*="consumerfinance.gov/consumer-tools/educator-tool/your-money-your-goals/toolkit/"]')).toHaveCount(0);
   await page.getByRole('link',{name:'Open bill planner'}).click();
@@ -69,4 +69,33 @@ test('Money & Bills resource links and all three tool headers have clear return 
   await expect(page).toHaveURL(/money-center\.html$/);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
  }
+});
+
+// This test checks the destination itself. An href-only assertion did not catch
+// the CFPB 404 reported in the founder's November 11 walkthrough.
+test('CFPB toolkit link opens a real resource page instead of an error page',async({request})=>{
+ const url='https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/toolkit/';
+ const response=await request.get(url,{timeout:20000});
+ expect(response.status(),'CFPB resource returned HTTP '+response.status()).toBe(200);
+ const body=await response.text();
+ expect(body).toMatch(/Your Money, Your Goals toolkit/i);
+ expect(body).toMatch(/Bill calendar/i);
+ expect(body).not.toMatch(/404: Page not found/i);
+});
+
+test('Every Money Center entry point uses the verified CFPB toolkit address',async({page})=>{
+ await page.goto('/one-place/money-center.html');
+ const url='https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/toolkit/';
+ await expect(page.getByRole('link',{name:/View CFPB resources/})).toHaveAttribute('href',url);
+ await expect(page.locator('#help a').filter({hasText:/CFPB/})).toHaveAttribute('href',url);
+ for(const selection of ['bills','debt','plan']){
+  await page.locator('#situation').selectOption(selection);
+  await expect(page.locator('#situationLinks a[href^="https://www.consumerfinance.gov"]')).toHaveAttribute('href',url);
+ }
+ for(const subject of ['Groceries & household savings','Saving, emergency funds & goals']){
+  await page.getByRole('button',{name:subject,exact:true}).click();
+  await expect(page.locator('#topicPanel a')).toHaveAttribute('href',url);
+ }
+ const bad=await page.evaluate(()=>[...document.querySelectorAll('a[href]')].map(a=>a.href).filter(u=>u.includes('/educator-tool/')));
+ expect(bad).toEqual([]);
 });
