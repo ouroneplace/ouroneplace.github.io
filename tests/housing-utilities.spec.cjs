@@ -225,3 +225,30 @@ test('Housing & Utilities: no tracking, third-party requests, or browser storage
   expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
   await expect(page.locator('#scenario-resources a').first()).toHaveAttribute('rel','noopener noreferrer');
 });
+
+
+test('Housing seasonal presets append safe editable tasks without replacing existing work',async({page})=>{
+ await page.setViewportSize({width:320,height:780});
+ await page.goto('/one-place/housing-utilities.html#maintenance');
+ const rows=page.locator('#task-list .taskrow');
+ await expect(rows).toHaveCount(3);
+ await rows.first().locator('input').first().fill('My custom task');
+ await page.getByRole('button',{name:'Spring checks'}).click();
+ await expect(rows).toHaveCount(6);
+ await expect(rows.first().locator('input').first()).toHaveValue('My custom task');
+ await expect(page.locator('#season-status')).toContainText('3 spring tasks added');
+ await page.getByRole('button',{name:'Spring checks'}).click();
+ await expect(rows).toHaveCount(6);
+ await expect(page.locator('#season-status')).toContainText('0 spring tasks added');
+ await page.getByRole('button',{name:'Fall checks'}).click();
+ await expect(rows).toHaveCount(9);
+ await page.getByRole('button',{name:'Winter checks'}).click();
+ await expect(rows).toHaveCount(12);
+ await page.getByRole('button',{name:'Summer checks'}).click();
+ await expect(rows).toHaveCount(12);
+ await expect(page.locator('#season-status')).toContainText('12-task limit reached');
+ await expect(page).not.toHaveURL(/index\.html/);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+2)).toBe(true);
+ await page.getByRole('button',{name:'Restore example tasks'}).click();
+ await expect(rows).toHaveCount(3);
+});
