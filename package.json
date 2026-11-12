@@ -7,7 +7,9 @@
     "test:migration": "node scripts/check_organization_migration.cjs",
     "check:js": "node scripts/check_javascript.cjs",
     "audit": "python3 scripts/site_audit.py",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "test:quick": "npm run test:migration && npm run audit && npm run check:js",
+    "test:money": "npm run test:quick && playwright test tests/money-center-v1.spec.cjs tests/money-bills-cashflow.spec.cjs tests/debt-creditor-guide.spec.cjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"
