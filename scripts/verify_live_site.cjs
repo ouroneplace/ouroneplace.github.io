@@ -82,6 +82,14 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('form.practice').first().getByRole('button',{name:'Check my choice'}).click();
    assert.match(await page.locator('form.practice .feedback').first().innerText(),/Good reasoning/,'Health Lab answer feedback missing');
    await reflow();
+   // Health Costs Lab: document literacy and immediate fictional answer feedback.
+   await goto('/one-place/health-costs-lab.html');
+   assert.equal(await page.locator('section.lesson').count(),4,'Health Costs Lab has four lessons');
+   assert.equal(await page.locator('form.practice').count(),4,'Health Costs Lab has four exercises');
+   await page.locator('form.practice').first().locator('input[type=radio]').nth(1).check();
+   await page.locator('form.practice').first().getByRole('button',{name:'Check my choice'}).click();
+   assert.match(await page.locator('form.practice .feedback').first().innerText(),/Good reasoning/,'Health Costs Lab answer feedback missing');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
