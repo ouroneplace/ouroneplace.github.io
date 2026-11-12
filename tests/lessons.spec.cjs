@@ -61,7 +61,7 @@ test('Lessons 01–10: centered headers and stage titles, centered video players
         const brand = document.querySelector('.brand');
         const heading = document.querySelector('.lesson-heading');
         const stageHeading = document.querySelector('#app > h1');
-        const frame = document.querySelector('.lesson-video-frame');
+        const frame = document.querySelector('.lesson-video-gate');
         const section = document.querySelector('.video-lesson');
         const close = (a, b) => Math.abs(a - b) <= 3;
         return {
@@ -103,7 +103,8 @@ test('Lessons 01–10: every See It player has exactly one standard external vid
   for (let n = 1; n <= 10; n++) {
     const lesson = String(n).padStart(2, '0');
     await page.goto('/lessons/' + lesson + '/');
-    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(0);
+    await expect(page.getByRole('button',{name:'Play Lesson Video',exact:true})).toBeVisible();
     await expect(page.locator('.video-lesson a')).toHaveCount(1);
     await expect(page.locator('.video-lesson a')).toHaveText('Open Lesson ' + n + ' video in a new tab');
     await expect(page.getByText('Watch original MP4 if the video player is unavailable')).toHaveCount(0);
@@ -124,8 +125,11 @@ const embeddedVideos = [
 ];
 for (const { lesson, share, mp4 } of embeddedVideos) {
   test(`lesson ${lesson}: large embedded video and five-stage flow`, async ({ page }) => {
+    await page.route('https://share.descript.com/**', route => route.abort('failed'));
     await page.goto('/lessons/' + lesson + '/');
     await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(0);
+    await page.getByRole('button',{name:'Play Lesson Video',exact:true}).click();
     await expect(page.locator('.video-lesson iframe.lesson-video-frame'))
       .toHaveAttribute('src', 'https://share.descript.com/embed/' + share);
     await expect(page.getByRole('link', { name: 'Open Lesson ' + Number(lesson) + ' video in a new tab' }))
