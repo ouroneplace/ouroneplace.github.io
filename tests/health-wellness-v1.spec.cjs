@@ -91,7 +91,8 @@ test('Health: the habit builder is useful, editable and safe at 200% text',async
  await page.locator('#habitAction').fill('Take a quiet pause');
  await page.locator('#makeHabit').click();
  await expect(page.locator('#habitResult')).toContainText('After breakfast');
- expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ const dimensions=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(el=>({tag:el.tagName,id:el.id,cls:el.className,right:Math.round(el.getBoundingClientRect().right)}))}));
+ expect(dimensions.scroll,'200% health routine reflow: '+JSON.stringify(dimensions)).toBeLessThanOrEqual(dimensions.width+1);
  await page.locator('#habitAction').fill('Take a gentle pause');
  await expect(page.locator('#habitResult')).toBeHidden();
  await page.locator('#makeHabit').click();
@@ -136,7 +137,7 @@ test('Health: guide and four choices remain readable without JavaScript',async({
   await page.goto('/one-place/health-wellness.html');
   await expect(page.getByRole('heading',{name:'Health & Wellness',exact:true})).toBeVisible();
   await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-  await expect(page.getByText('JavaScript is needed for the two interactive builders.')).toBeVisible();
+  await expect(page.locator('noscript p')).toContainText('JavaScript is needed for the two interactive builders.');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  }finally{await context.close();}
 });
