@@ -90,6 +90,13 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('form.practice').first().getByRole('button',{name:'Check my choice'}).click();
    assert.match(await page.locator('form.practice .feedback').first().innerText(),/Good reasoning/,'Health Costs Lab answer feedback missing');
    await reflow();
+   // Care Navigation Guide: four accessible situation paths, no private input or scripts.
+   await goto('/one-place/care-navigation.html');
+   assert.equal(await page.locator('section.path').count(),4,'Care Navigation has four paths');
+   assert.equal(await page.locator('input[type=checkbox]').count(),12,'Care Navigation has twelve optional action checks');
+   await page.locator('#home input[type=checkbox]').first().check();
+   assert.equal(await page.locator('#home input[type=checkbox]').first().isChecked(),true,'Care Navigation checklist must work');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
