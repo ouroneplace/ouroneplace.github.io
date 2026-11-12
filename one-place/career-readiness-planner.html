@@ -35,7 +35,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:680px){.steps,.columns{grid-template-columns:minmax(0,1fr)}.panel{padding:17px 13px}.actions button{flex:1 1 100%}}
 @media(max-width:360px){h1{font-size:1.6rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media print{body{background:white}.top,.skip,.examples,.actions,.sources,.no-print{display:none!important}.panel{box-shadow:none;break-inside:avoid}main{padding:0}#careerResult{max-height:none;overflow:visible}}
+@media print{
+body{background:white}
+.top,.skip,footer,main>:not(#planner),#planner>:not(#careerForm),#careerForm>:not(#careerResult){display:none!important}
+main{padding:0;max-width:none}
+#planner{box-shadow:none;border:0;padding:0;margin:0}
+#careerResult{display:block;max-height:none;overflow:visible;border:0;padding:0;background:white}
+}
 </style></head><body>
 <a class="skip" href="#main">Skip to career preparation</a>
 <header class="top"><a href="../index.html">✳ ONE PLACE</a><nav aria-label="Site navigation"><a href="../index.html?area=Work%20%26%20Careers">Work &amp; Careers</a><a href="../index.html">One Place home</a></nav></header>
