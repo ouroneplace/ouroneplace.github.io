@@ -67,6 +67,8 @@ fs.mkdirSync(output,{recursive:true});
    for(const route of solutions){await goto('/'+route);await reflow();}
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
+    assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
+    assert.equal(await page.getByRole('button',{name:'Play Lesson Video',exact:true}).count(),1,'Video play action must be available');
     assert.equal(await page.getByRole('navigation',{name:'One Place and lessons'}).count(),1);
     await page.getByRole('link',{name:'One Place Home',exact:true}).click();
     await visible(page.getByRole('heading',{name:'Explore every part of life',exact:true}));

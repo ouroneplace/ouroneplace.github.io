@@ -23,6 +23,11 @@ for (let n = 1; n <= 10; n++) {
     };
 
     await expect(page.getByRole('heading', { name: 'See It', exact: true })).toBeVisible();
+    await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(0);
+    const playVideo=page.getByRole('button',{name:'Play Lesson Video',exact:true});
+    await expect(playVideo).toBeVisible();
+    await playVideo.focus();
+    await page.keyboard.press('Enter');
     await expect(page.locator('.video-lesson iframe.lesson-video-frame')).toHaveCount(1);
     const externalLink = page.getByRole('link', {
       name: 'Open Lesson ' + n + ' video in a new tab', exact: true,
