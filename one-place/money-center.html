@@ -114,13 +114,4 @@ $('reset').addEventListener('click',()=>{document.querySelectorAll('.task').forE
 $('print').addEventListener('click',()=>window.print());
 $('download').addEventListener('click',()=>{const lines=['ONE PLACE · MONEY & BILLS ACTION PLAN','Date: '+new Date().toLocaleDateString(),'','Selected priorities:',...tasks().map((x,i)=>(i+1)+'. '+x),'','My next action:', $('nextAction').value.trim()||'Not specified','','Privacy: Created in your browser; not submitted to ONE PLACE. No financial or legal advice.'];const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-money-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)});
 })();
-</script></body></html>+delta.toFixed(2)+'.'}f.textContent=s}
-['priceA','qtyA','priceB','qtyB','unit','annual'].forEach(id=>$(id).addEventListener('input',compare));
-const tasks=()=>Array.from(document.querySelectorAll('.task:checked')).map(x=>x.value);
-function updateTasks(){const n=tasks().length;$('checkupStatus').textContent=n+' priorities selected'+(n>3?'. Please choose no more than three to keep this manageable.':'. Choose one doable next action.');$('download').disabled=n>3}
-document.querySelectorAll('.task').forEach(x=>x.addEventListener('change',updateTasks));updateTasks();
-$('reset').addEventListener('click',()=>{document.querySelectorAll('.task').forEach(x=>x.checked=false);$('nextAction').value='';updateTasks()});
-$('print').addEventListener('click',()=>window.print());
-$('download').addEventListener('click',()=>{const lines=['ONE PLACE · MONEY & BILLS ACTION PLAN','Date: '+new Date().toLocaleDateString(),'','Selected priorities:',...tasks().map((x,i)=>(i+1)+'. '+x),'','My next action:', $('nextAction').value.trim()||'Not specified','','Privacy: Created in your browser; not submitted to ONE PLACE. No financial or legal advice.'];const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-money-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)});
-})();
 </script></body></html>
