@@ -78,7 +78,8 @@ jobs:
                    'simulator/01/index.html', 'simulator/01/coach.js',
                    'one-place/money-bills.html', 'one-place/family-handoff.html',
                    'one-place/health-wellness.html', 'one-place/health-literacy-lab.html',
-                   'one-place/health-costs-lab.html']
+                   'one-place/health-costs-lab.html',
+                   'one-place/github-field-guide.html']
           paths += [f'lessons/{n:02}/index.html' for n in range(1, 11)]
           for attempt in range(60):
               try:
