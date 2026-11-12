@@ -51,11 +51,12 @@ fs.mkdirSync(output,{recursive:true});
     if(areaName==='Money & Bills'){
      // Founder-approved Money Center replaces the old four generic catalog cards.
      assert.equal(new URL(page.url()).pathname,'/one-place/money-center.html');
-     assert.equal(await page.locator('#tools .card').count(),4,'Money Center has four working tool cards');
+     assert.ok((await page.locator('#tools .card').count())>=6,'Money Center must retain its four tool cards and two resource cards');
      assert.equal(await page.locator('#situation').count(),1,'Money Center has a real situation selector');
-     for(const name of ['Open bill planner','Open debt guide','Compare prices','Start checkup']){
+     for(const name of ['Open bill planner','Open debt guide','Compare prices','Start checkup','Find real assistance']){
       assert.equal(await page.getByRole('link',{name,exact:true}).count(),1,'Missing Money Center tool: '+name);
      }
+     assert.equal(await page.getByRole('link',{name:/View CFPB resources/}).count(),1,'Missing official CFPB resource');
     }else{
      assert.equal(await page.locator('.offers > a.offer').count(),4,areaName+' has four working paths');
      solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));
@@ -114,7 +115,7 @@ fs.mkdirSync(output,{recursive:true});
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(siteWrites,[]);
    // Lesson media is loaded from Descript. Its third-party analytics/advertising
    // requests are reported, never hidden or misrepresented as first-party writes.
-   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,money_center_tools:4,legacy_catalog_links:68,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
+   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,money_center_tools:4,money_center_resource_cards:2,legacy_catalog_links:68,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
    await context.close();
   }
   const context=await browser.newContext();const request=context.request;
