@@ -90,6 +90,16 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('form.practice').first().getByRole('button',{name:'Check my choice'}).click();
    assert.match(await page.locator('form.practice .feedback').first().innerText(),/Good reasoning/,'Health Costs Lab answer feedback missing');
    await reflow();
+   // GitHub Field Guide: real read-only skill practice and safe return to learning area.
+   await goto('/one-place/github-field-guide.html');
+   assert.equal(await page.locator('section.mission').count(),4,'GitHub Field Guide must teach four concepts');
+   assert.equal(await page.locator('section.mission:visible').count(),1,'GitHub Field Guide must start at one mission');
+   await page.locator('#mission-1 input[type=radio]').nth(1).check();
+   await page.locator('#mission-1 button.check').click();
+   assert.match(await page.locator('#mission-1 .feedback').innerText(),/Good reasoning/,'GitHub answer explanation missing');
+   await page.locator('#mission-1 .next').click();
+   assert.ok(page.url().endsWith('#mission-2'),'GitHub topic navigation must work');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
