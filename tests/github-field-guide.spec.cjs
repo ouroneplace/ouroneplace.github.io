@@ -119,3 +119,33 @@ test('GitHub Field Guide uses safe external links, no tracking, saves nothing',a
  await page.reload();
  await expect(page.locator('#mission-1 .feedback')).toBeEmpty();
 });
+
+test('GitHub Field Guide captures reviewable exact-source screenshots across layouts',async({page})=>{
+ const fs=require('node:fs');
+ fs.mkdirSync('review-artifacts',{recursive:true});
+ const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ for(const width of [320,390,1366,1920]){
+  await page.setViewportSize({width,height:850});
+  await page.goto('/one-place/github-field-guide.html');
+  await expect(page.getByRole('heading',{name:'GitHub Field Guide'})).toBeVisible();
+  await expect(page.locator('section.mission:visible')).toHaveCount(1);
+  await page.screenshot({path:'review-artifacts/github-field-guide-'+width+'-top.png'});
+  const layout=await page.evaluate(()=>({width:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
+  expect(Math.max(layout.html,layout.body),'viewport '+width+': '+JSON.stringify(layout)).toBeLessThanOrEqual(width+1);
+ }
+ await page.setViewportSize({width:390,height:850});
+ for(const mission of [2,3,4]){
+  await page.goto('/one-place/github-field-guide.html#mission-'+mission);
+  await expect(page.locator('#mission-'+mission)).toBeVisible();
+  await page.screenshot({path:'review-artifacts/github-field-guide-390-mission'+mission+'.png'});
+ }
+ await page.setViewportSize({width:320,height:850});
+ await page.goto('/one-place/github-field-guide.html#mission-3');
+ await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+ await expect(page.locator('#mission-3')).toBeVisible();
+ await page.screenshot({path:'review-artifacts/github-field-guide-320-text200.png'});
+ const zoomLayout=await page.evaluate(()=>({width:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
+ expect(Math.max(zoomLayout.html,zoomLayout.body),'320px at 200%: '+JSON.stringify(zoomLayout)).toBeLessThanOrEqual(zoomLayout.width+1);
+ expect(errors).toEqual([]);
+});
