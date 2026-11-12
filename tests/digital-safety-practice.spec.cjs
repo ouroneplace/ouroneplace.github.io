@@ -67,7 +67,7 @@ test('Digital Safety: all teaching remains available without JavaScript',async({
   await page.goto('/one-place/digital-safety-practice.html');
   await expect(page.locator('section.lesson:visible')).toHaveCount(4);
   await expect(page.locator('button[type="submit"]:disabled')).toHaveCount(4);
-  await expect(page.getByText('All four examples, safer choices, instructions and source links remain readable without JavaScript.')).toBeVisible();
+  await expect(page.locator('noscript p')).toContainText('All four examples, safer choices, instructions and source links remain readable without JavaScript.');
   await page.getByRole('navigation',{name:'Jump to a practice situation'}).getByRole('link').nth(3).click();
   await expect(page).toHaveURL(/#already-paid$/);
   await expect(page.locator('#already-paid')).toBeVisible();
@@ -97,7 +97,7 @@ test('Digital Safety: practice stores no data, sends no writes and has safe sour
 });
 test('Digital Safety: discoverable only in the appropriate area, four original cards remain',async({page})=>{
  await page.goto('/index.html?area=Technology%20%26%20Digital%20Safety');
- await expect(page.getByRole('heading',{name:'Technology & Digital Safety'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Technology & Digital Safety',level:1,exact:true})).toBeVisible();
  await expect(page.locator('.offers > a.offer')).toHaveCount(4);
  await page.getByRole('link',{name:'Open the Digital Safety Practice Lab'}).click();
  await expect(page).toHaveURL(/\/one-place\/digital-safety-practice\.html$/);
