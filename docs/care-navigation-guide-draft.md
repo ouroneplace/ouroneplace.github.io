@@ -19,7 +19,7 @@ The checklist has no JavaScript, account, personal fields, network calls, hidden
 - [MedlinePlus: Caregiving—taking a loved one to the doctor](https://medlineplus.gov/ency/patientinstructions/000953.htm).
 - [National Institute on Aging: Taking someone to a doctor's appointment](https://www.nia.nih.gov/health/medical-care-and-appointments/taking-someone-doctors-appointment-tips-caregivers).
 - [AHRQ: IDEAL discharge planning](https://www.ahrq.gov/patient-safety/patients-families/engagingfamilies/strategy4/index.html).
-- [AHRQ: Postdischarge follow-up](https://www.ahrq.gov/patient-safety/settings/hospital/red/toolkit/redtool5.html).
+- [MedlinePlus: How to Understand Your Lab Results](https://medlineplus.gov/lab-tests/how-to-understand-your-lab-results/) — patient-facing guidance for test result questions and follow-up.
 
 ## Scope and preservation
 - New `one-place/care-navigation.html`.
