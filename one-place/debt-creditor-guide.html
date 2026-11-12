@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="robots" content="index,follow">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Private founder draft of an interactive debt and creditor learning and action guide.">
-<title>Debt &amp; Creditor Guide · ONE PLACE Founder Draft</title>
+<meta name="description" content="A free interactive debt and creditor learning and action guide.">
+<title>Debt &amp; Creditor Guide · ONE PLACE</title>
 <style>
 :root{font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#173935;background:#f7fbf8;--teal:#087f75;--line:#cde5d8;--soft:#4d665f}
 *{box-sizing:border-box}body{margin:0;overflow-wrap:anywhere}a{color:#075f57}button,input,textarea{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ae6624;outline-offset:3px}
@@ -45,7 +45,7 @@ footer{padding:15px 0;border-top:1px solid var(--line);font-size:12px;color:var(
 <a class="skip" href="#main">Skip to guide</a>
 <header><div class="wrapper"><a class="brand" href="../index.html" aria-label="ONE PLACE home"><i aria-hidden="true">✳</i> ONE PLACE</a><nav aria-label="Return navigation"><a href="../index.html?area=Money%20%26%20Bills">← Money &amp; Bills</a><a href="../index.html">All life areas</a><a href="money-bills.html">Bill planner</a></nav></div></header>
 <main class="wrapper" id="main" tabindex="-1">
-<div class="banner"><strong>UNPUBLISHED FOUNDER DRAFT · NO ACCOUNT · NO PURCHASES.</strong> This private prototype is not yet part of the public ONE PLACE website. It runs locally in your browser and does not send your entries to ONE PLACE.</div>
+<div class="banner"><strong>PUBLIC WORK IN PROGRESS · FREE TOOL · NO ACCOUNT · NO PURCHASES.</strong> This guide is part of the public ONE PLACE learning project. It runs locally in your browser and does not send your entries to ONE PLACE.</div>
 <p class="eyebrow">Money &amp; Bills · Learn → Understand → Practice → Act</p>
 <h1>Debt &amp; Creditor Guide</h1>
 <p class="intro">Find a sensible starting point for your situation, practice what you might say, and download an action checklist. This is U.S.-focused educational information—not personalized legal, credit, or financial advice.</p>
@@ -144,7 +144,7 @@ function render(){
 }
 radios.forEach(function(r){r.addEventListener('change',function(){saveCurrent();render();})});
 document.getElementById('reset').addEventListener('click',function(){drafts=Object.create(null);lastPath=null;radios[0].checked=true;render();status.textContent='All temporary edits and checkmarks have been cleared. Nothing was sent.';radios[0].focus()});
-document.getElementById('download').addEventListener('click',function(){var x=sources[path()];var lines=['ONE PLACE · Debt & Creditor Guide v1 · PRIVATE FOUNDER DRAFT','Generated: '+new Date().toLocaleString(),'General U.S. educational information, not legal or financial advice.','No message was sent or filing made.','',x.title,'',x.summary,'','Important: '+x.warning,'','Starting steps:'];x.steps.forEach(function(t,i){lines.push((i+1)+'. '+t)});lines.push('','Practice wording (review before using):',script.value,'','Checklist:');Array.from(checks.querySelectorAll('input')).forEach(function(c){lines.push((c.checked?'[x] ':'[ ] ')+c.value)});lines.push('','My next action: '+(next.value.trim()||'Not entered'),'','Original guidance: '+x.link,'','Verify deadlines and terms with official sources. Do not include sensitive identifiers.');var blob=new Blob([lines.join('\n')+'\n'],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-debt-'+path()+'-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},3000);status.textContent='Downloaded '+a.download+' to this browser. Check your downloads.'});
+document.getElementById('download').addEventListener('click',function(){var x=sources[path()];var lines=['ONE PLACE · Debt & Creditor Guide v1 · FREE PUBLIC LEARNING TOOL','Generated: '+new Date().toLocaleString(),'General U.S. educational information, not legal or financial advice.','No message was sent or filing made.','',x.title,'',x.summary,'','Important: '+x.warning,'','Starting steps:'];x.steps.forEach(function(t,i){lines.push((i+1)+'. '+t)});lines.push('','Practice wording (review before using):',script.value,'','Checklist:');Array.from(checks.querySelectorAll('input')).forEach(function(c){lines.push((c.checked?'[x] ':'[ ] ')+c.value)});lines.push('','My next action: '+(next.value.trim()||'Not entered'),'','Original guidance: '+x.link,'','Verify deadlines and terms with official sources. Do not include sensitive identifiers.');var blob=new Blob([lines.join('\n')+'\n'],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='one-place-debt-'+path()+'-next-steps.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},3000);status.textContent='Downloaded '+a.download+' to this browser. Check your downloads.'});
 render();
 })();
 </script>

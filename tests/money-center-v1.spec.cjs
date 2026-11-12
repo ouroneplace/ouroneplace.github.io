@@ -41,3 +41,13 @@ test('Money center returns home and links to previously approved tools',async({p
  await page.getByRole('link',{name:/Money & Bills category|Money & Bills/i}).first().click();
  await expect(page).toHaveURL(/money-center\.html$/);
 });
+
+
+test('Money center source ends cleanly without visible code after footer',async({page})=>{
+ await page.goto('/one-place/money-center.html');
+ await expect(page.locator('footer')).toBeVisible();
+ const tail=await page.evaluate(()=>Array.from(document.body.childNodes).filter(n=>n.nodeType===Node.TEXT_NODE&&n.textContent.trim()).map(n=>n.textContent.trim()));
+ expect(tail).toEqual([]);
+ const source=await page.locator('html').evaluate(el=>el.outerHTML);
+ expect(source).not.toContain('</html>+delta.toFixed');
+});

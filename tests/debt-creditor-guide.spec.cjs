@@ -10,7 +10,7 @@ test('Debt Guide appears in Money & Bills and five distinct paths remain navigab
   await guideLink.click();
   await expect(page).toHaveURL(/\/one-place\/debt-creditor-guide\.html$/);
   await expect(page).toHaveTitle(/Debt & Creditor Guide/);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content','noindex,nofollow,noarchive');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content','index,follow');
   const journeys=[
     ["I can't afford my payments","hardship","CFPB: When you can't pay credit-card bills"],
     ["A debt collector contacted me","collector","CFPB: Debt-validation information"],
