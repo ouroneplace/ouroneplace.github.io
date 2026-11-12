@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive"><meta name="color-scheme" content="light">
+<meta name="robots" content="index,follow"><meta name="color-scheme" content="light">
 <meta name="description" content="Free, practical housing and utilities guidance: find trustworthy resources, review home safety, plan upkeep, and create your own next-step plan.">
-<title>Housing &amp; Utilities — ONE PLACE · Founder review</title>
+<title>Housing &amp; Utilities — ONE PLACE</title>
 <style>
 :root{--ink:#193e38;--mute:#4e7068;--teal:#087e74;--paper:#f9fcf8;--soft:#eaf7f0;--line:#cce5d9;--warm:#fff2da}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:15px}body{background:radial-gradient(circle at 85% 0%,#e2f5eb,transparent 38%),var(--paper);color:var(--ink);margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
@@ -116,6 +116,18 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 <p class="eyebrow">03 · HOME MAINTENANCE PLANNER</p><h2 id="maintenance-title">Keep track of what matters.</h2>
 <p class="helptext"><strong>New to home maintenance?</strong> <a href="home-skills.html">Learn step-by-step inside and outside home-care skills</a> before adding tasks here.</p>
 <p class="intro">Start with a few common tasks or replace them with your own. This is an editable planning worksheet, not an automatic reminder service. Tasks stay in the page until you save a list to your device. Leave dangerous or specialized work to qualified professionals.</p>
+<div class="highlight" id="seasonal-guide" aria-labelledby="seasonal-title">
+<h3 id="seasonal-title">Choose a seasonal home-care starter list</h3>
+<p>Suggestions for ordinary upkeep—not a home inspection, fixed deadline, or repair instruction. Local weather, equipment, and manufacturer directions come first. For risky work, use a qualified professional.</p>
+<div class="controls" aria-label="Seasonal task presets">
+<button type="button" data-season="spring">Spring checks</button>
+<button type="button" data-season="summer">Summer checks</button>
+<button type="button" data-season="fall">Fall checks</button>
+<button type="button" data-season="winter">Winter checks</button>
+</div>
+<p id="season-status" class="helptext" role="status" aria-live="polite">Choose a season to add up to three editable examples to your existing task list. Existing tasks will not be deleted.</p>
+<p class="helptext">For step-by-step guidance, visit <a href="home-skills.html">Home Skills Academy</a>. Do not climb roofs or ladders, open electrical panels, or service gas equipment based on a checklist.</p>
+</div>
 <div class="tasklist" id="task-list" aria-label="Editable home maintenance tasks">
 <p class="helptext">Enable JavaScript to edit tasks. You can still use the safety guidance above.</p>
 </div>
@@ -151,7 +163,7 @@ textarea{display:block;width:100%;border:1px solid #abcdbd;padding:13px;border-r
 <p class="helptext">Editorial review: November 8, 2026. Recheck local programs, eligibility, links, laws and available funds before relying on them. This is general education, not personalized legal, financial, or safety advice.</p>
 </section>
 </main>
-<footer class="wrap footer"><span>ONE PLACE · One human founder · Human-led, AI-assisted, accountable · Founder review only</span><span><a href="../index.html?area=Housing%20%26%20Utilities">← Back to Housing &amp; Utilities</a> · <a href="../index.html">One Place Home</a></span></footer>
+<footer class="wrap footer"><span>ONE PLACE · One human founder · Human-led, AI-assisted, accountable · Free public learning project</span><span><a href="../index.html?area=Housing%20%26%20Utilities">← Back to Housing &amp; Utilities</a> · <a href="../index.html">One Place Home</a></span></footer>
 <script>
 (function(){
 'use strict';
@@ -225,6 +237,24 @@ remove.addEventListener('click',function(){tasks=tasks.filter(function(x){return
 box.appendChild(remove);list.appendChild(box);
 }
 function renderTasks(){list.replaceChildren();tasks.forEach(createRow);taskStatus.textContent=tasks.length+' editable tasks. Nothing is saved automatically.'}
+var seasonalPresets={
+ spring:[{task:'Inspect accessible window and door seals visually',when:'Spring, when convenient'},{task:'Review visible drainage areas from ground level',when:'Spring, after weather settles'},{task:'Check readily accessible smoke and CO alarm instructions',when:'Spring check'}],
+ summer:[{task:'Review cooling-system filter instructions',when:'Summer, per manufacturer'},{task:'Check accessible doors and windows for drafts',when:'Summer'},{task:'Review outdoor shade and hydration supplies',when:'Summer heat planning'}],
+ fall:[{task:'Review heating-system filter and service instructions',when:'Fall, per manufacturer'},{task:'Check accessible weatherstripping visually',when:'Fall'},{task:'Prepare safe cold-weather supplies and contacts',when:'Before local cold weather'}],
+ winter:[{task:'Review indoor temperature and safe heating guidance',when:'Winter'},{task:'Check smoke and carbon monoxide alarms as instructed',when:'Winter check'},{task:'Check for accessible moisture or draft warning signs',when:'Winter'}]
+};
+[].slice.call(document.querySelectorAll('[data-season]')).forEach(function(button){
+ button.addEventListener('click',function(){
+  var season=button.getAttribute('data-season'),incoming=seasonalPresets[season]||[],added=0;
+  incoming.forEach(function(item){
+   if(tasks.length>=12)return;
+   if(tasks.some(function(existing){return existing.task.trim().toLowerCase()===item.task.toLowerCase()}))return;
+   tasks.push({task:item.task,when:item.when});added++;
+  });
+  renderTasks();flagPlanInputChange();
+  document.getElementById('season-status').textContent=added+' '+season+' task'+(added===1?'':'s')+' added. '+tasks.length+' editable tasks in your planner. Existing tasks preserved'+(tasks.length>=12?'; 12-task limit reached.':'.');
+ });
+});
 document.getElementById('task-add').addEventListener('click',function(){if(tasks.length>=12){taskStatus.textContent='For clarity, this version supports up to 12 tasks.';return}
 var item={task:'',when:''};tasks.push(item);createRow(item);taskStatus.textContent='Blank task added. '+tasks.length+' total.';flagPlanInputChange();
 var inputs=list.querySelectorAll('input');if(inputs.length)inputs[inputs.length-2].focus();
