@@ -28,7 +28,7 @@ for(let i=0;i<ids.length;i++){
   const form=page.locator('#'+ids[i]+' form.practice');
   const choices=form.getByRole('radio');
   const submit=form.getByRole('button',{name:'Check my response'});
-  const feedback=form.getByRole('status');
+  const feedback=form.locator('.feedback');
   await submit.click();
   await expect(feedback).toContainText('Choose one response');
   await expect(choices.first()).toBeFocused();
