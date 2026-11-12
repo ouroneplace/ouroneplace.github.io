@@ -125,6 +125,32 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#urgent button[type=submit]').click();
    assert.match(await page.locator('#urgent .feedback').innerText(),/Safety comes first/,'Urgent safe choice feedback must work');
    await reflow();
+   // Work & Careers: editable fictional start, deliberate preview, and reset.
+   await goto('/one-place/career-readiness-planner.html');
+   assert.equal(await page.locator('[data-career-example]').count(),4,'Career Planner should have four fictional examples');
+   await page.locator('[data-career-example="first"]').click();
+   assert.equal(await page.locator('#careerGoal').inputValue(),'Prepare for a first customer-support interview','Career starter did not populate');
+   assert.equal(await page.locator('#careerResult').isHidden(),true,'Career plan must not auto-generate output');
+   await page.locator('#reviewCareer').click();
+   assert.match(await page.locator('#careerResult').innerText(),/Prepare for a first customer-support interview/,'Career review result missing');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearCareer').click();
+   // Real clear requires an explicit confirmation; accept in controlled fictional smoke.
+   assert.equal(await page.locator('#careerGoal').inputValue(),'','Career plan was not cleared');
+   await reflow();
+   // Business idea cost check: fiction-only one-product math and no auto-export.
+   await goto('/one-place/business-idea-reality-check.html');
+   assert.equal(await page.locator('[data-example]').count(),3,'Business reality check should offer three fictional examples');
+   await page.locator('[data-example="service"]').click();
+   assert.equal(await page.locator('#price').inputValue(),'50.00','Business example price missing');
+   assert.equal(await page.locator('#result').isHidden(),true,'Business estimate must not auto-run');
+   await page.locator('#calculateBtn').click();
+   assert.match(await page.locator('#result').innerText(),/At least 10 sales per month/,'Business break-even result missing');
+   assert.match(await page.locator('#result').innerText(),/Monthly balance after ENTERED costs: 70.00/,'Business cost arithmetic incorrect');
+   page.once('dialog',dialog=>dialog.accept());
+   await page.locator('#clearEstimate').click();
+   assert.equal(await page.locator('#price').inputValue(),'','Business estimate did not clear');
+   await reflow();
    for(let n=1;n<=10;n++){
     await goto('/lessons/'+String(n).padStart(2,'0')+'/');await reflow();
     assert.equal(await page.locator('.video-lesson iframe.lesson-video-frame').count(),0,'Descript must remain unloaded before intentional play');
