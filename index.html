@@ -36,6 +36,18 @@ if (['#choose', '#lessons', '#mission'].includes(location.hash)) {
 else if(service&&housingPaths[service]){location.replace('one-place/housing-utilities.html#'+housingPaths[service]);}
 else if(service){const x=all.find(z=>z.id===service);main.className='inside';if(!x){main.innerHTML='<a class="back" href="index.html">← All needs</a><h1>Solution not found</h1>'}else{document.title=x.title+' · ONE PLACE';main.innerHTML='<a class="back" href="'+uArea(x.area)+'">← '+esc(x.area)+'</a><div class="serviceview"><section class="content"><span class="tag '+x.kind+'">'+kinds[x.kind]+'</span><h1>'+esc(x.title)+'</h1><p class="desc">'+(x.kind==='free'?'Free starting points and a direct link to an established outside source.':x.kind==='product'?'Illustrative digital tool, not a finished product or checkout.':'A possible future service, not currently staffed or bookable.')+'</p><div id="helpContent"></div></section><aside class="aside" id="aside"></aside></div>';const body=$('helpContent'),aside=$('aside');if(x.kind==='free'){body.innerHTML='<h2>Three starting steps</h2><ol><li>Identify the problem and any urgent deadline.</li><li>Prepare only the details needed for the next action.</li><li>Open the provider resource and verify eligibility or local availability.</li></ol>';aside.innerHTML='<h2>Outside resources</h2><p>This project does not provide professional intervention or emergency response.</p><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">Open established resource ↗</a><p>Check the provider site for current information.</p>'}else if(x.kind==='service'){body.innerHTML='<h2>How this might work</h2><ol><li>Choose the specific outcome you need.</li><li>Review an understandable action checklist.</li><li>If professional expertise is needed, select a vetted outside provider.</li></ol>';aside.innerHTML='<h2>Concept only</h2><p>No service is active. No specialist, appointment, fee, client intake, or order is offered here.</p><a href="'+uArea(x.area)+'">See the free alternatives →</a>'}else{body.innerHTML='<h2>See the tool idea</h2><p>This is a prototype of a potential paid digital product. Try fictional inputs, not private information.</p><div id="demoHost"></div>';aside.innerHTML='<h2>Prototype only</h2><p>This is not a purchasable item. No checkout, delivery, subscription or service request is active.</p><a href="'+uArea(x.area)+'">Browse this life area →</a>';renderDemo(x.title)}aside.insertAdjacentHTML('beforeend','<p class="notice">General information only; no individualized medical, legal or financial advice. U.S. emergency: 911. Crisis support: call/text 988.</p>')}}
 else if(area==='Money & Bills'){location.replace('one-place/money-center.html');}
+else if(area==='Family & Caregiving'){
+main.className='inside';
+main.innerHTML='<a class="back" href="index.html">← All life areas</a>'+
+'<p class="eyebrow" style="margin-top:20px">FREE TOOLS · TRUSTED CAREGIVER RESOURCES</p>'+
+'<h1>Family &amp; Caregiving</h1>'+
+'<p class="desc">Coordinate responsibilities, respect the wishes of the person receiving care, and connect with real local support. Start with the free Family Handoff Toolkit below. No accounts or paid services.</p>'+
+'<div class="offers" id="family-resources">'+
+'<a class="offer" href="https://eldercare.acl.gov/" target="_blank" rel="noopener noreferrer"><span class="tag free">FREE LOCAL RESOURCE</span><strong>Find community caregiver support</strong><small>Eldercare Locator: local services, transportation, training, and respite starting points.</small><em>Visit Eldercare Locator ↗</em></a>'+
+'<a class="offer" href="https://www.nia.nih.gov/health/caregiving/caregiver-worksheets" target="_blank" rel="noopener noreferrer"><span class="tag free">FREE WORKSHEETS</span><strong>Share care responsibilities</strong><small>National Institute on Aging: caregiver planning and coordination worksheets.</small><em>Open caregiver worksheets ↗</em></a>'+
+'<a class="offer" href="https://www.caregiver.va.gov/CAREGIVER/PGCSS.asp" target="_blank" rel="noopener noreferrer"><span class="tag free">FREE VETERAN RESOURCE</span><strong>Support for caregivers of Veterans</strong><small>VA caregiver support and training information; eligibility varies.</small><em>Explore VA caregiver resources ↗</em></a>'+
+'</div><p class="notice">General U.S.-focused guidance. These external providers manage their own services and privacy policies. For emergency danger, call local emergency services; do not include medical records in the handoff.</p>';
+}
 else if(area==='Housing & Utilities'){
 main.className='inside';
 const housingList=[
@@ -97,7 +109,7 @@ if(impact){
 }else if(area){
  root.insertAdjacentHTML('afterbegin',metric());
  // Housing has its own complete, section-specific guide; avoid a duplicate generic kit.
- if(area!=='Housing & Utilities'){
+ if(area!=='Housing & Utilities'&&area!=='Family & Caregiving'){
   const steps=plans[area]||['Identify your need','Compare credible options','Choose one next step'];
   root.insertAdjacentHTML('beforeend',kit(area,steps,'areaKit'));
   copy(area,steps,'areaKit');
