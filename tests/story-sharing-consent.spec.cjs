@@ -181,6 +181,49 @@ test('mobile and enlarged text keep every story heading word intact',async({page
  }
 });
 
+test('all story section-heading words remain whole with enlarged phone text',async({page})=>{
+ for(const {width,enlarged} of [
+  {width:320,enlarged:false},{width:320,enlarged:true},
+  {width:390,enlarged:false},{width:390,enlarged:true},
+  {width:480,enlarged:true},{width:600,enlarged:true}
+ ]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  if(enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const layout=await page.evaluate(()=>{
+   const headings=[...document.querySelectorAll('main section.card h2')].map(h=>{
+    const parts=[];
+    const walker=document.createTreeWalker(h,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+     for(const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      parts.push({word:match[0],fragments:range.getClientRects().length});
+     }
+    }
+    return {title:h.textContent.trim(),font:parseFloat(getComputedStyle(h).fontSize),words:parts};
+   });
+   return {
+    headings,
+    rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    htmlWidth:document.documentElement.scrollWidth,
+    bodyWidth:document.body.scrollWidth
+   };
+  });
+  expect(layout.headings.length,JSON.stringify({width,enlarged})).toBe(6);
+  expect(layout.headings.flatMap(h=>h.words.filter(w=>w.fragments!==1).map(w=>h.title+': '+w.word)),
+    JSON.stringify({width,enlarged})).toEqual([]);
+  expect(layout.htmlWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  expect(layout.bodyWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  if(enlarged){
+   expect(layout.rootFont).toBeGreaterThanOrEqual(32);
+   expect(Math.min(...layout.headings.map(h=>h.font))).toBeGreaterThanOrEqual(layout.rootFont*1.14);
+  }
+ }
+});
+
 test('whole-page screenshot and section geometry hold across real browser sizes',async({page},testInfo)=>{
  test.setTimeout(120000);
  const configs=[
