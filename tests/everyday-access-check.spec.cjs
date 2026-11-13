@@ -131,7 +131,16 @@ test('changes invalidate old plan; cancel clear preserves; confirm clear resets'
  await expect(page.getByRole('button',{name:'Print reviewed plan'})).toBeDisabled();
 });
 
-test('print can be requested only after review',async({page})=>{
+test('printing without an approved review keeps the static guide, not an empty plan',async({page})=>{
+ await page.goto(url);
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('article.lesson').first()).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Paper or offline worksheet'})).toBeVisible();
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+});
+
+test('print reviewed plan shows only the selected outcome, then edit invalidates it',async({page})=>{
  await page.goto(url);
  await page.evaluate(()=>{window.__printCount=0;window.print=()=>window.__printCount++;});
  await expect(page.locator('#printPlan')).toBeDisabled();
@@ -139,8 +148,24 @@ test('print can be requested only after review',async({page})=>{
  await page.locator('#place').selectOption('home');
  await page.locator('#support').selectOption('ask');
  await page.getByRole('button',{name:'Review my access plan'}).click();
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await expect(page.locator('body')).toHaveClass(/print-reviewed/);
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#preview')).toContainText('Check success:');
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await expect(page.locator('article.lesson').first()).toBeHidden();
+ await expect(page.getByRole('heading',{name:'Paper or offline worksheet'})).toBeHidden();
+ await expect(page.locator('#noJsHelp')).toBeHidden();
+ await page.emulateMedia({media:'screen'});
  await page.locator('#printPlan').click();
  expect(await page.evaluate(()=>window.__printCount)).toBe(1);
+ await page.locator('#barrier').selectOption('hearing');
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('article.lesson').first()).toBeVisible();
+ await expect(page.locator('#reviewed')).toBeHidden();
 });
 
 test('fictional scenario has blank, appropriate, unsafe and reset feedback',async({page})=>{
@@ -187,6 +212,10 @@ test('all lessons, safety boundaries and paper worksheet remain available with J
   await expect(page.locator('#planForm')).toBeHidden();
   await page.locator('details summary').click();
   await expect(page.getByText('First ask the person and arrange a clear, safe route.')).toBeVisible();
+  await page.emulateMedia({media:'print'});
+  await expect(page.locator('#reviewed')).toBeHidden();
+  await expect(page.locator('article.lesson').first()).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Paper or offline worksheet'})).toBeVisible();
   const m=await page.evaluate(()=>({width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth}));
   expect(Math.max(m.body,m.html)).toBeLessThanOrEqual(m.width+1);
  }finally{await context.close();}

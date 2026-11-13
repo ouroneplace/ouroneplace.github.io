@@ -56,7 +56,7 @@ li{margin:.35rem 0}
 footer{padding:1.3rem;text-align:center;background:#deeee8}
 @media(max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}.panel{padding:1rem}h1{font-size:clamp(1.25rem,calc(3vw + .9rem),1.6rem);overflow-wrap:normal;word-break:normal;hyphens:none}h2{font-size:clamp(1.15rem,calc(2vw + .85rem),1.4rem)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-@media print{header,.skip,.actions,.interactive-only,.quiz,.source-links,footer{display:none!important}body{background:white;color:black}main{width:100%;padding:0}.panel,.lesson{break-inside:avoid;border-color:#bbb}#reviewed{display:block!important}.note{background:white;border-color:#777}a{color:black}}
+@media print{header,.skip,.actions,.interactive-only,.quiz,.source-links,footer{display:none!important}body{background:white;color:black}main{width:100%;padding:0}.panel,.lesson{break-inside:avoid;border-color:#bbb}.note{background:white;border-color:#777}a{color:black}#reviewed[hidden]{display:none!important}body.print-reviewed main>*:not(#planner),body.print-reviewed #planner>*:not(#planForm),body.print-reviewed #planForm>*:not(#reviewed){display:none!important}body.print-reviewed #planner{padding:0;margin:0;border:0}}
 </style>
 <noscript><style>#planForm,.quiz .actions{display:none!important}</style></noscript>
 </head>
@@ -70,7 +70,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 <p>For older adults, disabled people, caregivers, and anyone with a temporary or changing limitation. A barrier is often in the environment or communication—not a failure of the person.</p>
 <div class="note"><strong>Safety first:</strong> If someone is in immediate danger, use the local emergency response system (911 in the U.S.; numbers vary elsewhere). Do not attempt an unsafe lift or transfer, change medication, make structural alterations, or ignore sudden new symptoms because of this guide. Seek qualified local help for these situations.</div>
 <div class="note"><strong>Respect choice:</strong> Ask whether help is wanted and which approach works. Do not move a wheelchair, walker, cane or communication device without permission. A family relationship does not automatically grant medical or legal decision-making authority.</div>
-<section class="panel" aria-labelledby="planner-heading">
+<section class="panel" id="planner" aria-labelledby="planner-heading">
 <h2 id="planner-heading">1. Make a small access plan</h2>
 <p>Pick one barrier and a place to check it. You do not need to enter a name, diagnosis, address, account, or private record.</p>
 <form id="planForm">
@@ -202,7 +202,7 @@ const supports={
  ask:'I will ask the person and/or responsible service to agree on a workable accommodation.',
  professional:'I will pause the risky part and seek appropriate qualified local assistance.'
 };
-const clearReview=message=>{reviewed.hidden=true;preview.textContent='';printBtn.disabled=true;status.textContent=message;};
+const clearReview=message=>{document.body.classList.remove('print-reviewed');reviewed.hidden=true;preview.textContent='';printBtn.disabled=true;status.textContent=message;};
 const syncSupportChoice=()=>{const source=byId('support'),echo=byId('supportChoice');echo.textContent=source.value?'Selected next step: '+source.selectedOptions[0].textContent:'';echo.hidden=!source.value;};
 for(const id of ['barrier','place','support'])byId(id).addEventListener('change',()=>{clearReview('Choices changed. Review your updated plan before printing.');if(id==='support')syncSupportChoice();});
 syncSupportChoice();
@@ -211,7 +211,7 @@ form.addEventListener('submit',e=>{
  for(const id of ['barrier','place','support'])if(!byId(id).value){clearReview('Choose a barrier, place and next step first.');byId(id).focus();return;}
  const l=lessons[byId('barrier').value];
  const content=['ONE PLACE · EVERYDAY ACCESS CHECK','Focus: '+l.title,'Where: '+byId('place').selectedOptions[0].textContent,'Why: The environment or communication may create a barrier. Ask before assisting.','Notice: '+l.notice,'Next action: '+l.action,'In this place: '+places[byId('place').value],'My chosen support: '+supports[byId('support').value],'Check success: '+l.verify,'Stop and ask for help: '+l.stop,'This is a planning draft, not a safety inspection, clinical instruction or certification.'].join('\n\n');
- preview.textContent=content;reviewed.hidden=false;printBtn.disabled=false;status.textContent='Plan reviewed on this device. Nothing was uploaded or saved.';
+ preview.textContent=content;reviewed.hidden=false;document.body.classList.add('print-reviewed');printBtn.disabled=false;status.textContent='Plan reviewed on this device. Nothing was uploaded or saved.';
 });
 byId('clear').addEventListener('click',()=>{
  if(!confirm('Clear your current choices and reviewed plan?')){status.textContent='Clear canceled. Your choices are still here.';return;}
