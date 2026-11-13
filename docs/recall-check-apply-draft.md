@@ -4,6 +4,13 @@
 
 **Status:** SOURCE DRAFT. Not merged, not deployed, not approved by the founder.
 
+## November 13, 2026 — guard unsaved recall and transfer writing
+
+- **Source-confirmed gap:** The existing "Start over and clear all practice" immediately deleted both optional writing fields and all choices with one click, despite the page promising private editable practice.
+- **Focused change:** When either field has text or any evidence-answer option is selected, the browser asks confirmation before a full reset; Cancel preserves writing, compared-source state, answers, explanations and progress, announcing cancellation. Confirm clears the same state as before. An untouched practice resets without extra confirmation. The independent Clear Recall and Clear Next controls remain unchanged; no data storage, submissions, or outside requests were added.
+- **Focused test coverage:** Cancel then Confirm with two nonempty fields, one reviewed and another selected-but-unreviewed answer, plus source comparison displayed; blank reset without a dialog; existing complete-reset path now explicitly confirms. New-head source CI must be independently completed; the earlier 707/707 on the previous head is historical.
+- **Current release boundary:** Founder-authorized `main` is `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` after PR #78 (27-file live integrity manifest). HQ alone owns new-main integration, native device/assistive-technology review, founder decision, and post-merge deployment verification.
+
 ## Problem and one visitor outcome
 
 Existing Human Literacy lessons practice communication, self-reflection and decisions. Curiosity Studio demonstrates patterns, and HQ-owned draft Knowledge Atlas PR #65 teaches source literacy and foundational facts. This is a distinct narrow learning-technique exercise: recall a source from memory, compare with its actual wording, distinguish unknowns from facts, and apply verified details when the hypothetical situation changes.

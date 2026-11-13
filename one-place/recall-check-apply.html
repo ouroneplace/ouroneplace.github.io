@@ -223,6 +223,13 @@ document.getElementById("clearNext").addEventListener("click",()=>{
  document.getElementById("next").focus();
 });
 document.getElementById("reset").addEventListener("click",()=>{
+ // Confirm before discarding unsaved recall, transfer text or selected evidence reflections.
+ const next=document.getElementById("next");
+ const hasWork=recall.value.length>0||next.value.length>0||forms.some(form=>form.querySelector('input[type="radio"]:checked'));
+ if(hasWork&&!window.confirm("Start over? This clears your recall and next-step writing, selected answers and explanations. Choose Cancel to keep your work.")){
+  mark(document.getElementById("resetStatus"),"Start over canceled. Your writing and reflections are unchanged.");
+  return;
+ }
  recall.value="";
  document.getElementById("next").value="";
  reference.hidden=true;

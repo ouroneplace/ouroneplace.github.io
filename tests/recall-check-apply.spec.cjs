@@ -96,6 +96,7 @@ test('reset clears all texts, radio choices and feedback and restores source',as
  await explain(page,1,2);
  await explain(page,2,1);
  await page.locator('#next').fill('A generic later action');
+ page.once('dialog',dialog=>dialog.accept());
  await page.locator('#reset').click();
  await expect(page.locator('#recall')).toHaveValue('');
  await expect(page.locator('#next')).toHaveValue('');
@@ -107,6 +108,44 @@ test('reset clears all texts, radio choices and feedback and restores source',as
  await expect(page.locator('#recallStatus')).toBeEmpty();
  await expect(page.locator('#resetStatus')).toContainText('All private practice text and choices cleared');
  await expect(page.locator('#try')).toBeFocused();
+});
+
+test('cancel full reset preserves private writing, comparisons and unfinished choices',async({page})=>{
+ await page.goto(route);
+ await page.locator('#try').click();
+ await page.locator('#recall').fill('A detail I wrote privately');
+ await page.locator('#compare').click();
+ await explain(page,0,1);
+ await page.locator('form[data-question="1"] input[value="2"]').check();
+ await page.locator('#next').fill('An unfinished private next step');
+ page.once('dialog',async dialog=>{
+  expect(dialog.type()).toBe('confirm');
+  expect(dialog.message()).toContain('recall and next-step');
+  await dialog.dismiss();
+ });
+ await page.locator('#reset').click();
+ await expect(page.locator('#recall')).toHaveValue('A detail I wrote privately');
+ await expect(page.locator('#next')).toHaveValue('An unfinished private next step');
+ await expect(page.locator('#reference')).toBeVisible();
+ await expect(page.locator('#original')).not.toHaveAttribute('open','');
+ await expect(page.locator('#feedback1')).toContainText('paper');
+ await expect(page.locator('form[data-question="1"] input[value="2"]')).toBeChecked();
+ await expect(page.locator('#resetStatus')).toContainText('Start over canceled');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.locator('#reset').click();
+ await expect(page.locator('#recall')).toHaveValue('');
+ await expect(page.locator('#next')).toHaveValue('');
+ await expect(page.locator('form.practice input:checked')).toHaveCount(0);
+ await expect(page.locator('#reference')).toBeHidden();
+});
+
+test('blank recall practice resets without a needless confirmation',async({page})=>{
+ await page.goto(route);
+ let dialogs=0;
+ page.on('dialog',async dialog=>{dialogs++;await dialog.dismiss();});
+ await page.locator('#reset').click();
+ expect(dialogs).toBe(0);
+ await expect(page.locator('#resetStatus')).toContainText('All private practice text and choices cleared');
 });
 
 test('area, home and Human Literacy navigation resolve and sources are opt-in',async({page})=>{
