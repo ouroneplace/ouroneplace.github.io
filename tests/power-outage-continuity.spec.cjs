@@ -290,6 +290,27 @@ test('privacy: no personal fields, third-party subresources, writes, storage, or
  expect(await page.evaluate(()=>({local:Object.keys(localStorage),session:Object.keys(sessionStorage),cookies:document.cookie}))).toEqual({local:[],session:[],cookies:''});
 });
 
+for(const width of [320,1366]){
+ test('linked accepted Home Skills, Family Handoff and Emergencies area work at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  await page.getByRole('link',{name:'Home Skills emergency supplies lesson'}).click();
+  await expect(page).toHaveURL(/\/one-place\/home-skills\.html#skill-30$/);
+  await expect(page.locator('#skill-30 summary')).toContainText('Make a household emergency supplies plan');
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await page.getByRole('link',{name:'Family Handoff'}).click();
+  await expect(page).toHaveURL(/\/one-place\/family-handoff\.html$/);
+  await expect(page.getByRole('heading',{name:'Share the care. Make the next step clear.',level:1})).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await page.locator('header nav').getByRole('link',{name:'Emergencies & Preparedness'}).click();
+  await expect(page).toHaveURL(/\/index\.html\?area=Emergencies%20%26%20Preparedness$/);
+  await expect(page.getByRole('heading',{name:'Emergencies & Preparedness',level:1})).toBeVisible();
+  await expect(page.getByText('Create a family emergency plan')).toBeVisible();
+ });
+}
+
 test('source boundaries and HQ-only navigation are unambiguous',async({page})=>{
  await page.goto(url);
  const external=page.locator('.source-links a[href^="https://"]');
