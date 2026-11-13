@@ -21,13 +21,14 @@ h1{font-size:clamp(2rem,5.4vw,3.7rem);line-height:1.08;letter-spacing:-.045em;ma
 .checklist{padding:0;list-style:none;margin:.4rem 0}.checklist li{margin:.4rem 0}.checklist label{display:flex;gap:.7rem;align-items:flex-start;padding:.7rem;border:1px solid var(--line);border-radius:.6rem;background:white;cursor:pointer;overflow-wrap:anywhere}
 .checklist input{width:1.25rem;height:1.25rem;flex:none;accent-color:var(--teal);margin:.1rem 0}
 .questions{padding-left:1.4rem}.questions li{margin:.65rem 0}.sources{border-top:1px solid var(--line);padding-top:.8rem}.sources a{display:inline-block;margin:.3rem}
-.controls{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0}.controls button{min-height:2.75rem;border-radius:.65rem;border:1px solid var(--teal);background:white;color:#075c54;padding:.7rem 1rem;font-weight:740;cursor:pointer}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0}.controls button{min-height:2.75rem;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center;border-radius:.65rem;border:1px solid var(--teal);background:white;color:#075c54;padding:.7rem 1rem;font-weight:740;cursor:pointer}
 .controls button.primary{background:var(--teal);color:white}.controls button:disabled{opacity:.55;cursor:not-allowed}
 #planText{font:inherit;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;background:#f5faf7;border:1px solid var(--line);border-radius:.7rem;padding:1rem;max-height:32rem;overflow:auto}
 .status{min-height:1.5rem;color:#2b5b50;font-weight:700}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.cards>div{border:1px solid var(--line);border-radius:.7rem;padding:.9rem;background:#fbfefb}
 footer{padding:1.4rem 0 2rem;border-top:1px solid var(--line);color:var(--mute)}
 [hidden]{display:none!important}
 @media(max-width:780px){.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.columns,.cards{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.controls{display:grid;grid-template-columns:minmax(0,1fr)}.controls button{width:100%}}
 @media(max-width:370px){.wrap{width:calc(100% - 1rem)}.choices{grid-template-columns:minmax(0,1fr)}.panel,.path{padding:.85rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{header,.choices,.controls,.status,.skip,footer{display:none!important}.wrap{width:100%}.panel,.path{box-shadow:none;break-inside:avoid}#planText{max-height:none;overflow:visible}}
