@@ -146,6 +146,46 @@ test('320px screen at 200 percent text does not cause horizontal overflow',async
  await expect(page.locator('#feedback1')).toContainText('real requirement');
 });
 
+test('all four step labels keep whole words at phone sizes and enlarged text',async({page})=>{
+ for(const {width,enlarged} of [
+  {width:320,enlarged:false},{width:320,enlarged:true},
+  {width:390,enlarged:false},{width:390,enlarged:true},
+  {width:440,enlarged:true},{width:480,enlarged:true},
+  {width:600,enlarged:true}
+ ]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  if(enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const layout=await page.evaluate(()=>{
+   const steps=[...document.querySelectorAll('.steps b')].map(el=>{
+    const node=el.firstChild;
+    const title=node.textContent;
+    const match=[...title.matchAll(/\S+/g)].at(-1);
+    const range=document.createRange();
+    range.setStart(node,match.index);
+    range.setEnd(node,match.index+match[0].length);
+    return {word:match[0],fragments:range.getClientRects().length};
+   });
+   const grid=document.querySelector('.steps');
+   return {
+    steps,
+    columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,
+    docWidth:document.documentElement.scrollWidth,
+    rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize)
+   };
+  });
+  expect(layout.steps,JSON.stringify({width,enlarged})).toEqual([
+   {word:'Prepare',fragments:1},
+   {word:'Do',fragments:1},
+   {word:'Check',fragments:1},
+   {word:'Remember',fragments:1}
+  ]);
+  expect(layout.docWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  expect(layout.columns,JSON.stringify({width,enlarged})).toBe(width<=480?1:2);
+  if(enlarged)expect(layout.rootFont).toBeGreaterThanOrEqual(32);
+ }
+});
+
 test('keyboard path and assistive labeling are provided',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
