@@ -88,6 +88,14 @@ If the entire internet, power infrastructure or real-world supply systems disapp
 - Safety first: no do-it-yourself high-risk medical interventions, hazardous construction, dangerous engineering, weapons or sensitive exploitation instructions. Explain when professional or emergency help is essential.
 - Open access isn't lawless copying. Protect copyrighted works, privacy, indigenous sacred knowledge, endangered species locations, children's information and confidential data.
 
+## Portable knowledge starter
+
+The first Atlas prototype is accompanied by `one-place/knowledge-atlas-essentials.txt`, a **standalone, printable plain-text pack** containing the same six introductory subjects and three worked claim-checking examples. The Atlas page offers a voluntary local download (no account or uploads). This is a concrete, modest first resilience step: once saved the text can be read without the interactive website, but it cannot dynamically update, check current local conditions, or replace other physical support.
+
+The pack has an explicit version and review date and communicates its own limitations. Later editions should use reproducible scripts or content registries to keep web/text/PDF and translations in sync, audit permissions and source recency, and check the actual saved offline file. No service worker, blanket cache, background sync or automatic visitor storage is authorized by this draft.
+
+Any reused original educational material is subject to the repository's existing `CONTENT-LICENSE.md` and `LICENSE` terms; third-party sources and trademarks **do not** become public domain merely because they are referenced.
+
 ## First practical proof
 
 A new self-contained **One Place Knowledge Atlas — Foundation** HTML prototype belongs on an HQ-owned draft feature branch. It must offer real first-party teaching and practice, not a map of future empty promises:
