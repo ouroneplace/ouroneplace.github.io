@@ -225,6 +225,25 @@ test('page does not collect personal information, write requests, or persist',as
  expect(writes).toEqual([]);
  expect(await page.evaluate(()=>({local:Object.keys(localStorage),session:Object.keys(sessionStorage),cookies:document.cookie}))).toEqual({local:[],session:[],cookies:''});
 });
+for(const width of [320,1366]){
+ test('fire guide click-through to accepted smoke alarms and Emergencies area at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(path);
+  await page.getByRole('link',{name:'Home Skills smoke alarm lesson'}).click();
+  await expect(page).toHaveURL(/\/one-place\/home-skills\.html#skill-28$/);
+  await expect(page.locator('#skill-28 summary')).toContainText('Test smoke alarms');
+  await expect(page.locator('#skill-29 summary')).toContainText('Check carbon monoxide alarms');
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Home Fire Escape Rehearsal',level:1})).toBeVisible();
+  await page.locator('header nav').getByRole('link',{name:'Emergencies & Preparedness'}).click();
+  await expect(page).toHaveURL(/\/index\.html\?area=Emergencies%20%26%20Preparedness$/);
+  await expect(page.getByRole('heading',{name:'Emergencies & Preparedness',level:1})).toBeVisible();
+  await expect(page.getByText('Create a family emergency plan')).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Home Fire Escape Rehearsal',level:1})).toBeVisible();
+ });
+}
+
 test('primary sources, local limits, and protected feature return paths',async({page})=>{
  await page.goto(path);
  const external=page.locator('.sources a[href^="https://"]');
