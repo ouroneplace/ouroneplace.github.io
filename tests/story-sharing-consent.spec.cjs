@@ -143,6 +143,44 @@ test('200 percent enlarged text at 320px does not overflow',async({page})=>{
  await expect(page.locator('#draft')).toBeVisible();
 });
 
+test('mobile and enlarged text keep every story heading word intact',async({page})=>{
+ for(const {width,enlarged} of [
+  {width:320,enlarged:false},
+  {width:320,enlarged:true},
+  {width:390,enlarged:false},
+  {width:390,enlarged:true}
+ ]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  if(enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const layout=await page.evaluate(()=>{
+   const heading=document.querySelector('h1');
+   const node=heading.firstChild;
+   const words=[...node.textContent.matchAll(/\S+/g)].map(match=>{
+    const range=document.createRange();
+    range.setStart(node,match.index);
+    range.setEnd(node,match.index+match[0].length);
+    return {word:match[0],fragments:range.getClientRects().length};
+   });
+   return {
+    words,
+    root:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    title:parseFloat(getComputedStyle(heading).fontSize),
+    noSidewaysScroll:document.documentElement.scrollWidth<=innerWidth+1
+   };
+  });
+  expect(layout.words,JSON.stringify({width,enlarged})).toEqual([
+   {word:'Stories',fragments:1},
+   {word:'Are',fragments:1},
+   {word:'Gifts,',fragments:1},
+   {word:'Not',fragments:1},
+   {word:'Obligations',fragments:1}
+  ]);
+  expect(layout.noSidewaysScroll,JSON.stringify({width,enlarged})).toBe(true);
+  if(enlarged)expect(layout.title).toBeGreaterThanOrEqual(layout.root*1.09);
+ }
+});
+
 test('keyboard order, focus, semantic radio groups and live updates work',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
