@@ -20,7 +20,7 @@ This is NOT a new general mentor, conversational AI, diagnostic tool, mediator, 
 2. **Check:** Repeat a specific need and invite correction, or take a bounded pause without pressure.
 3. **Choose:** State a realistic offer or boundary and request voluntary agreement on the next concrete task.
 4. **Transfer:** Optional, editable locally constructed sample wording. Edits are preserved when regenerating is attempted, until the learner explicitly clears or resets. No auto-send and no automatic score.
-5. **No JavaScript:** All step explanations, example disclosures, reference links and one complete example message remain in the HTML without interaction.
+5. **No JavaScript:** All step explanations, example disclosures, reference links and a complete example message remain in native HTML disclosures without interaction.
 
 Each answer, including unhelpful fictional responses, has a distinct reasoning explanation rather than a binary success/failure grade. Someone who selects a harmful or overpromising phrase can still learn from the explanation and write their own alternative. Prompts explicitly acknowledge uncertainty and do not require a real-world conversation.
 
@@ -65,7 +65,7 @@ Do **not** merge independently or publish on the basis of this document.
 | Source & privacy review | Two public original sources above; scope and static privacy architecture recorded | Reviewed; independent specialist review not claimed |
 | HTML/JS quick audit | npm run test:quick on final Team C HEAD | Pending |
 | Focused browser tests | npx playwright test tests/conversation-repair-practice.spec.cjs on final HEAD | Pending |
-| Full exact-head CI | GitHub Actions workflow on final PR HEAD | Pending |
+| Full exact-head CI | Initial SHA 33d8b2f: [run 43337185711](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43337185711) — 698 passed, 2 test failures. One ambiguous area-heading selector; one no-JS fallback assertion unable to locate noscript example. Corrected by using a visible native disclosure and exact h1 selector. Full new-head rerun required. | Prior head failed; current-head pending |
 | Visual (320/390/1366/1920; 200% text) | Browser checks plus human inspection | Pending |
 | Assistive tech | Native fieldsets, labels, focus and status; real screen-reader hands-on | Pending manual confirmation |
 | HQ integration / live deployment | Separate HQ work and founder authorization | Not authorized |

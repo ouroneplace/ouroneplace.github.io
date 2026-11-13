@@ -115,7 +115,7 @@ test('navigation stays inside existing experiences with real local routes',async
     expect(response.status(),href).toBe(200);
   }
   await page.getByRole('link',{name:'Relationships area'}).click();
-  await expect(page.getByRole('heading',{name:'Relationships & Communication'})).toBeVisible();
+  await expect(page.getByRole('heading',{level:1,name:'Relationships & Communication',exact:true})).toBeVisible();
 });
 
 test('no external connections or persistent local storage on interaction',async({page})=>{
@@ -186,7 +186,9 @@ test.describe('no-JavaScript accessibility',()=>{
  test('core instruction and complete example remain readable and navigable',async({page})=>{
    await page.goto(route);
    await expect(page.getByRole('heading',{level:1,name:'Conversation Repair Practice'})).toBeVisible();
-   await expect(page.getByText('Complete sample message:')).toBeVisible();
+   await page.locator('#staticExample summary').click();
+   await expect(page.locator('#staticExample')).toContainText('Complete sample message:');
+   await expect(page.locator('#staticExample')).toContainText('Could you tell me what you expected?');
    await expect(page.locator('form.practice')).toHaveCount(3);
    await expect(page.locator('form.practice').first()).toBeHidden();
    await expect(page.locator('#makeExample')).toBeHidden();
