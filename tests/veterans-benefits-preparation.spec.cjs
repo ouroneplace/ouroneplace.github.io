@@ -84,7 +84,8 @@ test('no JavaScript still exposes every topic and official source without dead a
   const page=await context.newPage();
   await page.goto(url);
   await expect(page.locator('.path:visible')).toHaveCount(8);
-  await expect(page.locator('noscript')).toContainText('JavaScript is off');
+  await expect(page.locator('noscript')).toBeVisible();
+  expect(await page.locator('noscript').evaluate(el=>el.outerHTML)).toContain('JavaScript is off');
   await expect(page.getByRole('button',{name:'Review my preparation plan'})).toBeDisabled();
   await expect(page.locator('#reviews')).toContainText('decision letter');
   const dims=await page.evaluate(()=>({body:document.body.scrollWidth,doc:document.documentElement.scrollWidth,win:innerWidth}));
@@ -114,7 +115,8 @@ test('320px with 200 percent root text is keyboard operable and has no horizonta
  await page.getByRole('button',{name:'Review my preparation plan'}).focus();await page.keyboard.press('Enter');
  await expect(page.locator('#planText')).toContainText('Family & caregiver support');
  const d=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,body:document.body.scrollWidth,win:innerWidth}));
- expect(Math.max(d.doc,d.body)).toBeLessThanOrEqual(d.win+1);
+ const overflowing=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(el=>{const rect=el.getBoundingClientRect();return rect.width>0&&(rect.left<-1||rect.right>innerWidth+1)}).slice(0,7).map(el=>el.tagName.toLowerCase()+'#'+el.id+'.'+el.className));
+ expect(Math.max(d.doc,d.body),'Overflow elements: '+JSON.stringify(overflowing)).toBeLessThanOrEqual(d.win+1);
 });
 test('privacy: no persistent browser state, external script, background writes or automatic outbound requests',async({page})=>{
  const outbound=[],writes=[];
