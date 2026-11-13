@@ -119,11 +119,11 @@ test('print is deliberate and only available after review',async({page})=>{
  await page.emulateMedia({media:'print'});
  await expect(page.getByRole('heading',{name:'Review before using'})).toBeVisible();
  await expect(page.locator('#skills-title')).toBeHidden();
- await page.locator('#printPlan').click({force:true});
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#printPlan').click();
  expect(await page.evaluate(()=>window.__prints)).toBe(1);
  await page.locator('#priority').selectOption('communication');
  await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
- await page.emulateMedia({media:'screen'});
 });
 
 test('generator scenario supports blank, both unsafe, correct and reset',async({page})=>{
