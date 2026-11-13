@@ -1,0 +1,181 @@
+ONE PLACE — KNOWLEDGE ATLAS ESSENTIALS v0.1
+November 12, 2026 | A printable, text-only learning starter
+============================================================
+
+WHAT THIS IS
+A short set of original introductory lessons about how to think, live,
+learn and care for people and the planet. It is NOT all of human knowledge.
+It is not emergency response, medical treatment, legal advice or a substitute
+for local expertise. This file can be saved and printed. It does not require
+an internet connection merely to read the text; links to sources will require
+access to those sources. This guide will not update itself after download.
+
+THE BASIC METHOD
+Know what the question is.
+Understand why it matters.
+Check the evidence and important limits.
+Try one safe, manageable practice.
+Apply what is appropriate to your situation.
+Revisit when facts or circumstances change.
+
+1. SAFETY AND URGENT HELP
+-------------------------
+An online explanation cannot see your home, injuries, environment or risks.
+Start with what you can directly observe.
+
+1) Is someone in immediate danger? Contact appropriate local emergency
+   assistance if so. Do not finish a website exercise in place of urgent help.
+2) Separate direct observation from rumors, interpretations and guesses.
+3) Avoid actions that could increase danger. Use trusted local specialists
+   when a hazard exceeds your knowledge or ability.
+
+TRY IT: Identify the real emergency-help contact that applies where you live.
+Local numbers and services differ worldwide.
+
+LIMIT: This is general safety reasoning, not first-aid training or a promise
+that emergency services are available everywhere.
+
+2. UNDERSTANDING HEALTH INFORMATION
+-----------------------------------
+Health literacy includes finding, understanding, evaluating and using
+information. It is not simply memorizing medical words.
+
+1) Name the actual question or decision and whether it is urgent.
+2) Check who produced the health information, when it was reviewed,
+   what evidence supports it and whom it applies to.
+3) Ask a qualified professional what benefits, risks and alternatives
+   apply to your circumstances before changing treatments.
+
+TRY IT: Practice saying, "What do we know, what is uncertain, and what
+should I ask my care team next?"
+
+LIMIT: Never stop prescribed medication or care because an online message
+seems convincing. This guide provides no personalized treatment.
+
+Original background: WHO health literacy
+https://www.who.int/news-room/fact-sheets/detail/health-literacy
+
+3. CHECKING A CLAIM
+-------------------
+A claim can sound convincing without being well supported. A dramatic image,
+a repeated rumor or a confident AI response is not proof.
+
+1) State the exact claim. Is it a measured finding, interpretation,
+   prediction, value judgment or personal story?
+2) Find the original evidence. Check the author, date, actual observation,
+   method, context and weaknesses.
+3) Seek competent independent corroboration. If important information
+   is missing, say "I don't know yet" rather than pretending certainty.
+
+TRY IT: Ask what other explanation fits the same observation, and what
+additional evidence would help distinguish them.
+
+LIMIT: Science is vital for empirical questions. Ethical, cultural and
+personal decisions also require listening and transparent values.
+
+Original background: UNESCO Recommendation on Open Science
+https://www.unesco.org/en/legal-affairs/recommendation-open-science
+
+4. LIVING WITH OTHER PEOPLE
+--------------------------
+Respect does not mean automatic agreement, silent submission or ignoring
+your own needs. People bring different cultures, life stories and abilities.
+
+1) Describe what happened before concluding another person's motive.
+2) Ask what kind of conversation or help is welcome.
+3) Express your own need clearly. Consider a practical option that respects
+   both people's safety, autonomy and boundaries.
+
+TRY IT: "I noticed _____. How do you understand it? I need _____. What
+might work for us, if we both want to discuss it?"
+
+LIMIT: Some situations are unsafe. Do not pressure a person to reconcile
+with someone harming them. Qualified help may be necessary.
+
+Background on access to learning and cultural dignity:
+https://www.ifla.org/public-library-manifesto/
+
+5. EARTH AND LIVING SYSTEMS
+---------------------------
+Air, water, soil, climate and other living things support human and
+nonhuman life. A local action can affect nearby communities and ecosystems.
+
+1) Name one nearby life-supporting system (water source, soil, habitat).
+2) Ask where it comes from, what organisms depend on it, and what threatens it.
+3) Choose one locally appropriate way to avoid unnecessary harm.
+   Verify first before changing waterways, handling wildlife or releasing
+   plants or animals into the environment.
+
+TRY IT: Notice a living thing in your surroundings and ask what it needs
+to thrive without human interference.
+
+LIMIT: A simple observation is not a complete environmental assessment.
+Local habitats, regulations and ecological tradeoffs differ.
+
+Original background: UNEP Nature-based Solutions
+https://www.unep.org/en/what-we-do/nature-and-land-action/nature-based-solutions/overview-nature-based-solutions
+
+6. OUR SOLAR SYSTEM AND THE UNIVERSE
+------------------------------------
+The Sun is a star. Earth is the third planet from the Sun. Our solar system
+includes eight recognized planets, moons and many smaller objects.
+
+1) Distinguish observation from explanation: seeing a moving point of
+   light does not reveal its cause.
+2) Find out what was measured, with which instruments, and how uncertainty
+   was considered.
+3) Compare explanations using credible astronomy evidence.
+
+TRY IT: Explain the difference between a star and a planet in your own words.
+List one question about space that you would like to investigate.
+
+LIMIT: The universe is vast and science is still discovering new phenomena.
+An extraordinary theory needs evidence, not merely an unusual photograph.
+
+Original background: NASA Solar System Facts
+https://science.nasa.gov/solar-system/solar-system-facts/
+
+THREE REASONING PRACTICES
+-------------------------
+
+CASE A: A post claims one drink cures every illness and urges people to
+stop medical care. Should you believe it because someone speaks confidently?
+SAFER REASONING: No. Look for high-quality evidence, consider harms and ask
+qualified clinicians before changing personal care.
+
+CASE B: A blurry sky image is described as proof of extraterrestrial visitors.
+Does the photograph alone establish the cause?
+SAFER REASONING: No. It shows something that may deserve investigation.
+Date, context, original measurements and independent explanations matter.
+
+CASE C: A forwarded message claims a nearby water supply is unsafe, but it
+has no identifiable dated notice. Should you ignore it or assume it applies
+everywhere?
+SAFER REASONING: Neither. Check your known local utility or public-health
+authority using a trustworthy independent route. If a credible warning is
+current and relevant, follow local safety instructions.
+
+HOW TO KEEP LEARNING
+--------------------
+Start with one need or one genuine question. Read a short explanation. Try
+a safe practice. Check what you understood. Ask where the information came
+from. Revise when evidence changes. Share responsibly.
+
+The next generation deserves not only answers, but the ability to question
+and improve those answers. Humans, communities and nature are partners in
+this work; a website must remain a guide rather than an absolute authority.
+
+EVIDENCE AND REVIEW
+-------------------
+Original lesson text was prepared for a One Place Knowledge Atlas founder
+draft on November 12, 2026, drawing on the background links above.
+Facts, services and safety recommendations should be rechecked when used,
+especially in emergencies and personal health decisions.
+Languages beyond English, region-specific resources and extensive subject
+coverage have not yet been prepared or independently validated.
+
+There are no live links, account forms, tracking pixels, cookies or network
+requests inside this plain text file. This file does not secretly update.
+If you share it, communicate its date and limitations.
+
+ONE PLACE | Respect for Self + Others + Everything | TEAL
