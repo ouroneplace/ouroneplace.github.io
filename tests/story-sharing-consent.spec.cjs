@@ -181,6 +181,58 @@ test('mobile and enlarged text keep every story heading word intact',async({page
  }
 });
 
+test('whole-page screenshot and section geometry hold across real browser sizes',async({page},testInfo)=>{
+ const configs=[
+  {width:320,large:false},
+  {width:320,large:true},
+  {width:390,large:false},
+  {width:390,large:true},
+  {width:1366,large:false},
+  {width:1920,large:false}
+ ];
+ for(const cfg of configs){
+  await page.setViewportSize({width:cfg.width,height:900});
+  await page.goto(route);
+  if(cfg.large)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const dims=await page.evaluate(()=>{
+   const blocks=[...document.querySelectorAll('main > header, main > .pattern, main > section.card, footer')];
+   const positions=blocks.map(el=>{
+    const r=el.getBoundingClientRect();
+    return {name:el.tagName.toLowerCase(),x:r.left,right:r.right,y:r.top,bottom:r.bottom,height:r.height};
+   });
+   const buttons=[...document.querySelectorAll('button')].filter(el=>!el.disabled);
+   return {
+    viewport:innerWidth,
+    rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    htmlWidth:document.documentElement.scrollWidth,
+    bodyWidth:document.body.scrollWidth,
+    sections:positions,
+    smallestButtonHeight:Math.min(...buttons.map(el=>el.getBoundingClientRect().height)),
+    visibleSafetyNote:document.querySelector('.critical').getBoundingClientRect().height>0
+   };
+  });
+  expect(dims.htmlWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
+  expect(dims.bodyWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
+  expect(dims.visibleSafetyNote,JSON.stringify(cfg)).toBe(true);
+  expect(dims.sections.length,JSON.stringify(cfg)).toBe(10);
+  expect(dims.smallestButtonHeight,JSON.stringify(cfg)).toBeGreaterThanOrEqual(44);
+  for(let i=0;i<dims.sections.length;i++){
+   const section=dims.sections[i];
+   expect(section.height,JSON.stringify({cfg,section})).toBeGreaterThan(20);
+   expect(section.x,JSON.stringify({cfg,section})).toBeGreaterThanOrEqual(-1);
+   expect(section.right,JSON.stringify({cfg,section})).toBeLessThanOrEqual(cfg.width+1);
+   if(i>0)expect(section.y,JSON.stringify({cfg,i})).toBeGreaterThanOrEqual(dims.sections[i-1].bottom-1);
+  }
+  const png=await page.screenshot({fullPage:true,animations:'disabled'});
+  expect(png.subarray(0,8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(png.readUInt32BE(16),JSON.stringify(cfg)).toBe(cfg.width);
+  expect(png.readUInt32BE(20),JSON.stringify(cfg)).toBeGreaterThanOrEqual(900);
+  const label=cfg.width+(cfg.large?'-200-percent':'-normal');
+  await testInfo.attach('story-full-'+label+'.png',{body:png,contentType:'image/png'});
+  console.log('STORY_PAGE_GEOMETRY '+JSON.stringify({label,rootFont:dims.rootFont,sections:dims.sections.length,scrollWidth:dims.htmlWidth,pngHeight:png.readUInt32BE(20),minButtonHeight:dims.smallestButtonHeight}));
+ }
+});
+
 test('keyboard order, focus, semantic radio groups and live updates work',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
