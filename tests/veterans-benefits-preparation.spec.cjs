@@ -263,3 +263,28 @@ test('no-JavaScript paper fallback prints every Veterans lesson and its official
   await expect(page.locator('#reviews')).toContainText('decision letter');
  }finally{await context.close()}
 });
+
+for(const width of [320,1366]){
+ test('Veterans links reach real One Place home and life area, with browser back at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:780});
+  await page.goto(url+'#caregiving');
+  await expect(page.locator('#caregiving')).toBeVisible();
+  await page.locator('header a.brand').click();
+  await expect(page).toHaveURL(/\/index\.html$/);
+  await expect(page.locator('#main')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/veterans-benefits-preparation\.html#caregiving$/);
+  await expect(page.locator('#caregiving')).toBeVisible();
+  await expect(page.locator('#health')).toBeHidden();
+  await page.locator('header nav.mainnav a[href*="area="]').click();
+  await expect(page).toHaveURL(/index\.html\?area=Veterans%20%26%20Military%20Families$/);
+  await expect(page.locator('#main h1')).toHaveText('Veterans & Military Families');
+  await expect(page.locator('#main .offers .offer')).toHaveCount(4);
+  await page.goBack();
+  await expect(page.locator('#caregiving')).toBeVisible();
+  await page.locator('footer a[href*="area="]').click();
+  await expect(page.locator('#main h1')).toHaveText('Veterans & Military Families');
+  await page.goBack();
+  await expect(page.locator('#caregiving')).toBeVisible();
+ });
+}
