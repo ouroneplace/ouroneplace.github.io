@@ -18,7 +18,7 @@ test('Veterans preparation provides eight evidence-based, jurisdiction-labeled p
   await expect(page.locator('#'+id+' .questions li')).toHaveCount(3);
  }
  await expect(page.locator('#scams-title')).toBeVisible();
- await expect(page.locator('#privacy')).toContainText('Outside');
+ await expect(page.locator('aside.note')).toContainText('Outside the United States');
 });
 test('plan reflects marked and unmarked examples and invalidates on editing or pathway change',async({page})=>{
  await page.goto(url+'#health');
