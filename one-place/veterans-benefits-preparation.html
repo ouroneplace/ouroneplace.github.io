@@ -180,6 +180,12 @@ function choose(){
  const fragment=location.hash.slice(1);
  const next=ids.includes(fragment)?fragment:selected;
  const changed=next!==selected;
+ if(changed&&reviewed&&!window.confirm('Switch pathways and discard your reviewed preparation plan? Download a text copy first if you want to keep it.')){
+  history.replaceState(null,'','#'+selected);
+  say('Path switch canceled. Your reviewed preparation plan was preserved.');
+  document.getElementById(selected).focus({preventScroll:true});
+  return;
+ }
  if(changed)invalidate('Path changed. Review a new preparation plan when ready.');
  selected=next;
  paths.forEach(p=>p.hidden=p.dataset.path!==selected);

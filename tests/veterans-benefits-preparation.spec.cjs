@@ -32,6 +32,7 @@ test('plan reflects marked and unmarked examples and invalidates on editing or p
  await expect(page.locator('#planText')).toBeHidden();
  await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
  await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ page.once('dialog',d=>d.accept());
  await page.locator('[data-select="survivors"]').click();
  await expect(page.locator('#survivors')).toBeVisible();
  await expect(page.locator('#planText')).toBeHidden();
@@ -63,10 +64,40 @@ test('keyboard pathway navigation focuses the opened lesson and preserves plan p
  await expect(page.locator('#caregiving')).toBeVisible();
  await expect(page.locator('#planText')).toBeVisible();
  const health=page.locator('[data-select="health"]');
+ page.once('dialog',d=>d.accept());
  await health.focus();await page.keyboard.press('Enter');
  await expect(page.locator('#health')).toBeFocused();
  await expect(page.locator('#planText')).toBeHidden();
  await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
+});
+test('reviewed plan survives a canceled pathway change and changes only after consent',async({page})=>{
+ await page.goto(url+'#health');
+ const record=page.locator('#health [data-record]').first();
+ await record.check();
+ await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
+ page.once('dialog',d=>{
+  expect(d.message()).toContain('reviewed preparation plan');
+  d.dismiss();
+ });
+ await page.locator('[data-select="survivors"]').click();
+ await expect(page).toHaveURL(/#health$/);
+ await expect(page.locator('#health')).toBeVisible();
+ await expect(page.locator('#health')).toBeFocused();
+ await expect(record).toBeChecked();
+ await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
+ await page.getByRole('link',{name:'Privacy & limits'}).click();
+ await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
+ page.once('dialog',d=>d.accept());
+ await page.locator('[data-select="survivors"]').click();
+ await expect(page.locator('#survivors')).toBeFocused();
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
+ await expect(record).toBeChecked();
+ await page.locator('[data-select="education"]').click();
+ await expect(page.locator('#education')).toBeVisible();
 });
 test('clear confirmation protects and then resets all pathways',async({page})=>{
  await page.goto(url);
