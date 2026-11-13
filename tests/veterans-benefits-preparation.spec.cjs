@@ -200,3 +200,35 @@ for(const width of [320,390]){
   await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
  });
 }
+
+test('reviewed plan prints completely with selected lesson and no interactive controls',async({page})=>{
+ await page.goto(url+'#health');
+ await page.locator('#health [data-record]').first().check();
+ await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#health')).toBeVisible();
+ await expect(page.locator('#disability')).toBeHidden();
+ await expect(page.locator('#planText')).toBeVisible();
+ await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
+ await expect(page.locator('header')).toBeHidden();
+ await expect(page.locator('.choices')).toBeHidden();
+ await expect(page.locator('.controls')).toBeHidden();
+ const print=await page.locator('#planText').evaluate(el=>({max:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflow,scroll:el.scrollHeight,client:el.clientHeight}));
+ expect(print.max).toBe('none');
+ expect(print.overflow).toBe('visible');
+ expect(print.scroll).toBeLessThanOrEqual(print.client+2);
+});
+test('no-JavaScript paper fallback prints every Veterans lesson and its official reading',async({browser})=>{
+ const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:740}});
+ try{
+  const page=await context.newPage();await page.goto(url);
+  await page.emulateMedia({media:'print'});
+  await expect(page.locator('.path:visible')).toHaveCount(8);
+  await expect(page.locator('noscript')).toBeVisible();
+  await expect(page.locator('article.path .sources a')).toHaveCount(19);
+  await expect(page.locator('#planText')).toBeHidden();
+  await expect(page.locator('.controls')).toBeHidden();
+  await expect(page.locator('header')).toBeHidden();
+  await expect(page.locator('#reviews')).toContainText('decision letter');
+ }finally{await context.close()}
+});
