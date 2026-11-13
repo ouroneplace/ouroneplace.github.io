@@ -47,6 +47,27 @@ test('privacy navigation preserves a reviewed plan and chosen pathway',async({pa
  await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
  await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
 });
+test('keyboard pathway navigation focuses the opened lesson and preserves plan privacy behavior',async({page})=>{
+ await page.goto(url);
+ const caregiving=page.locator('[data-select="caregiving"]');
+ await caregiving.focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#caregiving')).toBeVisible();
+ await expect(page.locator('#caregiving')).toBeFocused();
+ await page.keyboard.press('Tab');
+ const first=page.locator('#caregiving [data-record]').first();
+ await expect(first).toBeFocused();
+ await page.keyboard.press('Space');await expect(first).toBeChecked();
+ await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ await expect(page.locator('#planText')).toContainText('Family & caregiver support');
+ await page.getByRole('link',{name:'Privacy & limits'}).click();
+ await expect(page.locator('#caregiving')).toBeVisible();
+ await expect(page.locator('#planText')).toBeVisible();
+ const health=page.locator('[data-select="health"]');
+ await health.focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#health')).toBeFocused();
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
+});
 test('clear confirmation protects and then resets all pathways',async({page})=>{
  await page.goto(url);
  await page.locator('#disability [data-record]').first().check();

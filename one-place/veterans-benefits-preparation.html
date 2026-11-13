@@ -179,11 +179,13 @@ function invalidate(message){reviewed=false;plan.hidden=true;plan.textContent=''
 function choose(){
  const fragment=location.hash.slice(1);
  const next=ids.includes(fragment)?fragment:selected;
- if(next!==selected)invalidate('Path changed. Review a new preparation plan when ready.');
+ const changed=next!==selected;
+ if(changed)invalidate('Path changed. Review a new preparation plan when ready.');
  selected=next;
  paths.forEach(p=>p.hidden=p.dataset.path!==selected);
  links.forEach(a=>{if(a.dataset.select===selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
  if(!reviewed)say('Showing '+document.getElementById(selected+'-title').textContent+'. Select located records, then review your plan.');
+ if(changed)document.getElementById(selected).focus({preventScroll:true});
 }
 document.querySelectorAll('[data-record]').forEach(input=>{input.checked=false;input.addEventListener('change',()=>invalidate('Records changed. Review your plan again before downloading.'))});
 review.disabled=false;clear.disabled=false;
