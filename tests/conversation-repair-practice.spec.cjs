@@ -163,6 +163,49 @@ test('200 percent text at 320px stays usable',async({page})=>{
   await expect(page.locator('#makeExample')).toBeDisabled();
 });
 
+test('mobile heading and safety warning keep whole words at normal and 200-percent text',async({page})=>{
+  for(const config of [
+    {width:320,enlarged:false},
+    {width:320,enlarged:true},
+    {width:390,enlarged:false}
+  ]){
+    await page.setViewportSize({width:config.width,height:900});
+    await page.goto(route);
+    if(config.enlarged) await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+    const visible=await page.evaluate(()=>{
+      const headline=document.querySelector('h1');
+      const headingText=headline.firstChild;
+      const pieces=[...headingText.textContent.matchAll(/\S+/g)].map(m=>{
+        const range=document.createRange();
+        range.setStart(headingText,m.index);
+        range.setEnd(headingText,m.index+m[0].length);
+        return {word:m[0],fragments:range.getClientRects().length};
+      });
+      const warningText=document.querySelector('.note strong').firstChild;
+      const warningWord='disagreements';
+      const index=warningText.textContent.indexOf(warningWord);
+      const range=document.createRange();
+      range.setStart(warningText,index);
+      range.setEnd(warningText,index+warningWord.length);
+      return {
+        pieces,
+        warningFragments:range.getClientRects().length,
+        rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),
+        h1Font:parseFloat(getComputedStyle(headline).fontSize),
+        noHorizontalOverflow:document.documentElement.scrollWidth<=window.innerWidth+1
+      };
+    });
+    expect(visible.pieces,JSON.stringify(config)).toEqual([
+      {word:'Conversation',fragments:1},
+      {word:'Repair',fragments:1},
+      {word:'Practice',fragments:1}
+    ]);
+    expect(visible.warningFragments,JSON.stringify(config)).toBe(1);
+    expect(visible.noHorizontalOverflow,JSON.stringify(config)).toBe(true);
+    if(config.enlarged) expect(visible.h1Font).toBeGreaterThanOrEqual(visible.rootFont*1.1);
+  }
+});
+
 test('keyboard, labels and live feedback are operable',async({page})=>{
   await page.goto(route);
   await page.keyboard.press('Tab');
