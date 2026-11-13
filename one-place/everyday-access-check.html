@@ -37,6 +37,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;flex-wrap:wrap;gap:.7rem;margin:1rem 0}
 .status{font-weight:650;color:#0c635c;min-height:1.5rem}
 .output{background:#f0faf6;border:1px solid #9dcec3;border-radius:.65rem;padding:1rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.selected-choice{display:block;margin:.45rem 0 .75rem;padding:.65rem .8rem;border-left:4px solid #08796e;background:#f0faf6;border-radius:.4rem;font-weight:650;white-space:normal;overflow-wrap:normal;word-break:normal}
 [hidden]{display:none!important}
 .lesson{border:1px solid #c8ded7;border-radius:.75rem;padding:1rem;margin:1rem 0;background:#fbfefd}
 .lesson h3{margin:0 0 .55rem}
@@ -53,7 +54,7 @@ ul,ol{padding-left:1.5rem}
 li{margin:.35rem 0}
 .small{font-size:.93rem;color:#3b5d59}
 footer{padding:1.3rem;text-align:center;background:#deeee8}
-@media(max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}.panel{padding:1rem}}
+@media(max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}.panel{padding:1rem}h1{font-size:clamp(1.25rem,calc(3vw + .9rem),1.6rem);overflow-wrap:normal;word-break:normal;hyphens:none}h2{font-size:clamp(1.15rem,calc(2vw + .85rem),1.4rem)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 @media print{header,.skip,.actions,.interactive-only,.quiz,.source-links,footer{display:none!important}body{background:white;color:black}main{width:100%;padding:0}.panel,.lesson{break-inside:avoid;border-color:#bbb}#reviewed{display:block!important}.note{background:white;border-color:#777}a{color:black}}
 </style>
@@ -98,6 +99,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 <option value="ask">I will ask the person or service what helps</option>
 <option value="professional">I need qualified assistance before proceeding</option>
 </select>
+<output for="support" id="supportChoice" class="selected-choice" aria-live="polite" hidden></output>
 <p class="small">There is no failure in needing help. Choosing qualified assistance can be the safest and most useful next step.</p>
 <div class="actions interactive-only"><button type="submit">Review my access plan</button><button type="button" class="secondary" id="clear">Clear choices</button><button type="button" class="secondary" id="printPlan" disabled>Print reviewed plan</button></div>
 <p id="status" role="status" aria-live="polite" class="status">Nothing submitted or saved.</p>
@@ -201,7 +203,9 @@ const supports={
  professional:'I will pause the risky part and seek appropriate qualified local assistance.'
 };
 const clearReview=message=>{reviewed.hidden=true;preview.textContent='';printBtn.disabled=true;status.textContent=message;};
-for(const id of ['barrier','place','support'])byId(id).addEventListener('change',()=>clearReview('Choices changed. Review your updated plan before printing.'));
+const syncSupportChoice=()=>{const source=byId('support'),echo=byId('supportChoice');echo.textContent=source.value?'Selected next step: '+source.selectedOptions[0].textContent:'';echo.hidden=!source.value;};
+for(const id of ['barrier','place','support'])byId(id).addEventListener('change',()=>{clearReview('Choices changed. Review your updated plan before printing.');if(id==='support')syncSupportChoice();});
+syncSupportChoice();
 form.addEventListener('submit',e=>{
  e.preventDefault();
  for(const id of ['barrier','place','support'])if(!byId(id).value){clearReview('Choose a barrier, place and next step first.');byId(id).focus();return;}
@@ -211,7 +215,7 @@ form.addEventListener('submit',e=>{
 });
 byId('clear').addEventListener('click',()=>{
  if(!confirm('Clear your current choices and reviewed plan?')){status.textContent='Clear canceled. Your choices are still here.';return;}
- form.reset();clearReview('Choices and review cleared from this page.');
+ form.reset();syncSupportChoice();clearReview('Choices and review cleared from this page.');
 });
 printBtn.addEventListener('click',()=>{if(reviewed.hidden)return;window.print();});
 byId('checkAnswer').addEventListener('click',()=>{
