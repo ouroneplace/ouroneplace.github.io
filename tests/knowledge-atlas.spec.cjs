@@ -146,3 +146,27 @@ test('Knowledge Atlas: published homepage and approved core pages are not modifi
  await expect(page.getByRole('heading',{level:1,name:/What do you need help with\?/})).toBeVisible();
  await expect(page.locator('a[href="one-place/knowledge-atlas.html"]')).toHaveCount(0);
 });
+
+test('Knowledge Atlas: intentionally downloads a complete printable offline-readable text edition',async({page})=>{
+ await page.goto('/one-place/knowledge-atlas.html');
+ const link=page.getByRole('link',{name:'Save the essentials as a plain-text file'});
+ await expect(link).toHaveAttribute('href','knowledge-atlas-essentials.txt');
+ await expect(link).toHaveAttribute('download','one-place-knowledge-atlas-essentials.txt');
+ const pending=page.waitForEvent('download');
+ await link.click();
+ const d=await pending;
+ expect(d.suggestedFilename()).toBe('one-place-knowledge-atlas-essentials.txt');
+ const stream=await d.createReadStream(),parts=[];
+ for await(const part of stream)parts.push(part);
+ const content=Buffer.concat(parts).toString('utf8');
+ expect(content).toContain('A printable, text-only learning starter');
+ expect(content).toContain('1. SAFETY AND URGENT HELP');
+ expect(content).toContain('2. UNDERSTANDING HEALTH INFORMATION');
+ expect(content).toContain('3. CHECKING A CLAIM');
+ expect(content).toContain('4. LIVING WITH OTHER PEOPLE');
+ expect(content).toContain('5. EARTH AND LIVING SYSTEMS');
+ expect(content).toContain('6. OUR SOLAR SYSTEM AND THE UNIVERSE');
+ expect(content).toContain('THREE REASONING PRACTICES');
+ expect(content).toContain('November 12, 2026');
+ expect(content).toContain('This file will not update itself after download');
+});
