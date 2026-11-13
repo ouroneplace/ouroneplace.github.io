@@ -36,6 +36,19 @@ for(const item of pages){
    const layout=await page.evaluate(()=>{
     const h=document.querySelector('h1').getBoundingClientRect();
     const m=document.querySelector('main').getBoundingClientRect();
+    // Detect whole-word breaks hidden by a passing horizontal-overflow check.
+    const splitHeadingWords=[];
+    const heading=document.querySelector('h1');
+    for(const node of heading.childNodes){
+     if(node.nodeType!==Node.TEXT_NODE)continue;
+     for(const match of (node.textContent||'').matchAll(/[A-Za-z]{3,}/g)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      if([...range.getClientRects()].filter(rect=>rect.width>0.5).length>1)
+       splitHeadingWords.push(match[0]);
+     }
+    }
     const visibleSections=[...document.querySelectorAll('main section')].filter(el=>el.getClientRects().length>0).length;
     return {
      viewport:innerWidth,
@@ -44,6 +57,7 @@ for(const item of pages){
      h1:{left:h.left,right:h.right,width:h.width,height:h.height},
      main:{left:m.left,right:m.right,width:m.width,height:m.height},
      sections:visibleSections,
+     splitHeadingWords,
      rootFontPx:parseFloat(getComputedStyle(document.documentElement).fontSize),
      bodyFontPx:parseFloat(getComputedStyle(document.body).fontSize),
      title:document.title,
@@ -58,6 +72,7 @@ for(const item of pages){
    expect(layout.main.left,item.key+' '+variant.name+' main left').toBeGreaterThanOrEqual(-1);
    expect(layout.main.right,item.key+' '+variant.name+' main right').toBeLessThanOrEqual(layout.viewport+1);
    expect(layout.sections,item.key+' '+variant.name+' visible sections').toBeGreaterThan(0);
+   expect(layout.splitHeadingWords,item.key+' '+variant.name+' heading must not split words').toEqual([]);
    if(variant.largeText)expect(layout.rootFontPx,item.key+' enlarged root text').toBeGreaterThanOrEqual(31);
    await page.keyboard.press('Tab');
    expect(await page.evaluate(()=>document.activeElement?.getAttribute('href')),item.key+' '+variant.name+' first keyboard stop').toBe('#main');
@@ -65,7 +80,8 @@ for(const item of pages){
   }
   expect(errors,'uncaught browser errors for '+item.key).toEqual([]);
   fs.writeFileSync(path.join(evidenceDir,item.key+'.json'),JSON.stringify({
-   sourceSha:process.env.GITHUB_SHA||'local',
+   sourceHeadSha:process.env.RC_SOURCE_HEAD_SHA||'unknown',
+   checkoutSha:process.env.GITHUB_SHA||'local',
    page:item.href,
    evidence:'synthetic browser screenshots only, not real-device or manual accessibility acceptance',
    rows
