@@ -28,6 +28,10 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm test
+        env:
+          # Only this draft branch generates visual review screenshots.
+          HQ_CAPTURE_VISUALS: ${{ github.event_name == 'pull_request' && github.head_ref == 'integration/two-area-access-conversation-20261112' }}
+          HQ_REVIEW_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -35,4 +39,11 @@ jobs:
           path: |
             playwright-report/
             test-results/
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always() && github.event_name == 'pull_request' && github.head_ref == 'integration/two-area-access-conversation-20261112'
+        with:
+          name: hq-rc02-visual-evidence
+          path: hq-visual-evidence/
+          if-no-files-found: error
           retention-days: 7
