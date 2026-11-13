@@ -87,3 +87,8 @@ The page paraphrases short, supported points and links to primary sources. Sourc
 Automated layout and text assertions cannot establish real-device screen reader usability, true accessibility of a home, personal suitability of assistive products, accurate interpretation/translation, or national/local law. A first-time visitor/specialist review is appropriate before acceptance; there is no need to ask the founder to inspect repeatedly. Prefer a contained Team A draft for HQ review, then integrate only after the QA and release gates are independently satisfied.
 
 **Founder action at draft stage: NONE.** HQ owns next integration/release proposal. Team A can continue targeted fixes on this feature without modifying shared files.
+
+
+## 8. Exact-head regression defect and recovery (Nov 12–13, 2026)
+
+Initial full run [43337577175](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43337577175) at `a033bc6c50c17eb0d091b90f0dad06d1ecb7b83a` **FAILED: 697 passed, 1 failed**. The failure was the no-JavaScript test not finding the `<noscript>`-only fallback message. Fix: render the fallback as ordinary static HTML, then hide it only when the local script successfully starts; with JS disabled, it remains visible while the interactive form is suppressed. This makes degradation truthful even when the script does not run. The focused and full suites must be rerun on the repair's exact new SHA before reporting passed.

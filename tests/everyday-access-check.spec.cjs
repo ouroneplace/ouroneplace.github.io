@@ -10,6 +10,7 @@ for(const width of sizes){
   await expect(page).toHaveTitle(/Everyday Access Check/);
   await expect(page.getByRole('heading',{level:1,name:'Everyday Access Check'})).toBeVisible();
   await expect(page.locator('article.lesson')).toHaveCount(5);
+  await expect(page.locator('#noJsHelp')).toBeHidden();
   await expect(page.locator('article.lesson dt')).toHaveCount(30);
   await expect(page.locator('header nav').getByRole('link',{name:'Aging & Accessibility'})).toBeVisible();
   const measure=await page.evaluate(()=>({width:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
@@ -143,7 +144,8 @@ test('all lessons, safety boundaries and paper worksheet remain available with J
   await page.goto(url);
   await expect(page.locator('article.lesson')).toHaveCount(5);
   await expect(page.getByRole('heading',{name:'Paper or offline worksheet'})).toBeVisible();
-  await expect(page.getByText('The interactive planner is unavailable.')).toBeVisible();
+  await expect(page.locator('#noJsHelp')).toBeVisible();
+  await expect(page.locator('#noJsHelp')).toContainText('The interactive planner is unavailable.');
   await expect(page.locator('#planForm')).toBeHidden();
   await page.locator('details summary').click();
   await expect(page.getByText('First ask the person and arrange a clear, safe route.')).toBeVisible();

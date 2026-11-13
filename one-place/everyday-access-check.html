@@ -103,7 +103,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 <p id="status" role="status" aria-live="polite" class="status">Nothing submitted or saved.</p>
 <section id="reviewed" hidden aria-labelledby="review-heading"><h3 id="review-heading">Your plan to review</h3><div class="output" id="preview"></div><p class="small">A draft for your own decisions, not proof that a route or accommodation is safe. Confirm the result with the person and the relevant local professional or provider.</p></section>
 </form>
-<noscript><p class="note"><strong>JavaScript is off:</strong> The interactive planner is unavailable. You can still read all five guides, practice with the explanation, and use the paper worksheet below. Use your browser's Print command.</p></noscript>
+<p class="note" id="noJsHelp"><strong>JavaScript is off or unavailable:</strong> The interactive planner is unavailable. You can still read all five guides, practice with the explanation, and use the paper worksheet below. Use your browser's Print command.</p>
 </section>
 <section class="panel" aria-labelledby="lesson-heading">
 <h2 id="lesson-heading">2. Learn to spot barriers and respond</h2>
@@ -181,6 +181,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 <script>
 (()=>{'use strict';
 const byId=id=>document.getElementById(id);
+byId('noJsHelp').hidden=true;
 const form=byId('planForm'),preview=byId('preview'),reviewed=byId('reviewed'),status=byId('status'),printBtn=byId('printPlan');
 const lessons={
  movement:{title:'Getting around and moving safely',notice:'Check paths, loose objects, light, surface changes and mobility-device clearance from a safe position.',action:'Ask what route and support the person prefers; arrange a clear path without moving their device without permission.',verify:'Confirm the person can use the route with their preferred support without taking a risky trial.',stop:'Unsafe transfers, falls, new unsteadiness or structural adaptations need qualified help.'},
