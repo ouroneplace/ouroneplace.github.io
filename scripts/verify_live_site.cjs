@@ -125,6 +125,21 @@ fs.mkdirSync(output,{recursive:true});
    await reflow();
    await page.getByRole('link',{name:/One Place Home/i}).first().click();
    await visible(page.getByRole('heading',{name:'Explore every part of life'}));
+   // Approved public FAQ: exact navigation, answer count and readable answer on both viewports.
+   await goto('/index.html?about#faq');
+   const faqLink=page.getByRole('link',{name:/complete 30-question One Place FAQ/});
+   assert.equal(await faqLink.count(),1,'About FAQ must link to the complete public questions');
+   await faqLink.click();
+   await visible(page.getByRole('heading',{name:'Frequently Asked Questions',exact:true}));
+   assert.equal(new URL(page.url()).pathname,'/one-place/faq.html','FAQ must reach its published path');
+   assert.equal(await page.locator('details').count(),30,'The approved FAQ must retain 30 questions');
+   assert.equal(await page.locator('section[aria-labelledby="essentials"] details').count(),10,'Ten essential questions must remain available');
+   await page.locator('#q1 summary').click();
+   assert.equal(await page.locator('#q1').evaluate(el=>el.open),true,'Opening a question must reveal its answer');
+   assert.match(await page.locator('#q1 .answer').innerText(),/free educational website/i,'FAQ answer missing');
+   await reflow();
+   await page.getByRole('link',{name:'Home',exact:true}).first().click();
+   await visible(page.getByRole('heading',{name:'Explore every part of life',exact:true}));
    // Follow each approved life-area journey into its real first-party tool.
    for(const [index,path] of [[0,'/one-place/money-bills.html'],[2,'/one-place/family-handoff.html']]){
     await goto('/');
@@ -149,7 +164,7 @@ fs.mkdirSync(output,{recursive:true});
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(siteWrites,[]);
    // Lesson media is loaded from Descript. Its third-party analytics/advertising
    // requests are reported, never hidden or misrepresented as first-party writes.
-   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,money_center_tools:4,money_center_resource_cards:2,legacy_catalog_links:68,lessons:10,teal101_chapters:12,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
+   result.widths.push({width,areas:18,working_category_links:21,pending_cards:3,solutions:72,money_center_tools:4,money_center_resource_cards:2,legacy_catalog_links:68,lessons:10,teal101_chapters:12,faq_questions:30,faq_essentials:10,major_navigation:'PASS',simulator:'PASS',tools:'PASS',canonical:'PASS',reflow:'PASS',first_party_server_writes:0,third_party_request_count:thirdPartyHosts.length,third_party_domains:[...new Set(thirdPartyHosts)].sort(),third_party_write_count:thirdPartyWrites.length,third_party_write_domains:[...new Set(thirdPartyWrites)].sort()});
    await context.close();
   }
   const context=await browser.newContext();const request=context.request;
