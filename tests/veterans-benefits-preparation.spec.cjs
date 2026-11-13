@@ -37,6 +37,16 @@ test('plan reflects marked and unmarked examples and invalidates on editing or p
  await expect(page.locator('#planText')).toBeHidden();
  await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
 });
+test('privacy navigation preserves a reviewed plan and chosen pathway',async({page})=>{
+ await page.goto(url+'#health');
+ await page.locator('#health [data-record]').first().check();
+ await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ await page.getByRole('link',{name:'Privacy & limits'}).click();
+ await expect(page).toHaveURL(/#privacy$/);
+ await expect(page.locator('#health')).toBeVisible();
+ await expect(page.locator('#planText')).toContainText('Pathway: VA health care');
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
+});
 test('clear confirmation protects and then resets all pathways',async({page})=>{
  await page.goto(url);
  await page.locator('#disability [data-record]').first().check();
