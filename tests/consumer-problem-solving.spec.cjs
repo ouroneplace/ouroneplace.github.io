@@ -133,7 +133,8 @@ test('320px with 200 percent text allows keyboard practice, review, reflow',asyn
  await page.getByRole('button',{name:'Review my plan'}).focus();await page.keyboard.press('Enter');
  await expect(page.locator('#planText')).toContainText('A suspicious prize message');
  const d=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,body:document.body.scrollWidth,win:innerWidth}));
- expect(Math.max(d.doc,d.body)).toBeLessThanOrEqual(d.win+1);
+ const overflowing=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&(r.left<-1||r.right>innerWidth+1)}).slice(0,7).map(el=>el.tagName.toLowerCase()+'#'+el.id+'.'+el.className));
+ expect(Math.max(d.doc,d.body),'Overflow elements: '+JSON.stringify(overflowing)).toBeLessThanOrEqual(d.win+1);
 });
 test('privacy has no network writes, outside scripts, silent outbound requests or persistence',async({page})=>{
  const third=[],writes=[];
