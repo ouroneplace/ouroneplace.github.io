@@ -1,6 +1,40 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const url='/one-place/consumer-problem-solving.html',cases=['purchase','financial','scam'];
+for(const width of [320,1366]){
+ test('Consumer public indexing is explicit on '+width+'px viewport',async({page})=>{
+  await page.setViewportSize({width,height:800});
+  await page.goto(url);
+  const robots=page.locator('head meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.locator('main h1')).toContainText('Understand a problem');
+  await expect(page.locator('main aside.notice')).toContainText('U.S.-specific examples');
+ });
+ test('Consumer Home and Legal area links navigate correctly, with return to the original lesson at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:800});
+  await page.goto(url+'#financial');
+  await expect(page.locator('#financial')).toBeVisible();
+  await page.locator('header a.brand').click();
+  await expect(page).toHaveURL(/\/index\.html$/);
+  await expect(page.locator('#main')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/consumer-problem-solving\.html#financial$/);
+  await expect(page.locator('#financial')).toBeVisible();
+  await expect(page.locator('#purchase')).toBeHidden();
+  await page.locator('header nav.top a[href*="area="]').click();
+  await expect(page).toHaveURL(/index\.html\?area=Legal%20%26%20Consumer%20Rights$/);
+  await expect(page.locator('#main h1')).toHaveText('Legal & Consumer Rights');
+  await expect(page.locator('#main .offers .offer')).toHaveCount(4);
+  await page.goBack();
+  await expect(page.locator('#financial')).toBeVisible();
+  await page.locator('footer a[href*="area="]').click();
+  await expect(page.locator('#main h1')).toHaveText('Legal & Consumer Rights');
+  await page.goBack();
+  await expect(page.locator('#financial')).toBeVisible();
+ });
+}
+
 test('purchase lesson protects card-dispute deadlines while teaching seller resolution',async({page})=>{
  await page.goto(url+'#purchase');
  await expect(page.locator('#purchase')).toBeVisible();
