@@ -149,3 +149,33 @@ test('official external links are marked and isolated; no fake eligibility score
  await expect(page.locator('body')).toContainText('cannot confirm approval');
  await expect(page.locator('body')).toContainText('No automated eligibility score');
 });
+
+for(const width of [320,390]){
+ test('enlarged-text labels keep full words and remain readable at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:800});
+  await page.goto(url);
+  await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+  await page.getByRole('button',{name:'Review my preparation plan'}).click();
+  const d=await page.evaluate(()=>{
+   const broken=[];
+   for(const el of document.querySelectorAll('h1,h2,h3,.choice,.controls button,.eyebrow')){
+    if(el.closest('[hidden]'))continue;
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    let textNode;
+    while((textNode=walker.nextNode())){
+     const words=/[^\s-]+/g;let m;
+     while((m=words.exec(textNode.textContent))){
+      if(m[0].length<4)continue;
+      const range=document.createRange();
+      range.setStart(textNode,m.index);range.setEnd(textNode,m.index+m[0].length);
+      if(range.getClientRects().length>1)broken.push(el.tagName.toLowerCase()+'#'+el.id+': '+m[0]);
+     }
+    }
+   }
+   return {broken,scroll:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewport:innerWidth};
+  });
+  expect(d.broken,'Split words at large text: '+JSON.stringify(d.broken)).toEqual([]);
+  expect(d.scroll).toBeLessThanOrEqual(d.viewport+1);
+  await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
+ });
+}

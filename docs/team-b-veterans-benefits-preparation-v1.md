@@ -48,3 +48,8 @@ Run npm run test:quick; npx playwright test tests/veterans-benefits-preparation.
 
 ## Founder authority
 No founder action needed during independent development. HQ may collect a release decision after tested integration. The founder will do experience review on their chosen schedule.
+
+
+### Independent large-text readability repair — November 12, 2026 (Central)
+
+The exact previous source head at 320px/200% root text had mid-word fragments in the heading, selected topic, buttons and later subheadings despite no horizontal scrolling (12 split non-whitespace tokens in an independent Chromium Range geometry review; 390px/200% had 21). That is a readability defect, not evidence of a WCAG failure. The narrow mobile-only CSS correction uses full-width pathway choices, modest fixed padding, and capped **heading/choice/control** sizes while keeping body paragraphs at the requested 200% enlargement. At 320 and 390px enlarged text, the same exact-browser word geometry found **zero split words** across visible headings, pathway labels and action buttons (natural hyphen breaks excluded). 320/390/1366/1920px normal and 320/390px 200% all had no horizontal overflow; inspected actual Chrome render of action controls and disability case. Focused browser tests now pin these word-integrity and width behaviors. Real native screen-reader/physical-device and founder subjective approval remain unverified. This is a source-only draft repair, not a publication decision.
