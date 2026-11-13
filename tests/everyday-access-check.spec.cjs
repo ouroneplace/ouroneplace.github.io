@@ -52,7 +52,7 @@ test('different places and seeking qualified support alter the plan without prom
  await page.getByRole('button',{name:'Review my access plan'}).click();
  await expect(page.locator('#preview')).toContainText('contact the venue or transport provider');
  await expect(page.locator('#preview')).toContainText('pause the risky part');
- await expect(page.locator('#preview')).toContainText('no');
+ await expect(page.locator('#preview')).toContainText('Stop and ask for help:');
  await expect(page.locator('#preview')).not.toContainText('guaranteed');
 });
 
@@ -144,6 +144,7 @@ test('all lessons, safety boundaries and paper worksheet remain available with J
   await expect(page.locator('article.lesson')).toHaveCount(5);
   await expect(page.getByRole('heading',{name:'Paper or offline worksheet'})).toBeVisible();
   await expect(page.getByText('The interactive planner is unavailable.')).toBeVisible();
+  await expect(page.locator('#planForm')).toBeHidden();
   await page.locator('details summary').click();
   await expect(page.getByText('First ask the person and arrange a clear, safe route.')).toBeVisible();
   const m=await page.evaluate(()=>({width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth}));
@@ -172,7 +173,7 @@ test('no tracking, network writes, cross-origin loads or stored visitor state',a
 test('external evidence and area navigation are explicit and non-invasive',async({page})=>{
  await page.goto(url);
  const resources=page.locator('.source-links a[href^="https://"]');
- await expect(resources).toHaveCount(6);
+ await expect(resources).toHaveCount(7);
  for(const a of await resources.all()){
   await expect(a).toHaveAttribute('target','_blank');
   await expect(a).toHaveAttribute('rel',/noopener noreferrer/);

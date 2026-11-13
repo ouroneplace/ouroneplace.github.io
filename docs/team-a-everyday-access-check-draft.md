@@ -55,6 +55,7 @@ Already present:
 - [W3C WAI — Accessibility Principles](https://www.w3.org/WAI/fundamentals/accessibility-principles/): keyboard use, clear and readable content, media alternatives, inclusive formats.
 - [W3C WAI — Auditory abilities and barriers](https://www.w3.org/WAI/people-use-web/abilities-barriers/auditory/): captions, transcripts, sign-language differences and alternatives to audio-only communication.
 - [UK NHS — Home adaptations](https://www.nhs.uk/social-care-and-support/care-services-equipment-and-care-homes/home-adaptations/): professional equipment and home adaptation assessment in UK context. **UK local council services/eligibility are not global entitlements.**
+- [UK NHS — Vision loss](https://www.nhs.uk/conditions/vision-loss/): abrupt inability to see requires emergency assessment. This supports the stop condition; the site's local emergency-number wording is country-specific.
 
 The page paraphrases short, supported points and links to primary sources. Sources explain principles, not formal clinical or onsite accessibility approval. Jurisdiction-specific emergency number *911* is labeled U.S.-only. Facility rules, payment, technology support, insurance and local access are not assumed.
 
