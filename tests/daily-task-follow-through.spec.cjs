@@ -186,6 +186,50 @@ test('all four step labels keep whole words at phone sizes and enlarged text',as
  }
 });
 
+test('all seven task section headings keep whole words at 200 percent mobile text',async({page})=>{
+ for(const {width,enlarged} of [
+  {width:320,enlarged:false},{width:320,enlarged:true},
+  {width:360,enlarged:true},
+  {width:390,enlarged:false},{width:390,enlarged:true},
+  {width:480,enlarged:true},{width:600,enlarged:true}
+ ]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  if(enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const layout=await page.evaluate(()=>{
+   const sections=[...document.querySelectorAll('main section.card h2')].map(h=>{
+    const words=[];
+    const walker=document.createTreeWalker(h,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+     for(const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      words.push({word:match[0],fragments:range.getClientRects().length});
+     }
+    }
+    return {title:h.textContent.trim(),font:parseFloat(getComputedStyle(h).fontSize),words};
+   });
+   return {
+    sections,
+    root:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    htmlWidth:document.documentElement.scrollWidth,
+    bodyWidth:document.body.scrollWidth
+   };
+  });
+  expect(layout.sections.length,JSON.stringify({width,enlarged})).toBe(7);
+  expect(layout.sections.flatMap(h=>h.words.filter(w=>w.fragments!==1).map(w=>h.title+': '+w.word)),
+    JSON.stringify({width,enlarged})).toEqual([]);
+  expect(layout.htmlWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  expect(layout.bodyWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  if(enlarged){
+   expect(layout.root).toBeGreaterThanOrEqual(32);
+   expect(Math.min(...layout.sections.map(h=>h.font))).toBeGreaterThanOrEqual(layout.root*1.14);
+  }
+ }
+});
+
 test('keyboard path and assistive labeling are provided',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
