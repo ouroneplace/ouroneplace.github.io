@@ -116,6 +116,34 @@ test('review is invalidated by edits and cleared only with confirmation',async({
  await expect(page.locator('#action')).toHaveValue('');
  await expect(page.locator('#reviewed')).toBeHidden();
 });
+test('unreviewed and edited notes stay out of print while paper guide remains usable',async({page})=>{
+ await page.goto(path);
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('body')).not.toHaveClass(/print-review/);
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.getByRole('heading',{name:'Five skills for an accessible fire plan'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'A paper escape rehearsal'})).toBeVisible();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#concern').selectOption('alerts');
+ await page.locator('#setting').selectOption('shared');
+ await page.locator('#action').selectOption('specialist');
+ await page.getByRole('button',{name:'Review my rehearsal step'}).click();
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await expect(page.locator('#preview')).toContainText('Make fire alerts');
+ await expect(page.getByRole('heading',{name:'A paper escape rehearsal'})).toBeHidden();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#setting').selectOption('multi');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('body')).not.toHaveClass(/print-review/);
+ await expect(page.locator('#print')).toBeDisabled();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.getByRole('heading',{name:'Five skills for an accessible fire plan'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'A paper escape rehearsal'})).toBeVisible();
+});
+
 test('only the reviewed step is printed by the dedicated button',async({page})=>{
  await page.goto(path);
  await page.evaluate(()=>{window.__prints=0;window.print=()=>window.__prints++;});
@@ -171,6 +199,10 @@ test('without JavaScript full lessons, explanation, and paper plan are readable'
  await expect(page.getByRole('heading',{name:'A paper escape rehearsal'})).toBeVisible();
  await page.locator('details summary').click();
  await expect(page.getByText(/Do not enter smoke or return to a dangerous building/)).toBeVisible();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.getByRole('heading',{name:'A paper escape rehearsal'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Five skills for an accessible fire plan'})).toBeVisible();
  const m=await page.evaluate(()=>({w:innerWidth,b:document.body.scrollWidth,h:document.documentElement.scrollWidth}));
  expect(Math.max(m.b,m.h)).toBeLessThanOrEqual(m.w+1);
  }finally{await ctx.close();}
