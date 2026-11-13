@@ -63,6 +63,13 @@ for(const item of pages){
       }
      }
     }
+    const navigationLabelMismatches=[];
+    for(const link of document.querySelectorAll('.top nav a')){
+     const visibleLabel=(link.textContent||'').trim().replace(/\s+/g,' ');
+     const explicitName=link.getAttribute('aria-label');
+     if(explicitName&&!explicitName.toLocaleLowerCase().includes(visibleLabel.toLocaleLowerCase()))
+      navigationLabelMismatches.push({text:visibleLabel,name:explicitName});
+    }
     const visibleSections=[...document.querySelectorAll('main section')].filter(el=>el.getClientRects().length>0).length;
     return {
      viewport:innerWidth,
@@ -73,6 +80,7 @@ for(const item of pages){
      sections:visibleSections,
      splitHeadingWords,
      splitNavigationWords,
+     navigationLabelMismatches,
      rootFontPx:parseFloat(getComputedStyle(document.documentElement).fontSize),
      bodyFontPx:parseFloat(getComputedStyle(document.body).fontSize),
      title:document.title,
@@ -89,6 +97,7 @@ for(const item of pages){
    expect(layout.sections,item.key+' '+variant.name+' visible sections').toBeGreaterThan(0);
    expect(layout.splitHeadingWords,item.key+' '+variant.name+' heading must not split words').toEqual([]);
    expect(layout.splitNavigationWords,item.key+' '+variant.name+' navigation words must not split').toEqual([]);
+   expect(layout.navigationLabelMismatches,item.key+' '+variant.name+' accessible name includes visible navigation label').toEqual([]);
    if(variant.largeText)expect(layout.rootFontPx,item.key+' enlarged root text').toBeGreaterThanOrEqual(31);
    await page.keyboard.press('Tab');
    expect(await page.evaluate(()=>document.activeElement?.getAttribute('href')),item.key+' '+variant.name+' first keyboard stop').toBe('#main');
