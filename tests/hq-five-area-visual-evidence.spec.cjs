@@ -49,6 +49,20 @@ for(const item of pages){
        splitHeadingWords.push(match[0]);
      }
     }
+    // Navigation words should remain intact at enlarged text sizes too.
+    const splitNavigationWords=[];
+    for(const link of document.querySelectorAll('.top nav a')){
+     for(const node of link.childNodes){
+      if(node.nodeType!==Node.TEXT_NODE)continue;
+      for(const match of (node.textContent||'').matchAll(/[A-Za-z]{3,}/g)){
+       const wordRange=document.createRange();
+       wordRange.setStart(node,match.index);
+       wordRange.setEnd(node,match.index+match[0].length);
+       if([...wordRange.getClientRects()].filter(rect=>rect.width>0.5).length>1)
+        splitNavigationWords.push(match[0]);
+      }
+     }
+    }
     const visibleSections=[...document.querySelectorAll('main section')].filter(el=>el.getClientRects().length>0).length;
     return {
      viewport:innerWidth,
@@ -58,6 +72,7 @@ for(const item of pages){
      main:{left:m.left,right:m.right,width:m.width,height:m.height},
      sections:visibleSections,
      splitHeadingWords,
+     splitNavigationWords,
      rootFontPx:parseFloat(getComputedStyle(document.documentElement).fontSize),
      bodyFontPx:parseFloat(getComputedStyle(document.body).fontSize),
      title:document.title,
@@ -73,6 +88,7 @@ for(const item of pages){
    expect(layout.main.right,item.key+' '+variant.name+' main right').toBeLessThanOrEqual(layout.viewport+1);
    expect(layout.sections,item.key+' '+variant.name+' visible sections').toBeGreaterThan(0);
    expect(layout.splitHeadingWords,item.key+' '+variant.name+' heading must not split words').toEqual([]);
+   expect(layout.splitNavigationWords,item.key+' '+variant.name+' navigation words must not split').toEqual([]);
    if(variant.largeText)expect(layout.rootFontPx,item.key+' enlarged root text').toBeGreaterThanOrEqual(31);
    await page.keyboard.press('Tab');
    expect(await page.evaluate(()=>document.activeElement?.getAttribute('href')),item.key+' '+variant.name+' first keyboard stop').toBe('#main');
