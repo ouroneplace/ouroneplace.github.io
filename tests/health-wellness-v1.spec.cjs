@@ -137,7 +137,7 @@ test('Health: guide and four choices remain readable without JavaScript',async({
   await page.goto('/one-place/health-wellness.html');
   await expect(page.getByRole('heading',{name:'Health & Wellness',exact:true})).toBeVisible();
   await expect(page.locator('.offers > a.offer')).toHaveCount(4);
-  await expect(page.locator('noscript p')).toContainText('JavaScript is needed for the two interactive builders.');
+  await expect(page.locator('noscript p').filter({hasText:'JavaScript is needed for the two interactive builders.'})).toContainText('JavaScript is needed for the two interactive builders.');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  }finally{await context.close();}
 });
