@@ -57,6 +57,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 @media print{header,.skip,.actions,.interactive-only,.quiz,.source-links,footer{display:none!important}body{background:white;color:black}main{width:100%;padding:0}.panel,.lesson{break-inside:avoid;border-color:#bbb}#reviewed{display:block!important}.note{background:white;border-color:#777}a{color:black}}
 </style>
+<noscript><style>#planForm,.quiz .actions{display:none!important}</style></noscript>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the Everyday Access Check</a>
@@ -97,7 +98,7 @@ footer{padding:1.3rem;text-align:center;background:#deeee8}
 <option value="ask">I will ask the person or service what helps</option>
 <option value="professional">I need qualified assistance before proceeding</option>
 </select>
-<p class="small">No choice means you failed. Selecting professional assistance is often the safest and most useful outcome.</p>
+<p class="small">There is no failure in needing help. Choosing qualified assistance can be the safest and most useful next step.</p>
 <div class="actions interactive-only"><button type="submit">Review my access plan</button><button type="button" class="secondary" id="clear">Clear choices</button><button type="button" class="secondary" id="printPlan" disabled>Print reviewed plan</button></div>
 <p id="status" role="status" aria-live="polite" class="status">Nothing submitted or saved.</p>
 <section id="reviewed" hidden aria-labelledby="review-heading"><h3 id="review-heading">Your plan to review</h3><div class="output" id="preview"></div><p class="small">A draft for your own decisions, not proof that a route or accommodation is safe. Confirm the result with the person and the relevant local professional or provider.</p></section>
