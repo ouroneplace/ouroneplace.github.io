@@ -20,7 +20,8 @@ test('consumer practice has three fictional cases with practical evidence, quest
 });
 test('each fictional case teaches blank, less-safe and safer decisions',async({page})=>{
  await page.goto(url);
- for(const id of cases){
+ for(const [index,id] of cases.entries()){
+  if(index>0)page.once('dialog',d=>d.accept());
   await page.locator('[data-select="'+id+'"]').click();
   const quiz=page.locator('#'+id+' .practice'),radios=quiz.getByRole('radio');
   await quiz.getByRole('button',{name:'Check my reasoning'}).click();
@@ -33,6 +34,35 @@ test('each fictional case teaches blank, less-safe and safer decisions',async({p
   await quiz.getByRole('button',{name:'Check my reasoning'}).click();
   await expect(quiz.getByRole('status')).toContainText('Good reasoning');
  }
+});
+test('quiz-only choices and feedback survive canceled case switches and clear only with consent',async({page})=>{
+ await page.goto(url);
+ const radio=page.locator('#purchase .practice input[type="radio"]').first();
+ const feedback=page.locator('#purchase .practice .feedback');
+ await radio.check();
+ await page.locator('#purchase .practice [data-check]').click();
+ await expect(feedback).toContainText('Sharing payment details publicly is unsafe');
+ const saved=await feedback.textContent();
+ page.once('dialog',d=>{
+  expect(d.message()).toContain('practice choices');
+  d.dismiss();
+ });
+ await page.locator('[data-select="financial"]').click();
+ await expect(page).toHaveURL(/#purchase$/);
+ await expect(page.locator('#purchase')).toBeVisible();
+ await expect(radio).toBeChecked();
+ await expect(feedback).toHaveText(saved);
+ await expect(page.locator('#facts')).toHaveValue(/Sample Store/);
+ await expect(page.locator('#planText')).toBeHidden();
+ page.once('dialog',d=>d.accept());
+ await page.locator('[data-select="financial"]').click();
+ await expect(page.locator('#financial')).toBeVisible();
+ await expect(page.locator('#financial')).toBeFocused();
+ await expect(radio).not.toBeChecked();
+ await expect(feedback).toBeEmpty();
+ await expect(page.locator('#facts')).toHaveValue(/Example Bank/);
+ await page.locator('[data-select="scam"]').click();
+ await expect(page.locator('#scam')).toBeVisible();
 });
 test('draft validation preserves edits, focuses missing field, blocks stale export',async({page})=>{
  await page.goto(url+'#purchase');

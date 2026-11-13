@@ -147,7 +147,7 @@ function route(){
  const id=location.hash.slice(1);
  if(!ids.includes(id))return;
  if(id===selected)return;
- if((dirty||reviewed||Boolean(document.querySelector('#'+selected+' [data-evidence]:checked')))&&!window.confirm('Switch fictional case and replace your current unsaved draft? Download or copy any draft you want to keep first.')){
+ if((dirty||reviewed||Boolean(document.querySelector('#'+selected+' [data-evidence]:checked'))||Boolean(document.querySelector('#'+selected+' .practice input[type="radio"]:checked')))&&!window.confirm('Switch fictional case and discard your current practice choices or reviewed draft? Download or copy any reviewed draft you want to keep first.')){
   history.replaceState(null,'','#'+selected);say('Case switch canceled. Your draft was preserved.');return;
  }
  setCase(id);
