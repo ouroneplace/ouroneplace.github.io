@@ -3,6 +3,18 @@ const fs=require('node:fs');
 const url='/one-place/veterans-benefits-preparation.html';
 const topics=['disability','health','education','caregiving','survivors','transition','housing','reviews'];
 
+for(const width of [320,1366]){
+ test('public Veterans lesson declares one indexable discoverable robots policy at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:800});
+  await page.goto(url);
+  const robots=page.locator('head meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.locator('h1')).toContainText('Benefits preparation');
+  await expect(page.locator('main > aside.note')).toContainText('United States only');
+ });
+}
+
 test('Veterans preparation provides eight evidence-based, jurisdiction-labeled pathways',async({page})=>{
  await page.goto(url);
  await expect(page).toHaveTitle(/Veterans Benefits Preparation/);
