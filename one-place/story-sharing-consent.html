@@ -180,6 +180,12 @@ document.getElementById("clear").addEventListener("click",()=>{
  draft.value="";draft.dataset.generated="false";feedback(status,"Invitation wording cleared; your reflections remain.");draft.focus();
 });
 document.getElementById("reset").addEventListener("click",()=>{
+ // Protect unsaved invitation wording and reflections from an accidental full reset.
+ const hasWork=draft.value.length>0||forms.some(form=>form.querySelector('input[type="radio"]:checked'));
+ if(hasWork&&!window.confirm("Start over? This clears your invitation wording, all choices and reflections. Choose Cancel to keep your work.")){
+  feedback(status,"Start over canceled. Your invitation wording and reflections remain.");
+  return;
+ }
  forms.forEach((form,i)=>{form.reset();reviewed[i]=false;feedback(document.getElementById("feedback"+(i+1)),"");});
  draft.value="";draft.dataset.generated="false";
  feedback(status,"All selections, explanations and invitation wording cleared.");update();forms[0].querySelector('input[type="radio"]').focus();

@@ -4,6 +4,13 @@
 
 **State:** Team-owned development draft. Not merged, deployed, presented as a public feature, founder-accepted, legally approved or certified for handling sensitive stories.
 
+## November 13, 2026 — protect an invitation against accidental full reset
+
+- **Verified source gap:** “Start over and clear everything” immediately removed typed invitation text and choices, even if the visitor had an unsaved draft. That is unnecessary data loss; the separate “Clear invitation wording only” control intentionally stays unchanged.
+- **Narrow fix:** If there is any invitation text or selected reflection, request native browser confirmation describing removal of invitation text, choices and reflections. Cancel keeps all text, checked responses, reasoning feedback and progress, and announces that reset was canceled. Confirm clears everything as before. Empty practice resets immediately without a prompt; no persistence, tracking, new data handling, third-party requests or redesign.
+- **New tests:** Cancel preserves a custom invitation, reviewed explanation and unreviewed selection; subsequent Confirm clears; empty reset creates no prompt; existing full reset test now explicitly confirms. Do not cite the previous 707/707 green head as proof of this change: exact new-head GitHub CI must finish.
+- **Release protection:** This is a Team C source-only draft. Current founder-authorized published source is `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` after PR #78 with 27 monitored files. HQ alone owns integration/publication, full integrated-head regression and founder authorization.
+
 ## Gap and real visitor outcome
 
 The existing Creativity & Legacy catalog offers starting a family story/memoir, a creative project plan, a Legacy Story Builder and a Life Story Roadmap. Those currently use generic catalog/preview guidance, not an original first-party interactive exercise teaching how to responsibly ask another human to contribute. It would be misleading to turn personal narratives into content without an informed choice by the person sharing.

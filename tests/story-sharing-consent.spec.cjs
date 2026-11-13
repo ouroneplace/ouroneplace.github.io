@@ -82,6 +82,7 @@ test('clear invitation does not erase reflections; full reset does',async({page}
  await expect(page.locator('#draft')).toHaveValue('');
  await expect(page.locator('#load')).toBeEnabled();
  await page.locator('#draft').fill('Temporary invitation');
+ page.once('dialog',dialog=>dialog.accept());
  await page.locator('#reset').click();
  await expect(page.locator('form.practice input:checked')).toHaveCount(0);
  for(const n of [1,2,3])await expect(page.locator('#feedback'+n)).toBeEmpty();
@@ -89,6 +90,38 @@ test('clear invitation does not erase reflections; full reset does',async({page}
  await expect(page.locator('#progress')).toContainText('0 of 3');
  await expect(page.locator('#load')).toBeDisabled();
  await expect(page.locator('form[data-step="0"] input[value="0"]')).toBeFocused();
+});
+
+test('canceling a destructive reset preserves invitation and consent reflections',async({page})=>{
+ await page.goto(route);
+ await page.locator('#draft').fill('Private fictional invitation I want to keep');
+ await reflect(page,0,1);
+ await page.locator('form[data-step="1"] input[value="2"]').check();
+ page.once('dialog',async dialog=>{
+  expect(dialog.type()).toBe('confirm');
+  expect(dialog.message()).toContain('invitation wording');
+  await dialog.dismiss();
+ });
+ await page.locator('#reset').click();
+ await expect(page.locator('#draft')).toHaveValue('Private fictional invitation I want to keep');
+ await expect(page.locator('#progress')).toContainText('1 of 3');
+ await expect(page.locator('#feedback1')).toContainText('freedom to refuse');
+ await expect(page.locator('form[data-step="1"] input[value="2"]')).toBeChecked();
+ await expect(page.locator('#draftStatus')).toContainText('Start over canceled');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.locator('#reset').click();
+ await expect(page.locator('#draft')).toHaveValue('');
+ await expect(page.locator('form.practice input:checked')).toHaveCount(0);
+ await expect(page.locator('#progress')).toContainText('0 of 3');
+});
+
+test('empty story-sharing reset never asks to discard work',async({page})=>{
+ await page.goto(route);
+ let dialogs=0;
+ page.on('dialog',async dialog=>{dialogs++;await dialog.dismiss();});
+ await page.locator('#reset').click();
+ expect(dialogs).toBe(0);
+ await expect(page.locator('#draftStatus')).toContainText('All selections');
 });
 
 test('practice never sends or stores written words',async({page})=>{
