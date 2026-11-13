@@ -202,6 +202,12 @@ document.getElementById("clear").addEventListener("click",()=>{
  status.classList.remove("caution");status.textContent="Plan wording cleared. Your four reflections remain.";fields[0].focus();
 });
 document.getElementById("reset").addEventListener("click",()=>{
+ // A single accidental click must not destroy a visitor's drafted plan or selected options.
+ const hasWork=fields.some(f=>f.value.length>0)||forms.some(form=>form.querySelector("input[type=radio]:checked"));
+ if(hasWork&&!window.confirm("Reset all practice? This permanently clears your four plan fields, choices and reflections. Choose Cancel to keep your work.")){
+  status.classList.remove("caution");status.textContent="Reset canceled. Your plan text and reflections are unchanged.";
+  return;
+ }
  forms.forEach((form,i)=>{form.reset();reviewed[i]=false;const fb=document.getElementById("feedback"+(i+1));fb.textContent="";fb.classList.remove("caution");});
  fields.forEach(f=>{f.value="";f.dataset.generated="false";});
  status.classList.remove("caution");status.textContent="All practice and plan wording cleared.";update();forms[0].querySelector("input[type=radio]").focus();

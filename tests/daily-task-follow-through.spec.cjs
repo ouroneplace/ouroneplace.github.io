@@ -85,6 +85,7 @@ test('reset clears selections, feedback, text and returns focus to first input',
  await page.goto(route);
  for(let i=0;i<4;i++)await review(page,i,0);
  await page.locator('#load').click();
+ page.once('dialog',dialog=>dialog.accept());
  await page.locator('#reset').click();
  await expect(page.locator('input[type=radio]:checked')).toHaveCount(0);
  for(let i=1;i<=4;i++)await expect(page.locator('#feedback'+i)).toBeEmpty();
@@ -92,6 +93,35 @@ test('reset clears selections, feedback, text and returns focus to first input',
  await expect(page.locator('#count')).toContainText('0 of 4');
  await expect(page.locator('#load')).toBeDisabled();
  await expect(page.locator('form[data-move="0"] input[value="0"]')).toBeFocused();
+});
+
+test('canceled full reset preserves custom words and unreviewed choices',async({page})=>{
+ await page.goto(route);
+ await page.locator('#planRemember').fill('My own private reminder');
+ await page.locator('form[data-move="0"] input[value="1"]').check();
+ page.once('dialog',async dialog=>{
+  expect(dialog.type()).toBe('confirm');
+  expect(dialog.message()).toContain('four plan fields');
+  await dialog.dismiss();
+ });
+ await page.locator('#reset').click();
+ await expect(page.locator('#planRemember')).toHaveValue('My own private reminder');
+ await expect(page.locator('form[data-move="0"] input[value="1"]')).toBeChecked();
+ await expect(page.locator('#planStatus')).toContainText('Reset canceled');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.locator('#reset').click();
+ await expect(page.locator('#planRemember')).toHaveValue('');
+ await expect(page.locator('input[type=radio]:checked')).toHaveCount(0);
+ await expect(page.locator('#count')).toContainText('0 of 4');
+});
+
+test('empty daily-task reset works without an unnecessary confirmation',async({page})=>{
+ await page.goto(route);
+ let dialogCount=0;
+ page.on('dialog',async dialog=>{dialogCount++;await dialog.dismiss();});
+ await page.locator('#reset').click();
+ expect(dialogCount).toBe(0);
+ await expect(page.locator('#planStatus')).toContainText('All practice and plan wording cleared');
 });
 
 test('source and local routes are real, external links consent-first',async({page})=>{

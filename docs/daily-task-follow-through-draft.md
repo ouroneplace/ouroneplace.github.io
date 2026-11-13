@@ -5,6 +5,13 @@
 **Team:** C · Daily Life & Organization
 **Coordination:** https://github.com/ouroneplace/ouroneplace.github.io/issues/63
 
+## November 13, 2026 — prevent accidental destruction of visitor-authored plans
+
+- **Observed source behavior:** The prior full reset discarded all four typed fields and radio choices on one click, without a confirmation. This is distinct from the already protected Load Example action and risks losing visitor work.
+- **Scoped correction:** Before resetting any selected or typed input, ask for a browser-native confirmation identifying all four plan fields, options, and reflections. Cancel preserves draft text, selections and feedback, with a non-destructive status message. When nothing is entered or chosen, reset stays one click. Deliberate Clear Plan remains unchanged. No storage, uploads or new services.
+- **Regression added:** Cancel after custom wording plus an unreviewed choice; confirm then clear; prior full reset after an example; empty reset produces no prompt. New exact-head GitHub CI is required to establish PASS; previous green run is historical.
+- **Published-baseline correction:** Current founder-authorized main after PR #78 is `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` with a 27-file integrity manifest. Source-only QA does not establish fresh-main HQ integrated tests, live release or native screen-reader approval. HQ owns all shared integration/publication.
+
 ## The user problem and one outcome
 
 The existing Daily Life & Organization catalogue contains generic resource/preview entries for organizing records, planning routines, a weekly life planner and household reset concept. That is not an implemented first-party, teach-and-practice outcome. Published docs/one-place-transition.md and docs/teal/README.md say there is no standalone published Universal Life Mentor or Everyday Mentor application. We therefore **do not** invent, replace or duplicate a mentor, nor build another general planner.
