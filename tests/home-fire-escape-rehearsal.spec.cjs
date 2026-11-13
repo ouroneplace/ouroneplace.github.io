@@ -24,6 +24,47 @@ test('200%-text reflow stays within a 320px viewport',async({page})=>{
  const m=await page.evaluate(()=>({w:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
  expect(Math.max(m.html,m.body),JSON.stringify(m)).toBeLessThanOrEqual(m.w+1);
 });
+for(const width of [320,390]){
+ test('selected fire choices are fully visible beside native controls at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(path);
+  const concern=page.locator('#concernChoice'),action=page.locator('#actionChoice');
+  await expect(concern).toBeHidden();
+  await expect(action).toBeHidden();
+  await page.locator('#concern').selectOption('alerts');
+  await page.locator('#setting').selectOption('shared');
+  await page.locator('#action').selectOption('specialist');
+  await expect(concern).toHaveText('Selected barrier: Make fire alerts understandable and detectable');
+  await expect(action).toHaveText('Selected next action: Contact qualified fire or building staff');
+  for(const output of [concern,action]){
+   await expect(output).toBeVisible();
+   const dimensions=await output.evaluate(el=>{
+    const box=el.getBoundingClientRect(),range=document.createRange();
+    range.selectNodeContents(el);
+    return {left:box.left,right:box.right,client:el.clientWidth,scroll:el.scrollWidth,fragments:range.getClientRects().length,viewport:innerWidth,documentScroll:document.documentElement.scrollWidth};
+   });
+   expect(dimensions.left).toBeGreaterThanOrEqual(0);
+   expect(dimensions.right).toBeLessThanOrEqual(width);
+   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client+1);
+   expect(dimensions.documentScroll).toBeLessThanOrEqual(width+1);
+  }
+  await page.getByRole('button',{name:'Review my rehearsal step'}).click();
+  await expect(page.locator('#reviewed')).toBeVisible();
+  await page.locator('#concern').selectOption('mobility');
+  await expect(concern).toContainText('Include mobility and assistance needs');
+  await expect(page.locator('#reviewed')).toBeHidden();
+  page.once('dialog',dialog=>dialog.dismiss());
+  await page.getByRole('button',{name:'Clear choices'}).click();
+  await expect(concern).toBeVisible();
+  page.once('dialog',dialog=>dialog.accept());
+  await page.getByRole('button',{name:'Clear choices'}).click();
+  await expect(concern).toBeHidden();
+  await expect(action).toBeHidden();
+  await expect(concern).toBeEmpty();
+  await expect(action).toBeEmpty();
+ });
+}
+
 test('five concerns and three settings give useful and bounded reviewed steps',async({page})=>{
  await page.goto(path);
  const concerns=['routes','mobility','alerts','dependents','building'],settings=['single','multi','shared'];

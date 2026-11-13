@@ -20,6 +20,7 @@ select{display:block;max-width:100%;min-width:0;width:100%;font:inherit;padding:
 button{font:inherit;min-height:44px;max-width:100%;background:#08776b;border:2px solid #08776b;color:#fff;border-radius:9px;font-weight:750;padding:10px 14px;cursor:pointer}
 button.secondary{color:#086056;background:white}button:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.status{font-weight:700;color:#0b655c;min-height:24px}
+.selected-choice{display:block;margin:7px 0 10px;padding:9px 12px;border-left:4px solid #08776b;border-radius:7px;background:#eff9f5;font-weight:650;white-space:normal;overflow-wrap:anywhere}
 [hidden]{display:none!important}.output{white-space:pre-wrap;overflow-wrap:anywhere;background:#eff9f5;border:1px solid #a5cdc3;border-radius:9px;padding:14px}
 .lesson{border:1px solid #d0e1d9;border-radius:11px;margin:14px 0;padding:15px;background:#fcfefd}.lesson dl{margin:0}
 .lesson dt{font-weight:800;margin:9px 0 2px}.lesson dd{margin:0 0 7px}
@@ -52,12 +53,13 @@ body.print-review #planner{padding:0;border:0}#reviewed[hidden]{display:none!imp
 <option value="mobility">Include mobility and assistance needs</option>
 <option value="alerts">Make fire alerts understandable and detectable</option>
 <option value="dependents">Plan for children, dependents and animals</option>
-<option value="building">Respect the specific building fire strategy</option></select></div><div><label for="setting">Which place needs a plan?</label><select id="setting" required>
+<option value="building">Respect the specific building fire strategy</option></select><output id="concernChoice" for="concern" class="selected-choice" aria-live="polite" hidden></output></div><div><label for="setting">Which place needs a plan?</label><select id="setting" required>
 <option value="">Choose a setting</option><option value="single">Single-level home</option><option value="multi">Multi-level home</option><option value="shared">Apartment or shared building</option>
 </select></div></div>
 <label for="action">What is your safest next step?</label><select id="action" required>
 <option value="">Choose a next step</option><option value="observe">Check without risky activity</option><option value="coordinate">Ask the person and confirm support</option><option value="specialist">Contact qualified fire or building staff</option>
 </select>
+<output id="actionChoice" for="action" class="selected-choice" aria-live="polite" hidden></output>
 <p class="small">Ask the person what assistance is wanted. Do not assume an elevator, untrained helper, registry or evacuation device guarantees escape.</p>
 <div class="actions"><button type="submit">Review my rehearsal step</button><button id="clear" type="button" class="secondary">Clear choices</button><button type="button" id="print" class="secondary" disabled>Print reviewed step</button></div>
 <p id="status" class="status" role="status" aria-live="polite">Nothing reviewed, saved or shared.</p>
@@ -101,7 +103,9 @@ const $=id=>document.getElementById(id);
 $("fallback").hidden=true;
 const form=$("planForm"),reviewed=$("reviewed"),preview=$("preview"),status=$("status"),print=$("print");
 const invalidate=message=>{document.body.classList.remove("print-review");reviewed.hidden=true;preview.textContent="";print.disabled=true;status.textContent=message;};
-["concern","setting","action"].forEach(id=>$(id).addEventListener("change",()=>invalidate("Your choices changed. Review a new note before printing.")));
+const syncChoice=id=>{const select=$(id),output=$(id+"Choice");output.textContent=select.value?"Selected "+(id==="concern"?"barrier":"next action")+": "+select.selectedOptions[0].textContent:"";output.hidden=!select.value;};
+["concern","setting","action"].forEach(id=>$(id).addEventListener("change",()=>{invalidate("Your choices changed. Review a new note before printing.");if(id!=="setting")syncChoice(id);}));
+syncChoice("concern");syncChoice("action");
 form.addEventListener("submit",event=>{
 event.preventDefault();
 for(const id of ["concern","setting","action"])if(!$(id).value){invalidate("Choose all three parts first.");$(id).focus();return;}
@@ -109,7 +113,7 @@ const s=data.outcomes[$("concern").value];
 preview.textContent=["ONE PLACE · HOME FIRE ESCAPE REHEARSAL","Concern: "+s.name,"Preparation: "+s.before,"Setting: "+data.locations[$("setting").value],"Chosen action: "+data.nexts[$("action").value],"Check success: "+s.verify,"Stop or seek help: "+s.stop,"In a real emergency follow local instructions; if safe escape is impossible call responders with your location.","This is a planning note, not inspection or professional approval."].join("\n\n");
 reviewed.hidden=false;print.disabled=false;document.body.classList.add("print-review");status.textContent="Reviewed here. No data uploaded or saved.";
 });
-$("clear").addEventListener("click",()=>{if(!confirm("Clear all selected choices and reviewed note?")){status.textContent="Clear canceled; choices kept.";return;}form.reset();invalidate("Choices cleared. Nothing stored.");});
+$("clear").addEventListener("click",()=>{if(!confirm("Clear all selected choices and reviewed note?")){status.textContent="Clear canceled; choices kept.";return;}form.reset();syncChoice("concern");syncChoice("action");invalidate("Choices cleared. Nothing stored.");});
 print.addEventListener("click",()=>{if(!reviewed.hidden)window.print();});
 $("check").addEventListener("click",()=>{const x=document.querySelector('input[name="decision"]:checked');
 $("feedback").textContent=!x?"Choose a response first, or read the explanation.":x.value==="b"?"Safer response: get out by a safe route, stay out and inform responders of anyone or any animal left inside.":x.value==="a"?"Unsafe: smoke can overcome people quickly. Do not enter smoky areas to retrieve an animal; call responders.":"Unsafe: an app confirmation is not needed to act on a smoke alarm; follow the building plan and emergency services.";
