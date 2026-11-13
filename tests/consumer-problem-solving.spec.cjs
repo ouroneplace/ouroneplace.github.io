@@ -1,6 +1,18 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const url='/one-place/consumer-problem-solving.html',cases=['purchase','financial','scam'];
+test('purchase lesson protects card-dispute deadlines while teaching seller resolution',async({page})=>{
+ await page.goto(url+'#purchase');
+ await expect(page.locator('#purchase')).toBeVisible();
+ await expect(page.locator('#purchase')).toContainText("waiting for a seller's reply can jeopardize dispute deadlines");
+ await expect(page.locator('#purchase .agency')).toContainText("check the issuer's dispute rules promptly");
+ await expect(page.locator('#purchase .twocol ol')).toContainText('written-notice process');
+ await expect(page.locator('#purchase .official a[href="https://consumer.ftc.gov/articles/sample-letter-disputing-credit-and-debit-card-charges"]')).toBeVisible();
+ await page.locator('#purchase .practice input[value="1"]').check();
+ await page.locator('#purchase .practice [data-check]').click();
+ await expect(page.locator('#purchase .feedback')).toContainText('Good reasoning');
+});
+
 test('consumer practice has three fictional cases with practical evidence, questions and correct agency roles',async({page})=>{
  await page.goto(url);
  await expect(page).toHaveTitle(/Consumer Problem-Solving Practice/);
