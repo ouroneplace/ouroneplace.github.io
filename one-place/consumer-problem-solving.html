@@ -18,7 +18,7 @@ nav.top{display:flex;flex-wrap:wrap;gap:.5rem}nav.top a{display:inline-flex;alig
 .ticklist input{width:1.2rem;height:1.2rem;accent-color:var(--teal);flex:none;margin:.08rem 0}
 .agency{border-left:4px solid var(--teal);background:#ecf8f0;padding:.65rem .9rem;border-radius:.25rem}
 .practice{border:1px solid #aacfbf;border-radius:.7rem;padding:1rem;margin:1rem 0;min-width:0}.practice legend{font-weight:800;padding:.25rem}.practice label{display:flex;align-items:start;gap:.6rem;margin:.45rem 0;padding:.6rem;background:white;border:1px solid var(--line);border-radius:.5rem;overflow-wrap:anywhere}
-.practice input{flex:none;margin:.25rem 0}.practice button,.actions button{border:1px solid var(--teal);border-radius:.6rem;background:var(--teal);color:white;min-height:2.75rem;padding:.65rem .95rem;font-weight:800}
+.practice input{flex:none;margin:.25rem 0}.practice button,.actions button{border:1px solid var(--teal);border-radius:.6rem;background:var(--teal);color:white;min-height:2.75rem;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;padding:.65rem .95rem;font-weight:800}
 .practice button:disabled,.actions button:disabled{opacity:.55;cursor:not-allowed}.feedback{font-weight:700;min-height:1.5rem;color:#174f44}
 .official{padding:.75rem 0;border-top:1px solid var(--line)}.official a{display:inline-block;margin:.4rem;padding:.4rem .65rem;border:1px solid var(--line);border-radius:.55rem;background:white;text-decoration:none}
 .fieldrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.fieldrow>div{min-width:0}.fieldrow label{display:block;font-weight:780;margin:.65rem 0 .25rem}
@@ -28,6 +28,7 @@ textarea{display:block;width:100%;min-width:0;min-height:9rem;border:1px solid #
 .resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}.resources>div{padding:1rem;border:1px solid var(--line);border-radius:.7rem;min-width:0}
 [hidden]{display:none!important}footer{border-top:1px solid var(--line);padding:1.2rem 0 2rem;color:var(--muted)}
 @media(max-width:710px){.routes{grid-template-columns:minmax(0,1fr)}.twocol,.fieldrow,.resources{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.actions{display:grid;grid-template-columns:minmax(0,1fr)}.actions button{width:100%}}
 @media(max-width:370px){.wrap{width:calc(100% - 1rem)}.panel,.case{padding:.8rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{header,.routes,.actions,footer,.skip,.practice button,.feedback{display:none!important}.wrap{width:100%}.panel,.case{box-shadow:none;break-inside:avoid}#planText{max-height:none;overflow:visible}}
@@ -100,7 +101,7 @@ textarea{display:block;width:100%;min-width:0;min-height:9rem;border:1px solid #
 <div><h3>Legal aid, when needed</h3><p>USAGov lists free and lower-cost legal aid, including resources for military families and people with disabilities. Local availability and qualification criteria vary. Use qualified help for court filings, jurisdiction-specific rights, threatened loss of housing or unresolved legal deadlines.</p>
 <a href="https://www.usa.gov/legal-aid" target="_blank" rel="noopener noreferrer">USAGov legal aid (external)</a></div>
 <div><h3>International visitors</h3><p>These U.S. examples are not global rights or complaint systems. Find your country's consumer regulator, financial ombudsman or legal-aid authority using a verified government or nonprofit source. Cross-border purchases can involve more than one jurisdiction.</p>
-<a href="https://www.usa.gov/consumer-complaints" target="_blank" rel="noopener noreferrer">USAGov complaint topic finder (U.S. external)</a></div></div>
+<a href="https://www.usa.gov/consumer-complaints" target="_blank" rel="noopener noreferrer">USAGov complaint topic finder — U.S. (external)</a></div></div>
 </section>
 <section id="limits" class="panel"><h2>Privacy and limits</h2><ul>
 <li>No actual complaint, consumer case, court filing, legal assessment, refund, chargeback or agency communication occurs here.</li>
