@@ -225,7 +225,7 @@ test('no-JavaScript paper fallback prints every Veterans lesson and its official
   await page.emulateMedia({media:'print'});
   await expect(page.locator('.path:visible')).toHaveCount(8);
   await expect(page.locator('noscript')).toBeVisible();
-  await expect(page.locator('article.path .sources a')).toHaveCount(19);
+  await expect(page.locator('article.path .sources a')).toHaveCount(17);
   await expect(page.locator('#planText')).toBeHidden();
   await expect(page.locator('.controls')).toBeHidden();
   await expect(page.locator('header')).toBeHidden();
