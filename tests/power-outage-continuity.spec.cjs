@@ -173,6 +173,35 @@ test('edit invalidates review and cancel clear preserves choices; confirmation c
  await expect(page.locator('#printPlan')).toBeDisabled();
 });
 
+test('unreviewed and edited outage plans never print an empty or stale reviewed note',async({page})=>{
+ await page.goto(url);
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+ await expect(page.locator('#skills-title')).toBeVisible();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#priority').selectOption('equipment');
+ await page.locator('#phase').selectOption('during');
+ await page.locator('#support').selectOption('stop');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await expect(page.locator('#preview')).toContainText('Never improvise electricity to a medical device');
+ await expect(page.locator('#skills-title')).toBeHidden();
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeHidden();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#phase').selectOption('after');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#skills-title')).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+});
+
 test('print is deliberate and only available after review',async({page})=>{
  await page.goto(url);
  await page.evaluate(()=>{window.__prints=0;window.print=()=>window.__prints++;});
@@ -234,6 +263,10 @@ test('no-JS page still teaches, explains and offers paper checklist at 320px',as
   await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
   await page.locator('details summary').click();
   await expect(page.getByText(/Never run fuel-burning generators or grills indoors/)).toBeVisible();
+  await page.emulateMedia({media:'print'});
+  await expect(page.locator('#reviewed')).toBeHidden();
+  await expect(page.locator('#skills-title')).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
   const m=await page.evaluate(()=>({w:innerWidth,a:document.documentElement.scrollWidth,b:document.body.scrollWidth}));
   expect(Math.max(m.a,m.b)).toBeLessThanOrEqual(m.w+1);
  }finally{await ctx.close();}
