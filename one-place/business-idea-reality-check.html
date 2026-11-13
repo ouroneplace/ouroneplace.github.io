@@ -57,23 +57,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <button type="button" class="secondary" data-example="craft">Handmade item example</button>
 <button type="button" class="secondary" data-example="teaching">One-on-one lesson example</button>
 </div>
-<noscript><p class="notice">Without JavaScript, read the explanation and official resources. The calculator buttons are disabled and no information is submitted.</p></noscript>
+<noscript><p class="notice">Without JavaScript, read the explanation and official resources. The calculator fields and buttons are disabled, and no information is submitted.</p></noscript>
 <form id="estimateForm" aria-label="Business idea cost check" autocomplete="off" novalidate>
 <fieldset><legend>Costs and likely monthly sales</legend><div class="columns">
 <div>
 <label for="price">Price charged per sale (currency units)</label>
-<input id="price" name="price" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 50.00" aria-describedby="moneyHelp">
+<input id="price" disabled name="price" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 50.00" aria-describedby="moneyHelp">
 <label for="unitCost">Variable cost per sale (same currency)</label>
-<input id="unitCost" name="unitCost" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 15.00">
+<input id="unitCost" disabled name="unitCost" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 15.00">
 <label for="fixedCost">Monthly fixed costs (same currency)</label>
-<input id="fixedCost" name="fixedCost" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 350.00"></div>
+<input id="fixedCost" disabled name="fixedCost" inputmode="decimal" type="text" maxlength="14" placeholder="For example: 350.00"></div>
 <div>
 <label for="units">Estimated sales per month (whole number)</label>
-<input id="units" name="units" inputmode="numeric" type="text" maxlength="8" placeholder="For example: 12">
+<input id="units" disabled name="units" inputmode="numeric" type="text" maxlength="8" placeholder="For example: 12">
 <label for="customerQuestion">Who needs this and what will you ask them? (optional)</label>
-<textarea id="customerQuestion" name="customerQuestion" maxlength="230" placeholder="For example: Ask three potential customers what they currently use"></textarea>
+<textarea id="customerQuestion" disabled name="customerQuestion" maxlength="230" placeholder="For example: Ask three potential customers what they currently use"></textarea>
 <label for="testNext">One no-spend next step (optional)</label>
-<textarea id="testNext" name="testNext" maxlength="230" placeholder="For example: Compare three local alternatives before buying supplies"></textarea>
+<textarea id="testNext" disabled name="testNext" maxlength="230" placeholder="For example: Compare three local alternatives before buying supplies"></textarea>
 </div>
 </div></fieldset>
 <p id="moneyHelp" class="hint">Use nonnegative amounts with at most two decimal places (up to 10,000,000 per sale, or 100,000,000 in monthly fixed costs). Units must be a whole number from 0 to 1,000,000. One sale means one item or one service session.</p>
@@ -124,6 +124,7 @@ for(const btn of document.querySelectorAll('[data-example]')){
   byId('price').focus();
  });
 }
+for(const id of ids)byId(id).disabled=false;
 document.querySelector('.examples').hidden=false;
 byId('calculateBtn').disabled=false;byId('clearEstimate').disabled=false;
 form.addEventListener('input',()=>{if(reviewed)invalidate('Draft changed. Review the new numbers before downloading.');});

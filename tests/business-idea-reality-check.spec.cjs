@@ -10,6 +10,7 @@ for(const data of scenarios){
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/one-place/business-idea-reality-check.html#calculate');
   await page.locator('[data-example="'+data.key+'"]').click();
+  await expect(page.locator('#estimateForm input:enabled, #estimateForm textarea:enabled')).toHaveCount(6);
   await expect(page.locator('#price')).toHaveValue(data.price);
   await expect(page.locator('#unitCost')).toHaveValue(data.cost);
   await expect(page.locator('#fixedCost')).toHaveValue(data.fixed);
@@ -161,7 +162,9 @@ test('Business reality: no-JavaScript users still get complete learning and sour
   await expect(page.locator('.examples')).toBeHidden();
   await expect(page.locator('#calculateBtn')).toBeDisabled();
   await expect(page.locator('#clearEstimate')).toBeDisabled();
-  await expect(page.locator('noscript p')).toContainText('The calculator buttons are disabled');
+  await expect(page.locator('#estimateForm input:disabled, #estimateForm textarea:disabled')).toHaveCount(6);
+  await expect(page.locator('#estimateForm input:enabled, #estimateForm textarea:enabled')).toHaveCount(0);
+  await expect(page.locator('noscript p')).toContainText('The calculator fields and buttons are disabled');
   await expect(page.locator('.sources a')).toHaveCount(3);
  }finally{await context.close();}
 });
