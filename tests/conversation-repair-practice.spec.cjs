@@ -85,6 +85,7 @@ test('reset clears answers, feedback, editable draft and restores focus',async({
   await page.goto(route);
   await reflect(page,0,2);await reflect(page,1,3);await reflect(page,2,3);
   await page.locator('#makeExample').click();
+  page.once('dialog',dialog=>dialog.accept());
   await page.locator('#resetPractice').click();
   await expect(page.locator('input[type=radio]:checked')).toHaveCount(0);
   await expect(page.locator('#feedback1')).toBeEmpty();
@@ -94,6 +95,38 @@ test('reset clears answers, feedback, editable draft and restores focus',async({
   await expect(page.locator('#progress')).toContainText('0 of 3');
   await expect(page.locator('#makeExample')).toBeDisabled();
   await expect(page.locator('form[data-step="0"] input[value="0"]')).toBeFocused();
+});
+
+test('cancel full reset preserves custom draft, checked answers and reviewed feedback',async({page})=>{
+  await page.goto(route);
+  await page.locator('#draft').fill('A message I am still editing');
+  await reflect(page,0,0);
+  await page.locator('form[data-step="1"] input[value="3"]').check();
+  page.once('dialog',async dialog=>{
+    expect(dialog.type()).toBe('confirm');
+    expect(dialog.message()).toContain('draft wording');
+    await dialog.dismiss();
+  });
+  await page.locator('#resetPractice').click();
+  await expect(page.locator('#draft')).toHaveValue('A message I am still editing');
+  await expect(page.locator('#progress')).toContainText('1 of 3');
+  await expect(page.locator('#feedback1')).toContainText('observable information');
+  await expect(page.locator('form[data-step="1"] input[value="3"]')).toBeChecked();
+  await expect(page.locator('#draftStatus')).toContainText('Start over canceled');
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('#resetPractice').click();
+  await expect(page.locator('#draft')).toHaveValue('');
+  await expect(page.locator('input[type=radio]:checked')).toHaveCount(0);
+  await expect(page.locator('#progress')).toContainText('0 of 3');
+});
+
+test('untouched conversation reset does not request confirmation',async({page})=>{
+  await page.goto(route);
+  let dialogCount=0;
+  page.on('dialog',async dialog=>{dialogCount++;await dialog.dismiss();});
+  await page.locator('#resetPractice').click();
+  expect(dialogCount).toBe(0);
+  await expect(page.locator('#draftStatus')).toContainText('Practice cleared');
 });
 
 test('draft may be freely entered before practice and never auto-replaced by a choice change',async({page})=>{

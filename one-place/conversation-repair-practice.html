@@ -228,6 +228,12 @@ document.getElementById("clearDraft").addEventListener("click",()=>{
   draft.focus();
 });
 document.getElementById("resetPractice").addEventListener("click",()=>{
+  // Keep an unsaved conversation draft and selected reflections safe from accidental reset.
+  const hasWork=draft.value.length>0||forms.some(form=>form.querySelector('input[type="radio"]:checked'));
+  if(hasWork&&!window.confirm("Start over? This clears your draft wording, selected answers and reflections. Choose Cancel to keep your work.")){
+    status.classList.remove("caution");status.textContent="Start over canceled. Your wording and reflections remain.";
+    return;
+  }
   forms.forEach((f,i)=>{f.reset();reflected[i]=false;const fb=document.getElementById("feedback"+(i+1));fb.textContent="";fb.classList.remove("caution");});
   draft.value="";draft.dataset.generated="false";
   status.classList.remove("caution");status.textContent="Practice cleared. You can start with any of the three moves.";
