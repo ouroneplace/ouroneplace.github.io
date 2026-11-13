@@ -214,3 +214,33 @@ test('Business reality: official sources are safe, clearly scoped to U.S. and no
   await expect(link).toContainText('(U.S., external)');
  }
 });
+
+for(const width of [320,390]){
+ test('Business reality: enlarged heading and site navigation keep entire words at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:740});
+  await page.goto('/one-place/business-idea-reality-check.html');
+  await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+  const result=await page.evaluate(()=>{
+   const broken=[];
+   for(const el of document.querySelectorAll('h1,.top nav a')){
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let node;
+    while((node=walker.nextNode())){
+     let word;const rx=/[A-Za-z]{4,}/g;
+     while((word=rx.exec(node.textContent))){
+      const range=document.createRange();range.setStart(node,word.index);range.setEnd(node,word.index+word[0].length);
+      if(range.getClientRects().length>1)broken.push(el.tagName+': '+word[0]);
+     }
+    }
+   }
+   return {broken,root:parseFloat(getComputedStyle(document.documentElement).fontSize),
+     title:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize),
+     nav:parseFloat(getComputedStyle(document.querySelector('.top nav a')).fontSize),
+     document:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewport:innerWidth};
+  });
+  expect(result.broken,'Mid-word fragments: '+JSON.stringify(result)).toEqual([]);
+  expect(result.root).toBeGreaterThanOrEqual(32);
+  expect(result.title).toBeGreaterThan(result.root);
+  expect(result.nav).toBeGreaterThanOrEqual(24);
+  expect(result.document).toBeLessThanOrEqual(result.viewport+1);
+ });
+}
