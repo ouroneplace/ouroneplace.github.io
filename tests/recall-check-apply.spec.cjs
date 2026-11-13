@@ -165,6 +165,53 @@ test('200 percent text remains usable at 320px',async({page})=>{
  await expect(page.locator('#compare')).toBeVisible();
 });
 
+test('section heading words remain complete at phone widths and 200-percent text',async({page})=>{
+ for(const {width,enlarged} of [
+  {width:320,enlarged:false},
+  {width:320,enlarged:true},
+  {width:390,enlarged:false},
+  {width:390,enlarged:true},
+  {width:480,enlarged:true},
+  {width:600,enlarged:true}
+ ]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  if(enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const layout=await page.evaluate(()=>{
+   const headings=[...document.querySelectorAll('main h2')];
+   const checked=headings.map(heading=>{
+    const words=[];
+    const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);
+    let node;
+    while(node=walker.nextNode()){
+     for(const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      words.push({word:match[0],fragments:range.getClientRects().length});
+     }
+    }
+    return {title:heading.textContent.trim(),words,size:parseFloat(getComputedStyle(heading).fontSize)};
+   });
+   return {
+    checked,
+    root:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    htmlWidth:document.documentElement.scrollWidth,
+    bodyWidth:document.body.scrollWidth
+   };
+  });
+  expect(layout.checked.length,JSON.stringify({width,enlarged})).toBe(6);
+  expect(layout.checked.flatMap(h=>h.words.filter(w=>w.fragments!==1).map(w=>h.title+': '+w.word)),
+   JSON.stringify({width,enlarged})).toEqual([]);
+  expect(layout.htmlWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  expect(layout.bodyWidth,JSON.stringify({width,enlarged})).toBeLessThanOrEqual(width+1);
+  if(enlarged){
+   expect(layout.root).toBeGreaterThanOrEqual(32);
+   expect(Math.min(...layout.checked.map(h=>h.size))).toBeGreaterThanOrEqual(layout.root*1.14);
+  }
+ }
+});
+
 test('keyboard, semantic labels and announced feedback are operable',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
