@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#eaf8f5">
+<title>One Task, Four Moves | Daily Life &amp; Organization | ONE PLACE</title>
+<meta name="description" content="Practice how to prepare, perform, check and remember one everyday task at your own pace.">
+<style>
+:root{font:17px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;color:#19353a;background:#eaf8f5;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;overflow-wrap:anywhere}a{color:#075e55}
+.skip{position:absolute;top:4px;left:-10000px;background:#fff;z-index:5;padding:12px}.skip:focus{left:8px}
+.top{background:#153a3b;color:#fff;padding:14px max(16px,calc((100% - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap}
+.top a{color:#fff;text-decoration:none;font-weight:730}.top nav{display:flex;flex-wrap:wrap;gap:10px 16px}
+main{width:min(1050px,calc(100% - 32px));margin:auto;padding:24px 0 48px}
+h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.15;margin:8px 0 14px}
+h2{font-size:clamp(1.4rem,3vw,1.85rem);line-height:1.3;margin:6px 0 13px}
+h3{font-size:1.08rem;margin:14px 0 8px}p{margin:0 0 13px}
+.eyebrow{font-size:.81rem;font-weight:850;color:#08766c;letter-spacing:.07em;text-transform:uppercase}
+.lead{font-size:1.12rem;max-width:71ch}.small{font-size:.9rem;color:#425d5e}
+.note{background:#fff4dd;border-left:5px solid #8b601f;border-radius:9px;padding:12px 15px;margin:16px 0}
+.card{background:#fff;border:1px solid #bddbd3;border-radius:17px;margin:19px 0;padding:21px;min-width:0}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:18px 0}
+.steps div{border:1px solid #a5d0c5;border-radius:12px;padding:12px;background:#eef9f5;min-width:0}
+.steps b{display:block}.scenario{padding:13px 17px;border-left:4px solid #0b796e;background:#effaf6;border-radius:9px}
+fieldset{padding:0;margin:0;border:0;min-width:0}legend{font-weight:790;font-size:1.04rem;margin-bottom:12px}
+label.choice{display:flex;align-items:flex-start;gap:10px;border:1px solid #afccc4;background:#fafdfa;padding:10px 13px;border-radius:11px;margin:8px 0;cursor:pointer;min-width:0}
+label.choice:has(input:checked){border:2px solid #076c62;padding:9px 12px;background:#e5f6ef}
+.choice input{flex:none;margin:7px 0 0;width:18px;height:18px;accent-color:#08766b}.choice span{min-width:0}
+button{min-height:46px;max-width:100%;border:2px solid #08766b;border-radius:10px;padding:9px 15px;font:inherit;font-weight:750;color:#fff;background:#08766b;cursor:pointer}
+button.secondary{background:#fff;color:#075e55}button:disabled{cursor:not-allowed;opacity:.55}button:hover:not(:disabled){filter:brightness(.92)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.feedback{border-left:4px solid #076c62;background:#e8f6ee;border-radius:9px;margin-top:13px;padding:12px 15px}
+.feedback.caution{border-color:#91611f;background:#fff4df}.feedback:empty{display:none}
+details{margin:13px 0}summary{font-weight:730;cursor:pointer;color:#075e55;min-height:44px;padding:9px 0}
+.example{border-left:4px solid #83b8ac;background:#f1faf7;border-radius:9px;padding:13px 15px}
+.js-controls{display:none}.has-js .js-controls{display:block}
+.plan{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.plan label{font-weight:740;display:block}.plan textarea{display:block;width:100%;min-height:92px;resize:vertical;border:2px solid #749f99;border-radius:10px;padding:10px;font:inherit;color:#19353a;background:#fff}
+footer{padding:22px 16px;text-align:center;background:#dcefe9}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,.choice:focus-within{outline:3px solid #8e590f;outline-offset:3px}
+@media(max-width:720px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:16px}.plan{grid-template-columns:1fr}.actions button{flex:1 1 100%}}
+@media(max-width:360px){.steps{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(forced-colors:active){.feedback,.note{border:2px solid CanvasText}.choice:has(input:checked){border:3px solid Highlight}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to learning</a>
+<header class="top">
+<a href="../index.html">✳ ONE PLACE</a>
+<nav aria-label="Daily-life learning navigation"><a href="../index.html?area=Daily%20Life%20%26%20Organization">Daily Life area</a><a href="../human-literacy/">Human Literacy</a><a href="../index.html">Home</a></nav>
+</header>
+<main id="main">
+<header>
+<p class="eyebrow">Daily Life &amp; Organization · Independent skill practice</p>
+<h1>One Task, Four Moves</h1>
+<p class="lead">Getting organized is more than making a list. Learn to prepare one ordinary task, actually carry it out, verify what changed and choose a reminder for next time.</p>
+<p class="small">Four short practice decisions · No grade · No account · No personal details required · Optional editable example</p>
+<div class="note"><strong>Respect your capacity and safety.</strong> You can adapt, pause, ask for help or stop. Never risk a fall, block a doorway, overexert yourself or reveal private details just to complete a routine. This is general learning, not a clinical assessment or a demand to be productive.</div>
+</header>
+<div class="steps" aria-label="Four stages of a completed task">
+<div><b>1. Prepare</b>Know the actual requirement and the safest first step.</div>
+<div><b>2. Do</b>Perform one manageable action using available support.</div>
+<div><b>3. Check</b>Look for evidence the needed outcome happened.</div>
+<div><b>4. Remember</b>Make a cue that suits your routine and abilities.</div>
+</div>
+<section class="card" aria-labelledby="scenarioTitle">
+<h2 id="scenarioTitle">One everyday situation</h2>
+<div class="scenario"><p>Tomorrow, Sam is attending a free community class. The class note says to bring a notebook and pencil. Sam has a reusable bag and limited time and energy today. The home is shared, so a bag cannot block the door.</p><p>Can Sam prepare without buying anything, guessing what is needed or exhausting themselves? Practice the four moves. There is no single routine that fits everyone.</p></div>
+<p><strong>Outcome:</strong> Sam should be able to find the actual requirement, put the items in an accessible location, verify they are ready, and choose a respectful reminder.</p>
+</section>
+<section class="card" aria-labelledby="prepareTitle">
+<p class="eyebrow">Move 1 of 4 · Prepare</p><h2 id="prepareTitle">Know what to prepare and why</h2>
+<p><strong>Why:</strong> Planning from the original instruction prevents wasted effort. Choose a place and an action that match your reach, ability, time and resources.</p>
+<p><strong>How:</strong> Read or listen to the class instructions, identify the two needed objects, and choose one small starting action. Ask someone you trust to read or translate instructions if needed.</p>
+<form class="js-controls choice-form" data-move="0">
+<fieldset><legend>What is the most reliable first step for Sam?</legend>
+<label class="choice"><input type="radio" name="prepare" value="0"><span>Use the class note to confirm notebook and pencil; choose a safe, reachable work surface.</span></label>
+<label class="choice"><input type="radio" name="prepare" value="1"><span>Assume every class needs expensive supplies and buy them immediately.</span></label>
+<label class="choice"><input type="radio" name="prepare" value="2"><span>Try to pack everything in the home, even if the task becomes overwhelming.</span></label>
+</fieldset><button type="submit">Reflect on preparation</button>
+<p class="feedback" id="feedback1" role="status" aria-live="polite" aria-atomic="true"></p>
+</form>
+<details><summary>Read why checking instructions matters</summary><p class="example">Sam has an original class note. The concrete requirement is a notebook and pencil, not unspecified new products. A safe and reachable place makes the next step easier; asking for help with reading is a legitimate adaptation.</p></details>
+</section>
+<section class="card" aria-labelledby="doTitle">
+<p class="eyebrow">Move 2 of 4 · Do</p><h2 id="doTitle">Perform a real, manageable step</h2>
+<p><strong>Why:</strong> A plan is only a starting point. An accessible, voluntary first action helps move the task toward completion without forcing a difficult pace.</p>
+<p><strong>How:</strong> Locate the notebook and pencil, place them together in or beside the bag if reachable, and take a break as needed. If an item is inaccessible, change the method or ask for help rather than taking a physical risk.</p>
+<form class="js-controls choice-form" data-move="1">
+<fieldset><legend>Sam cannot comfortably reach a high shelf. What next?</legend>
+<label class="choice"><input type="radio" name="do" value="0"><span>Climb on an unstable chair to reach the shelf immediately.</span></label>
+<label class="choice"><input type="radio" name="do" value="1"><span>Use a reachable alternative notebook or ask a willing person for help, without blocking paths.</span></label>
+<label class="choice"><input type="radio" name="do" value="2"><span>Give up on the class; not reaching the shelf means the task cannot be adapted.</span></label>
+</fieldset><button type="submit">Reflect on the action</button>
+<p class="feedback" id="feedback2" role="status" aria-live="polite" aria-atomic="true"></p>
+</form>
+<details><summary>Read an accessible action example</summary><p class="example">Sam can use an available accessible item or ask for assistance with consent. A risky climb is not necessary; fatigue and mobility needs are valid reasons to pause or change the task.</p></details>
+</section>
+<section class="card" aria-labelledby="checkTitle">
+<p class="eyebrow">Move 3 of 4 · Check</p><h2 id="checkTitle">Verify the real result</h2>
+<p><strong>Why:</strong> Feeling busy and having completed the requirement are not the same. A quick check can catch a missing item while there is still time to adjust.</p>
+<p><strong>How:</strong> Compare the actual notebook and pencil with the class note. Confirm that both are in a reachable, permitted place and that the route stays clear. If one is missing, note a practical alternative rather than claiming the task is finished.</p>
+<form class="js-controls choice-form" data-move="2">
+<fieldset><legend>Which check shows the preparation is complete?</legend>
+<label class="choice"><input type="radio" name="check" value="0"><span>The bag looks full, so it must contain everything.</span></label>
+<label class="choice"><input type="radio" name="check" value="1"><span>Someone else said “done,” so there is no need to verify the class note.</span></label>
+<label class="choice"><input type="radio" name="check" value="2"><span>Compare both required items to the note and confirm the bag is accessible and out of the way.</span></label>
+</fieldset><button type="submit">Reflect on the result</button>
+<p class="feedback" id="feedback3" role="status" aria-live="polite" aria-atomic="true"></p>
+</form>
+<details><summary>Read a verification example</summary><p class="example">The observable result is notebook and pencil ready, in a location Sam can use, with no blocked path. An item count and a safe location matter more than how busy Sam felt.</p></details>
+</section>
+<section class="card" aria-labelledby="rememberTitle">
+<p class="eyebrow">Move 4 of 4 · Remember</p><h2 id="rememberTitle">Leave a useful cue, not a demand</h2>
+<p><strong>Why:</strong> An external cue can reduce what you need to remember. It should be easy for you to notice without exposing private information to other people.</p>
+<p><strong>How:</strong> Choose a written word, picture, tactile marker, voice reminder or existing calendar cue that fits your access needs and daily routine. A helper can assist with consent; no smartphone or paid app is required.</p>
+<form class="js-controls choice-form" data-move="3">
+<fieldset><legend>Which reminder is the most useful to explore?</legend>
+<label class="choice"><input type="radio" name="remember" value="0"><span>Trust memory alone; needing a reminder means failure.</span></label>
+<label class="choice"><input type="radio" name="remember" value="1"><span>Choose a discreet, reachable cue near the usual morning routine; adjust for sight, hearing and access.</span></label>
+<label class="choice"><input type="radio" name="remember" value="2"><span>Post all private details on a public door so they cannot be forgotten.</span></label>
+</fieldset><button type="submit">Reflect on remembering</button>
+<p class="feedback" id="feedback4" role="status" aria-live="polite" aria-atomic="true"></p>
+</form>
+<details><summary>Read a privacy-aware reminder example</summary><p class="example">A short cue like “class bag” in a place Sam can perceive may be enough. It need not include a location, identity, private appointment information or a paid device. If a cue stops working, change it.</p></details>
+</section>
+<section class="card" aria-labelledby="applyTitle">
+<p class="eyebrow">Optional real-life transfer</p><h2 id="applyTitle">Make one adaptable four-move plan</h2>
+<p>Use fictional or generic wording only. The editable fields below help you think, but they are not a promise to complete a task or a substitute for hands-on instruction.</p>
+<div class="js-controls">
+<p class="small" id="count" role="status" aria-live="polite">Moves reflected on: 0 of 4; no score.</p>
+<div class="actions"><button id="load" type="button" disabled>Load example four-move plan</button><button id="reset" class="secondary" type="button">Start over and clear everything</button></div>
+<div class="plan">
+<div><label for="planPrepare">Prepare — what is required and safe?</label><textarea id="planPrepare" maxlength="350" placeholder="Use a generic goal, not names or personal details."></textarea></div>
+<div><label for="planDo">Do — what is the first manageable action?</label><textarea id="planDo" maxlength="350" placeholder="Include an accessible method or choice to pause."></textarea></div>
+<div><label for="planCheck">Check — how will I know it happened?</label><textarea id="planCheck" maxlength="350" placeholder="Name observable evidence, not an invented score."></textarea></div>
+<div><label for="planRemember">Remember — what cue will I notice?</label><textarea id="planRemember" maxlength="350" placeholder="Use a private, accessible cue."></textarea></div>
+</div>
+<div class="actions"><button id="clear" class="secondary" type="button">Clear plan wording only</button></div>
+<p id="planStatus" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+<p class="small">This page does not send, save, analyze or share what you type. The wording lasts only while the page is open; reload or close to discard it. Browser extensions and shared devices may have separate privacy risks. No downloads, notifications or scheduling are created.</p>
+</div>
+<details id="samplePlan"><summary>Read a complete example without using the interactive controls</summary>
+<ol class="example"><li><strong>Prepare:</strong> Confirm notebook and pencil from class note; choose a safe reachable place.</li><li><strong>Do:</strong> Place the two items together; adapt, pause or ask for willing help if needed.</li><li><strong>Check:</strong> Compare with note; confirm both items and no blocked path.</li><li><strong>Remember:</strong> Use an accessible “class bag” reminder near the regular morning routine.</li></ol>
+</details>
+<noscript><p class="note">Interactive reflections and editable fields need JavaScript, but all teaching, explanations, source links and the complete sample plan above are available without it.</p></noscript>
+</section>
+<section class="card" aria-labelledby="sourcesTitle">
+<h2 id="sourcesTitle">Keep learning and verify the source</h2>
+<p>These general ideas draw on <a target="_blank" rel="noopener noreferrer" href="https://www.rcot.co.uk/learn-about-occupational-therapy/ot-advice/lift-up/energy">Royal College of Occupational Therapists: pacing, planning and prioritising (external)</a> and <a target="_blank" rel="noopener noreferrer" href="https://www.cwp.nhs.uk/getting-help/leaflet-library/test-leaflet-library/Ideas-for-coping-with-memory-difficulties">Cheshire and Wirral NHS: everyday memory cues (external)</a>. The four-move teaching example is original; neither source endorses this website.</p>
+<p class="small">General educational strategies only, not a medical program, a test of cognitive function or a claim that every reminder works for everyone. Examples are English-language and may need cultural, linguistic, disability and household adaptations. For personal functional limitations or safety needs, consider appropriately qualified local support. Sources accessed November 12, 2026.</p>
+</section>
+</main>
+<footer><a href="../index.html?area=Daily%20Life%20%26%20Organization">Return to Daily Life &amp; Organization</a> · <a href="../index.html">One Place Home</a></footer>
+<script>
+"use strict";
+document.documentElement.classList.add("has-js");
+const explain=[
+ ["The class note gives a real requirement and the reachable surface makes the action safer.","This spends resources before checking needs; the class note lists only two ordinary items.","A vague all-at-once task increases effort without establishing what the class requires."],
+ ["Risking a fall is not necessary for a household task; choose a safer accessible option or help.","This meets the task without unsafe reaching and keeps another person's help voluntary.","An inaccessible shelf is a barrier to adapt, not proof the class or person has failed."],
+ ["How full a bag looks is not evidence that the notebook and pencil are both there.","A helper's report may be useful but the actual note and items are the concrete evidence.","Both items and a clear accessible route match the original requirement."],
+ ["Using a memory aid is an ordinary option, not a personal failure.","A cue works best when the person can perceive it and it connects to a routine. Keep it discreet.","A public notice can expose unnecessary private information; use a less revealing cue."]
+];
+const reviewed=[false,false,false,false];
+const forms=[...document.querySelectorAll("form.choice-form")];
+const fields=["planPrepare","planDo","planCheck","planRemember"].map(id=>document.getElementById(id));
+const load=document.getElementById("load"), count=document.getElementById("count"), status=document.getElementById("planStatus");
+const example=[
+ "Confirm notebook and pencil from the actual class note; choose a safe reachable place.",
+ "Put the two items together; adapt, pause or ask for willing help if needed.",
+ "Compare with the note; verify both items are ready and the route is clear.",
+ "Use a private, accessible 'class bag' cue where it fits the morning routine."
+];
+function update(){const n=reviewed.filter(Boolean).length;count.textContent="Moves reflected on: "+n+" of 4; no score.";load.disabled=n!==4;}
+forms.forEach((form,i)=>{
+ const feedback=document.getElementById("feedback"+(i+1));
+ form.addEventListener("change",()=>{
+  reviewed[i]=false;feedback.classList.remove("caution");
+  feedback.textContent="Choice changed. Reflect again to update the explanation.";update();
+ });
+ form.addEventListener("submit",event=>{
+  event.preventDefault();const selected=form.querySelector("input[type=radio]:checked");
+  if(!selected){reviewed[i]=false;feedback.classList.add("caution");feedback.textContent="Choose a response—or read the example explanation without selecting.";update();return;}
+  const k=Number(selected.value);if(!Number.isInteger(k)||!explain[i][k])return;
+  reviewed[i]=true;feedback.classList.remove("caution");feedback.textContent=explain[i][k]+" There is no grade; explore another choice if useful.";update();
+ });
+});
+fields.forEach(f=>f.addEventListener("input",()=>{f.dataset.generated="false";status.classList.remove("caution");status.textContent="";}));
+load.addEventListener("click",()=>{
+ if(!reviewed.every(Boolean))return;
+ if(fields.some(f=>f.value.trim()&&f.dataset.generated!=="true")){
+  status.classList.add("caution");status.textContent="You have your own wording. Clear the plan first if you want the example. No text was overwritten.";return;
+ }
+ fields.forEach((f,i)=>{f.value=example[i];f.dataset.generated="true";});
+ status.classList.remove("caution");status.textContent="Example loaded. Edit any part or leave it as a learning sample; nothing is sent.";fields[0].focus();
+});
+document.getElementById("clear").addEventListener("click",()=>{
+ fields.forEach(f=>{f.value="";f.dataset.generated="false";});
+ status.classList.remove("caution");status.textContent="Plan wording cleared. Your four reflections remain.";fields[0].focus();
+});
+document.getElementById("reset").addEventListener("click",()=>{
+ forms.forEach((form,i)=>{form.reset();reviewed[i]=false;const fb=document.getElementById("feedback"+(i+1));fb.textContent="";fb.classList.remove("caution");});
+ fields.forEach(f=>{f.value="";f.dataset.generated="false";});
+ status.classList.remove("caution");status.textContent="All practice and plan wording cleared.";update();forms[0].querySelector("input[type=radio]").focus();
+});
+update();
+</script>
+</body></html>
