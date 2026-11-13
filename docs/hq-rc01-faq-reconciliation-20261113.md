@@ -1,0 +1,12 @@
+# HQ RC-01 — five-area release candidate reconciled with approved FAQ
+
+**Status: DRAFT, unmerged, unpublished, not founder accepted.** Reconstructed on November 13, 2026 Central.
+
+- **Published baseline**: `3da93fc7e754af9e2ca50b6c98ce45734c57b1fc` after approved PR #77 (FAQ, 23/23 deployed bytes, 1366/320 live browser smoke, 688/688 post-merge tests). The approved 30-answer FAQ, About link, and QA remain untouched.
+- **Original source**: [PR #62](https://github.com/ouroneplace/ouroneplace.github.io/pull/62) at exact head `7df917408cf6ccc7ec38825c326988485220b42e`, 753/753 full CI **on the old base only**. Its 18 distinct feature, focused test and draft-document blobs are copied **byte-identically**, not rewritten.
+- **Shared files reconciled**: `index.html` retains approved FAQ and four area-specific entry paths; `scripts/verify_live_site.cjs` retains the FAQ 30-question/10-essential/accordion/Home tests at 1366/320 **and** adds the original five-area smoke; `.github/workflows/verify-live-site.yml` keeps all **23** approved application files including FAQ and monitors **four** additional educational pages exactly once. Proposed manifest = **27 files** on this base, not the historical **26** in #62's older evidence document.
+- **New independent regression:** `tests/hq-five-area-faq-coexistence.spec.cjs` covers approved FAQ plus four area entry and experience journeys at 320/1366 and checks integrity/live smoke preservation.
+- **Quality gate:** Exact integrated-head quick/full tests, static HTML/JS audit, visual reflow, content/source safety and regional review, actual mobile/native AT and founder experience still required. Original #62 green is provenance, not certification of this rebased result.
+- **Search visibility:** four educational pages retain original `noindex,nofollow` flags; if approved for public release, resolve deliberately. Search exclusion does not provide privacy.
+- **Official sources pending real visitor-browser click**: CISA four-ways PDF, CareerOneStop résumé and FTC ReportFraud. Their official indexed/source relevance is established, but retrieval errors/JavaScript shell do not prove human-site failure or click success.
+- **Release authority:** Neither this draft nor #62 nor separate two-area #72 is approved to merge or publish through “next.” Seek a **specific** founder decision after new-head QA, then verify exact Pages deployment, 27/27 byte matches, live desktop/mobile smoke and post-merge full regression. If main moves, rebase and recalculate count.

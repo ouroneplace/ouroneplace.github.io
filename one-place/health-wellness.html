@@ -35,7 +35,7 @@ textarea{resize:vertical;min-height:85px}fieldset{border:0;padding:0;margin:0}
 .hint,.fine{color:#4b6261;font-size:.9rem}.fine{margin-top:14px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
 button{font:inherit;min-height:46px;padding:11px 15px;border:2px solid #086a60;border-radius:10px;background:#087f73;color:white;cursor:pointer;font-weight:750}
-button.secondary{color:#07594f;background:#fff}button:disabled{opacity:.5;cursor:not-allowed}
+button.secondary{color:#07594f;background:#fff}button:disabled{opacity:.5;cursor:not-allowed}.example-starters[hidden]{display:none}
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #9d6824;outline-offset:3px}
 .output{background:#f0faf7;border:1px solid #b4ded3;border-radius:12px;padding:14px;min-height:48px;overflow-wrap:anywhere;white-space:pre-wrap}
 .output[hidden]{display:none}#visitPreview{font:inherit;line-height:1.6;max-height:520px;overflow:auto}
@@ -95,6 +95,19 @@ footer{padding:24px 16px;text-align:center;font-size:.85rem;color:#365c58}
 <section id="habits" class="panel" aria-labelledby="habitsTitle">
 <p class="eyebrow">03 · PRACTICE AN EVERYDAY SKILL</p><h2 id="habitsTitle">Wellness Routine Builder</h2>
 <p>Build one realistic, adjustable routine. This is a personal organization aid—not a fitness prescription or measurement of health.</p>
+<div class="guide" aria-labelledby="routineExamplesTitle">
+<h3 id="routineExamplesTitle">Need a starting idea?</h3>
+<p>Try a fictional example, then change its reminder, small step and gentler option to fit your life. A routine can be paused or changed; no streaks, grades or perfection required.</p>
+<div class="actions example-starters" role="group" aria-label="Load a fictional wellness routine example" hidden>
+<button type="button" class="secondary" data-routine-example="rest">Try a rest example</button>
+<button type="button" class="secondary" data-routine-example="movement">Try a movement example</button>
+<button type="button" class="secondary" data-routine-example="food">Try a food example</button>
+<button type="button" class="secondary" data-routine-example="care">Try a care organization example</button>
+</div>
+<noscript><p class="fine">With JavaScript off, consider a reminder you already know, one manageable action and an easier version for a difficult day.</p></noscript>
+<p class="fine">These are organizing examples, not personal recommendations. Follow your own clinician's activity, diet and fluid guidance when it differs. Choose rest or ask your care team if an example is not suitable.</p>
+<p class="fine">For general background: <a href="https://medlineplus.gov/healthyliving.html" target="_blank" rel="noopener noreferrer">MedlinePlus healthy living guidance (external) ↗</a> and <a href="https://www.cdc.gov/disability-and-health/conditions/physical-activity.html" target="_blank" rel="noopener noreferrer">CDC: physical activity and disability (external) ↗</a>. These are U.S. sources; needs and services vary worldwide.</p>
+</div>
 <form id="habitForm" aria-label="Wellness routine builder" autocomplete="off" novalidate>
 <div class="columns">
 <div><label for="habitTopic">What would you like to practice?</label>
@@ -142,6 +155,29 @@ footer{padding:24px 16px;text-align:center;font-size:.85rem;color:#365c58}
 'use strict';
 const byId=id=>document.getElementById(id);
 const habitForm=byId('habitForm'),habitResult=byId('habitResult'),habitStatus=byId('habitStatus');
+// Fictional, editable prompts: they never select a treatment or prescribe an activity.
+const routineExamples={
+ rest:{topic:'Sleep and rest',cue:'After putting my phone aside in the evening',step:'Make my surroundings a little quieter or more comfortable',gentle:'Take a comfortable pause without trying to force sleep'},
+ movement:{topic:'Gentle movement',cue:'After a usual rest break',step:'Choose a brief movement break that fits my abilities and care advice',gentle:'Rest or ask my care team which movement would fit'},
+ food:{topic:'Food and hydration',cue:'Before planning a meal',step:'Check one food choice against any dietary guidance I follow',gentle:'Write down a food or fluid question for my care team'},
+ care:{topic:'Daily care organization',cue:'After checking today’s calendar',step:'Write down one question or follow-up task for my next care contact',gentle:'Make a short reminder and return to it later'}
+};
+document.querySelector('.example-starters').hidden=false;
+for(const button of document.querySelectorAll('[data-routine-example]')){
+ button.addEventListener('click',()=>{
+  const example=routineExamples[button.dataset.routineExample];
+  if(!example)return;
+  const fields=['habitCue','habitAction','habitFallback'].map(byId);
+  if(fields.some(input=>input.value.trim())&&!window.confirm('Replace your current routine fields with this fictional example?'))return;
+  byId('habitTopic').value=example.topic;
+  byId('habitCue').value=example.cue;
+  byId('habitAction').value=example.step;
+  byId('habitFallback').value=example.gentle;
+  habitResult.textContent='';habitResult.hidden=true;
+  habitStatus.textContent='Fictional example loaded for editing. Review every field before building your routine. Nothing was saved or shared.';
+  byId('habitCue').focus();
+ });
+}
 habitForm.addEventListener('submit',event=>{
  event.preventDefault();
  const cue=byId('habitCue').value.trim(),step=byId('habitAction').value.trim(),gentle=byId('habitFallback').value.trim();
