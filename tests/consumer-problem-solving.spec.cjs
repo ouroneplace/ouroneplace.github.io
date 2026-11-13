@@ -4,6 +4,9 @@ const url='/one-place/consumer-problem-solving.html',cases=['purchase','financia
 test('consumer practice has three fictional cases with practical evidence, questions and correct agency roles',async({page})=>{
  await page.goto(url);
  await expect(page).toHaveTitle(/Consumer Problem-Solving Practice/);
+ await expect(page.locator('#facts')).toBeEnabled();
+ await expect(page.locator('#request')).toBeEnabled();
+ await expect(page.locator('.practice input[type="radio"]:enabled')).toHaveCount(9);
  await expect(page.locator('.case')).toHaveCount(3);await expect(page.locator('.case:visible')).toHaveCount(1);
  for(const id of cases){
   await page.locator('[data-select="'+id+'"]').click();
@@ -132,6 +135,10 @@ test('no-JavaScript view retains all fictional lessons, source links and paper f
  await expect(page.locator('noscript')).toBeVisible();
  expect(await page.locator('noscript').evaluate(el=>el.outerHTML)).toContain('JavaScript is off');
  await expect(page.getByRole('button',{name:'Review my plan'})).toBeDisabled();
+ await expect(page.locator('#facts')).toBeDisabled();
+ await expect(page.locator('#request')).toBeDisabled();
+ await expect(page.locator('.practice input[type="radio"]')).toHaveCount(9);
+ await expect(page.locator('.practice input[type="radio"]:disabled')).toHaveCount(9);
  await expect(page.locator('#scam .official a')).toHaveCount(3);
  const d=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,body:document.body.scrollWidth,win:innerWidth}));
  expect(Math.max(d.doc,d.body)).toBeLessThanOrEqual(d.win+1);
