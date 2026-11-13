@@ -62,6 +62,30 @@ test('canceling case switch preserves editable work; confirming replaces with fi
  await expect(page.locator('#facts')).toHaveValue(/Example Bank/);
  await expect(page.locator('#purchase')).toBeHidden();
 });
+test('case switching protects evidence-only marks and reviewed plans without text edits',async({page})=>{
+ await page.goto(url);
+ const checked=page.locator('#purchase [data-evidence]').first();
+ await checked.check();
+ page.once('dialog',d=>d.dismiss());
+ await page.locator('[data-select="financial"]').click();
+ await expect(page.locator('#purchase')).toBeVisible();
+ await expect(page).toHaveURL(/#purchase$/);
+ await expect(checked).toBeChecked();
+ await checked.uncheck();
+ await page.getByRole('button',{name:'Review my plan'}).click();
+ await expect(page.locator('#planText')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Download reviewed text'})).toBeEnabled();
+ page.once('dialog',d=>d.dismiss());
+ await page.locator('[data-select="financial"]').click();
+ await expect(page.locator('#purchase')).toBeVisible();
+ await expect(page.locator('#planText')).toContainText('A purchase that did not arrive');
+ await expect(page.getByRole('button',{name:'Download reviewed text'})).toBeEnabled();
+ page.once('dialog',d=>d.accept());
+ await page.locator('[data-select="financial"]').click();
+ await expect(page.locator('#financial')).toBeVisible();
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.locator('#facts')).toHaveValue(/Example Bank/);
+});
 test('reset cancel preserves work; reset accept clears checkboxes and reviewed plan',async({page})=>{
  await page.goto(url);
  await page.locator('#purchase [data-evidence]').first().check();
