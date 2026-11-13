@@ -19,6 +19,17 @@ for(const width of sizes){
  });
 }
 
+for(const width of [320,1366]){
+ test('public-release draft allows search indexing and link discovery at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{name:'Everyday Access Check',level:1})).toBeVisible();
+  await expect(page.locator('header nav').getByRole('link',{name:'Aging & Accessibility'})).toHaveAttribute('href','../index.html?area=Aging%20%26%20Accessibility');
+ });
+}
+
 test('320px viewport remains readable with 200% document font and no horizontal overflow',async({page})=>{
  await page.setViewportSize({width:320,height:720});
  await page.goto(url);
