@@ -245,7 +245,22 @@ test('whole-page screenshot and section geometry hold across real browser sizes'
     return {name:el.tagName.toLowerCase(),x:r.left,right:r.right,y:r.top,bottom:r.bottom,height:r.height};
    });
    const buttons=[...document.querySelectorAll('button')].filter(el=>!el.disabled);
+   const brokenNavOrTitleWords=[...document.querySelectorAll('.top nav a,main h1')].flatMap(el=>{
+    const words=[];
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+     for(const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      if(range.getClientRects().length!==1)words.push(match[0]);
+     }
+    }
+    return words;
+   });
    return {
+    brokenNavOrTitleWords,
     viewport:innerWidth,
     rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),
     htmlWidth:document.documentElement.scrollWidth,
@@ -255,6 +270,7 @@ test('whole-page screenshot and section geometry hold across real browser sizes'
     visibleSafetyNote:document.querySelector('.critical').getBoundingClientRect().height>0
    };
   });
+  expect(dims.brokenNavOrTitleWords,JSON.stringify(cfg)).toEqual([]);
   expect(dims.htmlWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
   expect(dims.bodyWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
   expect(dims.visibleSafetyNote,JSON.stringify(cfg)).toBe(true);
