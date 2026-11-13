@@ -3,7 +3,9 @@ const { defineConfig } = require('@playwright/test');
 module.exports = defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  workers: 2,
+  // CI performance experiment: preserve the full suite, test 3 parallel workers.
+  // Revert to 2 if memory pressure or flaky tests increase.
+  workers: process.env.CI ? 3 : 2,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   reporter: [
