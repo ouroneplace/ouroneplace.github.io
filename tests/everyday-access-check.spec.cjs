@@ -11,7 +11,7 @@ for(const width of sizes){
   await expect(page.getByRole('heading',{level:1,name:'Everyday Access Check'})).toBeVisible();
   await expect(page.locator('article.lesson')).toHaveCount(5);
   await expect(page.locator('article.lesson dt')).toHaveCount(30);
-  await expect(page.getByRole('link',{name:'Aging & Accessibility'})).toBeVisible();
+  await expect(page.locator('header nav').getByRole('link',{name:'Aging & Accessibility'})).toBeVisible();
   const measure=await page.evaluate(()=>({width:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
   expect(Math.max(measure.html,measure.body),JSON.stringify(measure)).toBeLessThanOrEqual(measure.width+1);
   expect(errors).toEqual([]);
