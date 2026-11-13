@@ -34,6 +34,34 @@ test('320px viewport remains readable with 200% document font and no horizontal 
  expect(m.headingPx).toBeGreaterThanOrEqual(m.bodyPx);
 });
 
+for(const width of [320,390]){
+ test('200%-text narrow lesson cards keep usable reading width at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:720});
+  await page.goto(url);
+  await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+  const info=await page.evaluate(()=>{
+   const lesson=document.querySelector('article.lesson');
+   const node=document.querySelector('.lead').firstChild;
+   const match=/accommodation/.exec(node.textContent);
+   const range=document.createRange();
+   range.setStart(node,match.index);
+   range.setEnd(node,match.index+match[0].length);
+   return {
+    screen:innerWidth,
+    body:document.body.scrollWidth,
+    html:document.documentElement.scrollWidth,
+    lessonWidth:lesson.getBoundingClientRect().width,
+    paragraphFont:parseFloat(getComputedStyle(lesson.querySelector('dd')).fontSize),
+    introWordRects:[...range.getClientRects()].filter(rect=>rect.width>.5).length
+   };
+  });
+  expect(Math.max(info.body,info.html),JSON.stringify(info)).toBeLessThanOrEqual(info.screen+1);
+  expect(info.lessonWidth,JSON.stringify(info)).toBeGreaterThanOrEqual(260);
+  expect(info.paragraphFont,JSON.stringify(info)).toBeGreaterThanOrEqual(32);
+  expect(info.introWordRects,JSON.stringify(info)).toBe(1);
+ });
+}
+
 test('390px closed support selection has an adjacent, readable full choice',async({page})=>{
  await page.setViewportSize({width:390,height:840});
  await page.goto(url);
