@@ -26,7 +26,7 @@ test('320px viewport remains readable with 200% document font and no horizontal 
  await expect(page.getByLabel('What is making this routine hard?')).toBeVisible();
  const m=await page.evaluate(()=>{
    const h=document.querySelector('h1'),node=h.firstChild,text=node.textContent,range=document.createRange();
-   const spans=[];let at=0;for(const word of text.match(/\\S+/g)){const i=text.indexOf(word,at);range.setStart(node,i);range.setEnd(node,i+word.length);spans.push({word,lineRects:range.getClientRects().length});at=i+word.length;}
+   const spans=[];let at=0;for(const word of text.match(/\S+/g)){const i=text.indexOf(word,at);range.setStart(node,i);range.setEnd(node,i+word.length);spans.push({word,lineRects:range.getClientRects().length});at=i+word.length;}
    return {screen:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth,headingPx:parseFloat(getComputedStyle(h).fontSize),bodyPx:parseFloat(getComputedStyle(document.body).fontSize),spans};
  });
  expect(Math.max(m.html,m.body),JSON.stringify(m)).toBeLessThanOrEqual(m.screen+1);
