@@ -162,6 +162,8 @@ test('primary sources, local limits, and protected feature return paths',async({
   await expect(a).toContainText('external');
  }
  await expect(page.getByText(/911 is used in the U.S./)).toBeVisible();
+ await expect(page.getByRole('link',{name:'UK government: home fire safety, accessible version (external; England)'})).toBeVisible();
+ await expect(page.getByText(/do not apply England-specific rules automatically elsewhere/)).toBeVisible();
  await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
  await expect(page.getByRole('link',{name:'Home Skills alarm teaching'})).toHaveAttribute('href','home-skills.html#skill-29');
 });
