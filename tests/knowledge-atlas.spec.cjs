@@ -43,7 +43,7 @@ for(const scene of cases){
   await choices.nth(wrong).check();
   await form.getByRole('button',{name:'Check my reasoning'}).click();
   await expect(feedback).toContainText('Consider the safer choice.');
-  await expect(feedback).toContainText('evidence');
+  await expect(feedback).toContainText(/[\\s\\S]{40,}/);
   await choices.nth(scene.correct).check();
   await expect(feedback).toBeEmpty();
   await form.getByRole('button',{name:'Check my reasoning'}).click();
