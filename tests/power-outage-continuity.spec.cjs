@@ -26,6 +26,22 @@ test('320px at 200 percent root font has no overflow',async({page})=>{
  expect(Math.max(m.a,m.b),JSON.stringify(m)).toBeLessThanOrEqual(m.w+1);
 });
 
+test('320px enlarged text keeps whole heading words without suppressing zoom',async({page})=>{
+ await page.setViewportSize({width:320,height:720});
+ await page.goto(url);
+ for(const enlarged of [false,true]){
+  await page.evaluate(enlarged=>document.documentElement.style.fontSize=enlarged?'200%':'100%',enlarged);
+  const m=await page.evaluate(()=>{
+   const heading=document.querySelector('h1'),node=heading.firstChild,text=node.textContent,range=document.createRange();
+   return {viewport:innerWidth,scroll:document.documentElement.scrollWidth,bodyScroll:document.body.scrollWidth,rootPx:parseFloat(getComputedStyle(document.documentElement).fontSize),headingPx:parseFloat(getComputedStyle(heading).fontSize),words:[...text.matchAll(/\S+/g)].map(match=>{range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);return {text:match[0],fragments:range.getClientRects().length};})};
+  });
+  expect(m.words.map(w=>w.text)).toEqual(['Power','Outage','Continuity','Check']);
+  expect(m.words.every(w=>w.fragments===1),JSON.stringify(m)).toBe(true);
+  expect(m.headingPx).toBeGreaterThanOrEqual(m.rootPx*1.1);
+  expect(Math.max(m.scroll,m.bodyScroll),JSON.stringify(m)).toBeLessThanOrEqual(m.viewport+1);
+ }
+});
+
 test('every priority yields clear prepare, respond, recover and stop steps',async({page})=>{
  await page.goto(url);
  const cases={
