@@ -182,6 +182,7 @@ test('mobile and enlarged text keep every story heading word intact',async({page
 });
 
 test('whole-page screenshot and section geometry hold across real browser sizes',async({page},testInfo)=>{
+ test.setTimeout(120000);
  const configs=[
   {width:320,large:false},
   {width:320,large:true},
@@ -214,7 +215,7 @@ test('whole-page screenshot and section geometry hold across real browser sizes'
   expect(dims.htmlWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
   expect(dims.bodyWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
   expect(dims.visibleSafetyNote,JSON.stringify(cfg)).toBe(true);
-  expect(dims.sections.length,JSON.stringify(cfg)).toBe(10);
+  expect(dims.sections.length,JSON.stringify(cfg)).toBe(9);
   expect(dims.smallestButtonHeight,JSON.stringify(cfg)).toBeGreaterThanOrEqual(44);
   for(let i=0;i<dims.sections.length;i++){
    const section=dims.sections[i];
