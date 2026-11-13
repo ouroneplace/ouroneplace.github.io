@@ -239,6 +239,31 @@ test('no tracking, network writes, cross-origin loads or stored visitor state',a
  expect(await page.evaluate(()=>({local:Object.keys(localStorage),session:Object.keys(sessionStorage),cookies:document.cookie}))).toEqual({local:[],session:[],cookies:''});
 });
 
+for(const width of [320,1366]){
+ test('accepted care and Aging links work after actual visitor clicks at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  await page.getByRole('link',{name:'Family Handoff Toolkit'}).click();
+  await expect(page).toHaveURL(/\/one-place\/family-handoff\.html$/);
+  await expect(page.getByRole('heading',{level:1,name:'Share the care. Make the next step clear.'})).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{level:1,name:'Everyday Access Check'})).toBeVisible();
+
+  await page.getByRole('link',{name:'Care Navigation Guide'}).click();
+  await expect(page).toHaveURL(/\/one-place\/care-navigation\.html$/);
+  await expect(page.getByRole('heading',{level:1,name:'Care Navigation Guide'})).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{level:1,name:'Everyday Access Check'})).toBeVisible();
+
+  await page.locator('header nav').getByRole('link',{name:'Aging & Accessibility'}).click();
+  await expect(page).toHaveURL(/\/index\.html\?area=Aging%20%26%20Accessibility$/);
+  await expect(page.getByRole('heading',{level:1,name:'Aging & Accessibility'})).toBeVisible();
+  await expect(page.getByText('Find older-adult community resources')).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{level:1,name:'Everyday Access Check'})).toBeVisible();
+ });
+}
+
 test('external evidence and area navigation are explicit and non-invasive',async({page})=>{
  await page.goto(url);
  const resources=page.locator('.source-links a[href^="https://"]');
