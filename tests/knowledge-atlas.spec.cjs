@@ -168,5 +168,5 @@ test('Knowledge Atlas: intentionally downloads a complete printable offline-read
  expect(content).toContain('6. OUR SOLAR SYSTEM AND THE UNIVERSE');
  expect(content).toContain('THREE REASONING PRACTICES');
  expect(content).toContain('November 12, 2026');
- expect(content).toContain('This file will not update itself after download');
+ expect(content).toContain('This guide will not update itself after download');
 });
