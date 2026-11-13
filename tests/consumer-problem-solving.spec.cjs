@@ -44,7 +44,7 @@ test('quiz-only choices and feedback survive canceled case switches and clear on
  await expect(feedback).toContainText('Sharing payment details publicly is unsafe');
  const saved=await feedback.textContent();
  page.once('dialog',d=>{
-  expect(d.message()).toContain('practice choices');
+  expect(d.message()).toContain('quiz answers, evidence marks, or draft');
   d.dismiss();
  });
  await page.locator('[data-select="financial"]').click();
