@@ -165,5 +165,8 @@ test('primary sources, local limits, and protected feature return paths',async({
  await expect(page.getByRole('link',{name:'UK government: home fire safety, accessible version (external; England)'})).toBeVisible();
  await expect(page.getByText(/do not apply England-specific rules automatically elsewhere/)).toBeVisible();
  await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
- await expect(page.getByRole('link',{name:'Home Skills alarm teaching'})).toHaveAttribute('href','home-skills.html#skill-29');
+ await expect(page.getByRole('link',{name:'Home Skills smoke alarm lesson'})).toHaveAttribute('href','home-skills.html#skill-28');
+ await page.goto('/one-place/home-skills.html#skill-28');
+ await expect(page.locator('#skill-28 summary')).toContainText('Test smoke alarms');
+ await expect(page.locator('#skill-29 summary')).toContainText('Check carbon monoxide alarms');
 });
