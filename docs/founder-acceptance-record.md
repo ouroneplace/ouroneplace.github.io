@@ -1,5 +1,14 @@
 # One Place — Founder Acceptance Record
 
+## One Place FAQ — approved content, published November 12, 2026 (Central)
+
+- **Recorded authorization:** [PR #76](https://github.com/ouroneplace/ouroneplace.github.io/pull/76) documents founder approval of the 30-question FAQ draft. This is approval of that bounded content, not acceptance of all One Place life-area curricula or any unrelated draft PR.
+- **Published scope:** New `one-place/faq.html` with ten essentials and 20 additional grouped questions; one homepage About → FAQ link; focused responsive, navigation and answer-count tests. The approved homepage, existing short FAQs, TEAL, lessons and life-area tools remain preserved.
+- **Publication evidence:** PR #76 merged to `main` commit `0e5d20a6f119b73bbf9f349db66134f36a15811a`; [source-head Actions 43360905022](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43360905022) passed **687/687**; [Pages deployment 43361867565](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43361867565) completed successfully; [post-merge Actions 43361868811](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43361868811) passed **687/687** with zero site-audit errors or structure warnings. [Production verification 43361868693](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43361868693) passed 1366/320 existing site smoke and **22/22** then-monitored file bytes. The new FAQ was **not** in that earlier 22-file list or its targeted live smoke: do not imply FAQ-specific byte/browser coverage passed at publication time.
+- **Outstanding QA-only follow-up:** Separate headquarters draft extends the deployed-byte manifest to **23 monitored files** and adds direct FAQ navigation/30-answer/10-essential/accordion/return checks at both 1366 and 320. It requires its own exact-head CI and an **approved merge plus future matching Pages push** to establish actual deployed 23/23; an unpublished draft alone cannot retroactively verify the previous production release.
+- **Preservation rule:** Keep the founder-approved 30 questions, free-access statements, privacy limits, existing homepage layout and all prior accepted experiences unchanged except under specifically scoped future approval.
+
+
 ## Money & Bills v1.0
 
 - **Decision:** Approved by the founder on **November 11, 2026 (Central Time)**.

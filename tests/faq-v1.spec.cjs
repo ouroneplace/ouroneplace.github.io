@@ -36,3 +36,14 @@ test('FAQ links point to existing internal paths and preserve accessibility',asy
  await expect(page.locator('a[target="_blank"]')).toHaveCount(2);
  await expect(page.locator('a[target="_blank"]:not([rel~="noopener"])')).toHaveCount(0);
 });
+
+test('live-release QA includes approved FAQ in exact byte manifest and browser smoke',()=>{
+ const fs=require('node:fs');
+ const workflow=fs.readFileSync('.github/workflows/verify-live-site.yml','utf8');
+ const liveSmoke=fs.readFileSync('scripts/verify_live_site.cjs','utf8');
+ expect((workflow.match(/'one-place\/faq\.html'/g)||[])).toHaveLength(1);
+ expect(liveSmoke).toContain("await goto('/index.html?about#faq')");
+ expect(liveSmoke).toContain("assert.equal(await page.locator('details').count(),30");
+ expect(liveSmoke).toContain("faq_questions:30");
+ expect(liveSmoke).toContain("faq_essentials:10");
+});
