@@ -115,8 +115,15 @@ test('print is deliberate and only available after review',async({page})=>{
  await page.locator('#phase').selectOption('after');
  await page.locator('#support').selectOption('coordinate');
  await page.getByRole('button',{name:'Review my outage step'}).click();
- await page.locator('#printPlan').click();
+ await expect(page.locator('body')).toHaveClass(/print-reviewed/);
+ await page.emulateMedia({media:'print'});
+ await expect(page.getByRole('heading',{name:'Review before using'})).toBeVisible();
+ await expect(page.locator('#skills-title')).toBeHidden();
+ await page.locator('#printPlan').click({force:true});
  expect(await page.evaluate(()=>window.__prints)).toBe(1);
+ await page.locator('#priority').selectOption('communication');
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await page.emulateMedia({media:'screen'});
 });
 
 test('generator scenario supports blank, both unsafe, correct and reset',async({page})=>{
@@ -195,6 +202,7 @@ test('source boundaries and HQ-only navigation are unambiguous',async({page})=>{
  }
  await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
  await expect(page.getByText('911 in the United States')).toBeVisible();
+ await expect(page.getByText(/more than 20 feet from doors, windows and vents/)).toBeVisible();
  await expect(page.getByRole('link',{name:'Family Handoff'})).toHaveAttribute('href','family-handoff.html');
  await expect(page.getByRole('link',{name:'Home Skills emergency supplies lesson'})).toHaveAttribute('href','home-skills.html#skill-30');
 });

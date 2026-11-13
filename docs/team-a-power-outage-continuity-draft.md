@@ -65,3 +65,8 @@ All linked original resources are **U.S.-authored**. Their principles may be use
 6. Integrated-current-head CI, source/privacy/device review and founder authorization must precede any merge. After approval HQ verifies deployed SHA, file bytes, live mobile/desktop smoke and full main regression.
 
 **Founder action: NONE at draft stage.** Project HQ owns integration and release decisions. A future fire/storm guide can be a separate independently testable experience.
+
+
+## Source and print refinement (Nov 12–13, 2026)
+
+Directly revisited all seven official source URLs. CDC CO Poisoning Basics (updated Oct 26, 2026) says portable generators outdoors **more than 20 feet** from doors, windows and vents, never in a garage even if open; the previous “at least 20 feet” phrase was corrected in the page's main warning and practice explanation. The “Print reviewed step” control now uses print-only CSS to hide unrelated lessons and print the selected reviewed outcome rather than every guide; when JavaScript is off, ordinary browser print still includes the complete static teaching and paper worksheet. Focused Playwright now explicitly exercises print media, review invalidation and distance wording. Re-run exact-head QA before treating this edit as verified.
