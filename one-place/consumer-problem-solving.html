@@ -143,6 +143,7 @@ function route(){
   history.replaceState(null,'','#'+selected);say('Case switch canceled. Your draft was preserved.');return;
  }
  setCase(id);
+ document.getElementById(id).focus({preventScroll:true});
 }
 for(const x of document.querySelectorAll('.practice')){
  const b=x.querySelector('[data-check]');b.disabled=false;

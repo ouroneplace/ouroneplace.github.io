@@ -89,6 +89,28 @@ test('case switching protects evidence-only marks and reviewed plans without tex
  await expect(page.locator('#planText')).toBeHidden();
  await expect(page.locator('#facts')).toHaveValue(/Example Bank/);
 });
+test('keyboard case navigation focuses the displayed lesson without discarding a privacy-reviewed plan',async({page})=>{
+ await page.goto(url);
+ const link=page.locator('[data-select="scam"]');
+ await link.focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#scam')).toBeVisible();
+ await expect(page.locator('#scam')).toBeFocused();
+ await page.keyboard.press('Tab');
+ const box=page.locator('#scam [data-evidence]').first();
+ await expect(box).toBeFocused();
+ await page.keyboard.press('Space');await expect(box).toBeChecked();
+ await page.getByRole('button',{name:'Review my plan'}).click();
+ await expect(page.locator('#planText')).toContainText('A suspicious prize message');
+ await page.getByRole('link',{name:'Privacy & limits'}).click();
+ await expect(page.locator('#scam')).toBeVisible();
+ await expect(page.locator('#planText')).toBeVisible();
+ page.once('dialog',d=>d.accept());
+ const second=page.locator('[data-select="financial"]');
+ await second.focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#financial')).toBeFocused();
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.getByRole('button',{name:'Download reviewed text'})).toBeDisabled();
+});
 test('reset cancel preserves work; reset accept clears checkboxes and reviewed plan',async({page})=>{
  await page.goto(url);
  await page.locator('#purchase [data-evidence]').first().check();
