@@ -8,6 +8,7 @@ for(const [key,stage,goal] of [["first","Exploring first role","Prepare for a fi
   const button=page.locator('[data-career-example="'+key+'"]');
   await expect(button).toBeVisible();
   await button.click();
+  await expect(page.locator('#careerForm input:enabled, #careerForm textarea:enabled, #careerForm select:enabled')).toHaveCount(7);
   await expect(page.locator('#careerStage')).toHaveValue(stage);
   await expect(page.locator('#careerGoal')).toHaveValue(goal);
   await expect(page.locator('#careerGoal')).toBeFocused();
@@ -151,7 +152,10 @@ test('Career Readiness: script-free page keeps teaching visible and controls dis
   await expect(page.locator('#reviewCareer')).toBeDisabled();
   await expect(page.locator('#downloadCareer')).toBeDisabled();
   await expect(page.locator('#clearCareer')).toBeDisabled();
+  await expect(page.locator('#careerForm input:disabled, #careerForm textarea:disabled, #careerForm select:disabled')).toHaveCount(7);
+  await expect(page.locator('#careerForm input:enabled, #careerForm textarea:enabled, #careerForm select:enabled')).toHaveCount(0);
   await expect(page.locator('noscript p')).toContainText('Without JavaScript');
+  await expect(page.locator('noscript p')).toContainText('fields and buttons are disabled');
  }finally{await c.close();}
 });
 
