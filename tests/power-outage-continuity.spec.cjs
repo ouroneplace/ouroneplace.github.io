@@ -42,6 +42,56 @@ test('320px enlarged text keeps whole heading words without suppressing zoom',as
  }
 });
 
+for(const width of [320,390]){
+ test('complete selected outage priorities, phases and support are readable at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  for(const id of ['priorityChoice','phaseChoice','supportChoice']){
+   await expect(page.locator('#'+id)).toBeHidden();
+   await expect(page.locator('#'+id)).toBeEmpty();
+  }
+  await page.locator('#priority').selectOption('medicine');
+  await page.locator('#phase').selectOption('during');
+  await page.locator('#support').selectOption('coordinate');
+  const labels={
+   priorityChoice:'Selected priority: Refrigerated medicines or healthcare supplies',
+   phaseChoice:'Selected phase: During an outage: respond',
+   supportChoice:'Selected approach: I need to confirm an arrangement with a person or service'
+  };
+  for(const [id,label] of Object.entries(labels)){
+   const output=page.locator('#'+id);
+   await expect(output).toBeVisible();
+   await expect(output).toHaveText(label);
+   for(const root of ['100%','200%']){
+    await page.evaluate(root=>document.documentElement.style.fontSize=root,root);
+    const m=await output.evaluate(el=>{
+     const b=el.getBoundingClientRect();
+     return {left:b.left,right:b.right,viewport:innerWidth,scroll:el.scrollWidth,client:el.clientWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth};
+    });
+    expect(m.left,JSON.stringify(m)).toBeGreaterThanOrEqual(0);
+    expect(m.right,JSON.stringify(m)).toBeLessThanOrEqual(width+1);
+    expect(m.scroll,JSON.stringify(m)).toBeLessThanOrEqual(m.client+1);
+    expect(Math.max(m.document,m.body),JSON.stringify(m)).toBeLessThanOrEqual(width+1);
+   }
+  }
+  await page.evaluate(()=>document.documentElement.style.fontSize='100%');
+  await page.getByRole('button',{name:'Review my outage step'}).click();
+  await expect(page.locator('#reviewed')).toBeVisible();
+  await page.locator('#priority').selectOption('equipment');
+  await expect(page.locator('#priorityChoice')).toHaveText('Selected priority: Power-dependent equipment or mobility');
+  await expect(page.locator('#reviewed')).toBeHidden();
+  page.once('dialog',d=>d.dismiss());
+  await page.locator('#resetPlan').click();
+  await expect(page.locator('#priorityChoice')).toBeVisible();
+  page.once('dialog',d=>d.accept());
+  await page.locator('#resetPlan').click();
+  for(const id of ['priorityChoice','phaseChoice','supportChoice']){
+   await expect(page.locator('#'+id)).toBeHidden();
+   await expect(page.locator('#'+id)).toBeEmpty();
+  }
+ });
+}
+
 test('every priority yields clear prepare, respond, recover and stop steps',async({page})=>{
  await page.goto(url);
  const cases={

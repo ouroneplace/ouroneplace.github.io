@@ -25,6 +25,7 @@ select{display:block;width:100%;min-width:0;max-width:100%;padding:11px 13px;fon
 button{font:inherit;font-weight:750;color:white;background:#07796d;border:2px solid #07796d;border-radius:9px;min-height:44px;padding:10px 15px;max-width:100%;cursor:pointer}
 button.secondary{background:white;color:#075d55}button:disabled{opacity:.55;cursor:not-allowed}
 .status{min-height:24px;color:#0c6058;font-weight:700}
+.selected-choice{display:block;margin:7px 0 10px;padding:9px 12px;border-left:4px solid #07796d;border-radius:7px;background:#f1faf6;font-weight:650;white-space:normal;overflow-wrap:anywhere}
 [hidden]{display:none!important}
 .output{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #9bcfc3;border-radius:10px;background:#f1faf6;padding:14px}
 .lesson{border:1px solid #cedfd9;border-radius:12px;padding:16px;margin:14px 0;background:#fbfefd}
@@ -64,13 +65,13 @@ footer{background:#dfeee8;text-align:center;padding:18px 16px}
 <option value="communication">Alerts, communication and support contact</option>
 <option value="people">Accessible exit or backup place to go</option>
 <option value="pets">Pets, service animals or household dependents</option>
-</select></div>
+</select><output id="priorityChoice" for="priority" class="selected-choice" aria-live="polite" hidden></output></div>
 <div><label for="phase">When is this plan for?</label><select id="phase" required>
 <option value="">Choose a phase</option>
 <option value="before">Before an outage: prepare</option>
 <option value="during">During an outage: respond</option>
 <option value="after">After power returns: check</option>
-</select></div>
+</select><output id="phaseChoice" for="phase" class="selected-choice" aria-live="polite" hidden></output></div>
 </div>
 <label for="support">Which approach fits right now?</label>
 <select id="support" required>
@@ -78,7 +79,7 @@ footer{background:#dfeee8;text-align:center;padding:18px 16px}
 <option value="check">I can safely check or prepare an item</option>
 <option value="coordinate">I need to confirm an arrangement with a person or service</option>
 <option value="stop">I must pause and seek urgent or qualified help</option>
-</select>
+</select><output id="supportChoice" for="support" class="selected-choice" aria-live="polite" hidden></output>
 <p class="small">There is no score. Choosing to ask for help is a responsible outcome. This planner does not confirm equipment capacity, medication safety or access to an evacuation service.</p>
 <div class="actions interactive-only"><button type="submit">Review my outage step</button><button type="button" id="resetPlan" class="secondary">Clear my choices</button><button type="button" id="printPlan" class="secondary" disabled>Print reviewed step</button></div>
 <p class="status" id="planStatus" role="status" aria-live="polite">No plan saved or sent.</p>
@@ -178,7 +179,9 @@ const supports={
 };
 const form=$('planForm'),status=$('planStatus'),preview=$('preview'),result=$('reviewed'),print=$('printPlan');
 const invalidate=message=>{document.body.classList.remove('print-reviewed');result.hidden=true;preview.textContent='';print.disabled=true;status.textContent=message;};
-['priority','phase','support'].forEach(id=>$(id).addEventListener('change',()=>invalidate('Selection changed. Review the revised step before printing.')));
+const syncChoice=id=>{const select=$(id),output=$(id+'Choice'),kind={priority:'priority',phase:'phase',support:'approach'}[id];output.textContent=select.value?'Selected '+kind+': '+select.selectedOptions[0].textContent:'';output.hidden=!select.value;};
+['priority','phase','support'].forEach(id=>$(id).addEventListener('change',()=>{invalidate('Selection changed. Review the revised step before printing.');syncChoice(id);}));
+['priority','phase','support'].forEach(syncChoice);
 form.addEventListener('submit',event=>{
  event.preventDefault();
  for(const id of ['priority','phase','support'])if(!$(id).value){invalidate('Choose a priority, phase and approach.');$(id).focus();return;}
@@ -188,7 +191,7 @@ form.addEventListener('submit',event=>{
 });
 $('resetPlan').addEventListener('click',()=>{
  if(!confirm('Clear choices and reviewed step on this page?')){status.textContent='Clear canceled. Your choices remain.';return;}
- form.reset();invalidate('Choices cleared. No information was uploaded or stored.');
+ form.reset();['priority','phase','support'].forEach(syncChoice);invalidate('Choices cleared. No information was uploaded or stored.');
 });
 print.addEventListener('click',()=>{if(!result.hidden)window.print();});
 $('checkDecision').addEventListener('click',()=>{
