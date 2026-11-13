@@ -288,3 +288,69 @@ for(const width of [320,1366]){
   await expect(page.locator('#caregiving')).toBeVisible();
  });
 }
+
+test('Veterans eight pathways render complete pages at six phone, zoom and desktop settings',async({page})=>{
+ test.setTimeout(180000);
+ const folder='test-results/team-b-veterans-visual';
+ fs.mkdirSync(folder,{recursive:true});
+ const sizes=[
+  {w:320,h:740,large:false},
+  {w:390,h:780,large:false},
+  {w:1366,h:900,large:false},
+  {w:1920,h:960,large:false},
+  {w:320,h:740,large:true},
+  {w:390,h:780,large:true}
+ ];
+ for(const v of sizes){
+  await page.setViewportSize({width:v.w,height:v.h});
+  await page.goto(url);
+  if(v.large)await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+  for(const id of topics){
+   await page.locator('[data-select="'+id+'"]').click();
+   await expect(page.locator('#'+id)).toBeVisible();
+   const result=await page.evaluate(()=>{
+    const selectors=['header','main > .hero','main > aside.note','main > section.panel','footer'];
+    const blocks=selectors.flatMap(q=>[...document.querySelectorAll(q)]).map(el=>{
+     const r=el.getBoundingClientRect();
+     return {name:el.id||el.getAttribute('aria-labelledby')||el.className||el.tagName,left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+    }).sort((a,b)=>a.top-b.top);
+    const broken=[];
+    for(const el of document.querySelectorAll('nav.mainnav a,.choices a,h1,h2,h3,h4,.controls button,.eyebrow')){
+     if(!el.getClientRects().length)continue;
+     const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let node;
+     while((node=walker.nextNode())){
+      const re=/[A-Za-z]{4,}/g;let m;
+      while((m=re.exec(node.textContent))){
+       const range=document.createRange();range.setStart(node,m.index);range.setEnd(node,m.index+m[0].length);
+       if(range.getClientRects().length>1)broken.push(el.tagName+':'+m[0]);
+      }
+     }
+    }
+    const buttons=[...document.querySelectorAll('.controls button:not(:disabled)')].map(el=>({label:el.textContent.trim(),height:el.getBoundingClientRect().height}));
+    return {blocks,broken,buttons,width:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewport:innerWidth,active:document.querySelector('.path:not([hidden])')?.id,root:parseFloat(getComputedStyle(document.documentElement).fontSize),limit:document.querySelector('main > aside.note')?.textContent||''};
+   });
+   expect(result.active).toBe(id);
+   expect(result.blocks,'Page section count').toHaveLength(9);
+   expect(result.width,'Side-scroll '+JSON.stringify({v,id,result})).toBeLessThanOrEqual(result.viewport+1);
+   expect(result.broken,'Fragmented words '+JSON.stringify({v,id,broken:result.broken})).toEqual([]);
+   expect(result.limit).toContain('United States only');
+   if(v.large)expect(result.root).toBeGreaterThanOrEqual(32);
+   for(let i=0;i<result.blocks.length;i++){
+    const b=result.blocks[i];
+    expect(b.left,'Left cropping '+JSON.stringify({v,id,b})).toBeGreaterThanOrEqual(-1);
+    expect(b.right,'Right cropping '+JSON.stringify({v,id,b})).toBeLessThanOrEqual(result.viewport+1);
+    if(i)expect(b.top,'Overlapping blocks '+JSON.stringify({v,id,b,prior:result.blocks[i-1]})).toBeGreaterThanOrEqual(result.blocks[i-1].bottom-1);
+   }
+   for(const b of result.buttons)expect(b.height,'Small active control '+JSON.stringify({v,id,b})).toBeGreaterThanOrEqual(44);
+   console.log('VETERANS_PAGE_GEOMETRY',JSON.stringify({viewport:v.w,enlarged:v.large,path:id,blocks:result.blocks.length,split:result.broken.length,documentWidth:result.width,buttons:result.buttons.length}));
+  }
+  await page.getByRole('button',{name:'Review my preparation plan'}).click();
+  await expect(page.locator('#planText')).toContainText('A VA decision I disagree with');
+  const image=folder+'/veterans-'+v.w+(v.large?'-200pct':'-normal')+'.png';
+  await page.screenshot({path:image,fullPage:true,animations:'disabled'});
+  const png=fs.readFileSync(image);
+  expect(png.subarray(0,8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(png.readUInt32BE(16)).toBe(v.w);
+  expect(png.readUInt32BE(20)).toBeGreaterThanOrEqual(v.h);
+ }
+});
