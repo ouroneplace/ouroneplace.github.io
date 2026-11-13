@@ -230,6 +230,76 @@ test('all seven task section headings keep whole words at 200 percent mobile tex
  }
 });
 
+test('complete daily-task page produces measured full screenshots at phone and desktop sizes',async({page},testInfo)=>{
+ test.setTimeout(120000);
+ const variants=[
+  {width:320,large:false},{width:320,large:true},
+  {width:390,large:false},{width:390,large:true},
+  {width:1366,large:false},{width:1920,large:false}
+ ];
+ for(const cfg of variants){
+  await page.setViewportSize({width:cfg.width,height:900});
+  await page.goto(route);
+  if(cfg.large)await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  const geometry=await page.evaluate(()=>{
+   const blocks=[...document.querySelectorAll('main > header, main > .steps, main > section.card, footer')];
+   const positions=blocks.map((el,i)=>{
+    const r=el.getBoundingClientRect();
+    return {i,kind:el.tagName.toLowerCase(),left:r.left,right:r.right,top:r.top,bottom:r.bottom,height:r.height};
+   });
+   const buttons=[...document.querySelectorAll('button')].filter(el=>!el.disabled&&getComputedStyle(el).display!=='none');
+   const words=[...document.querySelectorAll('.top nav a, main h1')].flatMap(el=>{
+    const result=[];
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+     for(const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)){
+      const range=document.createRange();
+      range.setStart(node,match.index);
+      range.setEnd(node,match.index+match[0].length);
+      result.push({word:match[0],fragments:range.getClientRects().length});
+     }
+    }
+    return result;
+   });
+   return {
+    rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),
+    htmlWidth:document.documentElement.scrollWidth,
+    bodyWidth:document.body.scrollWidth,
+    positions,
+    brokenWords:words.filter(w=>w.fragments!==1),
+    minButtonHeight:Math.min(...buttons.map(b=>b.getBoundingClientRect().height)),
+    safetyNoteVisible:document.querySelector('.note').getBoundingClientRect().height>0
+   };
+  });
+  expect(geometry.positions.length,JSON.stringify(cfg)).toBe(10);
+  expect(geometry.safetyNoteVisible,JSON.stringify(cfg)).toBe(true);
+  expect(geometry.brokenWords,JSON.stringify(cfg)).toEqual([]);
+  expect(geometry.htmlWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
+  expect(geometry.bodyWidth,JSON.stringify(cfg)).toBeLessThanOrEqual(cfg.width+1);
+  expect(geometry.minButtonHeight,JSON.stringify(cfg)).toBeGreaterThanOrEqual(44);
+  if(cfg.large)expect(geometry.rootFont).toBeGreaterThanOrEqual(32);
+  for(let i=0;i<geometry.positions.length;i++){
+   const block=geometry.positions[i];
+   expect(block.height,JSON.stringify({cfg,block})).toBeGreaterThan(20);
+   expect(block.left,JSON.stringify({cfg,block})).toBeGreaterThanOrEqual(-1);
+   expect(block.right,JSON.stringify({cfg,block})).toBeLessThanOrEqual(cfg.width+1);
+   if(i>0)expect(block.top,JSON.stringify({cfg,block})).toBeGreaterThanOrEqual(geometry.positions[i-1].bottom-1);
+  }
+  const screenshot=await page.screenshot({fullPage:true,animations:'disabled'});
+  expect(screenshot.subarray(0,8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(screenshot.readUInt32BE(16),JSON.stringify(cfg)).toBe(cfg.width);
+  expect(screenshot.readUInt32BE(20),JSON.stringify(cfg)).toBeGreaterThanOrEqual(900);
+  const label=cfg.width+(cfg.large?'-200-percent':'-normal');
+  await testInfo.attach('daily-task-full-'+label+'.png',{body:screenshot,contentType:'image/png'});
+  console.log('DAILY_PAGE_GEOMETRY '+JSON.stringify({
+   label,sourceRoute:route,rootFont:geometry.rootFont,blocks:geometry.positions.length,
+   scrollWidth:geometry.htmlWidth,pngHeight:screenshot.readUInt32BE(20),
+   minButtonHeight:geometry.minButtonHeight,brokenNavAndH1Words:geometry.brokenWords.length
+  }));
+ }
+});
+
 test('keyboard path and assistive labeling are provided',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
