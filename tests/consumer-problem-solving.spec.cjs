@@ -215,3 +215,37 @@ test('external sources are official verified HTTPS with safe link isolation',asy
  }
  await expect(page.locator('#limits')).toContainText('not pause all legal clocks');
 });
+
+for(const width of [320,390]){
+ test('consumer label words remain intact with 200 percent text at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:780});await page.goto(url);
+  await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+  for(const id of cases){
+   await page.locator('[data-select="'+id+'"]').click();
+   await expect(page.locator('#'+id)).toBeVisible();
+   const result=await page.evaluate(()=>{
+    const broken=[];
+    for(const el of document.querySelectorAll('h1,h2,h3,h4,.routes a,.actions button,.practice legend,.practice label,.fieldrow label,.eyebrow')){
+     if(el.getClientRects().length===0)continue;
+     const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let node;
+     while((node=walker.nextNode())){
+      const words=/[A-Za-z]{4,}/g;let m;
+      while((m=words.exec(node.textContent))){
+       const range=document.createRange();range.setStart(node,m.index);range.setEnd(node,m.index+m[0].length);
+       if(range.getClientRects().length>1)broken.push(el.tagName.toLowerCase()+': '+m[0]);
+      }
+     }
+    }
+    return {broken,documentWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),viewport:innerWidth,bodyFont:parseFloat(getComputedStyle(document.body).fontSize),h1Font:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize)};
+   });
+   expect(result.broken,'Mid-word label breaks in '+id+': '+JSON.stringify(result.broken)).toEqual([]);
+   expect(result.documentWidth).toBeLessThanOrEqual(result.viewport+1);
+   expect(result.bodyFont).toBeGreaterThanOrEqual(32);
+   expect(result.h1Font).toBeGreaterThan(result.bodyFont);
+  }
+  await page.getByRole('button',{name:'Review my plan'}).click();
+  await expect(page.locator('#planText')).toContainText('A suspicious prize message');
+  const overflow=await page.evaluate(()=>Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+ });
+}
