@@ -1,0 +1,71 @@
+# Team A — Home Fire Escape Rehearsal v1 · source, QA and HQ handoff
+
+**State:** DRAFT / unmerged / unpublished / not founder accepted.
+**Date:** 12 November 2026 (Central), based on verified main `2b2a32ed3a33de82af8ec96fa788b9f8045eb776`.
+**Owner and category:** Team A, existing Emergencies & Preparedness life area. No new catalog entry or area.
+**Branch:** `team-a/fire-escape-rehearsal-20261112`.
+**Exact new files:** `one-place/home-fire-escape-rehearsal.html`, `tests/home-fire-escape-rehearsal.spec.cjs`, `docs/team-a-home-fire-escape-rehearsal-draft.md`.
+
+## Distinct, useful visitor outcome
+
+One visitor can recognize a fire escape or warning barrier, identify a possible safe preparation action, explain a stop/seek-professional boundary, practice a fictional smoky-hallway decision, and use a no-JS paper plan. There is no live emergency triage or fire safety certification.
+
+The current published Emergencies & Preparedness catalog has a generic downloadable action kit but lacks an inclusive first-party *escape route + alarm + meeting point* teaching and practice workflow. This is distinct from:
+- Accepted `one-place/home-skills.html` smoke/CO alarm maintenance and emergency supplies teaching, unchanged.
+- Draft Team A PR #70 power outage continuity; no outage planning duplicated.
+- Draft Team A PR #67 everyday non-disaster access barriers; no clinic navigation, handoff or physical assessment duplicated.
+- Draft PR #62 Wellness and Support Skills; not merged or modified.
+
+**Important real-fire boundary:** Do not practice if smoke or fire is present. Follow current local emergency responders and building-specific strategy. If safe exit is available, leave and stay out. If trapped, call emergency services, report your location and follow their guidance. No risky stairs/transfers, unsafe window trials, disabling alarms, or re-entry for pets. US 911 and UK 999 labels are not universal response numbers.
+
+## What is implemented
+
+- Five static lessons: two usable exits and outside meeting point; disability and mobility accommodations; alerts for hearing/sensory differences; dependents/pets; actual building fire strategy. Each explicitly covers WHY, BEFORE, PRACTICE, VERIFY, COMMON MISTAKE and STOP/HELP.
+- Three non-sensitive selectors create a reviewed preparation note with concern-specific action/check/stop, setting-specific caution and chosen next approach. No name, location, diagnosis, phone, tracking or identification data. It is not a promise of a safe route, equipment or rescue.
+- Changing any select invalidates the reviewed note and disables printing; reset asks before deleting work. After review, print-only CSS hides the rest of the page from the reviewed-step printout. Native browser print without JS prints the full learning and paper worksheet.
+- Fictional alarm/smoky-hallway scenario: unsafe rush into smoke, safe leave/report/stay-out, unsafe wait-for-app; distinct corrective feedback, reset, no-JS explanation. This is safe reasoning practice, not a test of real behavior.
+- Paper prompts: alerts, routes, meeting point, preferred accommodations, assistance and backup, building strategy, emergency contact. No account, third-party script, remote storage, secret uploads, medical records, or synthetic scores.
+
+## Original evidence, retrieved/checked Nov 12, 2026
+
+1. [U.S. Fire Administration — Home Fire Escape Plans](https://www.usfa.fema.gov/prevention/home-fires/prepare-for-fire/home-fire-escape-plans/). USFA recommends a sketch with doors/windows, two ways out where possible, a clear route, external meeting point, and realistic household practice. Actual response and high-rise strategies differ; USFA high-rise text warns against ordinary elevators except as directed by firefighters.
+2. [U.S. Fire Administration — Fire Safety for People with Disabilities](https://www.usfa.fema.gov/prevention/home-fires/at-risk-audiences/people-with-disabilities/). Inclusive warnings/alarms (vibration/visual signals), route choice and ability-sensitive plans. These are educational suggestions, not an individual safety certification.
+3. [UK Government — Fire Safety in the Home (accessible)](https://www.gov.uk/government/publications/make-your-home-safe-from-fire/fire-safety-in-the-home-accessible-version). Home escape and smoke warnings; local UK emergency instructions differ from US.
+4. [England Government — Residential PEEPs, Guidance for Responsible Persons](https://www.gov.uk/government/publications/residential-personal-emergency-evacuation-plans-residential-peeps/residential-peeps-guidance-for-responsible-persons). Updated 6 April 2026. A building-specific, consent-based accommodation process exists for certain buildings and residents in **England only**. Do not invent universal legal rights, building eligibility, fire strategies or equipment.
+5. [Texas Department of Insurance — Evacuating Pets Safely](https://www.tdi.texas.gov/blog/evacuating-your-pets-safely.html). May 4, 2026: pets in an escape plan, but do not re-enter during an actual fire; tell responders if animals or people remain inside.
+
+We paraphrase short points and avoid claiming professional validation. International/local rules, equipment, consent and responder capacity must be verified with the actual local organization.
+
+## Twelve life-area quality lenses
+
+1. **Entry**: use plain first-person barrier choices or static guidance without special prompt.
+2. **Map**: planning, safe rehearsal, actual emergency limits, after-event responder contact; bounded to fire escape.
+3. **Outcome**: context-based reviewed note, decision practice and paper rehearsal.
+4. **Teach**: six named teaching elements in each of five lessons.
+5. **Safety**: clear current-danger priority, smoke, stairs, transfers, alarms, pets, trapped callers, building strategies; qualified help boundaries.
+6. **Evidence**: five official sources, date and jurisdiction stated.
+7. **Truth**: educational draft, no rescue, inspection, guarantee, medical/legal determination, or live-alert service.
+8. **Navigation**: direct standalone page links to existing Emergency area and home and accepted Home Skills alarm teaching; HQ to add source-area entry.
+9. **Privacy**: only non-identifying selects and fictional radios; no storage, writes, tracking, third-party scripts or silent export. Explicit print choice.
+10. **Accessibility**: keyboard-native controls, skip link, focus, status updates, low reading load, reduced motion, 320/390/1366/1920 responsive design and no-JS static/paper alternative. Actual screen reader and physical-access checks remain unverified.
+11. **States**: blank/partial, five concerns × three settings, safe next-step choices, edited invalidation, cancel/confirm reset, print gate, quiz blank/wrong/correct/reset and no-JS.
+12. **Proof**: exact-head automated results, real visual/device tests, source accuracy and HQ integrated/live QA required before release. Green CI is not clinical validation or founder acceptance.
+
+## QA: exact commands and truthful status
+
+- `npm run test:quick`: migration, static audit and syntax (must report actual completed outcome).
+- `npx playwright test tests/home-fire-escape-rehearsal.spec.cjs`: feature-only suite.
+- `npm test`: full exact-head current source PR, including all approved work.
+- Focused test file targets 320/390/1366/1920 widths, 320 with 200% root text, all 15 concern/settings combinations, blank/partial and edited states, reset confirm/cancel, dedicated print-only plan, correct and unsafe choices, keyboard, no-JS, network/privacy and source links.
+- At authoring: source scripts and test JS parse (static) and diff scope to be verified; **automated browser/CI, actual visual, VoiceOver/TalkBack/ChromeVox and first-time comprehension are not yet claimed passed**. Any new code head invalidates earlier CI. No actual home fire escape competence can be established by automated tests.
+
+## HQ-only integration instructions
+
+1. Add one targeted link within the existing `?area=Emergencies%20%26%20Preparedness` page: `href="one-place/home-fire-escape-rehearsal.html"`, label **Home Fire Escape Rehearsal — accessible exits and alerts**. Do **not** create another area or original catalog card, and do not remove its existing generic kit, Housing Home Skills or PR #70.
+2. Verify Area return `../index.html?area=Emergencies%20%26%20Preparedness`, One Place home and browser Back.
+3. Add desktop 1366 and mobile 320 smoke: open from Emergency area, select `mobility`, `shared`, `specialist`; review stop/help; change a choice to invalidate; attempt the smoky-hallway practice; navigate Home/Back.
+4. Add `one-place/home-fire-escape-rehearsal.html` exactly once to the HQ exact Pages-file-byte manifest, **after** reconciling the actual future integration head. PR #62 remains frozen; do not silently add this feature to it.
+5. Decide public-indexability from draft `noindex,nofollow` only as part of an explicitly approved publication. Keep other shared files/integration and CI decisions HQ-owned.
+6. Require the exact integrated candidate head to pass full QA and visual/manual checks, then seek specific founder authorization. **No merge or publication** without it. After approval HQ verifies exact Pages SHA, file bytes, mobile/desktop smoke and main regression.
+
+**Founder action at this stage: NONE.** This is an independently scoped draft for HQ intake, not an invitation for repeated founder testing.
