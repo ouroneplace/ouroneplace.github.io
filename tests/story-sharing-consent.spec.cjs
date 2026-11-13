@@ -1,0 +1,184 @@
+const {test,expect}=require('@playwright/test');
+const route='/one-place/story-sharing-consent.html';
+async function reflect(page,step,choice){
+ const form=page.locator('form[data-step="'+step+'"]');
+ await form.locator('input[value="'+choice+'"]').check();
+ await form.getByRole('button',{name:/Reflect on/}).click();
+}
+
+test('three consent moves lead to an optional editable invitation',async({page})=>{
+ await page.goto(route);
+ await expect(page.getByRole('heading',{level:1,name:'Stories Are Gifts, Not Obligations'})).toBeVisible();
+ await expect(page.locator('#load')).toBeDisabled();
+ await reflect(page,0,1);await reflect(page,1,0);await reflect(page,2,2);
+ await expect(page.locator('#progress')).toContainText('3 of 3');
+ await expect(page.locator('#load')).toBeEnabled();
+ await page.locator('#load').click();
+ await expect(page.locator('#draft')).toHaveValue(/I would like to make private written notes/);
+ await page.locator('#draft').fill('A kind fictional invitation without pressure');
+ await expect(page.locator('#draft')).toHaveValue('A kind fictional invitation without pressure');
+});
+
+test('nine options receive individualized reasoning, not a score',async({page})=>{
+ await page.goto(route);
+ const excerpts=[
+  ['without agreement','freedom to refuse','Guilt is pressure'],
+  ['honors the limit','overrides Morgan','mislabeled as Morgan'],
+  ['public social post','identifying details','exact words']
+ ];
+ for(let i=0;i<3;i++){
+  for(let j=0;j<3;j++){
+   await reflect(page,i,j);
+   await expect(page.locator('#feedback'+(i+1))).toContainText(excerpts[i][j]);
+   await expect(page.locator('#feedback'+(i+1))).toContainText('not a grade');
+  }
+ }
+});
+
+test('blank choice offers accessible explanation and no completion',async({page})=>{
+ await page.goto(route);
+ await page.locator('form[data-step="1"] button[type=submit]').click();
+ await expect(page.locator('#feedback2')).toContainText('Choose a response');
+ await expect(page.locator('#feedback2')).toHaveClass(/warn/);
+ await expect(page.locator('#progress')).toContainText('0 of 3');
+ await expect(page.locator('#load')).toBeDisabled();
+});
+
+test('changed selection retracts stale reflection until renewed',async({page})=>{
+ await page.goto(route);
+ for(let i=0;i<3;i++)await reflect(page,i,0);
+ await expect(page.locator('#load')).toBeEnabled();
+ await page.locator('form[data-step="2"] input[value="2"]').check();
+ await expect(page.locator('#feedback3')).toContainText('Choice changed');
+ await expect(page.locator('#progress')).toContainText('2 of 3');
+ await expect(page.locator('#load')).toBeDisabled();
+ await page.locator('form[data-step="2"] button[type=submit]').click();
+ await expect(page.locator('#feedback3')).toContainText('exact words');
+ await expect(page.locator('#progress')).toContainText('3 of 3');
+});
+
+test('a visitor can draft first; examples never overwrite personal wording',async({page})=>{
+ await page.goto(route);
+ await page.locator('#draft').fill('My own fictional wording');
+ for(let i=0;i<3;i++)await reflect(page,i,0);
+ await page.locator('#load').click();
+ await expect(page.locator('#draft')).toHaveValue('My own fictional wording');
+ await expect(page.locator('#draftStatus')).toContainText('nothing was overwritten');
+ await page.locator('#clear').click();
+ await expect(page.locator('#draft')).toHaveValue('');
+ await expect(page.locator('#progress')).toContainText('3 of 3');
+ await page.locator('#load').click();
+ await expect(page.locator('#draft')).toHaveValue(/neighbors/);
+ await page.locator('#draft').fill('I can edit loaded example without losing it');
+ await page.locator('#load').click();
+ await expect(page.locator('#draft')).toHaveValue('I can edit loaded example without losing it');
+});
+
+test('clear invitation does not erase reflections; full reset does',async({page})=>{
+ await page.goto(route);
+ for(let i=0;i<3;i++)await reflect(page,i,1);
+ await page.locator('#load').click();
+ await page.locator('#clear').click();
+ await expect(page.locator('#draft')).toHaveValue('');
+ await expect(page.locator('#load')).toBeEnabled();
+ await page.locator('#draft').fill('Temporary invitation');
+ await page.locator('#reset').click();
+ await expect(page.locator('form.practice input:checked')).toHaveCount(0);
+ for(const n of [1,2,3])await expect(page.locator('#feedback'+n)).toBeEmpty();
+ await expect(page.locator('#draft')).toHaveValue('');
+ await expect(page.locator('#progress')).toContainText('0 of 3');
+ await expect(page.locator('#load')).toBeDisabled();
+ await expect(page.locator('form[data-step="0"] input[value="0"]')).toBeFocused();
+});
+
+test('practice never sends or stores written words',async({page})=>{
+ const remote=[];
+ page.on('request',req=>{if(!req.url().startsWith('http://127.0.0.1:8765/'))remote.push(req.url());});
+ await page.goto(route);
+ for(let i=0;i<3;i++)await reflect(page,i,2);
+ await page.locator('#load').click();
+ await page.locator('#draft').fill('Secret fictional phrase that must disappear');
+ expect(remote).toEqual([]);
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length}))).toEqual({local:0,session:0});
+ await page.reload();
+ await expect(page.locator('#draft')).toHaveValue('');
+ await expect(page.locator('form.practice input:checked')).toHaveCount(0);
+ await expect(page.locator('#load')).toBeDisabled();
+});
+
+test('external ethical sources are opt-in and local links resolve',async({page})=>{
+ await page.goto(route);
+ const external=page.locator('a[href^="https://"]');
+ await expect(external).toHaveCount(3);
+ for(const a of await external.all()){
+  await expect(a).toHaveAttribute('rel',/noopener noreferrer/);
+  await expect(a).toHaveAttribute('target','_blank');
+  await expect(a).toContainText('(external)');
+ }
+ for(const path of ['../index.html','../human-literacy/','../index.html?area=Creativity%20%26%20Legacy']){
+  const res=await page.request.get(new URL(path,page.url()).toString());
+  expect(res.status(),path).toBe(200);
+ }
+ await page.getByRole('link',{name:'Creativity & Legacy area'}).click();
+ await expect(page.getByRole('heading',{level:1,name:'Creativity & Legacy',exact:true})).toBeVisible();
+});
+
+for(const width of [320,390,1366,1920]){
+ test('responsive reflow and usable practice at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+  await reflect(page,0,1);
+  await expect(page.locator('#feedback1')).toContainText('freedom to refuse');
+ });
+}
+
+test('200 percent enlarged text at 320px does not overflow',async({page})=>{
+ await page.setViewportSize({width:320,height:900});
+ await page.goto(route);
+ await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ await reflect(page,1,0);
+ await expect(page.locator('#feedback2')).toContainText('honors the limit');
+ await expect(page.locator('#draft')).toBeVisible();
+});
+
+test('keyboard order, focus, semantic radio groups and live updates work',async({page})=>{
+ await page.goto(route);
+ await page.keyboard.press('Tab');
+ await expect(page.locator('.skip')).toBeFocused();
+ const first=page.locator('form[data-step="0"] input[value="1"]');
+ await first.focus();await page.keyboard.press('Space');
+ await expect(first).toBeChecked();
+ await page.locator('form[data-step="0"] button[type=submit]').focus();await page.keyboard.press('Enter');
+ await expect(page.locator('#feedback1')).toContainText('freedom to refuse');
+ await expect(page.locator('#feedback1')).toHaveAttribute('role','status');
+ await expect(page.locator('fieldset legend')).toHaveCount(3);
+ await expect(page.locator('label[for="draft"]')).toHaveCount(1);
+ await expect(page.locator('#draft')).toHaveAttribute('maxlength','800');
+});
+
+test('reducing motion still permits practice without animation',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.goto(route);
+ await reflect(page,2,2);
+ await expect(page.locator('#feedback3')).toContainText('exact words');
+});
+
+test.describe('no JavaScript',()=>{
+ test.use({javaScriptEnabled:false});
+ test('all teaching, scenario explanations, sample and sources are readable',async({page})=>{
+  await page.goto(route);
+  await expect(page.getByRole('heading',{level:1,name:'Stories Are Gifts, Not Obligations'})).toBeVisible();
+  await expect(page.locator('form.practice')).toHaveCount(3);
+  await expect(page.locator('form.practice').first()).toBeHidden();
+  await expect(page.locator('#draft')).toBeHidden();
+  await page.locator('section[aria-labelledby="inviteTitle"] summary').click();
+  await expect(page.getByText(/Permission to chat does not automatically authorize/)).toBeVisible();
+  await page.locator('section[aria-labelledby="shareTitle"] summary').click();
+  await expect(page.getByText(/Even an unnamed quote might identify someone/)).toBeVisible();
+  await page.locator('#sample summary').click();
+  await expect(page.locator('#sample')).toContainText('Would you be comfortable talking');
+  await expect(page.getByRole('link',{name:/Oral History Association/})).toBeVisible();
+ });
+});
