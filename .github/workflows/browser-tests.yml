@@ -38,6 +38,14 @@ jobs:
           path: test-results/hq-rc01-visual-evidence/
           if-no-files-found: warn
           retention-days: 7
+      # Preserve read-only official resource browser outcomes; offsite errors are non-gating.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rc01-official-browser-observations
+          path: test-results/hq-rc01-external-browser-evidence/
+          if-no-files-found: warn
+          retention-days: 7
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
