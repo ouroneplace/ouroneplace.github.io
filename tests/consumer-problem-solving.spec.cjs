@@ -279,3 +279,72 @@ for(const width of [320,390]){
   expect(overflow).toBeLessThanOrEqual(1);
  });
 }
+
+test('consumer complete-page six-viewport layout, section order and navigation words',async({page})=>{
+ test.setTimeout(180000);
+ const folder='test-results/team-b-consumer-visual';
+ fs.mkdirSync(folder,{recursive:true});
+ const variants=[
+  {width:320,height:740,enlarged:false},
+  {width:390,height:780,enlarged:false},
+  {width:1366,height:900,enlarged:false},
+  {width:1920,height:960,enlarged:false},
+  {width:320,height:740,enlarged:true},
+  {width:390,height:780,enlarged:true}
+ ];
+ for(const v of variants){
+  await page.setViewportSize({width:v.width,height:v.height});
+  await page.goto(url);
+  if(v.enlarged)await page.evaluate(()=>{document.documentElement.style.fontSize='200%'});
+  for(const id of cases){
+   await page.locator('[data-select="'+id+'"]').click();
+   await expect(page.locator('#'+id)).toBeVisible();
+   const m=await page.evaluate(()=>{
+    const viewport=innerWidth;
+    const selectors=['header','main > .hero','main > .notice','main > section.panel','footer'];
+    const blocks=selectors.flatMap(sel=>[...document.querySelectorAll(sel)]).map(el=>{
+     const r=el.getBoundingClientRect();
+     return {label:el.id||el.getAttribute('aria-labelledby')||el.className||el.tagName.toLowerCase(),left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width};
+    }).sort((a,b)=>a.top-b.top);
+    const broken=[];
+    for(const el of document.querySelectorAll('nav.top a,.routes a,h1,h2,h3,h4,.practice legend,.practice label,.actions button')){
+     if(!el.getClientRects().length)continue;
+     const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let node;
+     while((node=walker.nextNode())){
+      const re=/[A-Za-z]{4,}/g;let match;
+      while((match=re.exec(node.textContent))){
+       const range=document.createRange();
+       range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
+       if(range.getClientRects().length>1)broken.push(el.tagName+':'+match[0]);
+      }
+     }
+    }
+    const active=document.querySelector('.case:not([hidden])');
+    const buttons=[...document.querySelectorAll('.actions button,.case:not([hidden]) .practice button')].filter(b=>!b.disabled).map(b=>({label:b.textContent.trim(),height:b.getBoundingClientRect().height}));
+    return {viewport,documentWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),blocks,broken,active:active?.id,buttons,safety:document.querySelector('main > .notice')?.textContent||'',rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize)};
+   });
+   expect(m.active).toBe(id);
+   expect(m.blocks).toHaveLength(8);
+   expect(m.documentWidth,'Horizontal overflow '+JSON.stringify({v,id,m})).toBeLessThanOrEqual(m.viewport+1);
+   expect(m.broken,'Word splits '+JSON.stringify({v,id,broken:m.broken})).toEqual([]);
+   expect(m.safety).toContain('U.S.-specific examples');
+   if(v.enlarged)expect(m.rootFont).toBeGreaterThanOrEqual(32);
+   for(let i=0;i<m.blocks.length;i++){
+    const b=m.blocks[i];
+    expect(b.left,'Left crop '+JSON.stringify({v,id,b})).toBeGreaterThanOrEqual(-1);
+    expect(b.right,'Right crop '+JSON.stringify({v,id,b})).toBeLessThanOrEqual(m.viewport+1);
+    if(i)expect(b.top,'Overlapping page regions '+JSON.stringify({v,id,previous:m.blocks[i-1],b})).toBeGreaterThanOrEqual(m.blocks[i-1].bottom-1);
+   }
+   for(const b of m.buttons)expect(b.height,'Small active target '+JSON.stringify({v,id,b})).toBeGreaterThanOrEqual(44);
+   console.log('CONSUMER_PAGE_GEOMETRY',JSON.stringify({size:v.width,large:v.enlarged,case:id,blocks:m.blocks.length,broken:m.broken.length,documentWidth:m.documentWidth,buttons:m.buttons.length}));
+  }
+  await page.getByRole('button',{name:'Review my plan'}).click();
+  await expect(page.locator('#planText')).toContainText('A suspicious prize message');
+  const target=folder+'/consumer-'+v.width+(v.enlarged?'-200pct':'-normal')+'.png';
+  await page.screenshot({path:target,fullPage:true,animations:'disabled'});
+  const png=fs.readFileSync(target);
+  expect(png.subarray(0,8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(png.readUInt32BE(16)).toBe(v.width);
+  expect(png.readUInt32BE(20)).toBeGreaterThanOrEqual(v.height);
+ }
+});
