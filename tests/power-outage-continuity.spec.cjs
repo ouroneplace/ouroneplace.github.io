@@ -1,6 +1,18 @@
 const {test,expect}=require('@playwright/test');
 const url='/one-place/power-outage-continuity.html';
 
+for(const width of [320,1366]){
+ test('public indexing parity for outage guide and area navigation at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  const robots=page.locator('meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
+ });
+}
+
 for(const width of [320,390,1366,1920]){
  test('power outage guide renders five complete lessons and reflows at '+width+'px',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
