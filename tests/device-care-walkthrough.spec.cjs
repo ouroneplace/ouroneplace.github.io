@@ -65,7 +65,9 @@ test('Device Care: JavaScript off retains full advice without interactive dead e
  try{const page=await context.newPage();await page.goto(url);
   await expect(page.locator('section.lesson')).toHaveCount(3);
   await expect(page.locator('button[type="submit"]:disabled')).toHaveCount(3);
-  await expect(page.getByText('JavaScript is off.',{exact:false})).toContainText('Every lesson, device-care step, option and explanation');
+  await expect(page.locator('#update .story')).toContainText('Open the device');
+  await expect(page.locator('#backup .story')).toContainText('Confirm a backup completed');
+  await expect(page.locator('#permissions .story')).toContainText('app permission settings');
   await page.locator('#permissions details summary').click();
   await expect(page.locator('#permissions .reasons li:visible')).toHaveCount(3);
   await expect(page.locator('#takeaway ol li')).toHaveCount(3);
