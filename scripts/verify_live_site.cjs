@@ -67,6 +67,9 @@ fs.mkdirSync(output,{recursive:true});
       assert.equal(await page.locator('#visitForm').count(),1,'Health visit planner must work');
       assert.equal(await page.locator('#habitForm').count(),1,'Health routine builder must work');
      }
+     if(areaName==='Technology & Digital Safety'){
+      assert.equal(await page.getByRole('link',{name:'Open Everyday Device Care'}).count(),1,'Technology device-care discovery');
+     }
      if(areaName==='Mental Health & Safety'){
       assert.equal(await page.getByRole('link',{name:'Open Calm Moment Practice'}).count(),1,'Mental Health self-coping practice discoverability');
      }
@@ -123,6 +126,11 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#unexpected-message input[type=radio]').nth(1).check();
    await page.locator('#unexpected-message button[type=submit]').click();
    assert.match(await page.locator('#unexpected-message .feedback').innerText(),/Good decision/,'Digital Safety decision feedback must work');
+   await reflow();
+   // Everyday Device Care: new Technology self-guided lesson.
+   await goto('/one-place/device-care-walkthrough.html');
+   assert.equal(await page.locator('section.lesson').count(),3,'Device Care must retain three lessons');
+   assert.equal(await page.locator('form.practice').count(),3,'Device Care must retain three fictional practices');
    await reflow();
    // Mental Health support practice: safety notice before other teaching and live quiz flow.
    await goto('/one-place/support-skills-safety.html');
