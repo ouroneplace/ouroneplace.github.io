@@ -20,6 +20,28 @@ for(const width of sizes){
 }
 
 for(const width of [320,1366]){
+ test('native select borders remain distinguishable at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto(url);
+  const ratios=await page.evaluate(()=>{
+   const toRgb=value=>(value.match(/[0-9.]+/g)||[]).slice(0,3).map(Number);
+   const luminosity=value=>{
+    const rgb=toRgb(value).map(x=>x/255).map(x=>x<=0.04045?x/12.92:((x+0.055)/1.055)**2.4);
+    return rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722;
+   };
+   const contrast=(a,b)=>{const x=luminosity(a),y=luminosity(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);};
+   return ['barrier','place','support'].map(id=>{
+    const style=getComputedStyle(document.getElementById(id));
+    return {id,border:style.borderTopColor,background:style.backgroundColor,ratio:contrast(style.borderTopColor,style.backgroundColor)};
+   });
+  });
+  for(const control of ratios){
+   expect(control.ratio,JSON.stringify(control)).toBeGreaterThanOrEqual(3.2);
+  }
+ });
+}
+
+for(const width of [320,1366]){
  test('public-release draft allows search indexing and link discovery at '+width+'px',async({page})=>{
   await page.setViewportSize({width,height:840});
   await page.goto(url);
