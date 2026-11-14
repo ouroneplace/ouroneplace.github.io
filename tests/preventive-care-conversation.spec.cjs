@@ -127,7 +127,7 @@ for(const width of [320,1366]){
   await expect(page).toHaveURL(/health-wellness\.html#plan$/);
   await page.goto(url);
   await page.getByRole('link',{name:'One Place home'}).first().click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/index\.html$/);
  });
 }
 
