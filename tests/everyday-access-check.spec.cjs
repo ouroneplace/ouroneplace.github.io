@@ -225,6 +225,27 @@ test('fictional scenario has blank, appropriate, unsafe and reset feedback',asyn
  await expect(page.locator('#feedback')).toContainText('Choice cleared');
 });
 
+for(const width of [320,1366]){
+ test('changing a safety quiz selection invalidates previous feedback at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto(url);
+  const feedback=page.locator('#feedback');
+  await page.locator('input[name="answer"][value="a"]').check();
+  await page.locator('#checkAnswer').click();
+  await expect(feedback).toContainText('Best first step');
+  await page.locator('input[name="answer"][value="b"]').check();
+  await expect(feedback).toContainText('Choice selected. Check my reasoning for feedback.');
+  await expect(feedback).not.toContainText('Best first step');
+  await page.locator('#checkAnswer').click();
+  await expect(feedback).toContainText('may be unsafe');
+  await page.locator('input[name="answer"][value="a"]').check();
+  await expect(feedback).toContainText('Choice selected. Check my reasoning for feedback.');
+  await expect(feedback).not.toContainText('may be unsafe');
+  await page.locator('#checkAnswer').click();
+  await expect(feedback).toContainText('Best first step');
+ });
+}
+
 test('keyboard access and accessible structure',async({page})=>{
  await page.goto(url);
  await page.getByRole('link',{name:'Skip to the Everyday Access Check'}).focus();

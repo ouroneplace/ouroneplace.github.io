@@ -218,6 +218,9 @@ byId('clear').addEventListener('click',()=>{
  form.reset();syncSupportChoice();clearReview('Choices and review cleared from this page.');
 });
 printBtn.addEventListener('click',()=>{if(reviewed.hidden)return;window.print();});
+byId('practice').addEventListener('change',event=>{
+ if(event.target.matches('input[name="answer"]'))byId('feedback').textContent='Choice selected. Check my reasoning for feedback.';
+});
 byId('checkAnswer').addEventListener('click',()=>{
  const choice=document.querySelector('input[name="answer"]:checked');
  const feedback=byId('feedback');
