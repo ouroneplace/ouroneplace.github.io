@@ -143,11 +143,14 @@ function setCase(id){
  }
  invalidate('Fictional case loaded. Edit the facts and desired next step, or review the example plan.');
 }
+function hasPracticeWork(){
+ return dirty||reviewed||Boolean(document.querySelector('#'+selected+' [data-evidence]:checked'))||Boolean(document.querySelector('#'+selected+' .practice input[type="radio"]:checked'));
+}
 function route(){
  const id=location.hash.slice(1);
  if(!ids.includes(id))return;
  if(id===selected)return;
- if((dirty||reviewed||Boolean(document.querySelector('#'+selected+' [data-evidence]:checked'))||Boolean(document.querySelector('#'+selected+' .practice input[type="radio"]:checked')))&&!window.confirm('Switch fictional case and replace your current practice work (quiz answers, evidence marks, or draft)? Copy or download any reviewed draft you want to keep first.')){
+ if(hasPracticeWork()&&!window.confirm('Switch fictional case and replace your current practice work (quiz answers, evidence marks, or draft)? Copy or download any reviewed draft you want to keep first.')){
   history.replaceState(null,'','#'+selected);say('Case switch canceled. Your draft was preserved.');return;
  }
  setCase(id);
@@ -202,7 +205,7 @@ save.addEventListener('click',()=>{
  say('Local text download requested. The file remains on your device.');
 });
 reset.addEventListener('click',()=>{
- if(!window.confirm('Reset this practice to the fictional starter? Current edits and checklist marks will be lost, but downloads remain on your device.')){say('Reset canceled. Your work remains unchanged.');return}
+ if(hasPracticeWork()&&!window.confirm('Reset this practice to the fictional starter? Current edits, quiz choices, evidence marks or reviewed plan will be lost, but downloads remain on your device.')){say('Reset canceled. Your work remains unchanged.');return}
  setCase(selected);say('Fictional example restored. Checklist and reviewed plan cleared.');
 });
 window.addEventListener('hashchange',route);
