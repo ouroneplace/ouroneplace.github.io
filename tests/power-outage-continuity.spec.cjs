@@ -251,6 +251,27 @@ test('generator scenario supports blank, both unsafe, correct and reset',async({
  await expect(page.locator('#decisionStatus')).toContainText('Decision cleared');
 });
 
+for(const width of [320,1366]){
+ test('generator choice switch invalidates prior safe feedback at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto(url);
+  const feedback=page.locator('#decisionStatus');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('Best first response');
+  await page.locator('input[name="decision"][value="a"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('Best first response');
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('open garage door');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('open garage door');
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('Best first response');
+ });
+}
+
 test('keyboard focus and semantic labels support non-pointer navigation',async({page})=>{
  await page.goto(url);
  await page.getByRole('link',{name:'Skip to outage guide'}).focus();
