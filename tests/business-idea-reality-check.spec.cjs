@@ -161,7 +161,7 @@ test('Business reality: no-JavaScript users still get complete learning and sour
   await expect(page.locator('.examples')).toBeHidden();
   await expect(page.locator('#calculateBtn')).toBeDisabled();
   await expect(page.locator('#clearEstimate')).toBeDisabled();
-  await expect(page.locator('noscript p')).toContainText('The calculator buttons are disabled');
+  await expect(page.locator('noscript p')).toContainText('The calculator fields and buttons are disabled');
   await expect(page.locator('.sources a')).toHaveCount(3);
  }finally{await context.close();}
 });
@@ -211,3 +211,40 @@ test('Business reality: official sources are safe, clearly scoped to U.S. and no
   await expect(link).toContainText('(U.S., external)');
  }
 });
+
+for(const width of [320,1366]){
+ test('Business issue #80 native no-JavaScript fields are disabled at '+width+'px',async({browser})=>{
+  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width,height:740}});
+  try{
+   const page=await context.newPage();await page.goto('/one-place/business-idea-reality-check.html');
+   await expect(page.locator('.tip:visible')).toHaveCount(4);
+   for(const id of ["price","unitCost","fixedCost","units","customerQuestion","testNext"]){
+    const field=page.locator('#'+id);
+    await expect(field).toBeDisabled();
+    expect(await field.evaluate(el=>el.disabled&&el.matches(':disabled'))).toBe(true);
+   }
+   await page.locator('body').click({position:{x:5,y:5}});
+   for(let i=0;i<30;i++){
+    await page.keyboard.press('Tab');
+    const focus=await page.evaluate(()=>document.activeElement&&document.activeElement.id);
+    expect(["price","unitCost","fixedCost","units","customerQuestion","testNext"]).not.toContain(focus);
+   }
+   await expect(page.locator('#calculateBtn')).toBeDisabled();
+   await expect(page.locator('noscript p')).toContainText('fields and buttons are disabled');
+   await expect(page.locator('.examples')).toBeHidden();
+   const d=await page.evaluate(()=>({width:innerWidth,scroll:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)}));
+   expect(d.scroll).toBeLessThanOrEqual(d.width+1);
+  }finally{await context.close();}
+ });
+ test('Business issue #80 JavaScript init restores editable fields at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:740});await page.goto('/one-place/business-idea-reality-check.html');
+  for(const id of ["price","unitCost","fixedCost","units","customerQuestion","testNext"]){
+   const field=page.locator('#'+id);
+   await expect(field).toBeEnabled();
+   expect(await field.evaluate(el=>!el.disabled&&!el.matches(':disabled'))).toBe(true);
+  }
+  await expect(page.locator('#calculateBtn')).toBeEnabled();
+  await page.locator('[data-example="service"]').click();
+  await expect(page.locator('#price')).toHaveValue('50.00');
+ });
+}
