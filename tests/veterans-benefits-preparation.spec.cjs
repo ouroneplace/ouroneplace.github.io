@@ -111,6 +111,46 @@ test('reviewed plan survives a canceled pathway change and changes only after co
  await page.locator('[data-select="education"]').click();
  await expect(page.locator('#education')).toBeVisible();
 });
+test('empty Veterans plan and checklists clear immediately without a destructive warning',async({page})=>{
+ await page.goto(url);
+ const prompts=[];
+ page.on('dialog',async d=>{prompts.push(d.message());await d.dismiss()});
+ await page.getByRole('button',{name:'Clear all checkmarks and plan'}).click();
+ expect(prompts).toEqual([]);
+ await expect(page.locator('[data-record]:checked')).toHaveCount(0);
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.locator('#status')).toContainText('All checkmarks and the plan cleared');
+});
+test('Veterans clear protects evidence-only marks even in another pathway',async({page})=>{
+ await page.goto(url+'#health');
+ const record=page.locator('#health [data-record]').first();
+ await record.check();
+ await page.locator('[data-select="disability"]').click();
+ await expect(page.locator('#disability')).toBeVisible();
+ await expect(record).toBeChecked();
+ page.once('dialog',d=>d.dismiss());
+ await page.getByRole('button',{name:'Clear all checkmarks and plan'}).click();
+ await expect(record).toBeChecked();
+ await expect(page.locator('#status')).toContainText('Nothing cleared');
+ page.once('dialog',d=>d.accept());
+ await page.getByRole('button',{name:'Clear all checkmarks and plan'}).click();
+ await expect(page.locator('[data-record]:checked')).toHaveCount(0);
+});
+test('Veterans clear protects a reviewed plan without checked records',async({page})=>{
+ await page.goto(url+'#education');
+ await page.getByRole('button',{name:'Review my preparation plan'}).click();
+ await expect(page.locator('#planText')).toContainText('Pathway: Education & training');
+ await expect(page.locator('[data-record]:checked')).toHaveCount(0);
+ page.once('dialog',d=>d.dismiss());
+ await page.getByRole('button',{name:'Clear all checkmarks and plan'}).click();
+ await expect(page.locator('#planText')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeEnabled();
+ page.once('dialog',d=>d.accept());
+ await page.getByRole('button',{name:'Clear all checkmarks and plan'}).click();
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.getByRole('button',{name:'Download text copy'})).toBeDisabled();
+});
+
 test('clear confirmation protects and then resets all pathways',async({page})=>{
  await page.goto(url);
  await page.locator('#disability [data-record]').first().check();
