@@ -70,6 +70,9 @@ fs.mkdirSync(output,{recursive:true});
      if(areaName==='Technology & Digital Safety'){
       assert.equal(await page.getByRole('link',{name:'Open Everyday Device Care'}).count(),1,'Technology device-care discovery');
      }
+     if(areaName==='Business & Entrepreneurship'){
+      assert.equal(await page.getByRole('link',{name:'Open Small Business Records Practice'}).count(),1,'Business records practice discovery');
+     }
      if(areaName==='Work & Careers'){
       assert.equal(await page.getByRole('link',{name:'Open First Week at Work Practice'}).count(),1,'Work first-week discoverability');
      }
@@ -161,6 +164,11 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#clearCareer').click();
    // Real clear requires an explicit confirmation; accept in controlled fictional smoke.
    assert.equal(await page.locator('#careerGoal').inputValue(),'','Career plan was not cleared');
+   await reflow();
+   // Business Records: safe fictional classification practice.
+   await goto('/one-place/business-records-practice.html');
+   assert.equal(await page.locator('form#practice').count(),1,'Business records practice must remain available');
+   assert.equal(await page.locator('select[data-case]').count(),4,'Business records four fictional records must remain');
    await reflow();
    // Business idea cost check: fiction-only one-product math and no auto-export.
    await goto('/one-place/business-idea-reality-check.html');
