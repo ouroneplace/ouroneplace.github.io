@@ -45,6 +45,13 @@ No homepage, shared script/style, workflow, release manifest, existing feature o
 4. Exact new GitHub source-head full npm test against the latest published main via PR merge checkout, HTML/link audit and shipped JavaScript parser. Inspect complete job logs before marking full PASS. Fix real defects only, document any failures and reruns.
 5. Future HQ integration owns its homepage Transportation-area entry, current-main merge staging, 27 accepted monitored published files, release manifest, live preview strategy, broader accessibility/physical-device/human review, specific founder release decision and post-merge integrity checks.
 
+## Accessibility correction — skip-link focus reaches main
+
+- **Actual isolated Chromium reproduction on the current markup pattern:** with `<a href="#main">` and nonfocusable `<main id="main">`, pressing Tab then Enter updates `#main` but `document.activeElement` is BODY. The same isolated page with `tabindex="-1"` on MAIN places real keyboard focus in MAIN; pressing Tab then advances to the first radio input. This reproduces the same mechanism separately observed in Team C Conversation Repair #68 and does not claim native assistive-technology validation.
+- **Narrow visitor correction:** add only `tabindex="-1"` to the existing main landmark, without moving paragraphs, changing focus styles, visitor text, routing, privacy, or other DOM. The negative tabindex allows programmatic anchor focus without adding a new ordinary Tab stop.
+- **Focused regression:** from page load, Tab focuses visible skip link, Enter changes URL to `#main`, MAIN becomes the active element, and the next Tab reaches the first response control. Requires exact new-head full browser CI, independent of the earlier 795/795 green run.
+- **Remaining limits:** physical iOS/Android and native VoiceOver/TalkBack remain unverified; no claim of complete accessibility acceptance.
+
 ## Full regression failure and narrowly corrected assertions — November 13
 
 - **Source-head CI actually failed:** [Actions #43539289848](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43539289848) checkout `ea8374b` of source `b08f3b4aaa1b2091a4343dd1eba50403b75a72b8` into approved published `main 05501c9643e4fbf1fd876a18e3347bff15ea4b8e` completed with **793 passed, 2 failed**; 37 HTML audited with zero errors/structure warnings, 43 shipped scripts parsed, 23 of 25 Transportation focused cases passed. Both failures were source-test fixture mistakes introduced while adding post-arrival safety wording.

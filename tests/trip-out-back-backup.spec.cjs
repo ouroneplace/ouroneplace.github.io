@@ -248,6 +248,17 @@ test('six full-page geometry samples and screenshot records retain safe widths',
  }
 });
 
+test('skip link transfers keyboard focus to the lesson without changing normal Tab order',async({page})=>{
+ await page.goto(route);
+ await page.keyboard.press('Tab');
+ await expect(page.locator('.skip')).toBeFocused();
+ await page.keyboard.press('Enter');
+ await expect(page).toHaveURL(/#main$/);
+ await expect(page.locator('#main')).toBeFocused();
+ await page.keyboard.press('Tab');
+ await expect(page.locator('form[data-scene="0"] input[value="0"]')).toBeFocused();
+});
+
 test('keyboard navigation, named groups, labeled fields and announced feedback',async({page})=>{
  await page.goto(route);
  await page.keyboard.press('Tab');
