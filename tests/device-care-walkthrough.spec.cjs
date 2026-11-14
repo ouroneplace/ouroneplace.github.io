@@ -29,7 +29,7 @@ for(const width of [320,390]){
 for(const c of cases){
  test('Device Care: all choice explanations, stale review, and reset for '+c.id,async({page})=>{
   await page.goto(url+'#'+c.id);
-  const form=page.locator('#'+c.id+' form.practice'), options=form.getByRole('radio'),feedback=form.getByRole('status');
+  const form=page.locator('#'+c.id+' form.practice'), options=form.getByRole('radio'),feedback=form.locator('.feedback');
   await expect(options).toHaveCount(3);
   await form.getByRole('button',{name:'Check this choice'}).click();
   await expect(feedback).toContainText('Choose an option');
@@ -65,7 +65,7 @@ test('Device Care: JavaScript off retains full advice without interactive dead e
  try{const page=await context.newPage();await page.goto(url);
   await expect(page.locator('section.lesson')).toHaveCount(3);
   await expect(page.locator('button[type="submit"]:disabled')).toHaveCount(3);
-  await expect(page.locator('noscript')).toContainText('Every lesson, device-care step, option and explanation');
+  await expect(page.getByText('JavaScript is off.',{exact:false})).toContainText('Every lesson, device-care step, option and explanation');
   await page.locator('#permissions details summary').click();
   await expect(page.locator('#permissions .reasons li:visible')).toHaveCount(3);
   await expect(page.locator('#takeaway ol li')).toHaveCount(3);
