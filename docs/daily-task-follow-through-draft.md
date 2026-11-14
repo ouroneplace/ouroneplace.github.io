@@ -5,6 +5,13 @@
 **Team:** C · Daily Life & Organization
 **Coordination:** https://github.com/ouroneplace/ouroneplace.github.io/issues/63
 
+## November 13, 2026 — public learning indexing and real area-return checks
+
+- **Release policy gap:** This standalone public-facing educational draft had a meaningful title/description but no explicit robots directive. Omission alone does NOT prohibit indexing; unlike a `noindex`, it uses the search engine's usual defaults. The already published four educational pages and latest Team A draft use explicit `index,follow` for transparent discoverability policy.
+- **Focused source-only alignment:** Added exactly one `<meta name="robots" content="index,follow">` without changing page body, lessons, private plan behavior, reset safety, sources, layout, or external requests. This is an indexing *request*, not proof that Google or another engine will actually index or rank the page; nothing publishes until HQ releases it.
+- **Focused browser check:** At 320px and 1366px, check exactly one policy tag, accurate H1, actual Daily Life area link navigation and heading, and no horizontal overflow after return. Existing broader privacy, no-JS, 200% text, full workflow and reset tests remain intact. Exact new-head CI must complete before claiming this revision passed.
+- **Coordination boundary:** Original founder-authorized published `main` `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` (#78) remains unchanged; HQ current two-area [PR #79](https://github.com/ouroneplace/ouroneplace.github.io/pull/79) is a separate scope (Aging/Conversation) and must not be modified to import this new Daily Life source. This Team C branch remains OPEN DRAFT only.
+
 ## November 13, 2026 — prevent accidental destruction of visitor-authored plans
 
 - **Observed source behavior:** The prior full reset discarded all four typed fields and radio choices on one click, without a confirmation. This is distinct from the already protected Load Example action and risks losing visitor work.

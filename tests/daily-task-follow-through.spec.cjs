@@ -124,6 +124,21 @@ test('empty daily-task reset works without an unnecessary confirmation',async({p
  await expect(page.locator('#planStatus')).toContainText('All practice and plan wording cleared');
 });
 
+test('public learning page declares indexing policy once and returns to its life area',async({page})=>{
+ for(const width of [320,1366]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  const robots=page.locator('meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{level:1,name:'One Task, Four Moves'})).toBeVisible();
+  await page.getByRole('link',{name:'Daily Life area'}).click();
+  await expect(page).toHaveURL(/index\.html\?area=Daily%20Life%20%26%20Organization$/);
+  await expect(page.getByRole('heading',{level:1,name:'Daily Life & Organization'})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ }
+});
+
 test('source and local routes are real, external links consent-first',async({page})=>{
  await page.goto(route);
  const local=['../index.html','../human-literacy/'];
