@@ -4,6 +4,13 @@
 
 **Status:** SOURCE DRAFT. Not merged, not deployed, not approved by the founder.
 
+## November 13, 2026 — explicit discoverability and area-return verification
+
+- **Source-confirmed policy gap:** This otherwise ready standalone education draft had a meaningful title/description but no explicit robots meta. Absence of a directive is NOT a `noindex` instruction and is not evidence that search indexing was blocked. The founder-authorized new public educational pages use explicit `index,follow`; preserve that transparent policy for this future educational page.
+- **Tiny source change:** Exactly one `<meta name="robots" content="index,follow">`; no change to the fictional teaching notice, selected answers, private writing, safe reset, privacy, existing links, JavaScript or styles. This is a crawl preference, **not a guarantee of actual search inclusion, an account/privacy feature, or an authorization to publish**.
+- **Added browser test:** At phone 320px and desktop 1366px, assert one correct directive, the public lesson H1, an actual click through the Learning area link to its encoded local route and matching area heading, and no horizontal overflow. Existing retrieval, source comparison, opt-in external links, keyboard, large-text, no-JS, privacy and reset tests remain.
+- **QA boundary:** Syntax of original inline JS and focused Playwright suite parsed; actual new-head full GitHub Actions CI must finish before this revision is marked PASS. Founder-approved public `main` remains `05501c9643e4fbf1fd876a18e3347bff15ea4b8e`; HQ [draft #79](https://github.com/ouroneplace/ouroneplace.github.io/pull/79) is a separate Access/Conversation two-area scope, not changed by this future Learning source.
+
 ## November 13, 2026 — guard unsaved recall and transfer writing
 
 - **Source-confirmed gap:** The existing "Start over and clear all practice" immediately deleted both optional writing fields and all choices with one click, despite the page promising private editable practice.

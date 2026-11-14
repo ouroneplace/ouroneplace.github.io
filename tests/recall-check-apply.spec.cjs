@@ -148,6 +148,21 @@ test('blank recall practice resets without a needless confirmation',async({page}
  await expect(page.locator('#resetStatus')).toContainText('All private practice text and choices cleared');
 });
 
+test('public retrieval lesson declares one indexing directive and returns to Learning at phone and desktop widths',async({page})=>{
+ for(const width of [320,1366]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  const robots=page.locator('meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{level:1,name:'Recall, Check, Apply'})).toBeVisible();
+  await page.getByRole('link',{name:'Learning area'}).click();
+  await expect(page).toHaveURL(/index\.html\?area=Learning%20%26%20Education$/);
+  await expect(page.getByRole('heading',{level:1,name:'Learning & Education',exact:true})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ }
+});
+
 test('area, home and Human Literacy navigation resolve and sources are opt-in',async({page})=>{
  await page.goto(route);
  const paths=['../index.html','../human-literacy/','../index.html?area=Learning%20%26%20Education'];
