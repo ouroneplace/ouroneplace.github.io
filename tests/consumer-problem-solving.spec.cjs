@@ -187,6 +187,45 @@ test('keyboard case navigation focuses the displayed lesson without discarding a
  await expect(page.locator('#planText')).toBeHidden();
  await expect(page.getByRole('button',{name:'Download reviewed text'})).toBeDisabled();
 });
+test('untouched consumer starter resets immediately without a destructive-work prompt',async({page})=>{
+ await page.goto(url+'#financial');
+ const dialogs=[];
+ page.on('dialog',async dialog=>{dialogs.push(dialog.message());await dialog.dismiss()});
+ await page.getByRole('button',{name:'Reset fictional practice'}).click();
+ expect(dialogs).toEqual([]);
+ await expect(page.locator('#financial')).toBeVisible();
+ await expect(page.locator('#facts')).toHaveValue(/Example Bank/);
+ await expect(page.locator('.practice input:checked')).toHaveCount(0);
+ await expect(page.locator('#planText')).toBeHidden();
+ await expect(page.locator('#status')).toContainText('Fictional example restored');
+});
+test('consumer reset protects selected quiz answers even with no edited draft',async({page})=>{
+ await page.goto(url+'#purchase');
+ const choice=page.locator('#purchase .practice input[value="1"]');
+ await choice.check();
+ page.once('dialog',dialog=>dialog.dismiss());
+ await page.getByRole('button',{name:'Reset fictional practice'}).click();
+ await expect(choice).toBeChecked();
+ await expect(page.locator('#status')).toContainText('Reset canceled');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByRole('button',{name:'Reset fictional practice'}).click();
+ await expect(choice).not.toBeChecked();
+ await expect(page.locator('#facts')).toHaveValue(/Sample Store/);
+});
+test('consumer reset protects evidence-only marks without edited text',async({page})=>{
+ await page.goto(url+'#scam');
+ const evidence=page.locator('#scam [data-evidence]').first();
+ await evidence.check();
+ page.once('dialog',dialog=>dialog.dismiss());
+ await page.getByRole('button',{name:'Reset fictional practice'}).click();
+ await expect(evidence).toBeChecked();
+ await expect(page.locator('#status')).toContainText('Reset canceled');
+ page.once('dialog',dialog=>dialog.accept());
+ await page.getByRole('button',{name:'Reset fictional practice'}).click();
+ await expect(evidence).not.toBeChecked();
+ await expect(page.locator('#facts')).toHaveValue(/prize message/);
+});
+
 test('reset cancel preserves work; reset accept clears checkboxes and reviewed plan',async({page})=>{
  await page.goto(url);
  await page.locator('#purchase [data-evidence]').first().check();
