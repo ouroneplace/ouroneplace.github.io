@@ -74,6 +74,35 @@ fs.mkdirSync(output,{recursive:true});
    }
    assert.equal(new Set(solutions).size,68,'17 catalog categories with four distinct paths, plus dedicated Money Center');
    for(const route of solutions){await goto('/'+route);await reflow();}
+   // HQ area-link smoke: green source practices, original 18/72 catalog unchanged.
+   for(const [areaName,key,path] of [
+    ['Aging & Accessibility','access','one-place/everyday-access-check.html'],
+    ['Relationships & Communication','conversation','one-place/conversation-repair-practice.html']
+   ]){
+    await goto('/index.html?area='+encodeURIComponent(areaName));
+    assert.equal(await page.locator('.offers > a.offer').count(),4,'Preserve four original '+areaName+' offerings');
+    const entry=page.locator('[data-hq-practice="'+key+'"]');
+    assert.equal(await entry.count(),1,'New '+areaName+' practice entry missing');
+    await entry.click();await visible(page.locator('h1').first());
+    assert.equal(new URL(page.url()).pathname,'/'+path);
+    if(key==='access'){
+     await page.locator('#barrier').selectOption('movement');
+     await page.locator('#place').selectOption('home');
+     await page.locator('#support').selectOption('ask');
+     await page.getByRole('button',{name:'Review my access plan'}).click();
+     assert.equal(await page.locator('#reviewed').isVisible(),true,'Access plan not reviewed');
+     await page.locator('#place').selectOption('community');
+     assert.equal(await page.locator('#reviewed').isVisible(),false,'Edited access plan must invalidate');
+    }else{
+     const first=page.locator('form[data-step="0"]');
+     await first.locator('input[value="0"]').check();
+     await first.getByRole('button',{name:'Reflect on move 1'}).click();
+     assert.match(await page.locator('#feedback1').innerText(),/observable information/);
+     await page.locator('#draft').fill('I heard you needed the counter. May we talk later?');
+     assert.match(await page.locator('#draft').inputValue(),/talk later/);
+    }
+    await reflow();
+   }
    // Verify the new Health practice lab's navigation and answer feedback.
    await goto('/one-place/health-literacy-lab.html');
    assert.equal(await page.locator('section.lesson').count(),4,'Health Lab has four lessons');
