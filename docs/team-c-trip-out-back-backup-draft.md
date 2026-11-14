@@ -34,7 +34,7 @@ No homepage, shared script/style, workflow, release manifest, existing feature o
 - Four editable plan textareas (320-character maximum). Loading a fictional example confirms before overwriting existing words; full reset confirms before destroying *any* writing or checked answer, even an unreviewed one. Cancel preserves writing, selected options, feedback and count. Empty reset is immediate.
 - Work stays in the rendered page and is lost upon reload. No localStorage/sessionStorage, cookies, location, third-party runtime calls, form submission, uploads, accounts, booking, payment or tracking.
 - Script-free fallback contains the full five teaching checks, safety stop, fictional scenario answers, both general official-source pointers, and expandable paper plan. Interactive controls remain hidden when scripting is unavailable instead of offering dead buttons.
-- Opt-in external anchors: U.S. Federal Transit Administration (https://www.transit.dot.gov/) and USAGov disability services (https://www.usa.gov/disability-services), both target blank + noopener noreferrer. These are general sources, **not** current local journey data or access eligibility verification.
+- Opt-in external anchors: U.S. Federal Transit Administration (https://www.transit.dot.gov/) and USAGov ADA and public transit rights (https://www.usa.gov/disability-rights), both target blank + noopener noreferrer. These are general sources, **not** current local journey data or access eligibility verification.
 - Respectful nonjudgmental language: a safe stop/postpone is valid, unsolicited stranger's ride is not a default backup, and personal contact details belong outside the webpage.
 
 ## Source-team QA checklist
@@ -44,6 +44,11 @@ No homepage, shared script/style, workflow, release manifest, existing feature o
 3. Responsive proof: real full-page synthetic screenshots and geometry at 320/390 normal and 200%-sized text, plus 1366/1920 normal. Check no lateral overflow, distinct four content panels, safe button heights and section order. Synthetic Chromium is NOT human pixel or native assistive technology acceptance.
 4. Exact new GitHub source-head full npm test against the latest published main via PR merge checkout, HTML/link audit and shipped JavaScript parser. Inspect complete job logs before marking full PASS. Fix real defects only, document any failures and reruns.
 5. Future HQ integration owns its homepage Transportation-area entry, current-main merge staging, 27 accepted monitored published files, release manifest, live preview strategy, broader accessibility/physical-device/human review, specific founder release decision and post-merge integrity checks.
+
+## Current external-source relevance check
+
+- Independently retrieved the live FTA homepage (https://www.transit.dot.gov/) and the USAGov ADA rights page (https://www.usa.gov/disability-rights) on November 13, 2026 Central. Both resolved with source content. USAGov's general disability-services landing page emphasizes benefits, jobs and caregivers rather than travel; the new source now links to the more relevant ADA rights page, which explicitly discusses public transit and how to ask about access. The link remains an opt-in educational pointer, not legal advice or a provider access guarantee.
+- Added focused DOM assertions for both exact official source URLs, retaining the external-link consent and rel/target checks. External page availability can change; no promise of link uptime or universal U.S./non-U.S. applicability.
 
 ## Unverified and held scope
 

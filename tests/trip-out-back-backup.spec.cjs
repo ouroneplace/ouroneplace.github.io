@@ -194,6 +194,8 @@ test('area return and Human Literacy are reachable and external sources opt-in',
  }
  const external=page.locator('a[href^="https://"]');
  await expect(external).toHaveCount(2);
+ await expect(page.locator('a[href="https://www.transit.dot.gov/"]')).toHaveCount(1);
+ await expect(page.locator('a[href="https://www.usa.gov/disability-rights"]')).toHaveCount(1);
  for(const link of await external.all()){
   await expect(link).toHaveAttribute('target','_blank');
   await expect(link).toHaveAttribute('rel',/noopener noreferrer/);
