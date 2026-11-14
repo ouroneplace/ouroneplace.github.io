@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="color-scheme" content="light"><meta name="description" content="ONE PLACE Veterans Benefits Preparation: free U.S.-specific benefit navigation, records checklist and official resource questions, with privacy-first local planning.">
+<title>Veterans Benefits Preparation — ONE PLACE</title><style>
+:root{color-scheme:light;--ink:#193e38;--mute:#4c675d;--teal:#087c72;--line:#c6dfd2;--bg:#f8fcf9;--soft:#eaf7f0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{overflow-wrap:anywhere;margin:0;background:radial-gradient(circle at 90% 0,#e2f7eb,transparent 45%),var(--bg);color:var(--ink);font:1rem/1.55 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,a,input{font:inherit}a{color:#075c54;overflow-wrap:anywhere}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #a76311;outline-offset:3px}
+.skip{position:absolute;top:-10rem;left:.6rem;padding:.6rem;background:white;z-index:5}.skip:focus{top:.4rem}
+.wrap{width:min(70rem,calc(100% - 1.5rem));margin:auto}
+header{border-bottom:1px solid var(--line);background:#fbfffc}.head{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;justify-content:space-between;padding:.8rem 0}
+.brand{font-weight:850;text-decoration:none}.brand b{padding:.25rem .5rem;border-radius:.45rem;color:white;background:var(--teal)}
+nav.mainnav{display:flex;flex-wrap:wrap;gap:.5rem}.mainnav a{display:inline-flex;padding:.45rem .7rem;background:white;border:1px solid var(--line);border-radius:2rem;text-decoration:none;font-size:.88rem;font-weight:720}
+.hero{padding:2.2rem 0 1rem}.eyebrow{color:#087c72;text-transform:uppercase;letter-spacing:.1em;font-size:.76rem;font-weight:850}
+h1{font-size:clamp(2rem,5.4vw,3.7rem);line-height:1.08;letter-spacing:-.045em;margin:.4rem 0 1rem;overflow-wrap:anywhere}h1 em{font-style:normal;color:var(--teal)}h2{font-size:clamp(1.45rem,3vw,2rem);overflow-wrap:anywhere}h3{font-size:1.45rem;margin:.2rem 0;overflow-wrap:anywhere}.hero>p{max-width:53rem}
+.note{background:#fff5e6;border:1px solid #e8cca8;border-radius:.8rem;padding:.85rem 1rem;margin:1rem 0}.note p{margin:.3rem 0}.panel{background:white;border:1px solid var(--line);border-radius:1rem;padding:clamp(1rem,2.2vw,1.6rem);margin:1.2rem 0;box-shadow:0 4px 18px #1c4e3210}
+.wrap,.panel,.path,.columns>div,.cards>div{min-width:0}.panel h2{margin:0 0 .5rem}.intro{max-width:55rem;color:var(--mute)}.choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.55rem;margin:1rem 0}
+.choice{display:flex;align-items:center;min-height:3.3rem;background:#f5fbf7;color:#124f45;border:1px solid #b7d8c8;border-radius:.6rem;padding:.65rem;text-decoration:none;font-weight:730;font-size:.91rem;overflow-wrap:anywhere}
+.choice[aria-current=page]{background:#d7f2e6;border-color:#087c72;box-shadow:inset 0 0 0 1px #087c72}.choice:hover{background:#e5f6ed}
+.path{background:#fbfefb;border:1px solid var(--line);border-radius:.8rem;padding:1.2rem;margin:.9rem 0;scroll-margin-top:1rem}.path .summary{font-size:1.08rem;font-weight:620}.path h4{font-size:1.04rem;margin:.7rem 0}.columns{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.caution{background:#fff5e8;border-left:4px solid #a66725;padding:.65rem .9rem}.small{font-size:.87rem;color:var(--mute)}
+.checklist{padding:0;list-style:none;margin:.4rem 0}.checklist li{margin:.4rem 0}.checklist label{display:flex;gap:.7rem;align-items:flex-start;padding:.7rem;border:1px solid var(--line);border-radius:.6rem;background:white;cursor:pointer;overflow-wrap:anywhere}
+.checklist input{width:1.25rem;height:1.25rem;flex:none;accent-color:var(--teal);margin:.1rem 0}
+.questions{padding-left:1.4rem}.questions li{margin:.65rem 0}.sources{border-top:1px solid var(--line);padding-top:.8rem}.sources a{display:inline-block;margin:.3rem}
+.controls{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0}.controls button{min-height:2.75rem;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center;border-radius:.65rem;border:1px solid var(--teal);background:white;color:#075c54;padding:.7rem 1rem;font-weight:740;cursor:pointer}
+.controls button.primary{background:var(--teal);color:white}.controls button:disabled{opacity:.55;cursor:not-allowed}
+#planText{font:inherit;max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;background:#f5faf7;border:1px solid var(--line);border-radius:.7rem;padding:1rem;max-height:32rem;overflow:auto}
+.status{min-height:1.5rem;color:#2b5b50;font-weight:700}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.cards>div{border:1px solid var(--line);border-radius:.7rem;padding:.9rem;background:#fbfefb}
+footer{padding:1.4rem 0 2rem;border-top:1px solid var(--line);color:var(--mute)}
+[hidden]{display:none!important}
+@media(max-width:780px){.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.columns,.cards{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.controls{display:grid;grid-template-columns:minmax(0,1fr)}.controls button{width:100%}}
+@media(max-width:370px){.wrap{width:calc(100% - 1rem)}.choices{grid-template-columns:minmax(0,1fr)}.panel,.path{padding:.85rem}}
+@media(max-width:430px){.choices{grid-template-columns:minmax(0,1fr)}.panel,.path{padding:10px}h1{font-size:min(2rem,48px)}h2{font-size:min(1.45rem,38px)}h3{font-size:min(1.45rem,34px)}.choice{font-size:min(.91rem,26px)}.controls button{font-size:min(1rem,28px);padding:8px}.eyebrow{font-size:min(.76rem,22px)}}
+@media(max-width:370px){.panel,.path,.cards>div{padding:6px}h1{font-size:min(2rem,40px)}h2{font-size:min(1.45rem,36px)}h3{font-size:min(1.45rem,28px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{header,.choices,.controls,.status,.skip,footer{display:none!important}.wrap{width:100%}.panel,.path{box-shadow:none;break-inside:avoid}#planText{max-height:none;overflow:visible}}
+</style></head>
+<body><a class="skip" href="#main">Skip to benefits preparation</a>
+<header><div class="wrap head"><a class="brand" href="../index.html"><b aria-hidden="true">✳</b> ONE PLACE</a>
+<nav class="mainnav" aria-label="Page navigation"><a href="../index.html">One Place Home</a><a href="../index.html?area=Veterans%20%26%20Military%20Families">Veterans &amp; Military Families</a><a href="#privacy">Privacy &amp; limits</a></nav></div></header>
+<main id="main" class="wrap">
+<section class="hero"><p class="eyebrow">ONE PLACE · Veterans &amp; Military Families · Free education</p>
+<h1>Benefits preparation. <em>One clear next step.</em></h1>
+<p>Choose what you need help understanding. Learn which records might be relevant, prepare useful questions and go directly to official U.S. government instructions. No account, uploads, applications, automated eligibility decisions or payments.</p></section>
+<aside class="note" aria-label="Important limitations"><p><strong>United States only:</strong> The VA, DOL and government benefit programs below are U.S.-specific. Eligibility, deadlines, benefits and application steps depend on program and individual circumstances. One Place cannot confirm approval, payment, legal status or service access.</p>
+<p><strong>Outside the United States:</strong> Ask your country's military/veterans authority or a recognized local advocate. U.S. VA programs should not be treated as worldwide rules. U.S. veterans living abroad may still need VA-specific advice.</p></aside>
+<section class="panel" aria-labelledby="choose-title"><h2 id="choose-title">1. What are you trying to prepare for?</h2>
+<p class="intro">Pick a pathway. You can change direction. All eight topic explanations remain readable with JavaScript switched off.</p>
+<nav class="choices" aria-label="Benefits pathways"><a class="choice" href="#disability" data-select="disability">Disability compensation</a>
+<a class="choice" href="#health" data-select="health">VA health care</a>
+<a class="choice" href="#education" data-select="education">Education &amp; training</a>
+<a class="choice" href="#caregiving" data-select="caregiving">Family &amp; caregiver support</a>
+<a class="choice" href="#survivors" data-select="survivors">Survivors &amp; dependents</a>
+<a class="choice" href="#transition" data-select="transition">Transition, work &amp; VR&amp;E</a>
+<a class="choice" href="#housing" data-select="housing">VA home loans &amp; housing</a>
+<a class="choice" href="#reviews" data-select="reviews">A VA decision I disagree with</a></nav>
+<noscript><p class="note"><strong>JavaScript is off:</strong> All eight learning sections and official sources below are available. The optional interactive preparation/download controls cannot run. You can make a plan on paper.</p></noscript>
+<div id="paths"><article class="path" id="disability" data-path="disability" tabindex="-1" aria-labelledby="disability-title" data-next="Read VA evidence guidance and ask an accredited VSO about the right claim type before sending sensitive records.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="disability-title">Disability compensation</h3>
+<p class="summary">Prepare a claim, new condition, or request for an increased rating.</p><p><strong>Why this matters:</strong> VA looks at the claim type, service connection and available evidence. An intent to file may help protect a potential effective date for certain claims, but is not a claim approval.</p>
+<p class="caution"><strong>Important limitation:</strong> An intent to file applies to specified claims, not every VA benefit. Check the current rules, forms and deadlines directly. Do not share medical records here.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="DD214 or other separation records, if available"> <span>DD214 or other separation records, if available</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Service treatment records and relevant non-VA medical evidence"> <span>Service treatment records and relevant non-VA medical evidence</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="A timeline of the condition and optional lay or witness statements"> <span>A timeline of the condition and optional lay or witness statements</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>What claim type and evidence requirements apply to my situation?</li><li>Would an intent to file be relevant, and what is the actual filing deadline?</li><li>What can VA retrieve for me, and how should I submit missing evidence?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Read VA evidence guidance and ask an accredited VSO about the right claim type before sending sensitive records.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/disability/how-to-file-claim/evidence-needed/" target="_blank" rel="noopener noreferrer">VA evidence needed (external)</a> · <a href="https://www.va.gov/forms/21-0966/" target="_blank" rel="noopener noreferrer">VA intent to file (external)</a> · <a href="https://www.va.gov/disability/how-to-file-claim/" target="_blank" rel="noopener noreferrer">VA claim preparation (external)</a></p></article>
+<article class="path" id="health" data-path="health" tabindex="-1" aria-labelledby="health-title" data-next="Read the VA health care application instructions and ask VA which information is required for the specific application.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="health-title">VA health care</h3>
+<p class="summary">Prepare to ask about enrollment, care access, and support needs.</p><p><strong>Why this matters:</strong> VA health care enrollment has distinct criteria and an application. Disability compensation and health care eligibility are not interchangeable.</p>
+<p class="caution"><strong>Important limitation:</strong> Health care enrollment may depend on service, discharge, priority groups and other facts. The page does not give a clinical opinion or verify enrollment.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Separation documents or military service history"> <span>Separation documents or military service history</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Current insurance information, if relevant"> <span>Current insurance information, if relevant</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Questions about care, accessible services, travel or caregiver support"> <span>Questions about care, accessible services, travel or caregiver support</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>Which enrollment criteria and priority group rules apply?</li><li>What information is required for Form 10-10EZ, and what can be omitted initially?</li><li>What accessible ways are available to apply or obtain an update?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Read the VA health care application instructions and ask VA which information is required for the specific application.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/health-care/how-to-apply/" target="_blank" rel="noopener noreferrer">VA health care application (external)</a> · <a href="https://www.va.gov/health-care/eligibility/" target="_blank" rel="noopener noreferrer">VA health care eligibility (external)</a></p></article>
+<article class="path" id="education" data-path="education" tabindex="-1" aria-labelledby="education-title" data-next="Use official VA eligibility and application pages before relying on a school's estimate.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="education-title">Education &amp; training</h3>
+<p class="summary">Explore GI Bill or other education paths without assuming entitlement.</p><p><strong>Why this matters:</strong> Programs differ by service, training, remaining entitlement, school, and family status. A school may have a certifying official.</p>
+<p class="caution"><strong>Important limitation:</strong> No promised tuition, housing payments or education benefit transfer. Transferred benefits depend on applicable Department of Defense approval and VA rules.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Service and education history"> <span>Service and education history</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Name and details of a possible school or training program"> <span>Name and details of a possible school or training program</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Any VA education letters or remaining entitlement records"> <span>Any VA education letters or remaining entitlement records</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>Which education program can I apply for and what applies to this course?</li><li>Is the school or program approved, and who is its certifying official?</li><li>If family benefits are involved, was a transfer approved and what rules apply?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Use official VA eligibility and application pages before relying on a school's estimate.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/education/eligibility/" target="_blank" rel="noopener noreferrer">VA education eligibility (external)</a> · <a href="https://www.va.gov/education/how-to-apply/" target="_blank" rel="noopener noreferrer">VA education application (external)</a></p></article>
+<article class="path" id="caregiving" data-path="caregiving" tabindex="-1" aria-labelledby="caregiving-title" data-next="Review VA's current caregiver program criteria and talk together with a VA Caregiver Support team.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="caregiving-title">Family &amp; caregiver support</h3>
+<p class="summary">Prepare a respectful joint conversation about veteran and caregiver support.</p><p><strong>Why this matters:</strong> VA has caregiver support services, including the Program of Comprehensive Assistance for Family Caregivers (PCAFC), but programs have different criteria.</p>
+<p class="caution"><strong>Important limitation:</strong> A VA disability rating by itself never proves PCAFC eligibility or approval; qualifying care needs, joint application and assessment also matter. Consent of the Veteran and caregiver matters.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Questions about assistance needed with everyday activities or supervision"> <span>Questions about assistance needed with everyday activities or supervision</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Any existing VA care-team contacts or relevant program letters"> <span>Any existing VA care-team contacts or relevant program letters</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Caregiver's questions about training, respite and accessible contact methods"> <span>Caregiver's questions about training, respite and accessible contact methods</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>What general caregiver support is available even if PCAFC is not approved?</li><li>For PCAFC, what are the joint application and assessment steps?</li><li>How can the Veteran and caregiver speak to a local Caregiver Support team?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Review VA's current caregiver program criteria and talk together with a VA Caregiver Support team.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/family-and-caregiver-benefits/health-and-disability/comprehensive-assistance-for-family-caregivers/" target="_blank" rel="noopener noreferrer">VA caregiver program (external)</a> · <a href="https://www.caregiver.va.gov/" target="_blank" rel="noopener noreferrer">VA caregiver support (external)</a></p></article>
+<article class="path" id="survivors" data-path="survivors" tabindex="-1" aria-labelledby="survivors-title" data-next="Read the specific VA survivor benefit page before sharing sensitive family records.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="survivors-title">Survivors &amp; dependents</h3>
+<p class="summary">Identify which survivor or family benefit question needs attention.</p><p><strong>Why this matters:</strong> Programs such as Dependency and Indemnity Compensation (DIC), survivors pension and dependent education have distinct tests. A relationship alone does not establish eligibility.</p>
+<p class="caution"><strong>Important limitation:</strong> Grief, estate and family matters can involve time-sensitive choices. Do not infer entitlement from another person's benefit or assume every survivor deadline is the same.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Veteran or service member service information, if available"> <span>Veteran or service member service information, if available</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Relationship documents and death records, if applicable"> <span>Relationship documents and death records, if applicable</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Relevant VA decision letters or past benefit correspondence"> <span>Relevant VA decision letters or past benefit correspondence</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>Which survivor programs should I review and what evidence is appropriate?</li><li>Does any intent-to-file or application timing rule affect this case?</li><li>Can an accredited VSO help review the forms without charging for an initial claim?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Read the specific VA survivor benefit page before sharing sensitive family records.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/dependency-indemnity-compensation/" target="_blank" rel="noopener noreferrer">VA survivor compensation (DIC) (external)</a> · <a href="https://www.va.gov/family-and-caregiver-benefits/survivor-compensation/survivors-pension/" target="_blank" rel="noopener noreferrer">VA survivors pension (external)</a></p></article>
+<article class="path" id="transition" data-path="transition" tabindex="-1" aria-labelledby="transition-title" data-next="Use DOL's TAP information and VA's VR&amp;E criteria; verify employers independently before sharing identity or banking details.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="transition-title">Transition, work &amp; VR&amp;E</h3>
+<p class="summary">Explore career support for service members, Veterans, spouses and caregivers.</p><p><strong>Why this matters:</strong> DOL transition services, VA Veteran Readiness and Employment (VR&amp;E), and civilian job resources serve different purposes.</p>
+<p class="caution"><strong>Important limitation:</strong> Applying to VR&amp;E does not establish entitlement to specific employment services. An evaluation and program-specific criteria may apply. No job is guaranteed.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Service transition dates and past work or training experience"> <span>Service transition dates and past work or training experience</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="A realistic question about skills, accessibility or career direction"> <span>A realistic question about skills, accessibility or career direction</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Any existing VA decision or program correspondence, if relevant"> <span>Any existing VA decision or program correspondence, if relevant</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>Which DOL TAP or spouse/caregiver programs fit this transition?</li><li>Should I apply for a VR&amp;E evaluation, and what are the current criteria?</li><li>What reasonable accommodations or accessible formats should I request?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Use DOL's TAP information and VA's VR&amp;E criteria; verify employers independently before sharing identity or banking details.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.dol.gov/agencies/vets/programs/tap" target="_blank" rel="noopener noreferrer">DOL Transition Assistance Program (external)</a> · <a href="https://www.va.gov/careers-employment/vocational-rehabilitation/eligibility/" target="_blank" rel="noopener noreferrer">VA VR&amp;E eligibility (external)</a></p></article>
+<article class="path" id="housing" data-path="housing" tabindex="-1" aria-labelledby="housing-title" data-next="Review VA COE eligibility and ask a lender about separate credit, income and affordability checks.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="housing-title">VA home loans &amp; housing</h3>
+<p class="summary">Learn the difference between a Certificate of Eligibility and loan approval.</p><p><strong>Why this matters:</strong> A VA Certificate of Eligibility (COE) indicates potential program entitlement, not guaranteed lender underwriting, property approval or an affordable payment.</p>
+<p class="caution"><strong>Important limitation:</strong> VA loan rules are U.S.-specific. Housing cost, lender standards, credit, income, occupancy and other requirements still apply. Never treat a calculator or COE as approval.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="Service dates and discharge documentation or existing COE, if available"> <span>Service dates and discharge documentation or existing COE, if available</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Questions about occupancy, entitlement reuse and purchase costs"> <span>Questions about occupancy, entitlement reuse and purchase costs</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="A conservative monthly housing budget, kept outside this site"> <span>A conservative monthly housing budget, kept outside this site</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>What COE requirements apply, including prior entitlement use?</li><li>What additional requirements does the lender impose?</li><li>What are total monthly costs, fees and risks before signing?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Review VA COE eligibility and ask a lender about separate credit, income and affordability checks.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/housing-assistance/home-loans/eligibility/" target="_blank" rel="noopener noreferrer">VA home loan eligibility (external)</a> · <a href="https://www.va.gov/housing-assistance/home-loans/loan-types/purchase-loan/" target="_blank" rel="noopener noreferrer">VA purchase loans (external)</a></p></article>
+<article class="path" id="reviews" data-path="reviews" tabindex="-1" aria-labelledby="reviews-title" data-next="Compare the VA review options and the deadline in your own decision letter before deciding which to file.">
+<p class="eyebrow">U.S. VA / government guidance</p><h3 id="reviews-title">A VA decision I disagree with</h3>
+<p class="summary">Prepare to understand a decision letter and available review choices.</p><p><strong>Why this matters:</strong> VA has Supplemental Claim, Higher-Level Review and Board Appeal pathways. Available evidence and deadlines differ by option.</p>
+<p class="caution"><strong>Important limitation:</strong> Some review choices have shorter deadlines than others. Read the actual decision letter and current VA instructions promptly; this tool never calculates an individual deadline.</p>
+<div class="columns"><div><h4>Possible records to locate</h4><p class="small">Mark only items you have already located. Unchecked does not mean you are missing them.</p>
+<ul class="checklist"><li><label><input data-record type="checkbox" autocomplete="off" aria-label="The decision letter and its date, held privately"> <span>The decision letter and its date, held privately</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="A list of the findings or evidence you want clarified"> <span>A list of the findings or evidence you want clarified</span></label></li>
+<li><label><input data-record type="checkbox" autocomplete="off" aria-label="Potential new and relevant evidence, only if the review option permits it"> <span>Potential new and relevant evidence, only if the review option permits it</span></label></li></ul></div>
+<div><h4>Questions worth asking</h4><ol class="questions"><li>Which review options and filing deadlines apply to this specific decision?</li><li>Can I introduce new evidence in this option?</li><li>Would an accredited representative help me understand the letter?</li></ol></div></div>
+<p><strong>A reasonable next step:</strong> Compare the VA review options and the deadline in your own decision letter before deciding which to file.</p>
+<p class="sources"><strong>Verify at the source:</strong> <a href="https://www.va.gov/resources/choosing-a-decision-review-option/" target="_blank" rel="noopener noreferrer">VA decision review choices (external)</a> · <a href="https://www.va.gov/resources/decision-reviews-faqs/" target="_blank" rel="noopener noreferrer">VA decision review FAQs (external)</a></p></article></div></section>
+<section class="panel" aria-labelledby="plan-title"><h2 id="plan-title">2. Review a practical preparation plan</h2>
+<p>Within your chosen pathway, check the example records you have located. Unchecked means only that you have not marked the item. Your plan lists remaining questions and official sources. It never asks you to type private facts.</p>
+<div class="controls"><button id="review" class="primary" type="button" disabled>Review my preparation plan</button><button id="download" type="button" disabled>Download text copy</button><button id="clear" type="button" disabled>Clear all checkmarks and plan</button></div>
+<p id="status" class="status" role="status" aria-live="polite">Read a pathway above. With JavaScript enabled, you can review a local text plan.</p>
+<pre id="planText" aria-label="Reviewed preparation plan" hidden></pre>
+<p class="small">Changes after review require another review before download. A downloaded text file is kept on your device and may be accessible to other device users. Printing or copying may also share information.</p></section>
+<section class="panel" aria-labelledby="scams-title"><h2 id="scams-title">3. Check for benefit-related scams</h2>
+<div class="cards"><div><h3>Protect your information</h3><ul><li>Verify a representative using VA's official accreditation search before sharing sensitive information.</li><li>Accredited VSO claim help is free. Do not pay anyone to file an initial VA benefits claim.</li><li>Be skeptical of guaranteed ratings, expedited approval or pressure to sign immediately.</li><li>Start at the official VA.gov website, not a link in an unexpected message.</li></ul></div>
+<div><h3>Ask before signing</h3><ol><li>Who exactly are you, and are you VA-accredited?</li><li>What services are free? Are any fees allowed in this type of case?</li><li>May I review the full agreement without pressure?</li><li>Can I verify the claim with VA independently?</li></ol></div></div>
+<p class="sources"><a href="https://www.va.gov/get-help-from-accredited-representative/" target="_blank" rel="noopener noreferrer">VA accredited representative search (external)</a> · <a href="https://www.va.gov/resources/how-to-protect-your-identity-and-your-va-benefits-from-scammers/" target="_blank" rel="noopener noreferrer">VA scam prevention (external)</a></p></section>
+<section class="panel" aria-labelledby="help-title"><h2 id="help-title">4. Get an official answer, not a guessed outcome</h2>
+<p>A sensible sequence is to identify the program, read its current criteria, locate relevant records, ask an accredited representative or VA what is still needed, and only then use the official application or review channel. If you have a decision letter or an urgent deadline, prioritize its instructions immediately.</p>
+<p><a href="https://www.va.gov/records/get-military-service-records/" target="_blank" rel="noopener noreferrer">VA military records guidance (external)</a> explains that VA generally requests a DD214 for a VA benefits application; you do not always need to obtain it separately first.</p>
+<p><a href="https://www.va.gov/resources/choosing-a-decision-review-option/" target="_blank" rel="noopener noreferrer">VA decision review guide (external)</a> explains different review choices and timing. Do not apply a general deadline to your specific letter without checking it.</p>
+<p>For immediate danger in the United States, call 911. For a Veteran in emotional crisis, call 988 and press 1. These services are separate from this educational page.</p></section>
+<section class="panel" id="privacy" aria-labelledby="privacy-title"><h2 id="privacy-title">Privacy, accessibility and important limits</h2><ul><li>All checkmarks and the plan exist only in this open page's memory. Reloading clears them. One Place does not submit them, use browser storage, require bank connections, or take your documents.</li><li>Website hosts and browsers may independently log ordinary page visits. Opening official external links takes you to another organization's website under its own privacy rules.</li><li>Use official forms and secure government channels for Social Security numbers, medical records, identity documents and banking details. Do not paste them into this exercise.</li><li>No automated eligibility score, legal determination, guaranteed VA rating, compensation amount, loan approval, job, stipend, reimbursement, or medical recommendation is provided.</li><li>Choose links by keyboard, use text zoom, or read every pathway without JavaScript. This guide is not an exhaustive map of all veteran or family programs.</li></ul>
+<p class="small">Official source links reviewed: November 12, 2026. Programs and links can change. Always confirm the current page and applicable jurisdiction before acting.</p></section>
+</main><footer><div class="wrap">ONE PLACE · Education and preparation, not a government agency. <a href="../index.html">One Place Home</a> · <a href="../index.html?area=Veterans%20%26%20Military%20Families">Veterans &amp; Military Families</a></div></footer>
+<script>
+(function(){
+'use strict';
+const ids=['disability','health','education','caregiving','survivors','transition','housing','reviews'];
+const links=Array.from(document.querySelectorAll('[data-select]'));
+const paths=Array.from(document.querySelectorAll('article.path'));
+const review=document.getElementById('review');
+const clear=document.getElementById('clear');
+const download=document.getElementById('download');
+const plan=document.getElementById('planText');
+const status=document.getElementById('status');
+let selected='disability';
+let reviewed=false;
+function say(message){status.textContent=message}
+function invalidate(message){reviewed=false;plan.hidden=true;plan.textContent='';download.disabled=true;if(message)say(message)}
+function choose(){
+ const fragment=location.hash.slice(1);
+ const next=ids.includes(fragment)?fragment:selected;
+ const changed=next!==selected;
+ if(changed&&reviewed&&!window.confirm('Switch pathways and discard your reviewed preparation plan? Download a text copy first if you want to keep it.')){
+  history.replaceState(null,'','#'+selected);
+  say('Path switch canceled. Your reviewed preparation plan was preserved.');
+  document.getElementById(selected).focus({preventScroll:true});
+  return;
+ }
+ if(changed)invalidate('Path changed. Review a new preparation plan when ready.');
+ selected=next;
+ paths.forEach(p=>p.hidden=p.dataset.path!==selected);
+ links.forEach(a=>{if(a.dataset.select===selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+ if(!reviewed)say('Showing '+document.getElementById(selected+'-title').textContent+'. Select located records, then review your plan.');
+ if(changed)document.getElementById(selected).focus({preventScroll:true});
+}
+document.querySelectorAll('[data-record]').forEach(input=>{input.checked=false;input.addEventListener('change',()=>invalidate('Records changed. Review your plan again before downloading.'))});
+review.disabled=false;clear.disabled=false;
+window.addEventListener('hashchange',choose);
+choose();
+review.addEventListener('click',()=>{
+ const item=document.getElementById(selected);
+ const title=item.querySelector('h3').textContent.trim();
+ const records=Array.from(item.querySelectorAll('[data-record]'));
+ const located=records.filter(i=>i.checked).map(i=>i.closest('label').querySelector('span').textContent.trim());
+ const toConfirm=records.filter(i=>!i.checked).map(i=>i.closest('label').querySelector('span').textContent.trim());
+ const questions=Array.from(item.querySelectorAll('.questions li')).map(x=>x.textContent.trim());
+ const urls=Array.from(item.querySelectorAll('.sources a')).map(a=>a.textContent.trim()+': '+a.href);
+ const lines=['ONE PLACE — Benefits Preparation (U.S. only)','Pathway: '+title,'Educational planning notes; not VA eligibility or legal advice.','', 'Marked located:'];
+ lines.push(...(located.length?located.map(x=>'- '+x):['- None marked yet']));
+ lines.push('','To locate or confirm (unchecked does not prove a record is missing):');
+ lines.push(...(toConfirm.length?toConfirm.map(x=>'- '+x):['- All examples marked located']));
+ lines.push('','Questions for VA or an accredited representative:');
+ lines.push(...questions.map((x,i)=>(i+1)+'. '+x));
+ lines.push('','Suggested next step: '+item.dataset.next,'','Official source pages (verify current criteria, dates and forms):');
+ lines.push(...urls);
+ lines.push('','Do not include SSNs, medical records, bank details or identifiable personal information in a shared copy.','Prepared without uploading or saving anything to One Place.');
+ plan.textContent=lines.join('\n');plan.hidden=false;download.disabled=false;reviewed=true;
+ say('Preparation plan reviewed. You can read it below or choose to download a local text copy.');
+});
+clear.addEventListener('click',()=>{
+ if((reviewed||Boolean(document.querySelector('[data-record]:checked')))&&!window.confirm('Clear every pathway checkmark and the current plan? This cannot be undone.')){say('Nothing cleared.');return}
+ document.querySelectorAll('[data-record]').forEach(i=>i.checked=false);
+ invalidate('All checkmarks and the plan cleared.');
+});
+download.addEventListener('click',()=>{
+ if(!reviewed||plan.hidden)return;
+ if(!window.confirm('Download this plan to your device? Local files may be visible to others who use the device. No data is sent to ONE PLACE.')){say('Download canceled; your plan stays on screen.');return}
+ const blob=new Blob([plan.textContent+'\n'],{type:'text/plain;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='one-place-veterans-benefits-preparation.txt';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ say('Local text download requested. The file remains on your device.');
+});
+})();
+</script></body></html>
