@@ -8,7 +8,7 @@
 
 ## November 13, 2026 — prevent accidental loss of conversation-repair wording
 
-- **Verified page defect:** “Start over and clear practice” previously cleared unsaved draft wording and all checked responses without confirmation. The separate intentional Clear Wording action already existed and is unchanged.
+- **Verified page defect:** “Start over and clear practice” previously cleared unsaved draft wording and all checked responses without confirmation. The separate Clear Wording action originally cleared entered text without confirmation; a new prepublication safety review identified this data-loss risk.
 - **Small repair:** If draft text is nonempty or any radio answer is selected, the page requests native browser confirmation; Cancel retains typed text, checked answers, live feedback and progress, reporting cancellation. Confirm clears all as before. When untouched, the reset remains immediate; no storage, tracking, account, submission, or external network dependency is introduced.
 - **New focused tests:** Cancel preserves custom text plus mixed reviewed/unreviewed answer states; subsequent Confirm clears; empty reset is prompt-free; prior complete-reset path explicitly accepts confirmation. Test/inline script syntax was checked at commit creation; actual exact-head CI must finish before claiming PASS.
 - **Integration divergence:** Prior PR #68 page/test/doc were blob-identical to frozen HQ draft PR #72; this QA fix updates Team C's source files **only**. HQ must later incorporate this new verified source when reconstructing #72 from current accepted main `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` and preserve all 27 monitored release files. Do not directly edit #72 or blindly merge old HQ integration. Real-device/native AT and founder approval remain outstanding.
@@ -80,3 +80,8 @@ Do **not** merge independently or publish on the basis of this document.
 A source PR is an **engineering handoff**, not proof of real-world conflict-resolution competency, worldwide applicability, full accessibility, publication or founder acceptance.
 
 **Recommended founder action during source handoff:** None. HQ may collect and integrate when exact-head QA passes; the founder receives one scoped publication decision at a later gate.
+
+
+## Additional draft safeguard — November 13, 2026 Central (founder HOLD)
+
+An independent HQ source review found that **Clear wording only** discarded an unsent edited response immediately, even though **Start over and clear practice** already guarded user work with native confirmation. During the explicit founder hold, Team C added a narrowly scoped confirmation for **nonempty wording only**: Cancel preserves the user's text and all existing reflections; Confirm clears only the text; an already empty draft clears without prompting. The page remains self-contained, offline-capable, with no data uploads/storage. Added focused Playwright tests for Cancel/Confirm and empty-draft behavior, and updated the existing typed-wording test to accept intentional clearance. These source edits do not authorize a release. Full exact-new-head CI, HQ integration, real iOS/Android/native screen readers, independent specialist review, and founder permission remain separate, uncompleted requirements. See [HQ hold tracker #81](https://github.com/ouroneplace/ouroneplace.github.io/issues/81).

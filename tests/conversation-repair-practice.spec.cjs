@@ -74,11 +74,47 @@ test('a typed message is not overwritten by generating an example',async({page})
   await page.locator('#makeExample').click();
   await expect(page.locator('#draft')).toHaveValue('My own wording and decision');
   await expect(page.locator('#draftStatus')).toContainText('Your text has not been changed');
+  page.once('dialog',async dialog=>{
+    expect(dialog.type()).toBe('confirm');
+    expect(dialog.message()).toContain('Clear your practice wording');
+    await dialog.accept();
+  });
   await page.locator('#clearDraft').click();
   await expect(page.locator('#draft')).toHaveValue('');
   await expect(page.locator('#progress')).toContainText('3 of 3');
   await page.locator('#makeExample').click();
   await expect(page.locator('#draft')).toHaveValue(/I thought I agreed to do dishes/);
+});
+
+test('Clear wording only asks before losing typed text and Cancel preserves it',async({page})=>{
+  await page.goto(route);
+  await reflect(page,0,0);
+  await page.locator('#draft').fill('A thoughtful sentence I am still writing');
+  page.once('dialog',async dialog=>{
+    expect(dialog.type()).toBe('confirm');
+    expect(dialog.message()).toContain('Clear your practice wording');
+    await dialog.dismiss();
+  });
+  await page.locator('#clearDraft').click();
+  await expect(page.locator('#draft')).toHaveValue('A thoughtful sentence I am still writing');
+  await expect(page.locator('#draftStatus')).toContainText('Clear canceled');
+  await expect(page.locator('#progress')).toContainText('1 of 3');
+  await expect(page.locator('form[data-step="0"] input[value="0"]')).toBeChecked();
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('#clearDraft').click();
+  await expect(page.locator('#draft')).toHaveValue('');
+  await expect(page.locator('#draftStatus')).toContainText('Wording cleared');
+  await expect(page.locator('#progress')).toContainText('1 of 3');
+  await expect(page.locator('#draft')).toBeFocused();
+});
+
+test('Clear wording only on empty draft does not interrupt with confirmation',async({page})=>{
+  await page.goto(route);
+  let prompts=0;
+  page.on('dialog',async dialog=>{prompts++;await dialog.dismiss();});
+  await page.locator('#clearDraft').click();
+  expect(prompts).toBe(0);
+  await expect(page.locator('#draftStatus')).toContainText('Wording cleared');
 });
 
 test('reset clears answers, feedback, editable draft and restores focus',async({page})=>{

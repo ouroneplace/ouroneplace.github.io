@@ -223,6 +223,10 @@ make.addEventListener("click",()=>{
 });
 draft.addEventListener("input",()=>{draft.dataset.generated="false";status.textContent="";status.classList.remove("caution");});
 document.getElementById("clearDraft").addEventListener("click",()=>{
+  if(draft.value.length>0&&!window.confirm("Clear your practice wording? Choose Cancel to keep it.")){
+    status.classList.remove("caution");status.textContent="Clear canceled. Your wording remains.";
+    draft.focus();return;
+  }
   draft.value="";draft.dataset.generated="false";
   status.classList.remove("caution");status.textContent="Wording cleared. Your three practice choices remain.";
   draft.focus();
