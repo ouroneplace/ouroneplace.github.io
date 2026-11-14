@@ -161,7 +161,7 @@ test('Business reality: no-JavaScript users still get complete learning and sour
   await expect(page.locator('.examples')).toBeHidden();
   await expect(page.locator('#calculateBtn')).toBeDisabled();
   await expect(page.locator('#clearEstimate')).toBeDisabled();
-  await expect(page.locator('noscript p')).toContainText('The calculator buttons are disabled');
+  await expect(page.locator('noscript p')).toContainText('The calculator fields and buttons are disabled');
   await expect(page.locator('.sources a')).toHaveCount(3);
  }finally{await context.close();}
 });
