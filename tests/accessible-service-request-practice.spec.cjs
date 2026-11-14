@@ -36,9 +36,9 @@ test('Accessible communication: local draft requires every selection and asks no
  await expect(b.locator('#setting')).toBeFocused();await expect(sample).toHaveValue('');
  await b.locator('#setting').selectOption('office');await b.locator('#method').selectOption('electronic');
  await b.locator('#confirm').selectOption('test');await b.getByRole('button',{name:'Create my sample wording'}).click();
- await expect(sample).toContainValue('state or local public office');
- await expect(sample).toContainValue('accessible electronic text');
- await expect(sample).toContainValue('check that the accessible material or aid works');
+ await expect(sample).toHaveValue(/state or local public office/);
+ await expect(sample).toHaveValue(/accessible electronic text/);
+ await expect(sample).toHaveValue(/check that the accessible material or aid works/);
  await b.getByRole('button',{name:'Select wording for manual copy'}).click();
  await expect(sample).toBeFocused();
  const selected=await sample.evaluate(x=>({start:x.selectionStart,end:x.selectionEnd,length:x.value.length}));
@@ -49,9 +49,9 @@ test('Accessible communication: changing selection invalidates old sample and re
  const b=page.locator('#request-form'),sample=b.locator('#sample'),status=b.locator('.status'),select=b.getByRole('button',{name:'Select wording for manual copy'});
  await b.locator('#setting').selectOption('meeting');await b.locator('#method').selectOption('captions');await b.locator('#confirm').selectOption('written');
  await b.getByRole('button',{name:'Create my sample wording'}).click();
- await expect(sample).toContainValue('real-time captions');await expect(select).toBeEnabled();
+ await expect(sample).toHaveValue(/real-time captions/);await expect(select).toBeEnabled();
  await b.locator('#method').selectOption('interpreter');await expect(sample).toHaveValue('');await expect(select).toBeDisabled();await expect(status).toBeEmpty();
- await b.getByRole('button',{name:'Create my sample wording'}).click();await expect(sample).toContainValue('qualified sign-language interpreting');
+ await b.getByRole('button',{name:'Create my sample wording'}).click();await expect(sample).toHaveValue(/qualified sign-language interpreting/);
  await b.getByRole('button',{name:'Clear selections'}).click();
  await expect(sample).toHaveValue('');await expect(select).toBeDisabled();
  await expect(b.locator('#setting')).toHaveValue('');await expect(b.locator('#method')).toHaveValue('');await expect(b.locator('#confirm')).toHaveValue('');
