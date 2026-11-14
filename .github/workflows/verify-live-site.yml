@@ -85,6 +85,7 @@ jobs:
                    'one-place/device-care-walkthrough.html',
                    'one-place/support-skills-safety.html',
                    'one-place/calm-moment-practice.html',
+                   'one-place/first-week-work-practice.html',
                    'one-place/career-readiness-planner.html',
                    'one-place/business-idea-reality-check.html']
           paths += [f'lessons/{n:02}/index.html' for n in range(1, 11)]

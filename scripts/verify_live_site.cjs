@@ -70,6 +70,9 @@ fs.mkdirSync(output,{recursive:true});
      if(areaName==='Technology & Digital Safety'){
       assert.equal(await page.getByRole('link',{name:'Open Everyday Device Care'}).count(),1,'Technology device-care discovery');
      }
+     if(areaName==='Work & Careers'){
+      assert.equal(await page.getByRole('link',{name:'Open First Week at Work Practice'}).count(),1,'Work first-week discoverability');
+     }
      if(areaName==='Mental Health & Safety'){
       assert.equal(await page.getByRole('link',{name:'Open Calm Moment Practice'}).count(),1,'Mental Health self-coping practice discoverability');
      }
@@ -140,6 +143,11 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#urgent input[type=radio]').nth(2).check();
    await page.locator('#urgent button[type=submit]').click();
    assert.match(await page.locator('#urgent .feedback').innerText(),/Safety comes first/,'Urgent safe choice feedback must work');
+   await reflow();
+   // First Week at Work: three distinct job-starting practice cases.
+   await goto('/one-place/first-week-work-practice.html');
+   assert.equal(await page.locator('section.case').count(),3,'First Week must retain three fictional cases');
+   assert.equal(await page.locator('.guide').count(),3,'First Week must retain three teaching guides');
    await reflow();
    // Work & Careers: editable fictional start, deliberate preview, and reset.
    await goto('/one-place/career-readiness-planner.html');
