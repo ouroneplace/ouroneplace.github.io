@@ -103,7 +103,7 @@ for(const width of [320,1366]){
    await expect(page.getByRole('heading',{name:'First Week at Work Practice',level:1})).toBeVisible();
    await expect(page.locator('form.practice:visible')).toHaveCount(0);
    await expect(page.locator('.case')).toHaveCount(3);
-   await expect(page.locator('noscript')).toContainText('optional quizzes are disabled');
+   await expect(page.locator('noscript p.notice')).toContainText('optional quizzes are disabled');
    for(const name of Object.keys(cases)){
     await expect(page.locator('#'+name+' .guide')).toBeVisible();
     await expect(page.locator('#'+name+' summary')).toBeVisible();
