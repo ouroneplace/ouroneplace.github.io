@@ -53,7 +53,7 @@ test('Device Care: keyboard skip link and practice navigation',async({page})=>{
  await page.keyboard.press('Enter');
  await expect(page.locator('main')).toBeFocused();
  await page.keyboard.press('Tab');
- await expect(page.getByRole('link',{name:'Technology & Digital Safety',exact:true})).toBeFocused();
+ await expect(page.getByRole('link',{name:'01. Updates'})).toBeFocused();
  await page.locator('#update input[type="radio"]').nth(1).focus();
  await page.keyboard.press('Space');
  await page.locator('#update button[type="submit"]').focus();
