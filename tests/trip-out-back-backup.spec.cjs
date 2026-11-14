@@ -74,7 +74,7 @@ test('blank decisions do not complete a step and provide an alternative',async({
 
 test('an already-away traveler receives a safe-place and verified-help backup, not departure advice',async({page})=>{
  await page.goto(route);
- await expect(page.locator('form[data-scene="2"]')).toContainText('After the library visit');
+ await expect(page.locator('form[data-scene="2"]').locator('..')).toContainText('After the library visit');
  await choose(page,2,1);
  await expect(page.locator('#feedback3')).toContainText('already away');
  await expect(page.locator('#feedback3')).toContainText('stay somewhere safe');
@@ -115,7 +115,7 @@ test('fictional example loads without asking to replace blank fields',async({pag
  await page.getByRole('button',{name:'Load a fictional example'}).click();
  expect(dialogs).toBe(0);
  await expect(page.locator('#goPlan')).toHaveValue(/Saturday outbound service/);
- await expect(page.locator('#backupPlan')).toHaveValue(/trusted support or postpone/);
+ await expect(page.locator('#backupPlan')).toHaveValue(/If canceled while out, stay safe and ask trusted support/);
  await expect(page.locator('#status')).toContainText('Fictional trip example loaded');
 });
 
