@@ -129,7 +129,7 @@ for(const config of [
    expect(await page.locator('noscript p').textContent()).toContain('Read-only without JavaScript');
    await expect(page.locator('.tabs')).toBeHidden();
    for(const s of ['#billForm','#incomeForm','.toolactions','#panel-overview .fieldrow','#panel-overview .check','#panel-plan .buttonrow'])
-    await expect(page.locator(s)).toBeHidden();
+    await expect(page.locator(s+':visible')).toHaveCount(0);
    await expect(page.locator('#main button:visible,#main input:visible,#main select:visible,#main textarea:visible')).toHaveCount(0);
    const widths=await page.evaluate(()=>({viewport:innerWidth,doc:document.documentElement.scrollWidth}));
    expect(widths.doc).toBeLessThanOrEqual(widths.viewport+1);
