@@ -275,6 +275,17 @@ test('mobile heading and safety warning keep whole words at normal and 200-perce
   }
 });
 
+test('skip link moves keyboard focus into main without altering normal Tab order',async({page})=>{
+  await page.goto(route);
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main$/);
+  await expect(page.locator('#main')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('form[data-step="0"] input[value="0"]')).toBeFocused();
+});
+
 test('keyboard, labels and live feedback are operable',async({page})=>{
   await page.goto(route);
   await page.keyboard.press('Tab');
