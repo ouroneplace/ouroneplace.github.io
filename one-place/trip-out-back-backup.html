@@ -75,7 +75,7 @@ footer{border-top:1px solid #bfd9d2;margin-top:30px;padding:20px 0;font-size:.95
 
 <noscript>
 <div class="note" role="note">
-<strong>Without JavaScript, the whole lesson still works on paper.</strong> For the three decisions below, practice these responses: confirm both directions with the actual provider before leaving; ask for a safe accessible alternative if the planned boarding path does not work; and arrange a confirmed backup or postpone if the return trip is canceled. Use the five checks above and the example worksheet below. No sign-in or digital tool is required.
+<strong>Without JavaScript, the whole lesson still works on paper.</strong> For the three decisions below, practice these responses: confirm both directions with the actual provider before leaving; ask for a safe accessible alternative if the planned boarding path does not work; and, if a return service is canceled after arrival, stay somewhere safe while contacting the provider or trusted support for a confirmed way home. Use the five checks above and the example worksheet below. No sign-in or digital tool is required.
 </div>
 </noscript>
 
@@ -113,7 +113,7 @@ footer{border-top:1px solid #bfd9d2;margin-top:30px;padding:20px 0;font-size:.95
 <form class="choice-form" data-scene="2">
 <fieldset><legend>What is a safer next decision?</legend>
 <label class="option"><input type="radio" name="return" value="0"><span>Accept an unsolicited ride from a stranger because it is offered first.</span></label>
-<label class="option"><input type="radio" name="return" value="1"><span>Contact the provider or trusted support, verify a safe alternative and postpone or seek help if needed.</span></label>
+<label class="option"><input type="radio" name="return" value="1"><span>Stay somewhere safe, contact the provider or trusted support, and confirm a way home before traveling again.</span></label>
 <label class="option"><input type="radio" name="return" value="2"><span>Keep waiting without checking whether any ride remains.</span></label>
 </fieldset>
 <button type="submit">Explain return choice</button>
@@ -134,7 +134,7 @@ footer{border-top:1px solid #bfd9d2;margin-top:30px;padding:20px 0;font-size:.95
 <label class="field" for="fitPlan">My access, comfort or cost check</label>
 <textarea id="fitPlan" maxlength="320" placeholder="Example: Ask about a boarding option and confirm the full fare."></textarea>
 <label class="field" for="backupPlan">My backup or safe stopping point</label>
-<textarea id="backupPlan" maxlength="320" placeholder="Example: If a safe return cannot be confirmed, postpone."></textarea>
+<textarea id="backupPlan" maxlength="320" placeholder="Example: Before leaving, verify a return; if canceled while out, seek trusted help in a safe place."></textarea>
 <div class="actions"><button type="button" id="example" class="secondary">Load a fictional example</button><button type="button" id="clear">Start over and clear practice</button></div>
 <p id="status" role="status" aria-live="polite"></p>
 </div>
@@ -143,7 +143,7 @@ footer{border-top:1px solid #bfd9d2;margin-top:30px;padding:20px 0;font-size:.95
 <p><strong>Out:</strong> Check the current Saturday outbound ride, route alert and boarding location with the provider.</p>
 <p><strong>Back:</strong> Confirm the final workable return service before going to the library.</p>
 <p><strong>Fit:</strong> Verify cost and a safe boarding plan; ask the operator about available assistance.</p>
-<p><strong>Backup:</strong> If the safe return cannot be confirmed, call a trusted person or postpone instead of accepting an unsolicited ride.</p>
+<p><strong>Backup:</strong> Before departure, postpone if no safe return can be confirmed. If already out, wait in a safe place and contact trusted support for a verified way home.</p>
 </div>
 </details>
 </section>
@@ -176,7 +176,7 @@ const explanations=[
 ],
 [
  "An unsolicited ride is not a verified backup. Use a known, safe option and seek trusted assistance if necessary.",
- "A return is not solved until a usable safe option is confirmed. Check provider alternatives, trusted support, or postpone and ask for help.",
+ "A return is not solved until a usable safe option is confirmed. Since this traveler is already away, stay somewhere safe and contact the provider or trusted support to arrange help. If in immediate danger, use local emergency services.",
  "Waiting without verifying a return may increase risk. Check a current option and decide whether to seek help."
 ]
 ];
@@ -205,7 +205,7 @@ document.getElementById("example").addEventListener("click",()=>{
   "Check the current Saturday outbound service and alerts with the operator.",
   "Confirm the last workable way home before going.",
   "Ask about safe boarding, full cost and any assistance needed.",
-  "If a safe return is uncertain, ask trusted support or postpone."
+  "Before leaving verify a return. If canceled while out, stay safe and ask trusted support."
  ].forEach((v,i)=>{fields[i].value=v;});
  status.textContent="Fictional trip example loaded. You can edit every field.";
 });

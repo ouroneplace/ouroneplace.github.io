@@ -72,6 +72,18 @@ test('blank decisions do not complete a step and provide an alternative',async({
  await expect(page.locator('#feedback2')).toContainText('Choose one response first');
 });
 
+test('an already-away traveler receives a safe-place and verified-help backup, not departure advice',async({page})=>{
+ await page.goto(route);
+ await expect(page.locator('form[data-scene="2"]')).toContainText('After the library visit');
+ await choose(page,2,1);
+ await expect(page.locator('#feedback3')).toContainText('already away');
+ await expect(page.locator('#feedback3')).toContainText('stay somewhere safe');
+ await expect(page.locator('#feedback3')).toContainText('contact the provider or trusted support');
+ await expect(page.locator('#feedback3')).not.toContainText('postpone');
+ await page.locator('#paper summary').click();
+ await expect(page.locator('#paper')).toContainText('If already out');
+});
+
 test('changing a reviewed choice invalidates stale reassurance and preserves other steps',async({page})=>{
  await page.goto(route);
  await choose(page,0,1);await choose(page,1,1);

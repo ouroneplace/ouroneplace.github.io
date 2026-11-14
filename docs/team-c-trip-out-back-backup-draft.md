@@ -20,6 +20,12 @@ A visitor can explain why a saved timetable needs provider verification, stop wh
 
 No homepage, shared script/style, workflow, release manifest, existing feature or founder-approved file is modified.
 
+## Pre-release content correction — canceled return while already away
+
+- Manual content review caught a real scenario mismatch before source-QA closure: the third fictional decision occurs *after* arrival at the library, when the return is canceled. Earlier advice to “postpone” the departure at that point was chronologically impossible. Postponement is valid only **before** leaving.
+- Corrected scenario's best option, individualized explanation, no-JavaScript paper summary, private placeholder and example to distinguish **before departure** versus **already away**. After cancellation while already out, remain somewhere safe, contact the actual operator or trusted support and confirm a safe way home; seek local emergency help in immediate danger. Never promise that any alternate service exists.
+- Added one focused Playwright test for already-away logic and paper backup text. This changes only Team C page, focused spec, feature QA doc. Initial CI for the prior head cannot certify this new revision; exact current-head full regression is required.
+
 ## Content, privacy, usability and safety boundaries
 
 - Explicit robots index,follow requests future public educational discoverability; it neither forces search results nor authorizes publication.
