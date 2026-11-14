@@ -115,6 +115,9 @@ reviewed.hidden=false;print.disabled=false;document.body.classList.add("print-re
 });
 $("clear").addEventListener("click",()=>{if(!confirm("Clear all selected choices and reviewed note?")){status.textContent="Clear canceled; choices kept.";return;}form.reset();syncChoice("concern");syncChoice("action");invalidate("Choices cleared. Nothing stored.");});
 print.addEventListener("click",()=>{if(!reviewed.hidden)window.print();});
+document.querySelector('input[name="decision"]').closest('fieldset').addEventListener("change",event=>{
+if(event.target.matches('input[name="decision"]'))$("feedback").textContent="Choice selected. Check my reasoning for updated feedback.";
+});
 $("check").addEventListener("click",()=>{const x=document.querySelector('input[name="decision"]:checked');
 $("feedback").textContent=!x?"Choose a response first, or read the explanation.":x.value==="b"?"Safer response: get out by a safe route, stay out and inform responders of anyone or any animal left inside.":x.value==="a"?"Unsafe: smoke can overcome people quickly. Do not enter smoky areas to retrieve an animal; call responders.":"Unsafe: an app confirmation is not needed to act on a smoke alarm; follow the building plan and emergency services.";
 });
