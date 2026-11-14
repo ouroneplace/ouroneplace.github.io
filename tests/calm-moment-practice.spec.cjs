@@ -19,7 +19,7 @@ for(const width of [320,390,1366,1920]){
 for(let i=0;i<ids.length;i++){
  test('Calm Moment '+ids[i]+': blank, wrong, right, stale response and reset',async({page})=>{
   await page.goto(url+'#'+ids[i]);
-  const form=page.locator('#'+ids[i]+' form.practice'),choices=form.getByRole('radio'),submit=form.getByRole('button',{name:'Check the idea'}),feedback=form.getByRole('status');
+  const form=page.locator('#'+ids[i]+' form.practice'),choices=form.getByRole('radio'),submit=form.getByRole('button',{name:'Check the idea'}),feedback=form.locator('.feedback');
   await submit.click();await expect(feedback).toContainText('Choose one fictional');await expect(choices.first()).toBeFocused();
   await choices.nth((safe[i]+1)%3).check();await submit.click();await expect(feedback).toContainText('Consider another approach.');
   await choices.nth(safe[i]).check();await expect(feedback).toBeEmpty();
