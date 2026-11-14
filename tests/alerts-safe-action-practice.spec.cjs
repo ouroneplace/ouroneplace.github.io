@@ -86,8 +86,9 @@ test('Alerts Safe Action does not write or upload; official links opt-in',async(
 test('Alerts Safe Action static links and sources remain narrowly distinct',async({page})=>{
  await page.goto(url);
  await expect(page.getByRole('link',{name:'Emergencies & Preparedness area'})).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
- await expect(page.getByRole('link',{name:'Power Outage Continuity Check'})).toHaveAttribute('href','power-outage-continuity.html');
- await expect(page.getByRole('link',{name:'Home Fire Escape Rehearsal'})).toHaveAttribute('href','home-fire-escape-rehearsal.html');
+ await expect(page.locator('main')).toContainText('Power Outage Continuity Check');
+ await expect(page.locator('main')).toContainText('Home Fire Escape Rehearsal');
+ await expect(page.locator('main a[href="power-outage-continuity.html"], main a[href="home-fire-escape-rehearsal.html"]')).toHaveCount(0);
  await expect(page.locator('.sources a')).toHaveCount(4);
  await expect(page.locator('meta[name=robots]')).toHaveAttribute('content','index,follow');
 });
