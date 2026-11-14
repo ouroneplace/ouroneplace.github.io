@@ -194,6 +194,9 @@ $('resetPlan').addEventListener('click',()=>{
  form.reset();['priority','phase','support'].forEach(syncChoice);invalidate('Choices cleared. No information was uploaded or stored.');
 });
 print.addEventListener('click',()=>{if(!result.hidden)window.print();});
+document.querySelector('input[name="decision"]').closest('fieldset').addEventListener('change',event=>{
+ if(event.target.matches('input[name="decision"]'))$('decisionStatus').textContent='Choice selected. Check reasoning for updated feedback.';
+});
 $('checkDecision').addEventListener('click',()=>{
  const selected=document.querySelector('input[name="decision"]:checked');
  $('decisionStatus').textContent=!selected?'Choose an option first, or open the explanation.':selected.value==='b'?'Best first response: never use fuel-burning devices indoors. Verify outdoor separation, ventilation, CO alarms and manufacturer guidance.':selected.value==='a'?'An open garage door does not remove lethal carbon monoxide risk. Never run a generator inside.':'Charcoal grills can also cause lethal carbon monoxide indoors. Never use them as indoor backup heat or cooking.';
