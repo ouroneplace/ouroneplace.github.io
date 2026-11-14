@@ -189,6 +189,26 @@ test('fictional practice handles blank, both unsafe options, safe choice and ret
  await expect(page.locator('input[name="decision"]:checked')).toHaveCount(0);
  await expect(page.locator('#feedback')).toContainText('Choice cleared');
 });
+for(const width of [320,1366]){
+ test('changing fire escape answer clears previous safe feedback at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto(path);
+  const feedback=page.locator('#feedback');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await page.locator('#check').click();
+  await expect(feedback).toContainText('Safer response');
+  await page.locator('input[name="decision"][value="a"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check my reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('Safer response');
+  await page.locator('#check').click();
+  await expect(feedback).toContainText('Unsafe: smoke');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check my reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('Unsafe: smoke');
+  await page.locator('#check').click();
+  await expect(feedback).toContainText('Safer response');
+ });
+}
 test('keyboard, labels, skip link and live feedback are semantic',async({page})=>{
  await page.goto(path);
  await page.getByRole('link',{name:'Skip to fire escape guide'}).focus();
