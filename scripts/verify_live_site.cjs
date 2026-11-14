@@ -67,6 +67,9 @@ fs.mkdirSync(output,{recursive:true});
       assert.equal(await page.locator('#visitForm').count(),1,'Health visit planner must work');
       assert.equal(await page.locator('#habitForm').count(),1,'Health routine builder must work');
      }
+     if(areaName==='Daily Life & Organization'){
+      assert.equal(await page.getByRole('link',{name:'Open Find It When Needed'}).count(),1,'Household records discovery');
+     }
      if(areaName==='Technology & Digital Safety'){
       assert.equal(await page.getByRole('link',{name:'Open Everyday Device Care'}).count(),1,'Technology device-care discovery');
      }
@@ -132,6 +135,11 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('#unexpected-message input[type=radio]').nth(1).check();
    await page.locator('#unexpected-message button[type=submit]').click();
    assert.match(await page.locator('#unexpected-message .feedback').innerText(),/Good decision/,'Digital Safety decision feedback must work');
+   await reflow();
+   // Household records: three safe fictional cases and no personal uploads.
+   await goto('/one-place/household-records-practice.html');
+   assert.equal(await page.locator('section.lesson').count(),3,'Household records must retain three decisions');
+   assert.equal(await page.locator('form.practice').count(),3,'Household records must retain three fictional practice forms');
    await reflow();
    // Everyday Device Care: new Technology self-guided lesson.
    await goto('/one-place/device-care-walkthrough.html');
