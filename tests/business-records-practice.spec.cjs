@@ -84,12 +84,17 @@ test('Business Records: editing after review invalidates stale feedback',async({
  await expect(page.locator('#review-summary')).toContainText('3 of 4');
 });
 test('Business Records: reset clears all invented choices and returns to first field',async({page})=>{
- await page.goto(URL);await allCorrect(page);await review(page).click();
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(URL);
+ expect(await page.evaluate(()=>typeof document.getElementById('practice').reset)).toBe('function');
+ await allCorrect(page);await review(page).click();
  await page.getByRole('button',{name:'Reset fictional practice'}).click();
  await expect(page.locator('#review')).toBeHidden();
  await expect(page.locator('#status')).toContainText('practice reset');
+ await expect(page.locator('#review-list li')).toHaveCount(0);
  for(const id of names)await expect(sel(page,id)).toHaveValue('');
  await expect(sel(page,'paid')).toBeFocused();
+ expect(errors).toEqual([]);
 });
 for(const width of [320,390,1366,1920]){
  test('Business Records: teaching and practice reflow at '+width+'px',async({page})=>{
