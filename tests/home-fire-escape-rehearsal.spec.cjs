@@ -2,6 +2,26 @@ const {test,expect}=require('@playwright/test');
 const path='/one-place/home-fire-escape-rehearsal.html';
 
 for(const width of [320,1366]){
+ test('emergency planner select borders meet non-text contrast at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(path);
+  const ratios=await page.evaluate(()=>{
+   const luminance=color=>{
+    const values=(color.match(/[0-9.]+/g)||[]).slice(0,3).map(Number);
+    const channels=values.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4);
+    return 0.2126*channels[0]+0.7152*channels[1]+0.0722*channels[2];
+   };
+   const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);};
+   return ["concern","setting","action"].map(id=>{
+    const style=getComputedStyle(document.getElementById(id));
+    return {id,border:style.borderTopColor,background:style.backgroundColor,ratio:contrast(style.borderTopColor,style.backgroundColor)};
+   });
+  });
+  for(const control of ratios)expect(control.ratio,JSON.stringify(control)).toBeGreaterThanOrEqual(3.2);
+ });
+}
+
+for(const width of [320,1366]){
  test('public indexing parity for fire escape and area navigation at '+width+'px',async({page})=>{
   await page.setViewportSize({width,height:840});
   await page.goto(path);
