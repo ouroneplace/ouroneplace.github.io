@@ -73,6 +73,18 @@ test('Calm Moment: local-only, no storage/writes/third-party loads',async({page}
  }
  await page.reload();await expect(page.locator('form.practice input:checked')).toHaveCount(0);
 });
+for(const width of [320,1366]){
+ test('Calm Moment: discoverable from Mental Health & Safety area at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:780});
+  await page.goto('/index.html?area=Mental%20Health%20%26%20Safety');
+  await expect(page.locator('.offers > a.offer')).toHaveCount(4);
+  const link=page.getByRole('link',{name:'Open Calm Moment Practice'});
+  await expect(link).toHaveAttribute('href','one-place/calm-moment-practice.html');
+  await link.click();
+  await expect(page).toHaveURL(/\/one-place\/calm-moment-practice\.html$/);
+  await expect(page.getByRole('heading',{name:'Calm Moment Practice',level:1})).toBeVisible();
+ });
+}
 test('Calm Moment: link to existing nonduplicated support lab and area/home paths',async({page})=>{
  await page.goto(url);
  await expect(page.getByRole('link',{name:'Support Skills & Safety Lab'})).toHaveAttribute('href','support-skills-safety.html');

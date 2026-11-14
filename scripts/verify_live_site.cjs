@@ -67,6 +67,9 @@ fs.mkdirSync(output,{recursive:true});
       assert.equal(await page.locator('#visitForm').count(),1,'Health visit planner must work');
       assert.equal(await page.locator('#habitForm').count(),1,'Health routine builder must work');
      }
+     if(areaName==='Mental Health & Safety'){
+      assert.equal(await page.getByRole('link',{name:'Open Calm Moment Practice'}).count(),1,'Mental Health self-coping practice discoverability');
+     }
      assert.equal(await page.locator('.offers > a.offer').count(),4,areaName+' has four working paths');
      solutions.push(...await page.locator('.offers > a.offer').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))));
     }
@@ -82,6 +85,11 @@ fs.mkdirSync(output,{recursive:true});
    await page.locator('form.practice').first().getByRole('button',{name:'Check my choice'}).click();
    assert.match(await page.locator('form.practice .feedback').first().innerText(),/Good reasoning/,'Health Lab answer feedback missing');
    await reflow();
+    // New self-directed Mental Health & Safety lesson, with visible safety boundaries.
+    await goto('/one-place/calm-moment-practice.html');
+    assert.equal(await page.locator('section.lesson').count(),3,'Calm Moment must retain three fictional lessons');
+    assert.equal(await page.locator('form.practice').count(),3,'Calm Moment must retain three educational choice sets');
+    await reflow();
    // Health Costs Lab: document literacy and immediate fictional answer feedback.
    await goto('/one-place/health-costs-lab.html');
    assert.equal(await page.locator('section.lesson').count(),4,'Health Costs Lab has four lessons');
