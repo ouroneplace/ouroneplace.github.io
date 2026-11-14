@@ -218,3 +218,40 @@ test('Career Readiness: print view displays only reviewed output, not other form
  expect(state.extra).toBe('none');
  await expect(page.locator('#careerResult')).toContainText('Prepare for a reliable job interview');
 });
+
+for(const width of [320,1366]){
+ test('Career issue #80 native no-JavaScript fields are disabled at '+width+'px',async({browser})=>{
+  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width,height:740}});
+  try{
+   const page=await context.newPage();await page.goto('/one-place/career-readiness-planner.html');
+   await expect(page.locator('.step:visible')).toHaveCount(4);
+   for(const id of ["careerStage","careerGoal","careerSkill","careerSituation","careerAction","careerResultField","careerNext"]){
+    const field=page.locator('#'+id);
+    await expect(field).toBeDisabled();
+    expect(await field.evaluate(el=>el.disabled&&el.matches(':disabled'))).toBe(true);
+   }
+   await page.locator('body').click({position:{x:5,y:5}});
+   for(let i=0;i<30;i++){
+    await page.keyboard.press('Tab');
+    const focus=await page.evaluate(()=>document.activeElement&&document.activeElement.id);
+    expect(["careerStage","careerGoal","careerSkill","careerSituation","careerAction","careerResultField","careerNext"]).not.toContain(focus);
+   }
+   await expect(page.locator('#reviewCareer')).toBeDisabled();
+   await expect(page.locator('noscript p')).toContainText('fields and buttons are disabled');
+   await expect(page.locator('.examples')).toBeHidden();
+   const d=await page.evaluate(()=>({width:innerWidth,scroll:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)}));
+   expect(d.scroll).toBeLessThanOrEqual(d.width+1);
+  }finally{await context.close();}
+ });
+ test('Career issue #80 JavaScript init restores editable fields at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:740});await page.goto('/one-place/career-readiness-planner.html');
+  for(const id of ["careerStage","careerGoal","careerSkill","careerSituation","careerAction","careerResultField","careerNext"]){
+   const field=page.locator('#'+id);
+   await expect(field).toBeEnabled();
+   expect(await field.evaluate(el=>!el.disabled&&!el.matches(':disabled'))).toBe(true);
+  }
+  await expect(page.locator('#reviewCareer')).toBeEnabled();
+  await page.locator('[data-career-example="first"]').click();
+  await expect(page.locator('#careerGoal')).toHaveValue(/first customer-support interview/);
+ });
+}

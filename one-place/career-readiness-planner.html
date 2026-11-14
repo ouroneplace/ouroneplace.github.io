@@ -67,20 +67,20 @@ main{padding:0;max-width:none}
 <button type="button" class="secondary" data-career-example="return">Try a return-to-work example</button>
 <button type="button" class="secondary" data-career-example="flexible">Try a flexible-work example</button>
 </div>
-<noscript><p class="notice">Without JavaScript, you can read all four skills and the official references. The private plan builder requires JavaScript, and its buttons are disabled without it.</p></noscript>
+<noscript><p class="notice">Without JavaScript, you can read all four skills and the official references. The private plan builder requires JavaScript; its fields and buttons are disabled without it.</p></noscript>
 <form id="careerForm" autocomplete="off" novalidate aria-label="Career readiness planner form">
 <fieldset><legend>My goal and evidence</legend>
 <div class="columns">
 <div>
-<label for="careerStage">Where am I starting?</label><select id="careerStage"><option>Exploring first role</option><option>Changing careers</option><option>Returning after a break</option><option>Exploring flexible work</option><option>Growing in current role</option></select>
-<label for="careerGoal">A role, skill or training goal</label><input id="careerGoal" maxlength="160" placeholder="For example: prepare for a customer support interview" required>
-<label for="careerSkill">One transferable skill I can actually demonstrate</label><input id="careerSkill" maxlength="160" placeholder="For example: explaining a process clearly" required>
-<label for="careerSituation">A real situation where I used the skill (optional)</label><textarea id="careerSituation" maxlength="280" placeholder="A brief, specific example; no names needed"></textarea>
+<label for="careerStage">Where am I starting?</label><select id="careerStage" disabled><option>Exploring first role</option><option>Changing careers</option><option>Returning after a break</option><option>Exploring flexible work</option><option>Growing in current role</option></select>
+<label for="careerGoal">A role, skill or training goal</label><input id="careerGoal" disabled maxlength="160" placeholder="For example: prepare for a customer support interview" required>
+<label for="careerSkill">One transferable skill I can actually demonstrate</label><input id="careerSkill" disabled maxlength="160" placeholder="For example: explaining a process clearly" required>
+<label for="careerSituation">A real situation where I used the skill (optional)</label><textarea id="careerSituation" disabled maxlength="280" placeholder="A brief, specific example; no names needed"></textarea>
 </div>
 <div>
-<label for="careerAction">What I actually did</label><textarea id="careerAction" maxlength="280" placeholder="Describe my actions, not somebody else's" required></textarea>
-<label for="careerResultField">What happened, or what I learned (optional)</label><textarea id="careerResultField" maxlength="280" placeholder="Avoid invented results or numbers"></textarea>
-<label for="careerNext">One achievable next step (optional)</label><input id="careerNext" maxlength="180" placeholder="For example: rehearse the answer for a minute">
+<label for="careerAction">What I actually did</label><textarea id="careerAction" disabled maxlength="280" placeholder="Describe my actions, not somebody else's" required></textarea>
+<label for="careerResultField">What happened, or what I learned (optional)</label><textarea id="careerResultField" disabled maxlength="280" placeholder="Avoid invented results or numbers"></textarea>
+<label for="careerNext">One achievable next step (optional)</label><input id="careerNext" disabled maxlength="180" placeholder="For example: rehearse the answer for a minute">
 </div></div></fieldset>
 <div class="actions"><button type="submit" id="reviewCareer" disabled>Review my plan</button><button type="button" id="downloadCareer" disabled>Download reviewed plan (.txt)</button><button type="button" id="printCareer" disabled>Print reviewed plan</button><button class="secondary" type="button" id="clearCareer" disabled>Clear my draft</button></div>
 <p id="careerStatus" class="status" role="status" aria-live="polite">Enter a goal, an actual skill, and what you did to create a plan. Nothing is uploaded.</p>
@@ -127,6 +127,7 @@ function fillExample(key){
 }
 document.querySelector('.examples').hidden=false;
 for(const button of document.querySelectorAll('[data-career-example]'))button.addEventListener('click',()=>fillExample(button.dataset.careerExample));
+byId('careerStage').disabled=false;for(const id of ids)byId(id).disabled=false;
 byId('reviewCareer').disabled=false;byId('clearCareer').disabled=false;
 form.addEventListener('input',()=>{if(reviewed)clearReview('Draft changed. Review the updated plan before exporting.');});
 form.addEventListener('change',()=>{if(reviewed)clearReview('Draft changed. Review the updated plan before exporting.');});
