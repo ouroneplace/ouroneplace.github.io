@@ -84,7 +84,9 @@ jobs:
                    'one-place/digital-safety-practice.html',
                    'one-place/support-skills-safety.html',
                    'one-place/career-readiness-planner.html',
-                   'one-place/business-idea-reality-check.html']
+                   'one-place/business-idea-reality-check.html',
+                   'one-place/everyday-access-check.html',
+                   'one-place/conversation-repair-practice.html']
           paths += [f'lessons/{n:02}/index.html' for n in range(1, 11)]
           for attempt in range(60):
               try:

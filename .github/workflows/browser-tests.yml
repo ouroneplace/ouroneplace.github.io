@@ -30,6 +30,8 @@ jobs:
       - run: npm test
         env:
           RC_SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          HQ_CAPTURE_VISUALS: ${{ github.event_name == 'pull_request' && github.head_ref == 'hq/rc02-access-conversation-on-main-20261113' }}
+          HQ_REVIEW_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
       # Synthetic screenshots are QA evidence, not human visual approval.
       - uses: actions/upload-artifact@v4
         if: always()
@@ -45,6 +47,14 @@ jobs:
           name: rc01-official-browser-observations
           path: test-results/hq-rc01-external-browser-evidence/
           if-no-files-found: warn
+          retention-days: 7
+      # New RC-02 QA artifact, keep existing RC-01 uploads unchanged.
+      - uses: actions/upload-artifact@v4
+        if: always() && github.event_name == 'pull_request' && github.head_ref == 'hq/rc02-access-conversation-on-main-20261113'
+        with:
+          name: hq-rc02-access-conversation-visual-evidence
+          path: hq-visual-evidence/
+          if-no-files-found: error
           retention-days: 7
       - uses: actions/upload-artifact@v4
         if: failure()
