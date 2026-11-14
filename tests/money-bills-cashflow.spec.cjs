@@ -101,3 +101,59 @@ test('Money & Bills: return to category without losing existing Debt Guide link'
     await expect(page.getByRole('heading',{name:'Money & Bills',exact:true})).toBeVisible();
   }
 });
+
+// Issue #83: essential Money & Bills teaching remains available without JavaScript.
+// Script-off controls cannot accept unprocessable financial information.
+for(const config of [
+ {width:320,root:'17px'},{width:390,root:'17px'},
+ {width:1366,root:'17px'},{width:1920,root:'17px'},
+ {width:320,root:'34px'},{width:390,root:'34px'}
+]){
+ test('Money Bills #83 readable script-off fallback '+config.width+'px root '+config.root,async({browser})=>{
+  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:config.width,height:740}});
+  try{
+   const page=await context.newPage();
+   await page.goto('/one-place/money-bills.html');
+   await page.evaluate(size=>document.documentElement.style.setProperty('font-size',size,'important'),config.root);
+   for(const [panel,heading] of [
+    ['overview','Start with the real situation'],
+    ['bills','Add unpaid bills and commitments'],
+    ['income','Add expected income'],
+    ['plan','Your next-step summary']
+   ]){
+    await expect(page.locator('#panel-'+panel)).toBeVisible();
+    await expect(page.getByRole('heading',{name:heading,exact:true})).toBeVisible();
+   }
+   await expect(page.getByRole('heading',{name:'Prepare to call a bill provider'})).toBeVisible();
+   await expect(page.locator('noscript p')).toBeVisible();
+   expect(await page.locator('noscript p').textContent()).toContain('Read-only without JavaScript');
+   await expect(page.locator('.tabs')).toBeHidden();
+   for(const s of ['#billForm','#incomeForm','.toolactions','#panel-overview .fieldrow','#panel-overview .check','#panel-plan .buttonrow'])
+    await expect(page.locator(s+':visible')).toHaveCount(0);
+   await expect(page.locator('#main button:visible,#main input:visible,#main select:visible,#main textarea:visible')).toHaveCount(0);
+   const widths=await page.evaluate(()=>({viewport:innerWidth,doc:document.documentElement.scrollWidth}));
+   expect(widths.doc).toBeLessThanOrEqual(widths.viewport+1);
+  }finally{await context.close();}
+ });
+}
+for(const width of [320,1366]){
+ test('Money Bills #83 enhanced tab startup and keyboard navigation '+width+'px',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.setViewportSize({width,height:740});
+  await page.goto('/one-place/money-bills.html');
+  await expect(page.locator('noscript')).toBeHidden();
+  await expect(page.locator('#panel-overview')).toBeVisible();
+  for(const id of ['bills','income','plan'])await expect(page.locator('#panel-'+id)).toBeHidden();
+  await page.locator('#tab-bills').click();
+  await expect(page.locator('#panel-bills')).toBeVisible();
+  await page.locator('#tab-bills').press('ArrowRight');
+  await expect(page.locator('#panel-income')).toBeVisible();
+  await page.locator('#tab-income').press('ArrowRight');
+  await expect(page.locator('#panel-plan')).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Prepare to call a bill provider'})).toBeVisible();
+  await page.locator('#tab-plan').press('Home');
+  await expect(page.locator('#panel-overview')).toBeVisible();
+  await expect(page.locator('#tab-overview')).toHaveAttribute('aria-selected','true');
+  expect(errors).toEqual([]);
+ });
+}
