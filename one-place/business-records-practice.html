@@ -104,7 +104,7 @@ li{margin:8px 0}footer{padding:24px;text-align:center;color:#4a675f;font-size:.9
 <label for="kind-returned">D · $20 refund to a customer</label>
 <select id="kind-returned" data-case="returned" disabled><option value="">Choose one fictional record type</option><option value="sale">Customer payment</option><option value="cost">Business purchase</option><option value="personal">Personal spending</option><option value="refund">Customer refund</option></select>
 </fieldset>
-<div class="actions"><button type="submit">Review my four choices</button><button type="button" class="secondary" id="reset" disabled>Reset fictional practice</button></div>
+<div class="actions"><button type="submit">Review my four choices</button><button type="button" class="secondary" id="resetPractice" disabled>Reset fictional practice</button></div>
 <p id="status" class="status" role="status" aria-live="polite">Select a category for each fictional example to review it.</p>
 <section id="review" class="review" aria-labelledby="review-title" tabindex="-1" hidden>
 <h3 id="review-title">Practice review — not a business ledger</h3>
@@ -135,7 +135,7 @@ const records={
  returned:{name:'D · Customer refund',answer:'refund',why:'Money returned to a customer adjusts the history; it is not a new sale.',evidence:'Keep the original transaction and linked refund confirmation.'}
 };
 const labels={sale:'Customer payment',cost:'Business purchase',personal:'Personal spending',refund:'Customer refund'};
-const form=document.getElementById('practice'),status=document.getElementById('status'),review=document.getElementById('review'),list=document.getElementById('review-list'),summary=document.getElementById('review-summary'),reset=document.getElementById('reset');
+const form=document.getElementById('practice'),status=document.getElementById('status'),review=document.getElementById('review'),list=document.getElementById('review-list'),summary=document.getElementById('review-summary'),reset=document.getElementById('resetPractice');
 const choices=[...form.querySelectorAll('select[data-case]')];
 form.hidden=false;for(const s of choices)s.disabled=false;reset.disabled=false;
 function invalidate(message){review.hidden=true;summary.textContent='';list.replaceChildren();status.textContent=message;}
