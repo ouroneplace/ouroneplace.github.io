@@ -219,7 +219,7 @@ review.addEventListener('click',()=>{
  say('Preparation plan reviewed. You can read it below or choose to download a local text copy.');
 });
 clear.addEventListener('click',()=>{
- if(!window.confirm('Clear every pathway checkmark and the current plan? This cannot be undone.')){say('Nothing cleared.');return}
+ if((reviewed||Boolean(document.querySelector('[data-record]:checked')))&&!window.confirm('Clear every pathway checkmark and the current plan? This cannot be undone.')){say('Nothing cleared.');return}
  document.querySelectorAll('[data-record]').forEach(i=>i.checked=false);
  invalidate('All checkmarks and the plan cleared.');
 });
