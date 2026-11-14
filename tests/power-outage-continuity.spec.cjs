@@ -1,0 +1,381 @@
+const {test,expect}=require('@playwright/test');
+const url='/one-place/power-outage-continuity.html';
+
+for(const width of [320,1366]){
+ test('emergency planner select borders meet non-text contrast at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  const ratios=await page.evaluate(()=>{
+   const luminance=color=>{
+    const values=(color.match(/[0-9.]+/g)||[]).slice(0,3).map(Number);
+    const channels=values.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4);
+    return 0.2126*channels[0]+0.7152*channels[1]+0.0722*channels[2];
+   };
+   const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);};
+   return ["priority","phase","support"].map(id=>{
+    const style=getComputedStyle(document.getElementById(id));
+    return {id,border:style.borderTopColor,background:style.backgroundColor,ratio:contrast(style.borderTopColor,style.backgroundColor)};
+   });
+  });
+  for(const control of ratios)expect(control.ratio,JSON.stringify(control)).toBeGreaterThanOrEqual(3.2);
+ });
+}
+
+for(const width of [320,1366]){
+ test('public indexing parity for outage guide and area navigation at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  const robots=page.locator('meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
+ });
+}
+
+for(const width of [320,390,1366,1920]){
+ test('power outage guide renders five complete lessons and reflows at '+width+'px',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  await expect(page).toHaveTitle(/Power Outage Continuity Check/);
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await expect(page.locator('article.lesson')).toHaveCount(5);
+  await expect(page.locator('article.lesson dt')).toHaveCount(30);
+  await expect(page.locator('#noJsHelp')).toBeHidden();
+  const m=await page.evaluate(()=>({width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth}));
+  expect(Math.max(m.body,m.html),JSON.stringify(m)).toBeLessThanOrEqual(m.width+1);
+  expect(errors).toEqual([]);
+ });
+}
+
+test('320px at 200 percent root font has no overflow',async({page})=>{
+ await page.setViewportSize({width:320,height:720});
+ await page.goto(url);
+ await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+ await expect(page.getByLabel('What must continue working?')).toBeVisible();
+ const m=await page.evaluate(()=>({w:innerWidth,a:document.documentElement.scrollWidth,b:document.body.scrollWidth}));
+ expect(Math.max(m.a,m.b),JSON.stringify(m)).toBeLessThanOrEqual(m.w+1);
+});
+
+test('320px enlarged text keeps whole heading words without suppressing zoom',async({page})=>{
+ await page.setViewportSize({width:320,height:720});
+ await page.goto(url);
+ for(const enlarged of [false,true]){
+  await page.evaluate(enlarged=>document.documentElement.style.fontSize=enlarged?'200%':'100%',enlarged);
+  const m=await page.evaluate(()=>{
+   const heading=document.querySelector('h1'),node=heading.firstChild,text=node.textContent,range=document.createRange();
+   return {viewport:innerWidth,scroll:document.documentElement.scrollWidth,bodyScroll:document.body.scrollWidth,rootPx:parseFloat(getComputedStyle(document.documentElement).fontSize),headingPx:parseFloat(getComputedStyle(heading).fontSize),words:[...text.matchAll(/\S+/g)].map(match=>{range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);return {text:match[0],fragments:range.getClientRects().length};})};
+  });
+  expect(m.words.map(w=>w.text)).toEqual(['Power','Outage','Continuity','Check']);
+  expect(m.words.every(w=>w.fragments===1),JSON.stringify(m)).toBe(true);
+  expect(m.headingPx).toBeGreaterThanOrEqual(m.rootPx*1.1);
+  expect(Math.max(m.scroll,m.bodyScroll),JSON.stringify(m)).toBeLessThanOrEqual(m.viewport+1);
+ }
+});
+
+for(const width of [320,390]){
+ test('complete selected outage priorities, phases and support are readable at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  for(const id of ['priorityChoice','phaseChoice','supportChoice']){
+   await expect(page.locator('#'+id)).toBeHidden();
+   await expect(page.locator('#'+id)).toBeEmpty();
+  }
+  await page.locator('#priority').selectOption('medicine');
+  await page.locator('#phase').selectOption('during');
+  await page.locator('#support').selectOption('coordinate');
+  const labels={
+   priorityChoice:'Selected priority: Refrigerated medicines or healthcare supplies',
+   phaseChoice:'Selected phase: During an outage: respond',
+   supportChoice:'Selected approach: I need to confirm an arrangement with a person or service'
+  };
+  for(const [id,label] of Object.entries(labels)){
+   const output=page.locator('#'+id);
+   await expect(output).toBeVisible();
+   await expect(output).toHaveText(label);
+   for(const root of ['100%','200%']){
+    await page.evaluate(root=>document.documentElement.style.fontSize=root,root);
+    const m=await output.evaluate(el=>{
+     const b=el.getBoundingClientRect();
+     return {left:b.left,right:b.right,viewport:innerWidth,scroll:el.scrollWidth,client:el.clientWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth};
+    });
+    expect(m.left,JSON.stringify(m)).toBeGreaterThanOrEqual(0);
+    expect(m.right,JSON.stringify(m)).toBeLessThanOrEqual(width+1);
+    expect(m.scroll,JSON.stringify(m)).toBeLessThanOrEqual(m.client+1);
+    expect(Math.max(m.document,m.body),JSON.stringify(m)).toBeLessThanOrEqual(width+1);
+   }
+  }
+  await page.evaluate(()=>document.documentElement.style.fontSize='100%');
+  await page.getByRole('button',{name:'Review my outage step'}).click();
+  await expect(page.locator('#reviewed')).toBeVisible();
+  await page.locator('#priority').selectOption('equipment');
+  await expect(page.locator('#priorityChoice')).toHaveText('Selected priority: Power-dependent equipment or mobility');
+  await expect(page.locator('#reviewed')).toBeHidden();
+  page.once('dialog',d=>d.dismiss());
+  await page.locator('#resetPlan').click();
+  await expect(page.locator('#priorityChoice')).toBeVisible();
+  page.once('dialog',d=>d.accept());
+  await page.locator('#resetPlan').click();
+  for(const id of ['priorityChoice','phaseChoice','supportChoice']){
+   await expect(page.locator('#'+id)).toBeHidden();
+   await expect(page.locator('#'+id)).toBeEmpty();
+  }
+ });
+}
+
+test('every priority yields clear prepare, respond, recover and stop steps',async({page})=>{
+ await page.goto(url);
+ const cases={
+  equipment:'Vital equipment support interrupted',
+  medicine:'Do not self-discontinue',
+  communication:'Someone unreachable and in danger',
+  people:'Never force unsafe transfers',
+  pets:'Do not assume shelters accept every animal'
+ };
+ for(const [priority,stop] of Object.entries(cases)){
+  for(const phase of ['before','during','after']){
+   await page.locator('#priority').selectOption(priority);
+   await page.locator('#phase').selectOption(phase);
+   await page.locator('#support').selectOption('check');
+   await page.getByRole('button',{name:'Review my outage step'}).click();
+   await expect(page.locator('#reviewed')).toBeVisible();
+   await expect(page.locator('#preview')).toContainText(stop);
+   await expect(page.locator('#preview')).toContainText('Check the outcome:');
+   await expect(page.locator('#preview')).toContainText('Local alerts and current emergency instructions');
+   await expect(page.locator('#printPlan')).toBeEnabled();
+  }
+ }
+});
+
+test('high-risk equipment, medicine and accessible exit avoid unsupported promises',async({page})=>{
+ await page.goto(url);
+ await page.locator('#priority').selectOption('equipment');
+ await page.locator('#phase').selectOption('during');
+ await page.locator('#support').selectOption('stop');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#preview')).toContainText('Never improvise electricity to a medical device');
+ await expect(page.locator('#preview')).toContainText('seek urgent or qualified help');
+ await page.locator('#priority').selectOption('medicine');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#preview')).toContainText('product-specific');
+ await page.locator('#priority').selectOption('people');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#preview')).toContainText('cannot safely stay or leave');
+});
+
+test('empty and partial inputs do not create review',async({page})=>{
+ await page.goto(url);
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#priority')).toHaveJSProperty('required',true);
+ await page.locator('#priority').selectOption('medicine');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#phase')).toHaveValue('');
+ await page.locator('#phase').selectOption('before');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#support')).toHaveValue('');
+});
+
+test('edit invalidates review and cancel clear preserves choices; confirmation clears',async({page})=>{
+ await page.goto(url);
+ await page.locator('#priority').selectOption('communication');
+ await page.locator('#phase').selectOption('before');
+ await page.locator('#support').selectOption('coordinate');
+ await page.locator('#planForm').evaluate(form=>form.requestSubmit());
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await page.locator('#phase').selectOption('during');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ page.once('dialog',d=>d.dismiss());
+ await page.locator('#resetPlan').click();
+ await expect(page.locator('#priority')).toHaveValue('communication');
+ await expect(page.locator('#reviewed')).toBeVisible();
+ page.once('dialog',d=>d.accept());
+ await page.locator('#resetPlan').click();
+ await expect(page.locator('#priority')).toHaveValue('');
+ await expect(page.locator('#phase')).toHaveValue('');
+ await expect(page.locator('#support')).toHaveValue('');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#printPlan')).toBeDisabled();
+});
+
+test('unreviewed and edited outage plans never print an empty or stale reviewed note',async({page})=>{
+ await page.goto(url);
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+ await expect(page.locator('#skills-title')).toBeVisible();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#priority').selectOption('equipment');
+ await page.locator('#phase').selectOption('during');
+ await page.locator('#support').selectOption('stop');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeVisible();
+ await expect(page.locator('#preview')).toContainText('Never improvise electricity to a medical device');
+ await expect(page.locator('#skills-title')).toBeHidden();
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeHidden();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#phase').selectOption('after');
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.emulateMedia({media:'print'});
+ await expect(page.locator('#reviewed')).toBeHidden();
+ await expect(page.locator('#skills-title')).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+});
+
+test('print is deliberate and only available after review',async({page})=>{
+ await page.goto(url);
+ await page.evaluate(()=>{window.__prints=0;window.print=()=>window.__prints++;});
+ await expect(page.locator('#printPlan')).toBeDisabled();
+ await page.locator('#priority').selectOption('pets');
+ await page.locator('#phase').selectOption('after');
+ await page.locator('#support').selectOption('coordinate');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await expect(page.locator('body')).toHaveClass(/print-reviewed/);
+ await page.emulateMedia({media:'print'});
+ await expect(page.getByRole('heading',{name:'Review before using'})).toBeVisible();
+ await expect(page.locator('#skills-title')).toBeHidden();
+ await page.emulateMedia({media:'screen'});
+ await page.locator('#printPlan').click();
+ expect(await page.evaluate(()=>window.__prints)).toBe(1);
+ await page.locator('#priority').selectOption('communication');
+ await expect(page.locator('body')).not.toHaveClass(/print-reviewed/);
+});
+
+test('generator scenario supports blank, both unsafe, correct and reset',async({page})=>{
+ await page.goto(url);
+ await page.locator('#checkDecision').click();
+ await expect(page.locator('#decisionStatus')).toContainText('Choose an option');
+ await page.locator('input[name="decision"][value="a"]').check();
+ await page.locator('#checkDecision').click();
+ await expect(page.locator('#decisionStatus')).toContainText('open garage door');
+ await page.locator('input[name="decision"][value="c"]').check();
+ await page.locator('#checkDecision').click();
+ await expect(page.locator('#decisionStatus')).toContainText('Charcoal grills');
+ await page.locator('input[name="decision"][value="b"]').check();
+ await page.locator('#checkDecision').click();
+ await expect(page.locator('#decisionStatus')).toContainText('Best first response');
+ await page.locator('#clearDecision').click();
+ await expect(page.locator('input[name="decision"]:checked')).toHaveCount(0);
+ await expect(page.locator('#decisionStatus')).toContainText('Decision cleared');
+});
+
+for(const width of [320,1366]){
+ test('generator choice switch invalidates prior safe feedback at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:850});
+  await page.goto(url);
+  const feedback=page.locator('#decisionStatus');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('Best first response');
+  await page.locator('input[name="decision"][value="a"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('Best first response');
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('open garage door');
+  await page.locator('input[name="decision"][value="b"]').check();
+  await expect(feedback).toHaveText('Choice selected. Check reasoning for updated feedback.');
+  await expect(feedback).not.toContainText('open garage door');
+  await page.locator('#checkDecision').click();
+  await expect(feedback).toContainText('Best first response');
+ });
+}
+
+test('keyboard focus and semantic labels support non-pointer navigation',async({page})=>{
+ await page.goto(url);
+ await page.getByRole('link',{name:'Skip to outage guide'}).focus();
+ await page.keyboard.press('Enter');
+ await expect(page).toHaveURL(/#main$/);
+ await page.locator('#priority').focus();
+ await page.keyboard.press('Tab');
+ await expect(page.locator('#phase')).toBeFocused();
+ await expect(page.getByRole('group',{name:'What should happen first?'})).toBeVisible();
+ await expect(page.getByRole('status')).toHaveCount(2);
+ await expect(page.locator('details summary')).toBeVisible();
+});
+
+test('no-JS page still teaches, explains and offers paper checklist at 320px',async({browser})=>{
+ const ctx=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:720}});
+ try{
+  const page=await ctx.newPage();
+  await page.goto(url);
+  await expect(page.locator('#planForm')).toBeHidden();
+  await expect(page.locator('#noJsHelp')).toBeVisible();
+  await expect(page.locator('article.lesson')).toHaveCount(5);
+  await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+  await page.locator('details summary').click();
+  await expect(page.getByText(/Never run fuel-burning generators or grills indoors/)).toBeVisible();
+  await page.emulateMedia({media:'print'});
+  await expect(page.locator('#reviewed')).toBeHidden();
+  await expect(page.locator('#skills-title')).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Paper checklist — works offline'})).toBeVisible();
+  const m=await page.evaluate(()=>({w:innerWidth,a:document.documentElement.scrollWidth,b:document.body.scrollWidth}));
+  expect(Math.max(m.a,m.b)).toBeLessThanOrEqual(m.w+1);
+ }finally{await ctx.close();}
+});
+
+test('privacy: no personal fields, third-party subresources, writes, storage, or cookies',async({page})=>{
+ const writes=[],third=[];
+ page.on('request',r=>{
+  if(!['GET','HEAD'].includes(r.method()))writes.push(r.method()+' '+r.url());
+  if(!r.url().startsWith('http://127.0.0.1:8765/')&&!r.url().startsWith('data:'))third.push(r.url());
+ });
+ await page.goto(url);
+ await expect(page.locator('input[type="text"],textarea,input[type="email"],input[type="tel"]')).toHaveCount(0);
+ await page.locator('#priority').selectOption('medicine');
+ await page.locator('#phase').selectOption('during');
+ await page.locator('#support').selectOption('stop');
+ await page.getByRole('button',{name:'Review my outage step'}).click();
+ await page.locator('input[name="decision"][value="b"]').check();
+ await page.locator('#checkDecision').click();
+ expect(writes).toEqual([]);expect(third).toEqual([]);
+ expect(await page.evaluate(()=>({local:Object.keys(localStorage),session:Object.keys(sessionStorage),cookies:document.cookie}))).toEqual({local:[],session:[],cookies:''});
+});
+
+for(const width of [320,1366]){
+ test('linked accepted Home Skills, Family Handoff and Emergencies area work at '+width+'px',async({page})=>{
+  await page.setViewportSize({width,height:840});
+  await page.goto(url);
+  await page.getByRole('link',{name:'Home Skills emergency supplies lesson'}).click();
+  await expect(page).toHaveURL(/\/one-place\/home-skills\.html#skill-30$/);
+  await expect(page.locator('#skill-30 summary')).toContainText('Make a household emergency supplies plan');
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await page.getByRole('link',{name:'Family Handoff'}).click();
+  await expect(page).toHaveURL(/\/one-place\/family-handoff\.html$/);
+  await expect(page.getByRole('heading',{name:'Share the care. Make the next step clear.',level:1})).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'Power Outage Continuity Check',level:1})).toBeVisible();
+  await page.locator('header nav').getByRole('link',{name:'Emergencies & Preparedness'}).click();
+  await expect(page).toHaveURL(/\/index\.html\?area=Emergencies%20%26%20Preparedness$/);
+  await expect(page.getByRole('heading',{name:'Emergencies & Preparedness',level:1})).toBeVisible();
+  await expect(page.getByText('Create a family emergency plan')).toBeVisible();
+ });
+}
+
+test('source boundaries and HQ-only navigation are unambiguous',async({page})=>{
+ await page.goto(url);
+ const external=page.locator('.source-links a[href^="https://"]');
+ await expect(external).toHaveCount(7);
+ for(const a of await external.all()){
+  await expect(a).toHaveAttribute('target','_blank');
+  await expect(a).toHaveAttribute('rel',/noopener noreferrer/);
+  await expect(a).toContainText('external');
+ }
+ await expect(page.locator('header nav a').first()).toHaveAttribute('href','../index.html?area=Emergencies%20%26%20Preparedness');
+ await expect(page.getByText('911 in the United States')).toBeVisible();
+ await expect(page.getByText(/more than 20 feet from doors, windows and vents/)).toBeVisible();
+ await expect(page.getByRole('link',{name:'Family Handoff'})).toHaveAttribute('href','family-handoff.html');
+ await expect(page.getByRole('link',{name:'Home Skills emergency supplies lesson'})).toHaveAttribute('href','home-skills.html#skill-30');
+});
