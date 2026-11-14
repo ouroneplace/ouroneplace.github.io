@@ -139,6 +139,21 @@ test('practice never sends or stores written words',async({page})=>{
  await expect(page.locator('#load')).toBeDisabled();
 });
 
+test('public story lesson requests indexing and returns to Creativity at phone and desktop widths',async({page})=>{
+ for(const width of [320,1366]){
+  await page.setViewportSize({width,height:900});
+  await page.goto(route);
+  const robots=page.locator('meta[name="robots"]');
+  await expect(robots).toHaveCount(1);
+  await expect(robots).toHaveAttribute('content','index,follow');
+  await expect(page.getByRole('heading',{level:1,name:'Story Sharing with Consent'})).toBeVisible();
+  await page.getByRole('link',{name:'Creativity & Legacy area'}).click();
+  await expect(page).toHaveURL(/index\.html\?area=Creativity%20%26%20Legacy$/);
+  await expect(page.getByRole('heading',{level:1,name:'Creativity & Legacy',exact:true})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ }
+});
+
 test('external ethical sources are opt-in and local links resolve',async({page})=>{
  await page.goto(route);
  const external=page.locator('a[href^="https://"]');

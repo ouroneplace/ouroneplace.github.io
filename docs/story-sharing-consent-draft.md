@@ -4,6 +4,13 @@
 
 **State:** Team-owned development draft. Not merged, deployed, presented as a public feature, founder-accepted, legally approved or certified for handling sensitive stories.
 
+## November 13, 2026 — explicit public discoverability and real area navigation
+
+- **Source-verified readiness gap:** This standalone educational draft had no robots meta directive, even though the newer public One Place educational pages use explicit `index,follow`. Its omission was NOT `noindex` and is not evidence of a crawler block.
+- **One scoped page correction:** Add exactly one `<meta name="robots" content="index,follow">` before the title. This expresses an indexing preference and never guarantees search inclusion, a ranking, or privacy. The existing oral-history/consent teaching, fictional choices, private invitation, confirmation before destructive reset, opt-in references, scripts, styles and body remain unchanged.
+- **Focused browser coverage:** At 320px and 1366px, verify one policy tag, exact heading, actual click on the Creativity & Legacy area link to its encoded local route, destination area H1, and no horizontal overflow. All existing consent, privacy, keyboard, 200%-text, no-JS, exterior-source and reset tests are retained. The new source head needs its own GitHub Actions full-suite CI before claiming PASS.
+- **Scope and founder protection:** The current approved `main` `05501c9643e4fbf1fd876a18e3347bff15ea4b8e` and HQ current two-area [draft #79](https://github.com/ouroneplace/ouroneplace.github.io/pull/79) remain separate and untouched. Future public indexing only after HQ's separate founder-approved release; no consent to collect stories, upload data, or publish the page now.
+
 ## November 13, 2026 — protect an invitation against accidental full reset
 
 - **Verified source gap:** “Start over and clear everything” immediately removed typed invitation text and choices, even if the visitor had an unsaved draft. That is unnecessary data loss; the separate “Clear invitation wording only” control intentionally stays unchanged.
