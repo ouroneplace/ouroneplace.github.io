@@ -4,6 +4,12 @@
 
 **State:** Team-owned development draft. Not merged, deployed, presented as a public feature, founder-accepted, legally approved or certified for handling sensitive stories.
 
+## November 13, 2026 — repair focused test's incorrect heading expectation
+
+- **Verified failing exact-head CI:** [Actions #43534676126](https://github.com/ouroneplace/ouroneplace.github.io/actions/runs/43534676126) completed FAILURE after 791/792 browser tests passed (the other 20/21 Story-focused tests green), 37 HTML audited with zero errors/structure warnings, 43 JS scripts parsed. The newly added indexing/category-return test incorrectly expected page H1 “Story Sharing with Consent”; the page's real H1, preserved from the original visitor-approved source, is **“Stories Are Gifts, Not Obligations”**. The document `<title>` does include “Story Sharing with Consent”. This is a **test fixture mistake, not a visitor-facing defect**, and fails before its category navigation assertion.
+- **Narrow correction:** Only update the focused Playwright test to separately assert the document title and **actual exact visible H1**; preserve all lesson/consent/private input/choice content and existing assertions. No HTML, shared files or founder-approved content touched. New exact-head full CI must complete; do not inherit a green result from older source.
+- **Follow-through:** The test still visits at 320px/1366px, verifies the single `index,follow` directive, clicks the real Creativity & Legacy area link, verifies encoded destination and target heading, and checks reflow. Retest the entire suite on current source after this correction.
+
 ## November 13, 2026 — explicit public discoverability and real area navigation
 
 - **Source-verified readiness gap:** This standalone educational draft had no robots meta directive, even though the newer public One Place educational pages use explicit `index,follow`. Its omission was NOT `noindex` and is not evidence of a crawler block.

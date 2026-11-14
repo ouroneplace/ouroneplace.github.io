@@ -146,7 +146,8 @@ test('public story lesson requests indexing and returns to Creativity at phone a
   const robots=page.locator('meta[name="robots"]');
   await expect(robots).toHaveCount(1);
   await expect(robots).toHaveAttribute('content','index,follow');
-  await expect(page.getByRole('heading',{level:1,name:'Story Sharing with Consent'})).toBeVisible();
+  await expect(page).toHaveTitle(/Story Sharing with Consent/);
+  await expect(page.getByRole('heading',{level:1,name:'Stories Are Gifts, Not Obligations'})).toBeVisible();
   await page.getByRole('link',{name:'Creativity & Legacy area'}).click();
   await expect(page).toHaveURL(/index\.html\?area=Creativity%20%26%20Legacy$/);
   await expect(page.getByRole('heading',{level:1,name:'Creativity & Legacy',exact:true})).toBeVisible();
